@@ -1,0 +1,68 @@
+target_node=ganymede
+host=ganymede
+date=2026-07-02T10:37:59+02:00
+SLURM_JOB_ID=244684
+SLURM_JOB_GPUS=0
+SLURM_GPUS=1
+SLURM_GPUS_ON_NODE=1
+SLURM_GPU_FREQ=1200,verbose
+CUDA_VISIBLE_DEVICES=0
+GPU_ID=0
+whoami=chjing
+id=uid=10271(chjing) gid=0(root) groups=0(root),10002(admin),10272(chjing)
+
+===== slurm_job_record =====
+JobId=244684 JobName=gpu-freq-gres-workload-ganymede
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=00:03:00 TimeMin=N/A
+   SubmitTime=2026-07-02T10:37:58 EligibleTime=2026-07-02T10:37:58
+   AccrueTime=2026-07-02T10:37:58
+   StartTime=2026-07-02T10:37:58 EndTime=2026-07-02T10:40:58 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-02T10:37:58 Scheduler=Backfill
+   Partition=short AllocNode:Sid=minerva:325882
+   ReqNodeList=ganymede ExcNodeList=(null)
+   NodeList=ganymede
+   BatchHost=ganymede
+   NumNodes=1 NumCPUs=4 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=2G,node=1,billing=1,gres/gpu=1
+   AllocTRES=cpu=4,mem=8G,node=1,billing=4,gres/gpu=1,gres/gpu:l4=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryCPU=2G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/gpu-freq-gres-workload-ganymede/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/gpu-freq-gres-workload-ganymede/slurm-244684.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/gpu-freq-gres-workload-ganymede/slurm-244684.out
+   Power=
+   CpusPerTres=gpu:4
+   TresFreq=gpu:1200,verbose
+   TresPerJob=gres/gpu:1
+   TresPerNode=gres/nvgpufreq:1
+   
+
+
+===== baseline_before_workload =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%]
+2026/07/02 10:37:59.156, 0, NVIDIA L4, Disabled, 210 MHz, 405 MHz, 2040 MHz, 6251 MHz, 16.21 W, 72.00 W, 0 %
+
+===== clock_sampling_during_workload =====
+--- sample=1 time=2026-07-02T10:37:59+02:00 ---
+python_gpu_workload=starting
+python_gpu_workload_error=ModuleNotFoundError: No module named 'torch'
+fallback_sleeping=20s
+0, 210 MHz, 405 MHz, 16.21 W, 0 %
+--- sample=2 time=2026-07-02T10:38:00+02:00 ---
+0, 210 MHz, 405 MHz, 16.21 W, 0 %
+--- sample=3 time=2026-07-02T10:38:01+02:00 ---
+0, 210 MHz, 405 MHz, 16.16 W, 0 %
+--- sample=4 time=2026-07-02T10:38:02+02:00 ---
+0, 210 MHz, 405 MHz, 16.16 W, 0 %
+--- sample=5 time=2026-07-02T10:38:03+02:00 ---
+0, 210 MHz, 405 MHz, 16.16 W, 0 %
+--- sample=6 time=2026-07-02T10:38:04+02:00 ---
+0, 210 MHz, 405 MHz, 16.16 W, 0 %
