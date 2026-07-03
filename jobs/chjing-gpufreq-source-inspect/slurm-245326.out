@@ -1344,3 +1344,958 @@ command=grep -RInE 'nvgpufreq|gpu[-_ ]?freq|GPU_FREQ|GpuFreq|frequency|clock|nvi
 
 ===== interesting_file_candidates =====
 command=for root in /data/users/chjing/slurm-nvgpufreq /data/users/chjing/build-nvgpufreq /data/users/chjing/vLLM_test /data/users/chjing/EnergyAwareCUDASTF; do [ -d "$root" ] && find "$root" -maxdepth 4 -type f \( -iname '*gpu*' -o -iname '*freq*' -o -iname '*clock*' -o -iname '*nvml*' -o -iname '*slurm*' -o -iname '*prolog*' -o -iname '*epilog*' -o -iname '*.conf' -o -iname '*.service' \) -printf '%M %u %g %s %p\n'; done | sort | head -n 160
+-rw-r--r-- chjing chjing 11799 /data/users/chjing/vLLM_test/gpu_monitor.py
+-rw-r--r-- chjing chjing 1765 /data/users/chjing/vLLM_test/submit_experiment_A_highfreq_probe.sh
+-rw-r--r-- chjing chjing 2176 /data/users/chjing/vLLM_test/submit_experiment_CD_cross_gpu_phase_only.sh
+-rw-r--r-- chjing chjing 2994 /data/users/chjing/EnergyAwareCUDASTF/experiment/sanity_check_8gpu/sanity_check_8gpu.cu
+-rw-r--r-- chjing chjing 3170 /data/users/chjing/EnergyAwareCUDASTF/containers/apptainer/run_sanity_8gpu.slurm
+-rw-r--r-- chjing chjing 4465 /data/users/chjing/EnergyAwareCUDASTF/experiment/heft_single_gpu_serial/heft_single_gpu_serial.cu
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260405-130942-stf-scheduler-io-8gpu-24h-01/results/20260406-181118-for-slurm-smoke-host-probe.runsh.stderr.log
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260405-130942-stf-scheduler-io-8gpu-24h-01/results/20260406-184829-for-slurm-smoke-echo-recheck.runsh.stderr.log
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260405-130942-stf-scheduler-io-8gpu-24h-01/results/20260407-025500-sudo-clock-lock-probe.runsh.stderr.log
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260405-130942-stf-scheduler-io-8gpu-24h-01/slurm-168842.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-181118-for-slurm-smoke-host-probe/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-183933-slurm-smoke-echo-verify/slurm-168931.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-184829-for-slurm-smoke-echo-recheck/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-185559-multifrontal-3sched-time-scratchsafe/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-190854-multifrontal-3sched-time-scratchsafe-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-191729-multifrontal-3sched-time-scratchsafe-rerun2/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-194659-multifrontal-heft-3min-trial/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-195527-multifrontal-3sched-3min-trial/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-210517-multifrontal-3sched-copycost-3min/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-211313-multifrontal-3sched-copycost-3min-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-212827-multifrontal-bandit-3min-single-run/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-213941-multifrontal-bandit-3min-rootcause-probe/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-215019-multifrontal-bandit-3min-rootcause-probe-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-225800-multifrontal-bandit-dvfs-v1-debug/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-230640-multifrontal-bandit-dvfs-v1-debug-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-231231-multifrontal-bandit-dvfs-v1-debug-rerun2/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-235348-multifrontal-bandit-dvfs-v1-debug-rerun3/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260406-235955-multifrontal-bandit-dvfs-opportunistic-debug-rerun4/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-001530-multifrontal-bandit-dvfs-midrank-sweep/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-004200-bandit-dvfs-power-order-probe/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-021500-tuner-dvfs-residency-probe/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-023700-tuner-dvfs-residency-probe-rank40/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-025500-sudo-clock-lock-probe/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-051210-multifrontal-bandit-dvfs-opportunistic-debug-rerun4-sudo/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-114615-multifrontal-bandit-dvfs-opportunistic-debug-rerun5-sudo/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-115741-multifrontal-bandit-dvfs-opportunistic-baseline-highlock/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-121305-multifrontal-bandit-dvfs-midrank-highlock-sweep/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-131314-multifrontal-bandit-fixedlock-sweep/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-140534-multifrontal-bandit-dvfs-mid1875-compare/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-142702-multifrontal-bandit-switching-ablation/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-154752-multifrontal-bandit-dvfs-mid1875-window64-ratelimit10s/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-162707-multifrontal-bandit-dvfs-mid1875-window64-ratelimit10s-runs5/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-171657-multifrontal-heft-vs-dvfs-bandit-runs5/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260407-185557-cholesky-heft-vs-dvfs-bandit-runs5/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260408-112326-stf-scheduler-io-8gpu-24h-04/slurm-169437.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260408-112327-stf-scheduler-io-8gpu-24h-05/slurm-169438.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260408-112328-stf-scheduler-io-8gpu-24h-06/slurm-169439.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260408-143021-multifrontal-bandit-fixedlock-ablation-runs3/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260408-151903-deft-bandit-fixedlock-2040-vs-1455-runs3/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260408-154459-deft-bandit-fixedlock-2040-vs-1455-runs3-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260408-160140-deft-bandit-fixedlock-2040-vs-1455-runs3-rerun2/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260410-115333-deft-heft-vs-bandit-runs3/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260410-133438-mixedpcg-v2-heft-vs-bandit-runs5/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260410-140141-mixedpcg-v2-heft-vs-bandit-runs5-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260410-145558-deft-heft-vs-bandit-runs3-30s-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260410-172047-deft-fdtd-cg-scale-calibration/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260410-180041-deft-fdtd-cg-heft-vs-bandit-runs1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260410-202223-deft-fdtd-cg-heft-vs-bandit-runs1-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260412-231300-stf-scheduler-io-8gpu-24h-07/results/20260414-143642-deft-cuda-init-sudo-gpusweep.runsh.stderr.log
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260412-231300-stf-scheduler-io-8gpu-24h-07/slurm-172704.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260412-231300-stf-scheduler-io-8gpu-24h-08/results/20260415-140335-heft-vs-bandit-4bench-8gpu-runs3-rerun1.runsh.stderr.log
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260412-231300-stf-scheduler-io-8gpu-24h-08/results/20260415-162841-heft-vs-bandit-4bench-7gpu-runs3-rerun1.runsh.stderr.log
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260412-231300-stf-scheduler-io-8gpu-24h-08/slurm-172705.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260412-231300-stf-scheduler-io-8gpu-24h-09/results/20260416-115526-watcher-gpu-visibility-diagnose.runsh.stderr.log
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260414-135459-deft-cuda-init-debug-probe/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260414-143642-deft-cuda-init-sudo-gpusweep/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260414-150805-deft-bandit-heft-root-g1g2-probe/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260414-193528-deft-bandit-heft-root-g1-preflight-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260414-203909-cuda-layer-smoke-root-g1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260414-210743-cuda-layer-smoke-host-g1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260414-211251-cuda-driver-smoke-host-g1-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260414-213026-cuda-env-repair-g1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260414-215138-deft-bandit-heft-root-g1-postrepair-validate/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260415-102435-deft-bandit-heft-root-g1-runs3/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260415-121930-deft-bandit-heft-root-g1-runs3-with-miniweather/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260415-140335-heft-vs-bandit-4bench-8gpu-runs3-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260415-144340-cuda-env-repair-g8-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260415-150700-cuda-env-repair-g8-driver-reload-rerun2/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260415-162841-heft-vs-bandit-4bench-7gpu-runs3-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260416-110625-mixedpcg-v2-heft-vs-bandit-mechanism-runs3/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260416-115526-watcher-gpu-visibility-diagnose/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260416-131242-watcher-gres-driver-repair-g8-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260416-144132-stf-scheduler-io-8gpu-smoke-nvidia-smi/slurm-174765.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260416-191657-stf-scheduler-io-8gpu-smoke-nvidia-smi-rerun1/slurm-174966.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260417-102734-stf-scheduler-io-8gpu-smoke-nvidia-smi-rerun2/slurm-175472.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-114808-for-slurm-sudo-smoke/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-121312-stf-scheduler-ganymede-8gpu-24h-rerun1/slurm-176287.err
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-122706-stf-scheduler-ganymede-8gpu-24h-rerun2/results/20260419-114808-for-slurm-sudo-smoke.runsh.stderr.log
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-122706-stf-scheduler-ganymede-8gpu-24h-rerun2/results/20260419-141806-for-slurm-gpu-type-smoke.runsh.stderr.log
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-131111-mixedpcg-v2-heft-vs-bandit-mechanism-sanity-runs3/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-133323-mixedpcg-v2-heft-vs-bandit-mechanism-sanity-runs3-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-140315-mixedpcg-v2-heft-vs-bandit-repro-runs5-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-141806-for-slurm-gpu-type-smoke/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-143821-mixedpcg-v2-heft-scale-calibration-1min-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-144510-mixedpcg-v2-heft-vs-bandit-16s-runs5-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-151027-hotchain-ctile-heft-smoke-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-151402-hotchain-ctile-heft-smoke-ganymede-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-152020-hotchain-ctile-heft-smoke-ganymede-rerun2/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-152716-hotchain-ctile-heft-smoke-ganymede-rerun3/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-153016-hotchain-ctile-heft-smoke-ganymede-rerun4/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-154005-hotchain-ctile-heft-smoke-ganymede-rerun5-notuner/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-154556-hotchain-ctile-heft-scale-calibration-30s-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-155223-hotchain-ctile-heft-scale-calibration-30s-rerun1-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-163711-hotchain-ctile-heft-vs-bandit-debug-timeout-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-165444-hotchain-ctile-bandit-taskcount-bisect-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-172748-hotchain-ctile-finalize-phase-debug-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-174429-hotchain-ctile-erase-phase-debug-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-180325-ctile-bandit-erase-detail-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-181540-ctile-bandit-erase-detail-rerun1-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-182910-ctile-bandit-cached-release-debug-rerun2-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-183958-ctile-heft-cached-release-debug-rerun1-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-184900-ctile-bandit-allocator-control-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-190700-ctile-bandit-allocator-control-rerun1-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-191630-hotchain-ctile-heft-vs-bandit-30s-runs3-ganymede-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-194856-hotchain-step1-ablation-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-200118-hotchain-step1-ablation-ganymede-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-201732-hotchain-step1-pingpong-ablation-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-202322-hotchain-step1-pingpong-ablation-ganymede-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-203110-hotchain-follow-owner-heft-switch-sweep-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-204100-switch-opportunity-unit-ganymede-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-204100-switch-opportunity-unit-ganymede-rerun2/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-204100-switch-opportunity-unit-ganymede-rerun3/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-204100-switch-opportunity-unit-ganymede-rerun4/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-204100-switch-opportunity-unit-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-212020-switchability-calendar-reservation-v1-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-215021-hotchain-reservation-follow-owner-heft-switch-validator-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-223100-hotchain-reservation-follow-owner-heft-vs-bandit-30s-runs3-ganymede-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-223100-hotchain-reservation-follow-owner-heft-vs-bandit-30s-runs3-ganymede-rerun2/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-223100-hotchain-reservation-follow-owner-heft-vs-bandit-30s-runs3-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-223123-hotchain-reservation-gap-calibration-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-224515-hotchain-reservation-gap-calibration-rerun1-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-225100-hotchain-reservation-gap-calibration-rerun2-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-230625-hotchain-reservation-gap-calibration-rerun3-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-231200-hotchain-reservation-gap-calibration-rerun4-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-233500-hotchain-gap-calibration-hot-elements-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-234500-hotchain-gap-calibration-chain-length-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-235200-hotchain-gap-calibration-chain-length-rerun1-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-235900-hotchain-30s-scale-calibration-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-235900-hotchain-30s-scale-calibration-rerun1-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260419-235900-hotchain-reservation-follow-owner-heft-vs-bandit-30s-runs3-ganymede-rerun3/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-001411-hotchain-30s-gap-sweep-chains-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-002232-hotchain-30s-gap-sweep-reserve-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-003551-hotchain-30s-gap-sweep-chainlen-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-005504-hotchain-30s-gap-sweep-footprint-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-010720-hotchain-30s-gap-sweep-8mchains-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-011200-hotchain-30s-gap-sweep-8m-chainlen-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-012000-hotchain-30s-gap-sweep-8m-reserve-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-012640-hotchain-root-cause-ppt-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-014100-hotchain-root-cause-ppt-ganymede-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-102521-ctile-heft-pathology-validator-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-103500-ctile-heft-vs-bandit-pathology-runs5-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-104100-ctile-heft-vs-bandit-pathology-runs5-ganymede-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-104600-ctile-heft-vs-bandit-pathology-runs5-ganymede-rerun2/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-105200-ctile-bandit-threshold-sweep-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-105800-ctile-bandit-threshold-sweep-ganymede-rerun1/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-111500-ctile-copyfootprint-sweep-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-113900-ctile-segment-head-sweep-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-114800-ctile-segment-factor-sweep-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-120900-ctile-segment-length-sweep-ganymede/.for_slurm_done
+-rw-r--r-- chjing nogroup 0 /data/users/chjing/EnergyAwareCUDASTF/jobs/20260420-122200-ctile-segment-length-timeout-debug-ganymede/.for_slurm_done
+===== interesting_file_candidates rc=0 =====
+
+===== selected_file_heads =====
+
+===== file_head /data/users/chjing/slurm-nvgpufreq/README.md =====
+# NVGPUFREQ Slurm Plugin
+This plugin unrestrict the Nvidia application clock command when an _exclusive job_ run on a node tagged with gres _nvgpufreq_.
+
+The nvgpufreq plugin call the _nvmlDeviceSetAPIRestriction()_ to restrict/unrestrict the GPU frequency clock at user level. When the application clock commands have been unrestricted a standard users can chenge the GPU frequency using the nvidia-smi tool or the NVML APIs.
+
+## Plugin checks
+The nvgpufreq plugin intercepts the prolog and epilog of each job submitted in the cluster (_slurm_spank_job_prolog()_ and _slurm_spank_job_epilog()_).
+
+### Prolog
+In the prolog procedure, the plugin does the following checks:
+
+1. Retrieve the node info from slurmctld. If the plugin cannot contact the slurmctld the plugin terminates its execution.
+2. Check if the node is tagged with the gres _nvgpufreq_. If the node is not tagged the plugin terminates its execution.
+3. Retrieve the job info from slurmctld. If the plugin cannot contact the slurmctld the plugin terminates its execution.
+4. Check if the job requests the nvgpufreq gres. If the job does not specify the gres _nvgpufreq_ the plugin terminates its execution.
+5. Check if the job run exclusive on the node. If the node can be shared among multiple jobs the plugin terminates its execution.
+6. The plugin call the _nvmlDeviceSetAPIRestriction()_ to unrestrict the GPU frequency clock for regular users.
+
+### Epilog
+In the epilog procedure, the plugin does the following checks:
+
+1. Retrieve the node info from slurmctld. If the plugin cannot contact the slurmctld the plugin terminates its execution.
+2. Check if the node is tagged with the gres _nvgpufreq_. If the node is not tagged the plugin terminates its execution.
+3. Check if the node has been configured from a nvgpufreq job and restore it. After that, the plugin deletes _/var/run/nvgpufreq.run_ and concludes the epilog procedure.
+
+## Evaluation
+To evaluate if the plugin concludes with the configuration of the node, the users/administrators can check the existence of the file _/var/run/nvgpufreq.run_, which contains the information if something when wrong or the plugin correctly terminated. This file should always be removed from the plugin in the epilog procedure after the restoration of the node.
+
+## Getting started
+### Compiling
+To compile the code:
+1. Clone this repo to a node where is deployed SLURM daemon
+    ```bash
+    git clone https://gitlab.hpc.cineca.it/dcesari1/slurm-nvgpufreq.git
+    ```
+2. Create a build directory
+    ```bash
+    mkdir build-nvgpufreq
+    ```
+3. Enter in the build directory
+    ```bash
+    cd build-nvgpufreq
+    ```
+4. Run CMAKE and specify an install directory
+    ```bash
+    cmake -DCMAKE_INSTALL_PREFIX=../install-nvgpufreq ../slurm-nvgpufreq
+    ```
+5. Run makefile to start the compilation and install the plugin
+    ```bash
+    make && make install
+    ```
+### Configurations
+#### gres.conf
+Before to deploy the plugin must be defined a gres called _nvgpufreq_. The gres allows the system administrators to identify only a subset of the nodes where the plugin can be used from the users.
+```
+NodeName=... Name=nvgpufreq Count=1
+```
+#### slurm.conf
+Add the gres configurations to the _slurm.conf_:
+```
+GresTypes=nvgpufreq
+PlugStackConfig=/run/slurm/conf/plugstack.conf
+NodeName=... Gres=nvgpufreq:1 ...
+```
+#### plugstack.conf
+Add the plugin configuration to the _plugstack.conf_:
+```
+optional   /path/to/nvgpufreq.so
+```
+### Run
+When a user wants to use the plugin must submit a job specify the _nvgpufreq_ gres and the exclusivity of the job.
+```
+sbatch $SLURM_CONF --gres=nvgpufreq --exclusive $BIN
+```
+### Change GPU frequencies
+Show supported GPU frequencies
+```
+nvidia-smi -q -d SUPPORTED_CLOCKS
+```
+Show current GPU frequency
+```
+nvidia-smi -q -d CLOCK
+```
+Set a GPU frequency on GPU ID '0' (usually for Tesla Architecture the memory frequency is fixed and it's no possible to change it due HW constraints related to the HBM)
+```
+# --applications-clocks=MEMORY_FREQUENCY,COMPUTE_FREQUENCY
+nvidia-smi -i 0 --applications-clocks=877,1530
+```
+### SLURM Bugs
+For SLURM version between 20.0 and 20.02.7 see the following: https://bugs.schedmd.com/show_bug.cgi?id=9081
+
+===== file_head /data/users/chjing/slurm-nvgpufreq/CMakeLists.txt =====
+#
+# Copyright (c) 2022, CINECA
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+#	   * Redistributions of source code must retain the above copyright notice, this
+#        list of conditions and the following disclaimer.
+#
+#      * Redistributions in binary form must reproduce the above copyright notice,
+#        this list of conditions and the following disclaimer in the documentation
+#        and/or other materials provided with the distribution.
+#
+#      * Neither the name of the copyright holder nor the names of its
+#        contributors may be used to endorse or promote products derived from
+#        this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# Author: Daniele Cesarini, CINECA
+
+project(nvgpufreq C)
+set(nvgpufreq_VERSION_MAJOR 0)
+set(nvgpufreq_VERSION_MINOR 1)
+
+cmake_minimum_required(VERSION 3.0.2)
+
+# Set default build type as release
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
+endif()
+
+# Build helper
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+
+# Find dependencies
+find_package(SLURM REQUIRED)
+find_package(CUDAToolkit REQUIRED)
+
+# Add directories
+add_subdirectory(src)
+===== file_head /data/users/chjing/test_nvgpufreq.sh =====
+#!/bin/bash
+#SBATCH --job-name=test_nvgpufreq
+#SBATCH --gres=gpu:L40s:1
+#SBATCH --gres=nvgpufreq
+#SBATCH --exclusive
+#SBATCH --nodelist=neptune
+#SBATCH --nodes=1
+#SBATCH --time=00:05:00
+#SBATCH --output=test_nvgpufreq_%j.out
+
+echo "=========================================="
+echo "Testing nvgpufreq plugin"
+echo "=========================================="
+echo "Node: $(hostname)"
+echo "Job ID: $SLURM_JOB_ID"
+echo ""
+
+# Check if plugin activated
+if [ -f /var/run/nvgpufreq.run ]; then
+    echo "✓ Plugin activated successfully!"
+    echo "Plugin status:"
+    cat /var/run/nvgpufreq.run
+else
+    echo "✗ Plugin status file not found"
+fi
+
+echo ""
+echo "=========================================="
+echo "Showing supported GPU frequencies:"
+echo "=========================================="
+nvidia-smi -q -d SUPPORTED_CLOCKS
+
+echo ""
+echo "=========================================="
+echo "Current GPU frequency:"
+echo "=========================================="
+nvidia-smi -q -d CLOCK
+
+echo ""
+echo "=========================================="
+echo "Attempting to set GPU frequency:"
+echo "=========================================="
+# Try to set a frequency (adjust based on your GPU's supported values)
+nvidia-smi -i 0 --applications-clocks=9001,2400 2>&1
+
+echo ""
+echo "Verification after setting:"
+nvidia-smi -q -d CLOCK
+
+echo ""
+echo "Test complete!"
+
+
+===== file_head /data/users/chjing/test_nvgpufreq_2.sh =====
+#!/bin/bash
+echo "Node: $(hostname)"
+echo "Job ID: $SLURM_JOB_ID"
+
+if [ -f /var/run/nvgpufreq.run ]; then
+    echo "✓ Plugin activated"
+    cat /var/run/nvgpufreq.run
+else
+    echo "✗ Plugin not activated"
+fi
+
+nvidia-smi -q -d SUPPORTED_CLOCKS | head -50
+nvidia-smi -i 0 --applications-clocks=9001,2400 2>&1
+nvidia-smi -q -d CLOCK | head -30
+
+===== file_head /data/users/chjing/measure_dvfs_transition.sh =====
+#!/bin/bash
+
+# nvcc measure_dvfs.cu -o measure_dvfs -lnvidia-ml
+
+
+# L4 Configuration
+# MAX_FREQ=2040
+# MEM_FREQ=6251
+# STEP=90
+# MIN_FREQ=210  # Adjust based on your GPU's limit
+
+# L40s Configuration
+MAX_FREQ=2520
+MEM_FREQ=9001
+STEP=105
+MIN_FREQ=210  # Adjust based on your GPU's limit
+
+ITERATIONS=80 # 50 samples is usually enough to find a stable median
+
+OUTPUT_FILE="L40S_down_dvfs_latency.csv"
+
+# Initialize CSV file with headers
+echo "Delta_MHz,Target_Freq_MHz,Latency_us" > $OUTPUT_FILE
+
+echo "Starting Benchmark..."
+echo "Config: Max=$MAX_FREQ, Step=$STEP, Iterations=$ITERATIONS"
+
+# Loop from MAX down to MIN
+# We start slightly below MAX because measuring 2040->2040 is 0
+current_target=$((MAX_FREQ - 15)) # Example start point
+
+while [ $current_target -ge $MIN_FREQ ]
+do
+    delta=$((MAX_FREQ - current_target))
+    
+    echo "Measuring Delta: ${delta} MHz (Target: ${current_target} MHz)..."
+    
+    for (( i=1; i<=ITERATIONS; i++ ))
+    do
+        # Run the C++ program
+        # We capture the output and extract the specific line with "DVFS Transition Time"
+        output=$(sudo ./measure_dvfs $MAX_FREQ $current_target $MEM_FREQ)
+        
+        # Parse the latency value (us) using grep and awk
+        # Assumes output format: "DVFS Transition Time (...): 1234.56 us"
+        latency=$(echo "$output" | grep "DVFS Transition Time" | awk '{print $(NF-1)}')
+        
+        # Check if we got a valid number
+        if [[ -n "$latency" ]]; then
+            echo "$delta,$current_target,$latency" >> $OUTPUT_FILE
+        else
+            echo "Error reading latency for run $i"
+        fi
+        
+        # Short sleep to allow GPU state to settle (prevents thermal throttling buildup)
+        sleep 1 
+    done
+
+    # Decrease frequency
+    current_target=$((current_target - STEP))
+done
+
+echo "Done! Data saved to $OUTPUT_FILE"
+
+# Upscaling Benchmark Script
+# Initialize CSV file with headers
+# We log Start_Freq because Target is always MAX_FREQ
+OUTPUT_FILE="L40S_up_dvfs_latency.csv"
+echo "Delta_MHz,Start_Freq_MHz,Latency_us" > $OUTPUT_FILE
+
+echo "Starting Upscaling Benchmark..."
+echo "Config: Target Fixed at $MAX_FREQ, Sweeping Start from $MIN_FREQ to Max"
+
+# Start from the bottom (MIN_FREQ) and go UP
+current_start=$MIN_FREQ
+
+# Loop until we get close to Max Freq
+while [ $current_start -lt $MAX_FREQ ]
+do
+    delta=$((MAX_FREQ - current_start))
+    
+    echo "Measuring Delta: ${delta} MHz (Transition: ${current_start} -> ${MAX_FREQ})..."
+    
+    for (( i=1; i<=ITERATIONS; i++ ))
+    do
+        # COMMAND CHANGE: 
+        # Arg 1 (From) is variable: $current_start
+        # Arg 2 (To)   is fixed:    $MAX_FREQ
+        output=$(sudo ./measure_dvfs $current_start $MAX_FREQ $MEM_FREQ)
+        
+        # Parse the latency
+        latency=$(echo "$output" | grep "DVFS Transition Time" | awk '{print $(NF-1)}')
+        
+        # Save to CSV
+        if [[ -n "$latency" ]]; then
+            echo "$delta,$current_start,$latency" >> $OUTPUT_FILE
+        else
+            echo "Error reading latency for run $i"
+        fi
+        
+        # Short sleep to reset thermal state
+        sleep 1 
+    done
+
+    # LOGIC CHANGE: Increment the start frequency
+    current_start=$((current_start + STEP))
+done
+
+echo "Done! Data saved to $OUTPUT_FILE"
+
+
+# Tiny Change (PLL Lock): 2040 -> 2025 (You've done this)
+# Small Change: 2040 -> 1980
+# Small-Medium Change: 2040 -> 1800
+# Medium Change: 2040 -> 1500
+# Medium-Large Change: 2040 -> 1005 (You've done this)
+# Large Change: 2040 -> 615
+# Extreme Change (Max Voltage Drop): 2040 -> 210 (You've done this)
+
+# Step 4 (Optional Advanced): Finding the "Knee"
+# The most interesting part of the cost curve is the point where it transitions from cheap (sub-500µs) to expensive (milliseconds). This "knee" represents the boundary of a voltage plane. You can find it by doing a fine-grained sweep.
+# Run a sweep to find the boundary:
+# Measure 2040 -> F for F from 2025 down to 1800 in 15 MHz increments.
+# Plot the results. You will likely see a clear point where the cost suddenly jumps up. This tells you the maximum frequency drop you can get "for free" without a slow voltage change.
+
+############# L4 DVFS Transition Measurements #############
+# for i in {0..11}
+# do
+#     # Ramping down from max frequency to min frequency in steps of 90 MHz, in total 20 steps
+#     sudo ./measure_dvfs 2040 2025 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 1935 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 1845 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 1755 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 1665 6251
+#     sleep 2     
+#     sudo ./measure_dvfs 2040 1575 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 1485 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 1395 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 1305 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 1215 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 1125 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 1035 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 945 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 855 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 765 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 675 6251
+#     sleep 2 
+#     sudo ./measure_dvfs 2040 585 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 495 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 405 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 315 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2040 225 6251
+#     sleep 2
+
+#     # Ramping back up from min frequency to max frequency in steps of 90 MHz
+#     sudo ./measure_dvfs 225 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 315 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 405 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 495 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 585 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 675 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 765 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 855 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 945 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1035 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1125 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1215 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1305 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1395 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1485 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1575 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1665 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1755 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1845 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1935 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2025 2040 6251
+#     sleep 2
+# done
+
+
+#     # Run the mirror image of Step 1:
+#     # 210 -> 2040
+#     # 615 -> 2040
+#     # 1005 -> 2040
+#     # 1500 -> 2040
+#     # 1800 -> 2040
+#     # 1980 -> 2040
+#     # 2025 -> 2040
+
+#     sudo ./measure_dvfs 210 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 420 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 615 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 810 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1005 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1200 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1500 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1800 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1980 2040 6251
+#     sleep 2
+#     sudo ./measure_dvfs 2025 2040 6251
+#     sleep 2
+
+#     # Small jump, mid-range: 1500 -> 1455
+#     # Large jump, mid-range: 1500 -> 810
+#     # Small ramp-up, mid-range: 810 -> 855
+
+#     sudo ./measure_dvfs 1500 1455 6251
+#     sleep 2
+#     sudo ./measure_dvfs 1500 810 6251
+#     sleep 2
+#     sudo ./measure_dvfs 810 855 6251
+#     sleep 2
+# done
+
+
+===== file_head /data/users/chjing/measure_dvfs.cu =====
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include <thread>
+#include <numeric>
+#include <iomanip>
+#include <cmath>
+
+#include <cuda_runtime.h>
+#include <nvml.h>
+
+// --- Error Checking Macros ---
+#define CUDA_SAFE_CALL(x)                                             \
+    do                                                                \
+    {                                                                 \
+        cudaError_t err = x;                                          \
+        if (err != cudaSuccess)                                       \
+        {                                                             \
+            fprintf(stderr, "CUDA error in %s:%d: %s\n", __FILE__, __LINE__, cudaGetErrorString(err)); \
+            exit(1);                                                  \
+        }                                                             \
+    } while (0)
+
+#define NVML_SAFE_CALL(x)                                             \
+    do                                                                \
+    {                                                                 \
+        nvmlReturn_t err = x;                                         \
+        if (err != NVML_SUCCESS)                                      \
+        {                                                             \
+            fprintf(stderr, "NVML error in %s:%d: %s\n", __FILE__, __LINE__, nvmlErrorString(err)); \
+            exit(1);                                                  \
+        }                                                             \
+    } while (0)
+
+
+__global__ void spin_kernel(long long cycles) {
+    long long start = clock64();
+    long long end = start + cycles;
+    while (clock64() < end);
+}
+
+void set_gpu_clocks(nvmlDevice_t device, unsigned int sm_clock, unsigned int mem_clock) {
+    // Suppress cout for cleaner measurement output
+    // std::cout << "Setting clocks to SM=" << sm_clock << " MHz, MEM=" << mem_clock << std::endl;
+    NVML_SAFE_CALL(nvmlDeviceSetApplicationsClocks(device, mem_clock, sm_clock));
+}
+
+void reset_gpu_clocks(nvmlDevice_t device) {
+    std::cout << "Resetting clocks to default." << std::endl;
+    NVML_SAFE_CALL(nvmlDeviceResetApplicationsClocks(device));
+}
+
+double measure_average_kernel_time(long long spin_cycles, int samples) {
+    double total_time_ms = 0;
+    for (int i = 0; i < samples; ++i) {
+        cudaEvent_t start, stop;
+        CUDA_SAFE_CALL(cudaEventCreate(&start));
+        CUDA_SAFE_CALL(cudaEventCreate(&stop));
+        CUDA_SAFE_CALL(cudaEventRecord(start));
+        spin_kernel<<<1, 1>>>(spin_cycles);
+        CUDA_SAFE_CALL(cudaEventRecord(stop));
+        CUDA_SAFE_CALL(cudaEventSynchronize(stop));
+        float ms = 0;
+        CUDA_SAFE_CALL(cudaEventElapsedTime(&ms, start, stop));
+        total_time_ms += ms;
+        CUDA_SAFE_CALL(cudaEventDestroy(start));
+        CUDA_SAFE_CALL(cudaEventDestroy(stop));
+    }
+    return total_time_ms / samples;
+}
+
+int main(int argc, char** argv) {
+    if (argc != 4) {
+        std::cerr << "Usage: " << argv[0] << " <from_freq_mhz> <to_freq_mhz> <mem_freq_mhz>" << std::endl;
+        return 1;
+    }
+
+    unsigned int from_freq = std::stoi(argv[1]);
+    unsigned int to_freq = std::stoi(argv[2]);
+    unsigned int mem_freq = std::stoi(argv[3]);
+    int device_id = 0;
+
+    NVML_SAFE_CALL(nvmlInit());
+    nvmlDevice_t device;
+    NVML_SAFE_CALL(nvmlDeviceGetHandleByIndex(device_id, &device));
+    CUDA_SAFE_CALL(cudaSetDevice(device_id));
+
+    const long long spin_cycles = 400000; // Keep kernel very short for high resolution
+
+    std::cout << "\n--- Establishing Baselines ---" << std::endl;
+    set_gpu_clocks(device, to_freq, mem_freq);
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    double baseline_target_time_ms = measure_average_kernel_time(spin_cycles, 100);
+    std::cout << "Baseline time at " << to_freq << " MHz: " << std::fixed << std::setprecision(6) 
+              << baseline_target_time_ms << " ms" << std::endl;
+
+    std::cout << "\n--- Preparing for Measurement ---" << std::endl;
+    set_gpu_clocks(device, from_freq, mem_freq);
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    
+    std::cout << "\n--- Measuring Transition ---" << std::endl;
+    
+    // ***************************************************************
+    // *****         NEW ASYNCHRONOUS PROBING METHOD             *****
+    // ***************************************************************
+    
+    const int num_probes = 1000;
+    std::vector<cudaEvent_t> start_events(num_probes);
+    std::vector<cudaEvent_t> stop_events(num_probes);
+    for(int i = 0; i < num_probes; ++i) {
+        CUDA_SAFE_CALL(cudaEventCreate(&start_events[i]));
+        CUDA_SAFE_CALL(cudaEventCreate(&stop_events[i]));
+    }
+
+    CUDA_SAFE_CALL(cudaDeviceSynchronize()); // Ensure device is idle
+
+    // ISSUE THE DVFS COMMAND
+    auto cpu_start = std::chrono::high_resolution_clock::now();
+    set_gpu_clocks(device, to_freq, mem_freq);
+
+    // Immediately launch all probe kernels asynchronously
+    for (int i = 0; i < num_probes; ++i) {
+        CUDA_SAFE_CALL(cudaEventRecord(start_events[i]));
+        spin_kernel<<<1, 1>>>(spin_cycles);
+        CUDA_SAFE_CALL(cudaEventRecord(stop_events[i]));
+    }
+    
+    // Wait for all probes to complete
+    CUDA_SAFE_CALL(cudaDeviceSynchronize());
+    auto cpu_end = std::chrono::high_resolution_clock::now();
+    
+    // --- Analyze the results ---
+    std::vector<float> durations_ms(num_probes);
+    for (int i = 0; i < num_probes; ++i) {
+        CUDA_SAFE_CALL(cudaEventElapsedTime(&durations_ms[i], start_events[i], stop_events[i]));
+    }
+
+    double transition_duration_us = 0;
+    const double tolerance = 0.05; // 5% tolerance is fine for this method
+    // int stable_count = 0;
+    const int stable_threshold = 5; // Require 5 stable probes for confidence
+
+    for (int i = 0; i < num_probes - stable_threshold; ++i) {
+        bool is_stable = true;
+        for (int j = 0; j < stable_threshold; ++j) {
+            if (std::abs(durations_ms[i+j] - baseline_target_time_ms) / baseline_target_time_ms > tolerance) {
+                is_stable = false;
+                break;
+            }
+        }
+
+        if (is_stable) {
+            // Found the first stable probe. The transition is complete.
+            // Calculate total time up to the END of this first stable probe.
+            // float total_time_ms = 0;
+            // for (int k = 0; k <= i; ++k) {
+            //     total_time_ms += durations_ms[k];
+            // }
+            // transition_duration_us = total_time_ms * 1000.0;
+            // std::cout << "Stabilized at probe " << i << ". Kernel time: " << durations_ms[i] << " ms" << std::endl;
+            
+            float span_ms = 0;
+            CUDA_SAFE_CALL(cudaEventElapsedTime(&span_ms, start_events[0], stop_events[i]));
+            transition_duration_us = span_ms * 1000.0;
+            //std::cout << "Stabilized at probe " << i << std::endl;
+            break;
+        }
+    }
+
+    // --- Cleanup ---
+    for(int i = 0; i < num_probes; ++i) {
+        CUDA_SAFE_CALL(cudaEventDestroy(start_events[i]));
+        CUDA_SAFE_CALL(cudaEventDestroy(stop_events[i]));
+    }
+    reset_gpu_clocks(device);
+    NVML_SAFE_CALL(nvmlShutdown());
+    
+    std::cout << "\n==============================================" << std::endl;
+    if (transition_duration_us == 0) {
+        std::cout << "✗ Warning: Could not detect a stable transition within " << num_probes << " probes." << std::endl;
+    }
+    std::cout << "DVFS Transition Time (" << from_freq << " -> " << to_freq << " MHz): " 
+              << std::fixed << std::setprecision(2) << transition_duration_us << " us" << std::endl;
+    std::cout << "=============================================\n" << std::endl;
+
+    return 0;
+}
+
+===== grep_context_in_slurm_nvgpufreq =====
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:35:#include "nvgpufreq.h"
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:37:HIDDEN int conf_nvgpufreq(spank_t spank_ctx, int argc, char **argv, int conf)
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:39:  nvmlReturn_t result;
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:50:  nvmlReturn_t (*DLnvmlInit)(void) = dlsym(hl, "nvmlInit");
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:51:  nvmlReturn_t (*DLnvmlDeviceGetCount)(unsigned int*) = dlsym(hl, "nvmlDeviceGetCount");
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:52:  nvmlReturn_t (*DLnvmlDeviceGetHandleByIndex)(unsigned int, nvmlDevice_t*) = dlsym(hl, "nvmlDeviceGetHandleByIndex");
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:53:  nvmlReturn_t (*DLnvmlDeviceGetName)(nvmlDevice_t, char*, unsigned int) = dlsym(hl, "nvmlDeviceGetName");
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:54:  nvmlReturn_t (*DLnvmlDeviceGetPciInfo)(nvmlDevice_t, nvmlPciInfo_t*) = dlsym(hl, "nvmlDeviceGetPciInfo");
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:55:  nvmlReturn_t (*DLnvmlDeviceResetApplicationsClocks)(nvmlDevice_t) = dlsym(hl, "nvmlDeviceResetApplicationsClocks");
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:56:  nvmlReturn_t (*DLnvmlDeviceSetAPIRestriction)(nvmlDevice_t, nvmlRestrictedAPI_t, nvmlEnableState_t) = dlsym(hl, "nvmlDeviceSetAPIRestriction");
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:57:  nvmlReturn_t (*DLnvmlShutdown)(void) = dlsym(hl, "nvmlShutdown");
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:58:  char* (*DLnvmlErrorString)(nvmlReturn_t) = dlsym(hl, "nvmlErrorString");
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:59:  if(DLnvmlInit == NULL ||
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:60:     DLnvmlDeviceGetCount == NULL ||
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:61:     DLnvmlDeviceGetHandleByIndex == NULL ||
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:62:     DLnvmlDeviceGetName == NULL ||
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:63:     DLnvmlDeviceGetPciInfo == NULL ||
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:64:     DLnvmlDeviceResetApplicationsClocks == NULL ||
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:65:     DLnvmlDeviceSetAPIRestriction == NULL ||
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:66:     DLnvmlShutdown == NULL)
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:73:  result = DLnvmlInit();
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:76:    slurm_spank_log("[NVGPUFREQ][ERROR] Failed to initialize NVML: %s\n", DLnvmlErrorString(result));
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:81:  result = DLnvmlDeviceGetCount(&device_count);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:84:    slurm_spank_log("[NVGPUFREQ][ERROR] Failed to query device count: %s\n", DLnvmlErrorString(result));
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:85:    result = DLnvmlShutdown();
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:87:      slurm_spank_log("[NVGPUFREQ][ERROR] Failed to shutdown NVML: %s\n", DLnvmlErrorString(result));
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:94:    nvmlDevice_t device;
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:96:    nvmlPciInfo_t pci;
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:97:	  nvmlRestrictedAPI_t apiType = NVML_RESTRICTED_API_SET_APPLICATION_CLOCKS;
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:99:    result = DLnvmlDeviceGetHandleByIndex(i, &device);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:102:      slurm_spank_log("[NVGPUFREQ][ERROR] Failed to get handle for device %u: %s\n", i, DLnvmlErrorString(result));
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:107:    result = DLnvmlDeviceGetName(device, name, NVML_DEVICE_NAME_BUFFER_SIZE);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:110:      slurm_spank_log("[NVGPUFREQ][ERROR] Failed to get name of device %u: %s\n", i, DLnvmlErrorString(result));
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:115:    result = DLnvmlDeviceGetPciInfo(device, &pci);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:118:      slurm_spank_log("[NVGPUFREQ][ERROR] Failed to get pci info for device %u: %s\n", i, DLnvmlErrorString(result));
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:125:      nvmlEnableState_t isRestricted = NVML_FEATURE_DISABLED;
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:127:      result = DLnvmlDeviceResetApplicationsClocks(device);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:130:        slurm_spank_log("[NVGPUFREQ][ERROR] Failed to set API restriction for device %u: %s\n", i, DLnvmlErrorString(result));
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:135:  	  result = DLnvmlDeviceSetAPIRestriction(device, apiType, isRestricted);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:138:        slurm_spank_log("[NVGPUFREQ][ERROR] Failed to set API restriction for device %u: %s\n", i, DLnvmlErrorString(result));
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:142:      slurm_spank_log("[NVGPUFREQ][INFO] Applications clocks commands have been set to UNRESTRICTED for GPU: %u. %s [%s]\n", i, name, pci.busId);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:146:      nvmlEnableState_t isRestricted = NVML_FEATURE_ENABLED;
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:148:      result = DLnvmlDeviceSetAPIRestriction(device, apiType, isRestricted);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:151:        slurm_spank_log("[NVGPUFREQ][ERROR] Failed to set API restriction for device %u: %s\n", i, DLnvmlErrorString(result));
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:155:      slurm_spank_log("[NVGPUFREQ][INFO] Applications clocks commands have been set to RESTRICTED for GPU: %u. %s [%s]\n", i, name, pci.busId);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:157:      result = DLnvmlDeviceResetApplicationsClocks(device);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:163:      slurm_spank_log("[NVGPUFREQ][INFO] Applications clocks have been reset for GPU: %u. %s [%s]\n", i, name, pci.busId);
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:167:  result = DLnvmlShutdown();
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:170:    slurm_spank_log("[NVGPUFREQ][ERROR] Failed to shutdown NVML: %s\n", DLnvmlErrorString(result));
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:178:    // Create the the nvgpufreq status file
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c:181:      slurm_spank_log("[NVGPUFREQ][ERROR] Failed to create the nvgpufreq status file: %s", PLUGIN_RUN_CONF);
+/data/users/chjing/slurm-nvgpufreq/src/main.c:35:#include "nvgpufreq.h"
+/data/users/chjing/slurm-nvgpufreq/src/main.c:37:SPANK_PLUGIN(nvgpufreq, 1);
+/data/users/chjing/slurm-nvgpufreq/src/main.c:39:// Callback of the job prolog. 
+/data/users/chjing/slurm-nvgpufreq/src/main.c:45:  slurm_spank_log("[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!");
+/data/users/chjing/slurm-nvgpufreq/src/main.c:55:  // Check if the node is tagged with the nvgpufreq gres
+/data/users/chjing/slurm-nvgpufreq/src/main.c:58:    slurm_spank_log("[NVGPUFREQ][INFO] The node is not tagged with the nvgpufreq gres, exit!");
+/data/users/chjing/slurm-nvgpufreq/src/main.c:75:  // Check if the job requests the nvgpufreq gres
+/data/users/chjing/slurm-nvgpufreq/src/main.c:78:    slurm_spank_log("[NVGPUFREQ][INFO] The job does not request the nvgpufreq gres, exit!");
+/data/users/chjing/slurm-nvgpufreq/src/main.c:82:  slurm_spank_log("[NVGPUFREQ][INFO] The job %d requests the nvgpufreq gres, try to unrestricted the applications clocks commands!", job_id);
+/data/users/chjing/slurm-nvgpufreq/src/main.c:86:    slurm_spank_log("[NVGPUFREQ][INFO] This job %d is not exclusive! The applications clocks commands won't be unrestricted. Exit!", job_id);
+/data/users/chjing/slurm-nvgpufreq/src/main.c:94:  int ret_conf_nvgpufreq = conf_nvgpufreq(spank_ctx, argc, argv, SET);
+/data/users/chjing/slurm-nvgpufreq/src/main.c:95:  if(ret_conf_nvgpufreq == ERROR_RET){
+/data/users/chjing/slurm-nvgpufreq/src/main.c:96:    slurm_spank_log("[NVGPUFREQ][ERROR] It is not possible to unrestricted the applications clocks commands! Exit!");
+/data/users/chjing/slurm-nvgpufreq/src/main.c:99:  else if(ret_conf_nvgpufreq == WARNING_RET){
+/data/users/chjing/slurm-nvgpufreq/src/main.c:100:    slurm_spank_log("[NVGPUFREQ][ERROR] The applications clocks commands have been partially unrestricted! Exit!");
+/data/users/chjing/slurm-nvgpufreq/src/main.c:104:    slurm_spank_log("[NVGPUFREQ][ERROR] The applications clocks commands have been unrestricted! Exit!");
+/data/users/chjing/slurm-nvgpufreq/src/main.c:109:// Callback of the job epilog. Called at the same time as the job epilog.
+/data/users/chjing/slurm-nvgpufreq/src/main.c:122:  // Check if the node is tagged with the nvgpufreq gres
+/data/users/chjing/slurm-nvgpufreq/src/main.c:125:    slurm_spank_log("[NVGPUFREQ][INFO] The node is not tagged with the nvgpufreq gres, exit!");
+/data/users/chjing/slurm-nvgpufreq/src/main.c:133:    slurm_spank_log("[NVGPUFREQ][INFO] Try to restore the nvgpufreq files to the system state configuration!");
+/data/users/chjing/slurm-nvgpufreq/src/main.c:135:    int ret_conf_nvgpufreq = conf_nvgpufreq(spank_ctx, argc, argv, RESET);
+/data/users/chjing/slurm-nvgpufreq/src/main.c:136:    if(ret_conf_nvgpufreq == ERROR_RET){
+/data/users/chjing/slurm-nvgpufreq/src/main.c:137:      slurm_spank_log("[NVGPUFREQ][ERROR] It is not possible to restricted the applications clocks commands! Exit!");
+/data/users/chjing/slurm-nvgpufreq/src/main.c:140:    else if(ret_conf_nvgpufreq == WARNING_RET)
+/data/users/chjing/slurm-nvgpufreq/src/main.c:141:      slurm_spank_log("[NVGPUFREQ][ERROR] The applications clocks commands have been partially restricted! Exit!");
+/data/users/chjing/slurm-nvgpufreq/src/main.c:143:      slurm_spank_log("[NVGPUFREQ][INFO] The applications clocks commands have been restricted! Exit!");
+/data/users/chjing/slurm-nvgpufreq/src/CMakeLists.txt:36:	nvgpufreq.c)
+/data/users/chjing/slurm-nvgpufreq/src/CMakeLists.txt:39:add_library(nvgpufreq SHARED ${SOURCES})
+/data/users/chjing/slurm-nvgpufreq/src/CMakeLists.txt:42:target_link_libraries(nvgpufreq PRIVATE SLURM::SLURM)
+/data/users/chjing/slurm-nvgpufreq/src/CMakeLists.txt:43:target_include_directories(nvgpufreq PRIVATE ${CUDAToolkit_INCLUDE_DIRS})
+/data/users/chjing/slurm-nvgpufreq/src/CMakeLists.txt:46:target_compile_options(nvgpufreq PRIVATE "-Wall")
+/data/users/chjing/slurm-nvgpufreq/src/CMakeLists.txt:49:set_target_properties(nvgpufreq PROPERTIES PREFIX "")
+/data/users/chjing/slurm-nvgpufreq/src/CMakeLists.txt:50:install(TARGETS nvgpufreq DESTINATION lib)
+/data/users/chjing/slurm-nvgpufreq/src/check.c:35:#include "nvgpufreq.h"
+/data/users/chjing/slurm-nvgpufreq/src/check.c:39:  if(node == NULL || node->gres == NULL || strcasestr(node->gres, "nvgpufreq") == NULL)
+/data/users/chjing/slurm-nvgpufreq/src/check.c:47:  if(job == NULL || job->tres_per_node == NULL || strcasestr(job->tres_per_node, "nvgpufreq") == NULL)
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.h:40:#include <nvml.h>
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.h:49:#define PLUGIN_RUN_CONF "/run/nvgpufreq.run"
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.h:81:// nvgpufreq.c
+/data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.h:82:int conf_nvgpufreq(spank_t spank_ctx, int argc, char **argv, int conf);
+/data/users/chjing/slurm-nvgpufreq/CMakeLists.txt:32:project(nvgpufreq C)
+/data/users/chjing/slurm-nvgpufreq/CMakeLists.txt:33:set(nvgpufreq_VERSION_MAJOR 0)
+/data/users/chjing/slurm-nvgpufreq/CMakeLists.txt:34:set(nvgpufreq_VERSION_MINOR 1)
+/data/users/chjing/slurm-nvgpufreq/README.md:2:This plugin unrestrict the Nvidia application clock command when an _exclusive job_ run on a node tagged with gres _nvgpufreq_.
+/data/users/chjing/slurm-nvgpufreq/README.md:4:The nvgpufreq plugin call the _nvmlDeviceSetAPIRestriction()_ to restrict/unrestrict the GPU frequency clock at user level. When the application clock commands have been unrestricted a standard users can chenge the GPU frequency using the nvidia-smi tool or the NVML APIs.
+/data/users/chjing/slurm-nvgpufreq/README.md:7:The nvgpufreq plugin intercepts the prolog and epilog of each job submitted in the cluster (_slurm_spank_job_prolog()_ and _slurm_spank_job_epilog()_).
+/data/users/chjing/slurm-nvgpufreq/README.md:10:In the prolog procedure, the plugin does the following checks:
+/data/users/chjing/slurm-nvgpufreq/README.md:13:2. Check if the node is tagged with the gres _nvgpufreq_. If the node is not tagged the plugin terminates its execution.
+/data/users/chjing/slurm-nvgpufreq/README.md:15:4. Check if the job requests the nvgpufreq gres. If the job does not specify the gres _nvgpufreq_ the plugin terminates its execution.
+/data/users/chjing/slurm-nvgpufreq/README.md:17:6. The plugin call the _nvmlDeviceSetAPIRestriction()_ to unrestrict the GPU frequency clock for regular users.
+/data/users/chjing/slurm-nvgpufreq/README.md:20:In the epilog procedure, the plugin does the following checks:
+/data/users/chjing/slurm-nvgpufreq/README.md:23:2. Check if the node is tagged with the gres _nvgpufreq_. If the node is not tagged the plugin terminates its execution.
+/data/users/chjing/slurm-nvgpufreq/README.md:24:3. Check if the node has been configured from a nvgpufreq job and restore it. After that, the plugin deletes _/var/run/nvgpufreq.run_ and concludes the epilog procedure.
+/data/users/chjing/slurm-nvgpufreq/README.md:27:To evaluate if the plugin concludes with the configuration of the node, the users/administrators can check the existence of the file _/var/run/nvgpufreq.run_, which contains the information if something when wrong or the plugin correctly terminated. This file should always be removed from the plugin in the epilog procedure after the restoration of the node.
+/data/users/chjing/slurm-nvgpufreq/README.md:34:    git clone https://gitlab.hpc.cineca.it/dcesari1/slurm-nvgpufreq.git
+/data/users/chjing/slurm-nvgpufreq/README.md:38:    mkdir build-nvgpufreq
+/data/users/chjing/slurm-nvgpufreq/README.md:42:    cd build-nvgpufreq
+/data/users/chjing/slurm-nvgpufreq/README.md:46:    cmake -DCMAKE_INSTALL_PREFIX=../install-nvgpufreq ../slurm-nvgpufreq
+/data/users/chjing/slurm-nvgpufreq/README.md:54:Before to deploy the plugin must be defined a gres called _nvgpufreq_. The gres allows the system administrators to identify only a subset of the nodes where the plugin can be used from the users.
+/data/users/chjing/slurm-nvgpufreq/README.md:56:NodeName=... Name=nvgpufreq Count=1
+/data/users/chjing/slurm-nvgpufreq/README.md:61:GresTypes=nvgpufreq
+/data/users/chjing/slurm-nvgpufreq/README.md:63:NodeName=... Gres=nvgpufreq:1 ...
+/data/users/chjing/slurm-nvgpufreq/README.md:68:optional   /path/to/nvgpufreq.so
+/data/users/chjing/slurm-nvgpufreq/README.md:71:When a user wants to use the plugin must submit a job specify the _nvgpufreq_ gres and the exclusivity of the job.
+/data/users/chjing/slurm-nvgpufreq/README.md:73:sbatch $SLURM_CONF --gres=nvgpufreq --exclusive $BIN
+/data/users/chjing/slurm-nvgpufreq/README.md:78:nvidia-smi -q -d SUPPORTED_CLOCKS
+/data/users/chjing/slurm-nvgpufreq/README.md:80:Show current GPU frequency
+/data/users/chjing/slurm-nvgpufreq/README.md:82:nvidia-smi -q -d CLOCK
+/data/users/chjing/slurm-nvgpufreq/README.md:84:Set a GPU frequency on GPU ID '0' (usually for Tesla Architecture the memory frequency is fixed and it's no possible to change it due HW constraints related to the HBM)
+/data/users/chjing/slurm-nvgpufreq/README.md:86:# --applications-clocks=MEMORY_FREQUENCY,COMPUTE_FREQUENCY
+/data/users/chjing/slurm-nvgpufreq/README.md:87:nvidia-smi -i 0 --applications-clocks=877,1530
+
+===== note =====
+This job only inspects filenames and selected text/source files in known chjing directories.
