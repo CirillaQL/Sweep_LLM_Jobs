@@ -1,0 +1,750 @@
+host=europa
+date=2026-07-03T16:30:46+02:00
+whoami=chjing
+id=uid=10271(chjing) gid=0(root) groups=0(root),10002(admin),10272(chjing)
+script=/data/users/chjing/vLLM_test/phase2_highrate_l4.sh
+
+===== script_stat =====
+-rwxr-xr-x 1 chjing chjing 20661 May 16 20:59 /data/users/chjing/vLLM_test/phase2_highrate_l4.sh
+  File: /data/users/chjing/vLLM_test/phase2_highrate_l4.sh
+  Size: 20661     	Blocks: 19         IO Block: 1048576 regular file
+Device: 0,49	Inode: 510293510   Links: 1
+Access: (0755/-rwxr-xr-x)  Uid: (10271/  chjing)   Gid: (10272/  chjing)
+Access: 2026-07-03 11:47:14.477191776 +0200
+Modify: 2026-05-16 20:59:49.930435436 +0200
+Change: 2026-05-16 20:59:49.930435436 +0200
+ Birth: -
+
+===== function_and_section_index =====
+13:# ==============================================================================
+15:# ==============================================================================
+42:# ==============================================================================
+46:# ==============================================================================
+47:# 1. CONFIGURATION
+48:# ==============================================================================
+65:# ==============================================================================
+66:# 2. L4 GPU CONFIGURATION (fixed — this script targets europa only)
+67:# ==============================================================================
+72:# ==============================================================================
+73:# 3. EXPERIMENT PARAMETERS
+74:# ==============================================================================
+86:# ==============================================================================
+87:# 4. OUTPUT SETUP
+88:# ==============================================================================
+97:# ==============================================================================
+98:# 5. HELPER FUNCTIONS (identical to phase2_characterization_l4.sh)
+99:# ==============================================================================
+103:cleanup_monitors() {
+135:cleanup_all() {
+149:start_server() {
+239:set_gpu_freq() {
+249:start_monitors() {
+267:parse_bench_output() {
+286:compute_power_energy() {
+366:already_done() {
+377:run_experiment() {
+457:# ==============================================================================
+458:# 6. STEP FUNCTIONS
+459:# ==============================================================================
+461:run_step_hr_tp4() {
+486:run_step_hr_tp8() {
+511:run_step_hr_tp2() {
+536:# ==============================================================================
+537:# 7. MAIN
+538:# ==============================================================================
+
+===== frequency_related_lines =====
+14:# Phase 2 High-Rate Extension: L4 TP=2/4/8 at rates {20, 30, 50}
+17:# only collected TP≥2 data at rates {1, 10}.  ROUTE_BB queries on L4 at
+19:# identical to the L40S TP=4 issue.
+22:#   step_hr_tp4: TP=4, IL∈{1024,2048,4096}, OL=32,
+26:#   step_hr_tp8: TP=8, IL∈{1024,2048,4096}, OL=32,
+30:#   step_hr_tp2: TP=2, IL∈{1024,2048,4096}, OL=32,
+38:#   sbatch phase2_highrate_l4.sh --step tp4      # TP=4 (primary)
+39:#   sbatch phase2_highrate_l4.sh --step tp8      # TP=8 (primary)
+40:#   sbatch phase2_highrate_l4.sh --step tp2      # TP=2 (optional)
+49:MODEL="mistralai/Mistral-7B-v0.1"
+51:VLLM_LOG="vllm_server.log"
+52:GPU_TYPE="L4"
+54:STEP="${1:---step}"
+55:if [ "$STEP" == "--step" ]; then
+56:    STEP="${2:-all}"
+61:RUNS=3
+63:MONITOR_SCRIPT="gpu_monitor.py"
+68:SUPPORTED_MEM_FREQ="6251"
+69:ALL_GPU_FREQS=("2040" "1830" "1620" "1410" "1200" "990" "780" "570" "360" "210")
+75:# Primary: TP=4 and TP=8 DVFS sweep at high rates — the calibration gaps
+76:HR_TP4_ILS=("1024" "2048" "4096")
+77:HR_TP8_ILS=("1024" "2048" "4096")
+78:HR_PRIMARY_OL="32"
+79:HR_PRIMARY_RATES=("20" "30" "50")
+81:# Optional: TP=2 DVFS sweep at high rates
+82:HR_TP2_ILS=("1024" "2048" "4096")
+83:HR_TP2_OL="32"
+84:HR_TP2_RATES=("20" "30")
+87:# 4. OUTPUT SETUP
+89:OUTPUT_DIR="Phase2_Results_L4"
+90:mkdir -p "$OUTPUT_DIR"
+92:MASTER_CSV="$OUTPUT_DIR/master_results.csv"
+93:if [ ! -f "$MASTER_CSV" ]; then
+94:    echo "step,gpu_type,gpu_freq_mhz,mem_freq_mhz,tp_degree,input_len,output_len,request_rate,run,num_prompts,benchmark_duration_s,request_throughput_rps,output_token_throughput_tps,total_token_throughput_tps,mean_ttft_ms,median_ttft_ms,p99_ttft_ms,mean_tpot_ms,median_tpot_ms,p99_tpot_ms,mean_itl_ms,median_itl_ms,p99_itl_ms,avg_power_w,min_power_w,max_power_w,energy_j,avg_gpu_util_pct,avg_mem_util_pct,monitor_samples" > "$MASTER_CSV"
+103:cleanup_monitors() {
+135:cleanup_all() {
+136:    echo "--- Full cleanup ---"
+137:    cleanup_monitors
+144:    sudo nvidia-smi -rac 2>/dev/null || true
+147:trap cleanup_all EXIT INT TERM
+157:    pkill -TERM -u "$USER" -f "vllm" 2>/dev/null || true
+159:    pkill -KILL -u "$USER" -f "vllm" 2>/dev/null || true
+160:    for _pid in $(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null \
+170:    while [ "$(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null \
+176:            for _pid in $(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null \
+205:    echo "Starting vLLM server: model=$MODEL, TP=$tp_degree, GPUs=$gpu_list"
+207:    python -m vllm.entrypoints.openai.api_server \
+208:        --model $MODEL \
+239:set_gpu_freq() {
+242:    echo "  Setting GPU frequency to ${freq} MHz (mem: ${SUPPORTED_MEM_FREQ} MHz) on $tp GPU(s)..."
+244:        sudo nvidia-smi -i $g -ac "${SUPPORTED_MEM_FREQ},${freq}"
+249:start_monitors() {
+256:        $(which python3) "$MONITOR_SCRIPT" --monitor --interval $MONITOR_INTERVAL --output "$log_file" --gpu-id $g &
+276:    local mean_tpot=$(grep "Mean TPOT" "$bench_file" | awk '{print $NF}')
+277:    local median_tpot=$(grep "Median TPOT" "$bench_file" | awk '{print $NF}')
+278:    local p99_tpot=$(grep "P99 TPOT" "$bench_file" | awk '{print $NF}')
+368:    [ ! -f "$MASTER_CSV" ] && return 1
+374:    ' "$MASTER_CSV"
+387:    local exp_dir="$OUTPUT_DIR/${step_name}"
+391:    local monitor_prefix="$exp_dir/monitor_${exp_label}"
+400:    start_monitors "$monitor_prefix" "$tp_degree"
+427:    vllm bench serve \
+430:        --model $MODEL \
+443:    cleanup_monitors
+449:    power_metrics=$(compute_power_energy "$monitor_prefix" "$tp_degree" "$start_ts" "$end_ts")
+451:    echo "${step_name},${GPU_TYPE},${gpu_freq},${SUPPORTED_MEM_FREQ},${tp_degree},${input_len},${output_len},${req_rate},${run_num},${NUM_PROMPTS},${bench_metrics},${power_metrics}" >> "$MASTER_CSV"
+458:# 6. STEP FUNCTIONS
+463:    echo "====== High-Rate Extension: TP=4 DVFS sweep ======"
+464:    echo "  IL: ${HR_TP4_ILS[*]}, OL: ${HR_PRIMARY_OL}, rates: ${HR_PRIMARY_RATES[*]}"
+465:    local total=$(( ${#HR_TP4_ILS[@]} * ${#HR_PRIMARY_RATES[@]} * ${#ALL_GPU_FREQS[@]} * RUNS ))
+471:    for freq in "${ALL_GPU_FREQS[@]}"; do
+472:        set_gpu_freq $freq $tp
+474:        for input_len in "${HR_TP4_ILS[@]}"; do
+475:            for req_rate in "${HR_PRIMARY_RATES[@]}"; do
+476:                for ((run=1; run<=RUNS; run++)); do
+477:                    run_experiment "step_hr_tp4" "$freq" "$tp" "$input_len" "$HR_PRIMARY_OL" "$req_rate" "$run"
+483:    echo "====== High-Rate TP=4 Complete ======"
+488:    echo "====== High-Rate Extension: TP=8 DVFS sweep ======"
+489:    echo "  IL: ${HR_TP8_ILS[*]}, OL: ${HR_PRIMARY_OL}, rates: ${HR_PRIMARY_RATES[*]}"
+490:    local total=$(( ${#HR_TP8_ILS[@]} * ${#HR_PRIMARY_RATES[@]} * ${#ALL_GPU_FREQS[@]} * RUNS ))
+496:    for freq in "${ALL_GPU_FREQS[@]}"; do
+497:        set_gpu_freq $freq $tp
+499:        for input_len in "${HR_TP8_ILS[@]}"; do
+500:            for req_rate in "${HR_PRIMARY_RATES[@]}"; do
+501:                for ((run=1; run<=RUNS; run++)); do
+502:                    run_experiment "step_hr_tp8" "$freq" "$tp" "$input_len" "$HR_PRIMARY_OL" "$req_rate" "$run"
+508:    echo "====== High-Rate TP=8 Complete ======"
+513:    echo "====== High-Rate Extension: TP=2 DVFS sweep ======"
+514:    echo "  IL: ${HR_TP2_ILS[*]}, OL: ${HR_TP2_OL}, rates: ${HR_TP2_RATES[*]}"
+515:    local total=$(( ${#HR_TP2_ILS[@]} * ${#HR_TP2_RATES[@]} * ${#ALL_GPU_FREQS[@]} * RUNS ))
+521:    for freq in "${ALL_GPU_FREQS[@]}"; do
+522:        set_gpu_freq $freq $tp
+524:        for input_len in "${HR_TP2_ILS[@]}"; do
+525:            for req_rate in "${HR_TP2_RATES[@]}"; do
+526:                for ((run=1; run<=RUNS; run++)); do
+527:                    run_experiment "step_hr_tp2" "$freq" "$tp" "$input_len" "$HR_TP2_OL" "$req_rate" "$run"
+533:    echo "====== High-Rate TP=2 Complete ======"
+542:sudo nvidia-smi -pm 1
+546:echo "Phase 2 High-Rate Extension: GPU_TYPE=$GPU_TYPE, STEP=$STEP"
+547:echo "Model: $MODEL"
+548:echo "Output: $OUTPUT_DIR"
+551:case "$STEP" in
+568:        echo "  tp4: TP=4 DVFS sweep, IL∈{1024,2048,4096}, rates∈{20,30,50} (270 expts)"
+569:        echo "  tp8: TP=8 DVFS sweep, IL∈{1024,2048,4096}, rates∈{20,30,50} (270 expts)"
+570:        echo "  tp2: TP=2 DVFS sweep, IL∈{1024,2048,4096}, rates∈{20,30} (180 expts) [optional]"
+577:cleanup_all
+582:echo "Results: $MASTER_CSV"
+583:echo "Monitor logs: $OUTPUT_DIR/step_hr_tp{4,8,2}/"
+
+===== full_script_numbered =====
+     1	#!/bin/bash
+     2	#SBATCH --job-name=phase2_highrate_l4
+     3	#SBATCH --partition=long
+     4	#SBATCH --nodelist=europa
+     5	#SBATCH --gres=gpu:8
+     6	#SBATCH --cpus-per-task=16
+     7	#SBATCH --mem=128G
+     8	#SBATCH --time=23:59:59
+     9	#SBATCH --exclusive
+    10	#SBATCH --output=phase2_highrate_l4_%j.out
+    11	#SBATCH --error=phase2_highrate_l4_%j.err
+    12	
+    13	# ==============================================================================
+    14	# Phase 2 High-Rate Extension: L4 TP=2/4/8 at rates {20, 30, 50}
+    15	# ==============================================================================
+    16	# Fills the calibration gap where the original phase2_characterization_l4.sh
+    17	# only collected TP≥2 data at rates {1, 10}.  ROUTE_BB queries on L4 at
+    18	# realistic request rates (>10 rps) cause polynomial extrapolation explosions
+    19	# identical to the L40S TP=4 issue.
+    20	#
+    21	# New experiments (step labels in master_results.csv):
+    22	#   step_hr_tp4: TP=4, IL∈{1024,2048,4096}, OL=32,
+    23	#                rates∈{20,30,50}, all 10 DVFS frequencies × 3 runs
+    24	#                = 3 × 1 × 3 × 10 × 3 = 270 experiments
+    25	#
+    26	#   step_hr_tp8: TP=8, IL∈{1024,2048,4096}, OL=32,
+    27	#                rates∈{20,30,50}, all 10 DVFS frequencies × 3 runs
+    28	#                = 3 × 1 × 3 × 10 × 3 = 270 experiments
+    29	#
+    30	#   step_hr_tp2: TP=2, IL∈{1024,2048,4096}, OL=32,
+    31	#                rates∈{20,30}, all 10 DVFS frequencies × 3 runs  [optional]
+    32	#                = 3 × 1 × 2 × 10 × 3 = 180 experiments
+    33	#
+    34	# Results are appended to the existing Phase2_Results_L4/master_results.csv.
+    35	# The already_done() idempotency check prevents re-running completed rows.
+    36	#
+    37	# Usage:
+    38	#   sbatch phase2_highrate_l4.sh --step tp4      # TP=4 (primary)
+    39	#   sbatch phase2_highrate_l4.sh --step tp8      # TP=8 (primary)
+    40	#   sbatch phase2_highrate_l4.sh --step tp2      # TP=2 (optional)
+    41	#   sbatch phase2_highrate_l4.sh --step all      # all three
+    42	# ==============================================================================
+    43	
+    44	set -euo pipefail
+    45	
+    46	# ==============================================================================
+    47	# 1. CONFIGURATION
+    48	# ==============================================================================
+    49	MODEL="mistralai/Mistral-7B-v0.1"
+    50	PORT=8000
+    51	VLLM_LOG="vllm_server.log"
+    52	GPU_TYPE="L4"
+    53	
+    54	STEP="${1:---step}"
+    55	if [ "$STEP" == "--step" ]; then
+    56	    STEP="${2:-all}"
+    57	fi
+    58	
+    59	NUM_PROMPTS=500
+    60	NUM_WARMUPS=5
+    61	RUNS=3
+    62	MONITOR_INTERVAL=0.05
+    63	MONITOR_SCRIPT="gpu_monitor.py"
+    64	
+    65	# ==============================================================================
+    66	# 2. L4 GPU CONFIGURATION (fixed — this script targets europa only)
+    67	# ==============================================================================
+    68	SUPPORTED_MEM_FREQ="6251"
+    69	ALL_GPU_FREQS=("2040" "1830" "1620" "1410" "1200" "990" "780" "570" "360" "210")
+    70	MAX_GPUS=8
+    71	
+    72	# ==============================================================================
+    73	# 3. EXPERIMENT PARAMETERS
+    74	# ==============================================================================
+    75	# Primary: TP=4 and TP=8 DVFS sweep at high rates — the calibration gaps
+    76	HR_TP4_ILS=("1024" "2048" "4096")
+    77	HR_TP8_ILS=("1024" "2048" "4096")
+    78	HR_PRIMARY_OL="32"
+    79	HR_PRIMARY_RATES=("20" "30" "50")
+    80	
+    81	# Optional: TP=2 DVFS sweep at high rates
+    82	HR_TP2_ILS=("1024" "2048" "4096")
+    83	HR_TP2_OL="32"
+    84	HR_TP2_RATES=("20" "30")
+    85	
+    86	# ==============================================================================
+    87	# 4. OUTPUT SETUP
+    88	# ==============================================================================
+    89	OUTPUT_DIR="Phase2_Results_L4"
+    90	mkdir -p "$OUTPUT_DIR"
+    91	
+    92	MASTER_CSV="$OUTPUT_DIR/master_results.csv"
+    93	if [ ! -f "$MASTER_CSV" ]; then
+    94	    echo "step,gpu_type,gpu_freq_mhz,mem_freq_mhz,tp_degree,input_len,output_len,request_rate,run,num_prompts,benchmark_duration_s,request_throughput_rps,output_token_throughput_tps,total_token_throughput_tps,mean_ttft_ms,median_ttft_ms,p99_ttft_ms,mean_tpot_ms,median_tpot_ms,p99_tpot_ms,mean_itl_ms,median_itl_ms,p99_itl_ms,avg_power_w,min_power_w,max_power_w,energy_j,avg_gpu_util_pct,avg_mem_util_pct,monitor_samples" > "$MASTER_CSV"
+    95	fi
+    96	
+    97	# ==============================================================================
+    98	# 5. HELPER FUNCTIONS (identical to phase2_characterization_l4.sh)
+    99	# ==============================================================================
+   100	
+   101	MONITOR_PIDS=()
+   102	
+   103	cleanup_monitors() {
+   104	    if [ ${#MONITOR_PIDS[@]} -eq 0 ]; then
+   105	        return
+   106	    fi
+   107	    for PID in "${MONITOR_PIDS[@]}"; do
+   108	        if kill -0 "$PID" 2>/dev/null; then
+   109	            kill -TERM "$PID" 2>/dev/null || true
+   110	        fi
+   111	    done
+   112	    for attempt in {1..10}; do
+   113	        all_dead=true
+   114	        for PID in "${MONITOR_PIDS[@]}"; do
+   115	            if kill -0 "$PID" 2>/dev/null; then
+   116	                all_dead=false
+   117	                break
+   118	            fi
+   119	        done
+   120	        if $all_dead; then break; fi
+   121	        sleep 0.5
+   122	    done
+   123	    for PID in "${MONITOR_PIDS[@]}"; do
+   124	        if kill -0 "$PID" 2>/dev/null; then
+   125	            kill -KILL "$PID" 2>/dev/null || true
+   126	        fi
+   127	    done
+   128	    MONITOR_PIDS=()
+   129	    sync
+   130	    sleep 0.5
+   131	}
+   132	
+   133	SERVER_PID=""
+   134	
+   135	cleanup_all() {
+   136	    echo "--- Full cleanup ---"
+   137	    cleanup_monitors
+   138	    if [ -n "$SERVER_PID" ] && kill -0 "$SERVER_PID" 2>/dev/null; then
+   139	        echo "Shutting down vLLM server (PID: $SERVER_PID)..."
+   140	        kill "$SERVER_PID"
+   141	        wait "$SERVER_PID" 2>/dev/null
+   142	    fi
+   143	    echo "Resetting GPU clocks..."
+   144	    sudo nvidia-smi -rac 2>/dev/null || true
+   145	}
+   146	
+   147	trap cleanup_all EXIT INT TERM
+   148	
+   149	start_server() {
+   150	    local tp_degree=$1
+   151	
+   152	    if [ -n "$SERVER_PID" ] && kill -0 "$SERVER_PID" 2>/dev/null; then
+   153	        echo "Stopping existing server (PID: $SERVER_PID)..."
+   154	        kill "$SERVER_PID" 2>/dev/null || true
+   155	        wait "$SERVER_PID" 2>/dev/null || true
+   156	    fi
+   157	    pkill -TERM -u "$USER" -f "vllm" 2>/dev/null || true
+   158	    sleep 5
+   159	    pkill -KILL -u "$USER" -f "vllm" 2>/dev/null || true
+   160	    for _pid in $(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null \
+   161	                  | grep -Ev '^$|^pid'); do
+   162	        _owner=$(ps -o user= -p "$_pid" 2>/dev/null | tr -d ' ')
+   163	        if [ "$_owner" = "$USER" ]; then
+   164	            echo "  GPU-holder kill: PID $_pid"
+   165	            kill -KILL "$_pid" 2>/dev/null || true
+   166	        fi
+   167	    done
+   168	
+   169	    local gpu_wait=0
+   170	    while [ "$(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null \
+   171	               | grep -Evc '^$|^pid')" -gt 0 ]; do
+   172	        sleep 2
+   173	        gpu_wait=$((gpu_wait + 2))
+   174	        if [ $gpu_wait -ge 30 ]; then
+   175	            echo "WARNING: GPU compute context still held after 30s; force-killing."
+   176	            for _pid in $(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null \
+   177	                          | grep -Ev '^$|^pid'); do
+   178	                kill -KILL "$_pid" 2>/dev/null || true
+   179	            done
+   180	            sleep 5
+   181	            break
+   182	        fi
+   183	    done
+   184	    sleep 5
+   185	
+   186	    local port_wait=0
+   187	    while lsof -i:$PORT -sTCP:LISTEN -t >/dev/null 2>&1; do
+   188	        sleep 2
+   189	        port_wait=$((port_wait + 2))
+   190	        if [ $port_wait -ge 30 ]; then
+   191	            echo "WARNING: Port $PORT still in use after 30s; force-killing holders."
+   192	            lsof -i:$PORT -sTCP:LISTEN -t | xargs -r kill -KILL 2>/dev/null || true
+   193	            sleep 3
+   194	            break
+   195	        fi
+   196	    done
+   197	
+   198	    local gpu_list=""
+   199	    for ((g=0; g<tp_degree; g++)); do
+   200	        if [ -n "$gpu_list" ]; then gpu_list+=","; fi
+   201	        gpu_list+="$g"
+   202	    done
+   203	    export CUDA_VISIBLE_DEVICES="$gpu_list"
+   204	
+   205	    echo "Starting vLLM server: model=$MODEL, TP=$tp_degree, GPUs=$gpu_list"
+   206	
+   207	    python -m vllm.entrypoints.openai.api_server \
+   208	        --model $MODEL \
+   209	        --host localhost \
+   210	        --port $PORT \
+   211	        --tensor-parallel-size $tp_degree \
+   212	        --max-model-len 9216 \
+   213	        --disable-log-requests \
+   214	        > $VLLM_LOG 2>&1 &
+   215	
+   216	    SERVER_PID=$!
+   217	    echo "Server PID: $SERVER_PID"
+   218	
+   219	    local max_wait=600
+   220	    local elapsed=0
+   221	    while ! curl -s http://localhost:$PORT/v1/models > /dev/null 2>&1; do
+   222	        sleep 10
+   223	        elapsed=$((elapsed + 10))
+   224	        if ! ps -p $SERVER_PID > /dev/null 2>&1; then
+   225	            echo "ERROR: Server died! Last log lines:"
+   226	            tail -20 $VLLM_LOG
+   227	            exit 1
+   228	        fi
+   229	        if [ $elapsed -ge $max_wait ]; then
+   230	            echo "ERROR: Server failed to start within ${max_wait}s"
+   231	            kill $SERVER_PID 2>/dev/null
+   232	            exit 1
+   233	        fi
+   234	        echo "  Waiting for server... (${elapsed}s)"
+   235	    done
+   236	    echo "Server ready!"
+   237	}
+   238	
+   239	set_gpu_freq() {
+   240	    local freq=$1
+   241	    local tp=$2
+   242	    echo "  Setting GPU frequency to ${freq} MHz (mem: ${SUPPORTED_MEM_FREQ} MHz) on $tp GPU(s)..."
+   243	    for ((g=0; g<tp; g++)); do
+   244	        sudo nvidia-smi -i $g -ac "${SUPPORTED_MEM_FREQ},${freq}"
+   245	    done
+   246	    sleep 2
+   247	}
+   248	
+   249	start_monitors() {
+   250	    local log_prefix=$1
+   251	    local tp_degree=$2
+   252	
+   253	    MONITOR_PIDS=()
+   254	    for ((g=0; g<tp_degree; g++)); do
+   255	        local log_file="${log_prefix}_gpu${g}.csv"
+   256	        $(which python3) "$MONITOR_SCRIPT" --monitor --interval $MONITOR_INTERVAL --output "$log_file" --gpu-id $g &
+   257	        MONITOR_PIDS+=($!)
+   258	    done
+   259	    sleep 2
+   260	    for PID in "${MONITOR_PIDS[@]}"; do
+   261	        if ! kill -0 $PID 2>/dev/null; then
+   262	            echo "  WARNING: Monitor PID $PID failed to start"
+   263	        fi
+   264	    done
+   265	}
+   266	
+   267	parse_bench_output() {
+   268	    local bench_file=$1
+   269	    local duration=$(grep "Benchmark duration" "$bench_file" | awk '{print $NF}')
+   270	    local req_throughput=$(grep "Request throughput" "$bench_file" | awk '{print $NF}')
+   271	    local out_tok_throughput=$(grep "Output token throughput" "$bench_file" | head -1 | awk '{print $NF}')
+   272	    local total_tok_throughput=$(grep "Total token throughput" "$bench_file" | awk '{print $NF}')
+   273	    local mean_ttft=$(grep "Mean TTFT" "$bench_file" | awk '{print $NF}')
+   274	    local median_ttft=$(grep "Median TTFT" "$bench_file" | awk '{print $NF}')
+   275	    local p99_ttft=$(grep "P99 TTFT" "$bench_file" | awk '{print $NF}')
+   276	    local mean_tpot=$(grep "Mean TPOT" "$bench_file" | awk '{print $NF}')
+   277	    local median_tpot=$(grep "Median TPOT" "$bench_file" | awk '{print $NF}')
+   278	    local p99_tpot=$(grep "P99 TPOT" "$bench_file" | awk '{print $NF}')
+   279	    local mean_itl=$(grep "Mean ITL" "$bench_file" | awk '{print $NF}')
+   280	    local median_itl=$(grep "Median ITL" "$bench_file" | awk '{print $NF}')
+   281	    local p99_itl=$(grep "P99 ITL" "$bench_file" | awk '{print $NF}')
+   282	
+   283	    echo "${duration:-N/A},${req_throughput:-N/A},${out_tok_throughput:-N/A},${total_tok_throughput:-N/A},${mean_ttft:-N/A},${median_ttft:-N/A},${p99_ttft:-N/A},${mean_tpot:-N/A},${median_tpot:-N/A},${p99_tpot:-N/A},${mean_itl:-N/A},${median_itl:-N/A},${p99_itl:-N/A}"
+   284	}
+   285	
+   286	compute_power_energy() {
+   287	    local log_prefix=$1
+   288	    local tp_degree=$2
+   289	    local start_ts=$3
+   290	    local end_ts=$4
+   291	
+   292	    local total_avg_power=0
+   293	    local total_min_power=999999
+   294	    local total_max_power=0
+   295	    local total_energy=0
+   296	    local total_avg_gpu_util=0
+   297	    local total_avg_mem_util=0
+   298	    local total_samples=0
+   299	
+   300	    for ((g=0; g<tp_degree; g++)); do
+   301	        local log_file="${log_prefix}_gpu${g}.csv"
+   302	        if [ ! -f "$log_file" ]; then
+   303	            echo "0,0,0,0,0,0,0"
+   304	            return
+   305	        fi
+   306	
+   307	        local result
+   308	        result=$(awk -F, -v start="$start_ts" -v end="$end_ts" '
+   309	            BEGIN { count=0; sum_p=0; min_p=999999; max_p=0; first_e=-1; last_e=-1; sum_gpu_util=0; sum_mem_util=0 }
+   310	            NR > 1 && $1 >= start && $1 <= end {
+   311	                p = $3+0;
+   312	                e = $4+0;
+   313	                gu = $8+0;
+   314	                mu = $9+0;
+   315	                sum_p += p;
+   316	                if (p < min_p) min_p = p;
+   317	                if (p > max_p) max_p = p;
+   318	                if (first_e == -1) first_e = e;
+   319	                last_e = e;
+   320	                sum_gpu_util += gu;
+   321	                sum_mem_util += mu;
+   322	                count++;
+   323	            }
+   324	            END {
+   325	                if (count > 0) {
+   326	                    avg_p = sum_p / count;
+   327	                    energy_j = (last_e - first_e) / 1000.0;
+   328	                    avg_gu = sum_gpu_util / count;
+   329	                    avg_mu = sum_mem_util / count;
+   330	                    printf "%.2f,%.2f,%.2f,%.3f,%.1f,%.1f,%d", avg_p, min_p, max_p, energy_j, avg_gu, avg_mu, count;
+   331	                } else {
+   332	                    print "0,0,0,0,0,0,0";
+   333	                }
+   334	            }' "$log_file")
+   335	
+   336	        local gpu_avg_p=$(echo "$result" | cut -d, -f1)
+   337	        local gpu_min_p=$(echo "$result" | cut -d, -f2)
+   338	        local gpu_max_p=$(echo "$result" | cut -d, -f3)
+   339	        local gpu_energy=$(echo "$result" | cut -d, -f4)
+   340	        local gpu_util=$(echo "$result" | cut -d, -f5)
+   341	        local mem_util=$(echo "$result" | cut -d, -f6)
+   342	        local samples=$(echo "$result" | cut -d, -f7)
+   343	
+   344	        total_avg_power=$(awk "BEGIN {print $total_avg_power + $gpu_avg_p}")
+   345	        total_energy=$(awk "BEGIN {print $total_energy + $gpu_energy}")
+   346	        total_avg_gpu_util=$(awk "BEGIN {print $total_avg_gpu_util + $gpu_util}")
+   347	        total_avg_mem_util=$(awk "BEGIN {print $total_avg_mem_util + $mem_util}")
+   348	        total_samples=$((total_samples + samples))
+   349	
+   350	        if awk "BEGIN {exit !($gpu_min_p < $total_min_power)}"; then
+   351	            total_min_power=$gpu_min_p
+   352	        fi
+   353	        if awk "BEGIN {exit !($gpu_max_p > $total_max_power)}"; then
+   354	            total_max_power=$gpu_max_p
+   355	        fi
+   356	    done
+   357	
+   358	    if [ "$tp_degree" -gt 0 ]; then
+   359	        total_avg_gpu_util=$(awk "BEGIN {printf \"%.1f\", $total_avg_gpu_util / $tp_degree}")
+   360	        total_avg_mem_util=$(awk "BEGIN {printf \"%.1f\", $total_avg_mem_util / $tp_degree}")
+   361	    fi
+   362	
+   363	    echo "${total_avg_power},${total_min_power},${total_max_power},${total_energy},${total_avg_gpu_util},${total_avg_mem_util},${total_samples}"
+   364	}
+   365	
+   366	already_done() {
+   367	    local step=$1 freq=$2 tp=$3 il=$4 ol=$5 rate=$6 run=$7
+   368	    [ ! -f "$MASTER_CSV" ] && return 1
+   369	    awk -F, -v step="$step" -v freq="$freq" -v tp="$tp" -v il="$il" \
+   370	        -v ol="$ol" -v rate="$rate" -v run="$run" '
+   371	        NR > 1 && $1 == step && $3 == freq && $5 == tp && $6 == il \
+   372	              && $7 == ol && $8 == rate && $9 == run { found = 1; exit }
+   373	        END { exit (found ? 0 : 1) }
+   374	    ' "$MASTER_CSV"
+   375	}
+   376	
+   377	run_experiment() {
+   378	    local step_name=$1
+   379	    local gpu_freq=$2
+   380	    local tp_degree=$3
+   381	    local input_len=$4
+   382	    local output_len=$5
+   383	    local req_rate=$6
+   384	    local run_num=$7
+   385	
+   386	    local exp_label="f${gpu_freq}_tp${tp_degree}_i${input_len}_o${output_len}_r${req_rate}_run${run_num}"
+   387	    local exp_dir="$OUTPUT_DIR/${step_name}"
+   388	    mkdir -p "$exp_dir"
+   389	
+   390	    local bench_file="$exp_dir/bench_${exp_label}.txt"
+   391	    local monitor_prefix="$exp_dir/monitor_${exp_label}"
+   392	
+   393	    if already_done "$step_name" "$gpu_freq" "$tp_degree" "$input_len" "$output_len" "$req_rate" "$run_num"; then
+   394	        echo "  [${exp_label}] SKIP — already in master CSV"
+   395	        return
+   396	    fi
+   397	
+   398	    echo "  [${exp_label}] Starting experiment..."
+   399	
+   400	    start_monitors "$monitor_prefix" "$tp_degree"
+   401	
+   402	    local start_ts
+   403	    start_ts=$(python3 -c "import time; print(f'{time.time():.6f}')")
+   404	
+   405	    # max_concurrency: capped by L4 KV budget (~8 GB KV headroom per shard at 24 GB VRAM).
+   406	    local max_concurrency
+   407	    if [ "$req_rate" -le 5 ]; then
+   408	        max_concurrency=32
+   409	    elif [ "$req_rate" -le 20 ]; then
+   410	        max_concurrency=128
+   411	    else
+   412	        max_concurrency=256
+   413	    fi
+   414	    local kv_budget_mb=$((8 * 1024 * tp_degree))
+   415	    local kv_per_req_mb=$(awk "BEGIN {printf \"%.0f\", 0.128 * $input_len}")
+   416	    if [ "$kv_per_req_mb" -gt 0 ]; then
+   417	        local kv_cap=$((kv_budget_mb / kv_per_req_mb))
+   418	        if [ "$kv_cap" -lt "$max_concurrency" ]; then
+   419	            max_concurrency=$kv_cap
+   420	        fi
+   421	        if [ "$max_concurrency" -lt 4 ]; then
+   422	            max_concurrency=4
+   423	        fi
+   424	    fi
+   425	    echo "  max_concurrency=$max_concurrency (rate=$req_rate, il=$input_len, tp=$tp_degree)"
+   426	
+   427	    vllm bench serve \
+   428	        --backend openai \
+   429	        --base-url http://localhost:$PORT \
+   430	        --model $MODEL \
+   431	        --num-prompts $NUM_PROMPTS \
+   432	        --request-rate $req_rate \
+   433	        --dataset-name random \
+   434	        --random-input-len $input_len \
+   435	        --random-output-len $output_len \
+   436	        --max-concurrency $max_concurrency \
+   437	        --num-warmups $NUM_WARMUPS \
+   438	        > "$bench_file" 2>&1
+   439	
+   440	    local end_ts
+   441	    end_ts=$(python3 -c "import time; print(f'{time.time():.6f}')")
+   442	
+   443	    cleanup_monitors
+   444	
+   445	    local bench_metrics
+   446	    bench_metrics=$(parse_bench_output "$bench_file")
+   447	
+   448	    local power_metrics
+   449	    power_metrics=$(compute_power_energy "$monitor_prefix" "$tp_degree" "$start_ts" "$end_ts")
+   450	
+   451	    echo "${step_name},${GPU_TYPE},${gpu_freq},${SUPPORTED_MEM_FREQ},${tp_degree},${input_len},${output_len},${req_rate},${run_num},${NUM_PROMPTS},${bench_metrics},${power_metrics}" >> "$MASTER_CSV"
+   452	
+   453	    echo "  [${exp_label}] Done."
+   454	    sleep 3
+   455	}
+   456	
+   457	# ==============================================================================
+   458	# 6. STEP FUNCTIONS
+   459	# ==============================================================================
+   460	
+   461	run_step_hr_tp4() {
+   462	    echo ""
+   463	    echo "====== High-Rate Extension: TP=4 DVFS sweep ======"
+   464	    echo "  IL: ${HR_TP4_ILS[*]}, OL: ${HR_PRIMARY_OL}, rates: ${HR_PRIMARY_RATES[*]}"
+   465	    local total=$(( ${#HR_TP4_ILS[@]} * ${#HR_PRIMARY_RATES[@]} * ${#ALL_GPU_FREQS[@]} * RUNS ))
+   466	    echo "  Total experiments: $total"
+   467	
+   468	    local tp=4
+   469	    start_server $tp
+   470	
+   471	    for freq in "${ALL_GPU_FREQS[@]}"; do
+   472	        set_gpu_freq $freq $tp
+   473	
+   474	        for input_len in "${HR_TP4_ILS[@]}"; do
+   475	            for req_rate in "${HR_PRIMARY_RATES[@]}"; do
+   476	                for ((run=1; run<=RUNS; run++)); do
+   477	                    run_experiment "step_hr_tp4" "$freq" "$tp" "$input_len" "$HR_PRIMARY_OL" "$req_rate" "$run"
+   478	                done
+   479	            done
+   480	        done
+   481	    done
+   482	
+   483	    echo "====== High-Rate TP=4 Complete ======"
+   484	}
+   485	
+   486	run_step_hr_tp8() {
+   487	    echo ""
+   488	    echo "====== High-Rate Extension: TP=8 DVFS sweep ======"
+   489	    echo "  IL: ${HR_TP8_ILS[*]}, OL: ${HR_PRIMARY_OL}, rates: ${HR_PRIMARY_RATES[*]}"
+   490	    local total=$(( ${#HR_TP8_ILS[@]} * ${#HR_PRIMARY_RATES[@]} * ${#ALL_GPU_FREQS[@]} * RUNS ))
+   491	    echo "  Total experiments: $total"
+   492	
+   493	    local tp=8
+   494	    start_server $tp
+   495	
+   496	    for freq in "${ALL_GPU_FREQS[@]}"; do
+   497	        set_gpu_freq $freq $tp
+   498	
+   499	        for input_len in "${HR_TP8_ILS[@]}"; do
+   500	            for req_rate in "${HR_PRIMARY_RATES[@]}"; do
+   501	                for ((run=1; run<=RUNS; run++)); do
+   502	                    run_experiment "step_hr_tp8" "$freq" "$tp" "$input_len" "$HR_PRIMARY_OL" "$req_rate" "$run"
+   503	                done
+   504	            done
+   505	        done
+   506	    done
+   507	
+   508	    echo "====== High-Rate TP=8 Complete ======"
+   509	}
+   510	
+   511	run_step_hr_tp2() {
+   512	    echo ""
+   513	    echo "====== High-Rate Extension: TP=2 DVFS sweep ======"
+   514	    echo "  IL: ${HR_TP2_ILS[*]}, OL: ${HR_TP2_OL}, rates: ${HR_TP2_RATES[*]}"
+   515	    local total=$(( ${#HR_TP2_ILS[@]} * ${#HR_TP2_RATES[@]} * ${#ALL_GPU_FREQS[@]} * RUNS ))
+   516	    echo "  Total experiments: $total"
+   517	
+   518	    local tp=2
+   519	    start_server $tp
+   520	
+   521	    for freq in "${ALL_GPU_FREQS[@]}"; do
+   522	        set_gpu_freq $freq $tp
+   523	
+   524	        for input_len in "${HR_TP2_ILS[@]}"; do
+   525	            for req_rate in "${HR_TP2_RATES[@]}"; do
+   526	                for ((run=1; run<=RUNS; run++)); do
+   527	                    run_experiment "step_hr_tp2" "$freq" "$tp" "$input_len" "$HR_TP2_OL" "$req_rate" "$run"
+   528	                done
+   529	            done
+   530	        done
+   531	    done
+   532	
+   533	    echo "====== High-Rate TP=2 Complete ======"
+   534	}
+   535	
+   536	# ==============================================================================
+   537	# 7. MAIN
+   538	# ==============================================================================
+   539	
+   540	ulimit -n 65536
+   541	
+   542	sudo nvidia-smi -pm 1
+   543	echo "GPU persistence mode enabled."
+   544	
+   545	echo "============================================================"
+   546	echo "Phase 2 High-Rate Extension: GPU_TYPE=$GPU_TYPE, STEP=$STEP"
+   547	echo "Model: $MODEL"
+   548	echo "Output: $OUTPUT_DIR"
+   549	echo "============================================================"
+   550	
+   551	case "$STEP" in
+   552	    "tp4")
+   553	        run_step_hr_tp4
+   554	        ;;
+   555	    "tp8")
+   556	        run_step_hr_tp8
+   557	        ;;
+   558	    "tp2")
+   559	        run_step_hr_tp2
+   560	        ;;
+   561	    "all")
+   562	        run_step_hr_tp4
+   563	        run_step_hr_tp8
+   564	        run_step_hr_tp2
+   565	        ;;
+   566	    *)
+   567	        echo "Usage: $0 --step {tp4|tp8|tp2|all}"
+   568	        echo "  tp4: TP=4 DVFS sweep, IL∈{1024,2048,4096}, rates∈{20,30,50} (270 expts)"
+   569	        echo "  tp8: TP=8 DVFS sweep, IL∈{1024,2048,4096}, rates∈{20,30,50} (270 expts)"
+   570	        echo "  tp2: TP=2 DVFS sweep, IL∈{1024,2048,4096}, rates∈{20,30} (180 expts) [optional]"
+   571	        echo "  all: tp4 then tp8 then tp2"
+   572	        exit 1
+   573	        ;;
+   574	esac
+   575	
+   576	trap - EXIT
+   577	cleanup_all
+   578	
+   579	echo ""
+   580	echo "============================================================"
+   581	echo "High-rate L4 calibration complete!"
+   582	echo "Results: $MASTER_CSV"
+   583	echo "Monitor logs: $OUTPUT_DIR/step_hr_tp{4,8,2}/"
+   584	echo "============================================================"
