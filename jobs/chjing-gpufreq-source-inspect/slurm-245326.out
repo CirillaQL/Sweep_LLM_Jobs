@@ -1,0 +1,135 @@
+host=ganymede
+date=2026-07-03T11:44:17+02:00
+pwd=/data/users/chjing/Sweep_LLM_Jobs_broker
+SLURM_JOB_ID=245326
+whoami=chjing
+id=uid=10271(chjing) gid=0(root) groups=0(root),10002(admin),10272(chjing)
+USER=root
+LOGNAME=root
+HOME=/root
+
+===== slurm_job_record =====
+JobId=245326 JobName=chjing-gpufreq-source-inspect
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:00 TimeLimit=00:04:00 TimeMin=N/A
+   SubmitTime=2026-07-03T11:44:16 EligibleTime=2026-07-03T11:44:16
+   AccrueTime=2026-07-03T11:44:16
+   StartTime=2026-07-03T11:44:17 EndTime=2026-07-03T11:48:17 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-03T11:44:17 Scheduler=Main
+   Partition=short AllocNode:Sid=minerva:325882
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=ganymede
+   BatchHost=ganymede
+   NumNodes=1 NumCPUs=2 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=2G,node=1,billing=1
+   AllocTRES=cpu=2,mem=4G,node=1,billing=2
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryCPU=2G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/chjing-gpufreq-source-inspect/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/chjing-gpufreq-source-inspect/slurm-245326.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/chjing-gpufreq-source-inspect/slurm-245326.out
+   Power=
+   
+
+
+===== root_check /data/users/chjing/slurm-nvgpufreq =====
+  File: /data/users/chjing/slurm-nvgpufreq
+  Size: 8         	Blocks: 5          IO Block: 1048576 directory
+Device: 0,49	Inode: 344017698   Links: 5
+Access: (0775/drwxrwxr-x)  Uid: (10271/  chjing)   Gid: (10272/  chjing)
+Access: 2026-07-03 11:38:00.922304341 +0200
+Modify: 2025-10-25 22:08:55.209156845 +0200
+Change: 2025-10-25 22:08:55.209156845 +0200
+ Birth: -
+drwxrwxr-x 5 chjing chjing 8 Oct 25  2025 /data/users/chjing/slurm-nvgpufreq
+
+===== root_check /data/users/chjing/build-nvgpufreq =====
+  File: /data/users/chjing/build-nvgpufreq
+  Size: 8         	Blocks: 5          IO Block: 1048576 directory
+Device: 0,49	Inode: 344019850   Links: 4
+Access: (0775/drwxrwxr-x)  Uid: (10271/  chjing)   Gid: (10272/  chjing)
+Access: 2026-07-03 11:37:56.238305119 +0200
+Modify: 2025-10-25 22:48:16.536631898 +0200
+Change: 2025-10-25 22:48:16.536631898 +0200
+ Birth: -
+drwxrwxr-x 4 chjing chjing 8 Oct 25  2025 /data/users/chjing/build-nvgpufreq
+
+===== root_check /data/users/chjing/vLLM_test =====
+  File: /data/users/chjing/vLLM_test
+  Size: 125       	Blocks: 41         IO Block: 1048576 directory
+Device: 0,49	Inode: 440062608   Links: 9
+Access: (0775/drwxrwxr-x)  Uid: (10271/  chjing)   Gid: (10272/  chjing)
+Access: 2026-07-03 11:37:31.268309198 +0200
+Modify: 2026-06-01 16:03:45.875221080 +0200
+Change: 2026-06-01 16:03:45.875221080 +0200
+ Birth: -
+drwxrwxr-x 9 chjing chjing 125 Jun  1 16:03 /data/users/chjing/vLLM_test
+
+===== root_check /data/users/chjing/EnergyAwareCUDASTF =====
+  File: /data/users/chjing/EnergyAwareCUDASTF
+  Size: 45        	Blocks: 9          IO Block: 1048576 directory
+Device: 0,49	Inode: 470446454   Links: 20
+Access: (0755/drwxr-xr-x)  Uid: (10271/  chjing)   Gid: (10272/  chjing)
+Access: 2026-07-03 10:57:05.513798239 +0200
+Modify: 2026-06-22 10:53:00.482211910 +0200
+Change: 2026-06-22 10:53:00.482211910 +0200
+ Birth: -
+drwxr-xr-x 20 chjing chjing 45 Jun 22 10:53 /data/users/chjing/EnergyAwareCUDASTF
+
+===== tree_like_listing /data/users/chjing/slurm-nvgpufreq =====
+command=find '/data/users/chjing/slurm-nvgpufreq' -maxdepth 3 \( -path '*/.git' -o -path '*/__pycache__' -o -path '*/.cache' \) -prune -o -printf '%M %u %g %s %TY-%Tm-%Td %TH:%TM %p\n' | sort | head -n 260
+-rw-rw-r-- chjing chjing 1516 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/LICENSE
+-rw-rw-r-- chjing chjing 2029 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/src/CMakeLists.txt
+-rw-rw-r-- chjing chjing 2104 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/CMakeLists.txt
+-rw-rw-r-- chjing chjing 2186 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/src/check.c
+-rw-rw-r-- chjing chjing 2566 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.h
+-rw-rw-r-- chjing chjing 3578 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/cmake/FindSLURM.cmake
+-rw-rw-r-- chjing chjing 4194 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/README.md
+-rw-rw-r-- chjing chjing 5721 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/src/main.c
+-rw-rw-r-- chjing chjing 7285 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/src/nvgpufreq.c
+drwxrwxr-x chjing chjing 3 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/cmake
+drwxrwxr-x chjing chjing 7 2025-10-25 22:06 /data/users/chjing/slurm-nvgpufreq/src
+drwxrwxr-x chjing chjing 8 2025-10-25 22:08 /data/users/chjing/slurm-nvgpufreq
+===== tree_like_listing /data/users/chjing/slurm-nvgpufreq rc=0 =====
+
+===== tree_like_listing /data/users/chjing/build-nvgpufreq =====
+command=find '/data/users/chjing/build-nvgpufreq' -maxdepth 3 \( -path '*/.git' -o -path '*/__pycache__' -o -path '*/.cache' \) -prune -o -printf '%M %u %g %s %TY-%Tm-%Td %TH:%TM %p\n' | sort | head -n 260
+-rw-r--r-- chjing chjing 2525 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/3.28.3/CMakeCCompiler.cmake
+-rw-r--r-- chjing chjing 398 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/3.28.3/CMakeSystem.cmake
+-rw-r--r-- root root 45 2025-10-25 22:48 /data/users/chjing/build-nvgpufreq/install_manifest.txt
+-rw-rw-r-- chjing chjing 1832 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/cmake_install.cmake
+-rw-rw-r-- chjing chjing 2 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/progress.marks
+-rw-rw-r-- chjing chjing 2 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/src/CMakeFiles/progress.marks
+-rw-rw-r-- chjing chjing 2386 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/src/cmake_install.cmake
+-rw-rw-r-- chjing chjing 31404 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeCache.txt
+-rw-rw-r-- chjing chjing 32418 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/CMakeConfigureLog.yaml
+-rw-rw-r-- chjing chjing 4014 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/Makefile2
+-rw-rw-r-- chjing chjing 644 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/CMakeDirectoryInformation.cmake
+-rw-rw-r-- chjing chjing 644 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/src/CMakeFiles/CMakeDirectoryInformation.cmake
+-rw-rw-r-- chjing chjing 6525 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/Makefile
+-rw-rw-r-- chjing chjing 6813 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/Makefile.cmake
+-rw-rw-r-- chjing chjing 85 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/cmake.check_cache
+-rw-rw-r-- chjing chjing 858 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/TargetDirectories.txt
+-rw-rw-r-- chjing chjing 9451 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/src/Makefile
+-rwxrwxr-x chjing chjing 15968 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/3.28.3/CMakeDetermineCompilerABI_C.bin
+-rwxrwxr-x chjing chjing 16832 2025-10-25 22:48 /data/users/chjing/build-nvgpufreq/src/nvgpufreq.so
+drwxrwxr-x chjing chjing 12 2025-10-25 22:48 /data/users/chjing/build-nvgpufreq/CMakeFiles
+drwxrwxr-x chjing chjing 18 2025-10-25 22:48 /data/users/chjing/build-nvgpufreq/src/CMakeFiles/nvgpufreq.dir
+drwxrwxr-x chjing chjing 2 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/CMakeScratch
+drwxrwxr-x chjing chjing 2 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/pkgRedirects
+drwxrwxr-x chjing chjing 5 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/3.28.3/CompilerIdC
+drwxrwxr-x chjing chjing 5 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/src/CMakeFiles
+drwxrwxr-x chjing chjing 6 2025-10-25 22:47 /data/users/chjing/build-nvgpufreq/CMakeFiles/3.28.3
+drwxrwxr-x chjing chjing 6 2025-10-25 22:48 /data/users/chjing/build-nvgpufreq/src
+drwxrwxr-x chjing chjing 8 2025-10-25 22:48 /data/users/chjing/build-nvgpufreq
+===== tree_like_listing /data/users/chjing/build-nvgpufreq rc=0 =====
+
+===== tree_like_listing /data/users/chjing/vLLM_test =====
+command=find '/data/users/chjing/vLLM_test' -maxdepth 3 \( -path '*/.git' -o -path '*/__pycache__' -o -path '*/.cache' \) -prune -o -printf '%M %u %g %s %TY-%Tm-%Td %TH:%TM %p\n' | sort | head -n 260
