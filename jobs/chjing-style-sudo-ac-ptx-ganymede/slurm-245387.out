@@ -273,3 +273,42 @@ ptx_workload=starting
 0, 1590 MHz, 6251 MHz, 72.02 W, 100 %
 --- sample=15 time=2026-07-03T12:05:48+02:00 ---
 0, 1605 MHz, 6251 MHz, 71.83 W, 100 %
+--- sample=16 time=2026-07-03T12:05:49+02:00 ---
+0, 1590 MHz, 6251 MHz, 72.16 W, 100 %
+--- sample=17 time=2026-07-03T12:05:50+02:00 ---
+0, 1575 MHz, 6251 MHz, 71.91 W, 100 %
+--- sample=18 time=2026-07-03T12:05:51+02:00 ---
+0, 1590 MHz, 6251 MHz, 71.86 W, 100 %
+--- sample=19 time=2026-07-03T12:05:52+02:00 ---
+0, 1590 MHz, 6251 MHz, 71.97 W, 100 %
+--- sample=20 time=2026-07-03T12:05:53+02:00 ---
+0, 1590 MHz, 6251 MHz, 72.12 W, 100 %
+ptx_kernel_launches=4013
+--- sample=21 time=2026-07-03T12:05:55+02:00 ---
+0, 2040 MHz, 6251 MHz, 29.53 W, 0 %
+workload_rc=0
+
+===== after_workload_before_cleanup =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%]
+2026/07/03 12:05:55.216, 0, NVIDIA L4, Enabled, 2040 MHz, 6251 MHz, 2040 MHz, 6251 MHz, 29.32 W, 72.00 W, 0 %
+
+===== interpretation_hint =====
+This job uses chjing's sudo nvidia-smi -pm/-ac/-rac style, not bare nvidia-smi.
+If clocks.gr exceeds 1200 MHz under 100% util, chjing-style -ac did not cap real PTX clocks on this node.
+
+===== cleanup_reset_like_chjing =====
+The requested functionality has been deprecated.
+All done.
+The requested functionality has been deprecated.
+The requested functionality has been deprecated.
+The requested functionality has been deprecated.
+The requested functionality has been deprecated.
+The requested functionality has been deprecated.
+The requested functionality has been deprecated.
+The requested functionality has been deprecated.
+The requested functionality has been deprecated.
+All done.
+
+===== after_cleanup_reset =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%]
+2026/07/03 12:05:55.596, 0, NVIDIA L4, Enabled, 2040 MHz, 6251 MHz, 2040 MHz, 6251 MHz, 29.34 W, 72.00 W, 0 %
