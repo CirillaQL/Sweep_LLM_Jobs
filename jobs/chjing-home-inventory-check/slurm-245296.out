@@ -201,3 +201,20 @@ drwxrwxr-x chjing chjing 8 2026-07-01 19:32 /data/users/chjing/Sweep_LLM_Jobs_br
 
 ===== visible_sif_files_top_two_levels =====
 command=find '/data/users/chjing' -maxdepth 2 -path '/data/users/chjing/.ssh' -prune -o -path '/data/users/chjing/.gnupg' -prune -o -type f -name '*.sif' -printf '%M %u %g %s %p\n' 2>/dev/null | sort | head -n 80
+-rwxr-xr-x chjing nogroup 4133347328 /data/users/chjing/EnergyAwareCUDASTF/stf-sanity-cuda12.4.sif
+===== visible_sif_files_top_two_levels rc=0 =====
+
+===== visible_model_like_dirs_top_two_levels =====
+command=find '/data/users/chjing' -maxdepth 2 -path '/data/users/chjing/.ssh' -prune -o -path '/data/users/chjing/.gnupg' -prune -o -type d \( -iname '*model*' -o -iname '*mistral*' -o -iname '*llm*' -o -iname '*vllm*' \) -printf '%M %u %g %p\n' 2>/dev/null | sort | head -n 80
+drwxrwxr-x chjing chjing /data/users/chjing/.cache/vllm
+drwxrwxr-x chjing chjing /data/users/chjing/.config/vllm
+drwxrwxr-x chjing chjing /data/users/chjing/Sweep_LLM_Jobs_broker
+drwxrwxr-x chjing chjing /data/users/chjing/gpuPTXModel
+drwxrwxr-x chjing chjing /data/users/chjing/gpuPTXModel/model_configs
+drwxrwxr-x chjing chjing /data/users/chjing/gpupowermodel
+drwxrwxr-x chjing chjing /data/users/chjing/vLLM_test
+drwxrwxr-x chjing chjing /data/users/chjing/vLLM_test/vLLM_Calibration_Results
+===== visible_model_like_dirs_top_two_levels rc=0 =====
+
+===== note =====
+This job only lists paths and metadata. It does not read file contents.
