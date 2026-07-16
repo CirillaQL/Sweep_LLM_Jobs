@@ -53,3 +53,36 @@ timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.
 ===== run_cuda_load =====
 CUDA_VISIBLE_DEVICES=0
 command=timeout 420 /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260716-154233-luqia-cuda-f990-ganymede-retry1/compute_load 300 0
+cuda_load_rc=0
+GPU: NVIDIA L4
+Device: 0
+Duration: 300.0 seconds
+Launch: 464 blocks x 256 threads
+Completed 12573 kernel launches in 300.021 seconds
+
+===== after_cuda_load =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], clocks.applications.graphics [MHz], clocks.applications.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/16 15:49:15.442, 0, NVIDIA L4, Enabled, 2010 MHz, 2010 MHz, 6251 MHz, 2040 MHz, 6251 MHz, [Requested functionality has been deprecated], [Requested functionality has been deprecated], 68.30 W, 72.00 W, 100 %, 0 MiB, 67
+stopping_monitor_pid=1757851
+
+===== frequency_summary =====
+monitor_file=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260716-154233-luqia-cuda-f990-ganymede-retry1/gpu_frequency_monitor.csv
+set_frequency_rc=0
+target_sm_mhz=990.0
+all_sm_mhz_samples=0
+active_sm_mhz_samples=0
+active_graphics_mhz_samples=0
+active_application_mhz_samples=0
+active_power_w_samples=0
+active_above_target_plus_45=0
+cap_effective=False
+
+===== cleanup_and_restore =====
+reset_command=sudo nvidia-smi -i 0 -rac
+The requested functionality has been deprecated.
+All done.
+
+===== after_application_clock_reset =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], clocks.applications.graphics [MHz], clocks.applications.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/16 15:49:15.791, 0, NVIDIA L4, Enabled, 2040 MHz, 2040 MHz, 6251 MHz, 2040 MHz, 6251 MHz, [Requested functionality has been deprecated], [Requested functionality has been deprecated], 57.63 W, 72.00 W, 0 %, 0 MiB, 63
+job_exit_rc=0
