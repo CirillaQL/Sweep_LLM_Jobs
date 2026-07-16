@@ -29,3 +29,27 @@ nvcc_rc=0
 timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], clocks.applications.graphics [MHz], clocks.applications.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
 2026/07/16 15:44:04.438, 0, NVIDIA L4, Enabled, 210 MHz, 210 MHz, 405 MHz, 2040 MHz, 6251 MHz, [Requested functionality has been deprecated], [Requested functionality has been deprecated], 16.06 W, 72.00 W, 0 %, 0 MiB, 34
 monitor_pid=1757851
+
+===== set_frequency_chjing_style =====
+persistence_command=sudo nvidia-smi -pm 1
+Persistence mode is already Enabled for GPU 00000000:0D:00.0.
+Persistence mode is already Enabled for GPU 00000000:37:00.0.
+Persistence mode is already Enabled for GPU 00000000:4A:00.0.
+Persistence mode is already Enabled for GPU 00000000:61:00.0.
+Persistence mode is already Enabled for GPU 00000000:A0:00.0.
+Persistence mode is already Enabled for GPU 00000000:B5:00.0.
+Persistence mode is already Enabled for GPU 00000000:CA:00.0.
+Persistence mode is already Enabled for GPU 00000000:E1:00.0.
+All done.
+set_command=sudo nvidia-smi -i 0 -ac 6251,990
+The requested functionality has been deprecated.
+All done.
+set_frequency_rc=0
+
+===== after_frequency_change =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], clocks.applications.graphics [MHz], clocks.applications.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/16 15:44:14.842, 0, NVIDIA L4, Enabled, 210 MHz, 210 MHz, 405 MHz, 2040 MHz, 6251 MHz, [Requested functionality has been deprecated], [Requested functionality has been deprecated], 16.07 W, 72.00 W, 0 %, 0 MiB, 34
+
+===== run_cuda_load =====
+CUDA_VISIBLE_DEVICES=0
+command=timeout 420 /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260716-154233-luqia-cuda-f990-ganymede-retry1/compute_load 300 0
