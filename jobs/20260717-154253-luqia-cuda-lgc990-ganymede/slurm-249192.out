@@ -78,3 +78,57 @@ monitor_pid=1969904
 set_command=sudo nvidia-smi -i 0 -lgc 990,990
 GPU clocks set to "(gpuClkMin 990, gpuClkMax 990)" for GPU 00000000:0D:00.0
 All done.
+set_frequency_rc=0
+
+===== after_locked_clock_change =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/17 15:46:09.968, 0, NVIDIA L4, Enabled, 990 MHz, 990 MHz, 6251 MHz, 2040 MHz, 6251 MHz, 20.72 W, 72.00 W, 0 %, 0 MiB, 36
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Fri Jul 17 15:46:10 2026
+Driver Version                                         : 595.71.05
+CUDA Version                                           : 13.2
+
+Attached GPUs                                          : 8
+GPU 00000000:0D:00.0
+    Clocks
+        Graphics                                       : 990 MHz
+        SM                                             : 990 MHz
+        Memory                                         : 6251 MHz
+        Video                                          : 930 MHz
+    Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Default Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Deferred Clocks
+        Memory                                         : N/A
+    Max Clocks
+        Graphics                                       : 2040 MHz
+        SM                                             : 2040 MHz
+        Memory                                         : 6251 MHz
+        Video                                          : 1770 MHz
+    Max Customer Boost Clocks
+        Graphics                                       : 2040 MHz
+    SM Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Memory Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Clock Policy
+        Auto Boost                                     : N/A
+        Auto Boost Default                             : N/A
+
+
+===== run_cuda_load =====
+CUDA_VISIBLE_DEVICES=0
+command=timeout 420 /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260717-154253-luqia-cuda-lgc990-ganymede/compute_load 300 0
