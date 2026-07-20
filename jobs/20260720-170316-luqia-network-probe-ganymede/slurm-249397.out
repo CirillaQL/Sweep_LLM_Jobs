@@ -1,0 +1,602 @@
+
+===== job_and_host_identity =====
+time=2026-07-20T17:06:02+02:00
+hostname=ganymede
+hostname_fqdn=ganymede
+hostname_short=ganymede
+whoami=chjing
+uid_gid=uid=10271(chjing) gid=0(root) groups=0(root),10002(admin),10272(chjing)
+kernel=Linux ganymede 6.8.0-136-generic #136-Ubuntu SMP PREEMPT_DYNAMIC Wed Jul  1 21:53:05 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+SLURM_JOB_ID=249397
+SLURM_JOB_NODELIST=ganymede
+SLURM_JOB_PARTITION=long
+SLURM_NNODES=1
+SLURM_NTASKS=1
+SLURM_CPUS_ON_NODE=2
+hostname_I=10.1.0.3 
+hostname_i=127.0.1.1 10.1.0.3
+1024
+ganymede
+NodeName=ganymede Arch=x86_64 CoresPerSocket=32 
+   CPUAlloc=10 CPUEfctv=128 CPUTot=128 CPULoad=16.33
+   AvailableFeatures=(null)
+   ActiveFeatures=(null)
+   Gres=gpu:L4:8,nvgpufreq:1
+   NodeAddr=ganymede NodeHostName=ganymede Version=23.11.4
+   OS=Linux 6.8.0-136-generic #136-Ubuntu SMP PREEMPT_DYNAMIC Wed Jul  1 21:53:05 UTC 2026 
+   RealMemory=515453 AllocMem=66560 FreeMem=471351 Sockets=2 Boards=1
+   State=MIXED ThreadsPerCore=2 TmpDisk=0 Weight=1 Owner=N/A MCS_label=N/A
+   Partitions=short,long,debug 
+   BootTime=2026-07-18T13:37:09 SlurmdStartTime=2026-07-20T11:08:18
+   LastBusyTime=2026-07-20T15:22:49 ResumeAfterTime=None
+   CfgTRES=cpu=128,mem=515453M,billing=128,gres/gpu=8
+   AllocTRES=cpu=10,mem=65G,gres/gpu=1,gres/gpu:l4=1
+   CapWatts=n/a
+   CurrentWatts=0 AveWatts=0
+   ExtSensorsJoules=n/a ExtSensorsWatts=0 ExtSensorsTemp=n/a
+
+
+===== name_resolution =====
+--- getent hosts ganymede ---
+127.0.1.1       ganymede
+10.1.0.3        ganymede
+--- getent ahostsv4 ganymede ---
+127.0.1.1       STREAM ganymede
+127.0.1.1       DGRAM  
+127.0.1.1       RAW    
+10.1.0.3        STREAM 
+10.1.0.3        DGRAM  
+10.1.0.3        RAW    
+--- getent ahostsv6 ganymede ---
+::ffff:10.1.0.3 STREAM ganymede
+::ffff:10.1.0.3 DGRAM  
+::ffff:10.1.0.3 RAW    
+::ffff:127.0.1.1 STREAM 
+::ffff:127.0.1.1 DGRAM  
+::ffff:127.0.1.1 RAW    
+--- getent hosts ganymede ---
+127.0.1.1       ganymede
+10.1.0.3        ganymede
+--- getent ahostsv4 ganymede ---
+127.0.1.1       STREAM ganymede
+127.0.1.1       DGRAM  
+127.0.1.1       RAW    
+10.1.0.3        STREAM 
+10.1.0.3        DGRAM  
+10.1.0.3        RAW    
+--- getent ahostsv6 ganymede ---
+::ffff:10.1.0.3 STREAM ganymede
+::ffff:10.1.0.3 DGRAM  
+::ffff:10.1.0.3 RAW    
+::ffff:127.0.1.1 STREAM 
+::ffff:127.0.1.1 DGRAM  
+::ffff:127.0.1.1 RAW    
+--- getent hosts neptune ---
+10.1.0.6        neptune
+--- getent ahostsv4 neptune ---
+10.1.0.6        STREAM neptune
+10.1.0.6        DGRAM  
+10.1.0.6        RAW    
+--- getent ahostsv6 neptune ---
+::ffff:10.1.0.6 STREAM neptune
+::ffff:10.1.0.6 DGRAM  
+::ffff:10.1.0.6 RAW    
+--- getent hosts ganymede ---
+127.0.1.1       ganymede
+10.1.0.3        ganymede
+--- getent ahostsv4 ganymede ---
+127.0.1.1       STREAM ganymede
+127.0.1.1       DGRAM  
+127.0.1.1       RAW    
+10.1.0.3        STREAM 
+10.1.0.3        DGRAM  
+10.1.0.3        RAW    
+--- getent ahostsv6 ganymede ---
+::ffff:10.1.0.3 STREAM ganymede
+::ffff:10.1.0.3 DGRAM  
+::ffff:10.1.0.3 RAW    
+::ffff:127.0.1.1 STREAM 
+::ffff:127.0.1.1 DGRAM  
+::ffff:127.0.1.1 RAW    
+--- getent hosts minerva ---
+10.1.0.8        minerva
+--- getent ahostsv4 minerva ---
+10.1.0.8        STREAM minerva
+10.1.0.8        DGRAM  
+10.1.0.8        RAW    
+--- getent ahostsv6 minerva ---
+::ffff:10.1.0.8 STREAM minerva
+::ffff:10.1.0.8 DGRAM  
+::ffff:10.1.0.8 RAW    
+
+===== resolver_configuration =====
+127.0.0.1 localhost
+127.0.1.1 ganymede
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+10.1.0.8 minerva
+10.1.0.1 io
+10.1.0.2 europa
+10.1.0.3 ganymede
+10.1.0.4 callisto
+10.1.0.5 uranus
+10.1.0.6 neptune
+10.1.0.7 sensai
+10.1.0.9 jupiter
+10.1.0.10 saturn
+# This is /run/systemd/resolve/stub-resolv.conf managed by man:systemd-resolved(8).
+# Do not edit.
+#
+# This file might be symlinked as /etc/resolv.conf. If you're looking at
+# /etc/resolv.conf and seeing this text, you have followed the symlink.
+#
+# This is a dynamic resolv.conf file for connecting local clients to the
+# internal DNS stub resolver of systemd-resolved. This file lists all
+# configured search domains.
+#
+# Run "resolvectl status" to see details about the uplink DNS servers
+# currently in use.
+#
+# Third party programs should typically not access this file directly, but only
+# through the symlink at /etc/resolv.conf. To manage man:resolv.conf(5) in a
+# different way, replace this symlink by a static file or a different symlink.
+#
+# See man:systemd-resolved.service(8) for details about the supported modes of
+# operation for /etc/resolv.conf.
+
+nameserver 127.0.0.53
+options edns0 trust-ad
+search chalmers.se
+hosts:          files dns
+
+===== ip_addresses_and_links =====
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+eno8303          DOWN           
+eno12409np1      DOWN           
+eno8403          DOWN           
+idrac            DOWN           
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0  allmulti 0 minmtu 0 maxmtu 0 addrgenmode eui64 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 524280 tso_max_segs 65535 gro_max_size 65536 
+2: eno12399np0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 04:32:01:4d:00:80 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 60 maxmtu 9600 addrgenmode eui64 numtxqueues 592 numrxqueues 74 gso_max_size 65536 gso_max_segs 65535 tso_max_size 524280 tso_max_segs 65535 gro_max_size 65536 portname p0 switchid 80004dfeff013204 parentbus pci parentdev 0000:22:00.0 
+    altname enp34s0f0np0
+3: eno8303: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether c4:cb:e1:e3:4e:f2 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 60 maxmtu 9000 addrgenmode eui64 numtxqueues 5 numrxqueues 5 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus pci parentdev 0000:01:00.0 
+    altname enp1s0f0
+4: eno12409np1: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 04:32:01:4d:00:81 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 60 maxmtu 9600 addrgenmode eui64 numtxqueues 592 numrxqueues 74 gso_max_size 65536 gso_max_segs 65535 tso_max_size 524280 tso_max_segs 65535 gro_max_size 65536 portname p1 switchid 80004dfeff013204 parentbus pci parentdev 0000:22:00.1 
+    altname enp34s0f1np1
+5: eno8403: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether c4:cb:e1:e3:4e:f3 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 60 maxmtu 9000 addrgenmode eui64 numtxqueues 5 numrxqueues 5 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus pci parentdev 0000:01:00.1 
+    altname enp1s0f1
+6: idrac: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether c4:cb:e1:dd:de:cb brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 0 maxmtu 1500 addrgenmode eui64 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus usb parentdev 1-10.3:1.0 
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    RX:  bytes packets errors dropped  missed   mcast           
+      21569444  100239      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+      21569444  100239      0       0       0       0 
+2: eno12399np0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 04:32:01:4d:00:80 brd ff:ff:ff:ff:ff:ff
+    RX:   bytes  packets errors dropped  missed   mcast           
+    17944578855 12386310      0       0       0  190741 
+    TX:   bytes  packets errors dropped carrier collsns           
+     2422680414  2080538      0       0       0       0 
+    altname enp34s0f0np0
+3: eno8303: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether c4:cb:e1:e3:4e:f2 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes packets errors dropped  missed   mcast           
+             0       0      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+             0       0      0       0       0       0 
+    altname enp1s0f0
+4: eno12409np1: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 04:32:01:4d:00:81 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes packets errors dropped  missed   mcast           
+             0       0      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+             0       0      0       0       0       0 
+    altname enp34s0f1np1
+5: eno8403: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether c4:cb:e1:e3:4e:f3 brd ff:ff:ff:ff:ff:ff
+    RX:  bytes packets errors dropped  missed   mcast           
+             0       0      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+             0       0      0       0       0       0 
+    altname enp1s0f1
+6: idrac: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether c4:cb:e1:dd:de:cb brd ff:ff:ff:ff:ff:ff
+    RX:  bytes packets errors dropped  missed   mcast           
+             0       0      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+             0       0      0       0       0       0 
+
+===== per_interface_details =====
+--- interface=eno12399np0 ---
+address=04:32:01:4d:00:80
+mtu=1500
+operstate=up
+speed=100000
+duplex=full
+carrier=1
+type=1
+driver=bnxt_en
+numa_node=0
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+netlink error: Operation not permitted
+Settings for eno12399np0:
+	Supported ports: [ FIBRE ]
+	Supported link modes:   25000baseCR/Full
+	                        50000baseCR2/Full
+	                        100000baseCR4/Full
+	                        50000baseCR/Full
+	                        100000baseCR2/Full
+	                        200000baseCR4/Full
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: RS	 BASER	 LLRS
+	Advertised link modes:  25000baseCR/Full
+	                        50000baseCR2/Full
+	                        100000baseCR4/Full
+	                        50000baseCR/Full
+	                        100000baseCR2/Full
+	                        200000baseCR4/Full
+	Advertised pause frame use: No
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Speed: 100000Mb/s
+	Lanes: 4
+	Duplex: Full
+	Auto-negotiation: on
+	Port: Direct Attach Copper
+	PHYAD: 0
+	Transceiver: internal
+        Current message level: 0x00002081 (8321)
+                               drv tx_err hw
+	Link detected: yes
+driver: bnxt_en
+version: 6.8.0-136-generic
+firmware-version: 233.0.196.0/pkg 23.31.18.10
+expansion-rom-version: 
+bus-info: 0000:22:00.0
+supports-statistics: yes
+supports-test: yes
+supports-eeprom-access: yes
+supports-register-dump: yes
+supports-priv-flags: no
+--- interface=eno12409np1 ---
+address=04:32:01:4d:00:81
+mtu=1500
+operstate=down
+speed=duplex=carrier=type=1
+driver=bnxt_en
+numa_node=0
+eno12409np1      DOWN           
+netlink error: Operation not permitted
+Settings for eno12409np1:
+	Supported ports: [ FIBRE ]
+	Supported link modes:   25000baseCR/Full
+	                        25000baseKR/Full
+	                        25000baseSR/Full
+	                        50000baseCR2/Full
+	                        50000baseKR2/Full
+	                        100000baseKR4/Full
+	                        100000baseSR4/Full
+	                        100000baseCR4/Full
+	                        100000baseLR4_ER4/Full
+	                        50000baseSR2/Full
+	                        50000baseKR/Full
+	                        50000baseSR/Full
+	                        50000baseCR/Full
+	                        50000baseLR_ER_FR/Full
+	                        100000baseKR2/Full
+	                        100000baseSR2/Full
+	                        100000baseCR2/Full
+	                        100000baseLR2_ER2_FR2/Full
+	                        200000baseKR4/Full
+	                        200000baseSR4/Full
+	                        200000baseLR4_ER4_FR4/Full
+	                        200000baseCR4/Full
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: RS	 BASER	 LLRS
+	Advertised link modes:  25000baseCR/Full
+	                        25000baseKR/Full
+	                        25000baseSR/Full
+	                        50000baseCR2/Full
+	                        50000baseKR2/Full
+	                        100000baseKR4/Full
+	                        100000baseSR4/Full
+	                        100000baseCR4/Full
+	                        100000baseLR4_ER4/Full
+	                        50000baseSR2/Full
+	                        50000baseKR/Full
+	                        50000baseSR/Full
+	                        50000baseCR/Full
+	                        50000baseLR_ER_FR/Full
+	                        100000baseKR2/Full
+	                        100000baseSR2/Full
+	                        100000baseCR2/Full
+	                        100000baseLR2_ER2_FR2/Full
+	                        200000baseKR4/Full
+	                        200000baseSR4/Full
+	                        200000baseLR4_ER4_FR4/Full
+	                        200000baseCR4/Full
+	Advertised pause frame use: No
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Speed: Unknown!
+	Duplex: Unknown! (255)
+	Auto-negotiation: on
+	Port: FIBRE
+	PHYAD: 0
+	Transceiver: internal
+        Current message level: 0x00002081 (8321)
+                               drv tx_err hw
+	Link detected: no
+driver: bnxt_en
+version: 6.8.0-136-generic
+firmware-version: 233.0.196.0/pkg 23.31.18.10
+expansion-rom-version: 
+bus-info: 0000:22:00.1
+supports-statistics: yes
+supports-test: yes
+supports-eeprom-access: yes
+supports-register-dump: yes
+supports-priv-flags: no
+--- interface=eno8303 ---
+address=c4:cb:e1:e3:4e:f2
+mtu=1500
+operstate=down
+speed=duplex=carrier=type=1
+driver=tg3
+numa_node=0
+eno8303          DOWN           
+netlink error: Operation not permitted
+Settings for eno8303:
+	Supported ports: [ TP ]
+	Supported link modes:   10baseT/Half 10baseT/Full
+	                        100baseT/Half 100baseT/Full
+	                        1000baseT/Half 1000baseT/Full
+	Supported pause frame use: No
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  10baseT/Half 10baseT/Full
+	                        100baseT/Half 100baseT/Full
+	                        1000baseT/Half 1000baseT/Full
+	Advertised pause frame use: No
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Speed: Unknown!
+	Duplex: Unknown! (255)
+	Auto-negotiation: on
+	Port: Twisted Pair
+	PHYAD: 1
+	Transceiver: internal
+	MDI-X: Unknown
+        Current message level: 0x000000ff (255)
+                               drv probe link timer ifdown ifup rx_err tx_err
+	Link detected: no
+driver: tg3
+version: 6.8.0-136-generic
+firmware-version: FFV23.31.1 bc 5720-v1.39
+expansion-rom-version: 
+bus-info: 0000:01:00.0
+supports-statistics: yes
+supports-test: yes
+supports-eeprom-access: yes
+supports-register-dump: yes
+supports-priv-flags: no
+--- interface=eno8403 ---
+address=c4:cb:e1:e3:4e:f3
+mtu=1500
+operstate=down
+speed=duplex=carrier=type=1
+driver=tg3
+numa_node=0
+eno8403          DOWN           
+netlink error: Operation not permitted
+Settings for eno8403:
+	Supported ports: [ TP ]
+	Supported link modes:   10baseT/Half 10baseT/Full
+	                        100baseT/Half 100baseT/Full
+	                        1000baseT/Half 1000baseT/Full
+	Supported pause frame use: No
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  10baseT/Half 10baseT/Full
+	                        100baseT/Half 100baseT/Full
+	                        1000baseT/Half 1000baseT/Full
+	Advertised pause frame use: No
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Speed: Unknown!
+	Duplex: Unknown! (255)
+	Auto-negotiation: on
+	Port: Twisted Pair
+	PHYAD: 2
+	Transceiver: internal
+	MDI-X: Unknown
+        Current message level: 0x000000ff (255)
+                               drv probe link timer ifdown ifup rx_err tx_err
+	Link detected: no
+driver: tg3
+version: 6.8.0-136-generic
+firmware-version: FFV23.31.1 bc 5720-v1.39
+expansion-rom-version: 
+bus-info: 0000:01:00.1
+supports-statistics: yes
+supports-test: yes
+supports-eeprom-access: yes
+supports-register-dump: yes
+supports-priv-flags: no
+--- interface=idrac ---
+address=c4:cb:e1:dd:de:cb
+mtu=1500
+operstate=down
+speed=duplex=carrier=type=1
+driver=cdc_ether
+idrac            DOWN           
+netlink error: Operation not permitted
+Settings for idrac:
+	Supported ports: [  ]
+	Supported link modes:   Not reported
+	Supported pause frame use: No
+	Supports auto-negotiation: No
+	Supported FEC modes: Not reported
+	Advertised link modes:  Not reported
+	Advertised pause frame use: No
+	Advertised auto-negotiation: No
+	Advertised FEC modes: Not reported
+	Speed: Unknown!
+	Duplex: Half
+	Auto-negotiation: off
+	Port: Twisted Pair
+	PHYAD: 0
+	Transceiver: internal
+	MDI-X: Unknown
+        Current message level: 0x00000007 (7)
+                               drv probe link
+	Link detected: no
+driver: cdc_ether
+version: 6.8.0-136-generic
+firmware-version: CDC Ethernet Device
+expansion-rom-version: 
+bus-info: usb-0000:00:14.0-10.3
+supports-statistics: no
+supports-test: no
+supports-eeprom-access: no
+supports-register-dump: no
+supports-priv-flags: no
+--- interface=lo ---
+address=00:00:00:00:00:00
+mtu=65536
+operstate=unknown
+speed=duplex=carrier=1
+type=772
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+netlink error: Operation not permitted
+Settings for lo:
+	Link detected: yes
+Cannot get driver information: Operation not supported
+
+===== routes_and_source_address_selection =====
+default via 10.1.0.8 dev eno12399np0 proto static 
+10.1.0.0/16 dev eno12399np0 proto kernel scope link src 10.1.0.3 
+local 10.1.0.3 dev eno12399np0 table local proto kernel scope host src 10.1.0.3 
+broadcast 10.1.255.255 dev eno12399np0 table local proto kernel scope link src 10.1.0.3 
+local 127.0.0.0/8 dev lo table local proto kernel scope host src 127.0.0.1 
+local 127.0.0.1 dev lo table local proto kernel scope host src 127.0.0.1 
+broadcast 127.255.255.255 dev lo table local proto kernel scope link src 127.0.0.1 
+fe80::/64 dev eno12399np0 proto kernel metric 256 pref medium
+local ::1 dev lo table local proto kernel metric 0 pref medium
+local fe80::632:1ff:fe4d:80 dev eno12399np0 table local proto kernel metric 0 pref medium
+multicast ff00::/8 dev eno12399np0 table local proto kernel metric 256 pref medium
+fe80::/64 dev eno12399np0 proto kernel metric 256 pref medium
+local ::1 dev lo table local proto kernel metric 0 pref medium
+local fe80::632:1ff:fe4d:80 dev eno12399np0 table local proto kernel metric 0 pref medium
+multicast ff00::/8 dev eno12399np0 table local proto kernel metric 256 pref medium
+0:	from all lookup local
+32766:	from all lookup main
+32767:	from all lookup default
+peer=neptune resolved_ipv4=10.1.0.6
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+peer=ganymede resolved_ipv4=127.0.1.1
+local 127.0.1.1 dev lo src 127.0.0.1 uid 10271 
+    cache <local> 
+
+===== neighbor_and_arp_state =====
+10.1.0.8 dev eno12399np0 lladdr 6c:92:cf:37:92:b0 REACHABLE 
+fe80::d246:cff:fe0a:e015 dev eno12399np0 lladdr d0:46:0c:0a:e0:15 router STALE 
+IP address       HW type     Flags       HW address            Mask     Device
+10.1.0.8         0x1         0x2         6c:92:cf:37:92:b0     *        eno12399np0
+
+===== peer_ping =====
+--- ping neptune ---
+PING neptune (10.1.0.6) 56(84) bytes of data.
+64 bytes from 10.1.0.6: icmp_seq=1 ttl=64 time=0.605 ms
+64 bytes from 10.1.0.6: icmp_seq=2 ttl=64 time=0.421 ms
+64 bytes from 10.1.0.6: icmp_seq=3 ttl=64 time=0.373 ms
+
+--- neptune ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2075ms
+rtt min/avg/max/mdev = 0.373/0.466/0.605/0.099 ms
+--- ping ganymede ---
+PING ganymede (127.0.1.1) 56(84) bytes of data.
+64 bytes from 127.0.1.1: icmp_seq=1 ttl=64 time=0.043 ms
+64 bytes from 127.0.1.1: icmp_seq=2 ttl=64 time=0.035 ms
+64 bytes from 127.0.1.1: icmp_seq=3 ttl=64 time=0.025 ms
+
+--- ganymede ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2041ms
+rtt min/avg/max/mdev = 0.025/0.034/0.043/0.007 ms
+
+===== listening_tcp_udp_sockets =====
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+LISTEN 0      4096       127.0.0.1:42899      0.0.0.0:*          
+LISTEN 0      4096         0.0.0.0:42165      0.0.0.0:*          
+LISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*          
+LISTEN 0      4096      127.0.0.54:53         0.0.0.0:*          
+LISTEN 0      4096         0.0.0.0:6818       0.0.0.0:*          
+LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*          
+LISTEN 0      4096         0.0.0.0:111        0.0.0.0:*          
+LISTEN 0      4096            [::]:58775         [::]:*          
+LISTEN 0      4096            [::]:22            [::]:*          
+LISTEN 0      4096            [::]:111           [::]:*          
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+UNCONN 0      0         127.0.0.54:53         0.0.0.0:*          
+UNCONN 0      0      127.0.0.53%lo:53         0.0.0.0:*          
+UNCONN 0      0            0.0.0.0:111        0.0.0.0:*          
+UNCONN 0      0          127.0.0.1:886        0.0.0.0:*          
+UNCONN 0      0            0.0.0.0:35041      0.0.0.0:*          
+UNCONN 0      0               [::]:111           [::]:*          
+UNCONN 0      0               [::]:60250         [::]:*          
+
+===== tcp_and_socket_configuration =====
+net.ipv4.ip_local_port_range = 32768	60999
+net.ipv4.tcp_congestion_control = cubic
+net.ipv4.tcp_available_congestion_control = reno cubic
+net.ipv4.tcp_mtu_probing = 0
+net.core.somaxconn = 4096
+net.core.rmem_max = 212992
+net.core.wmem_max = 212992
+tool_python3=/usr/bin/python3
+tool_nc=/usr/bin/nc
+tool_ncat=missing
+tool_socat=missing
+tool_curl=/usr/bin/curl
+tool_wget=/usr/bin/wget
+tool_iperf3=missing
+
+===== network_pci_devices =====
+01:00.0 Ethernet controller [0200]: Broadcom Inc. and subsidiaries NetXtreme BCM5720 Gigabit Ethernet PCIe [14e4:165f]
+01:00.1 Ethernet controller [0200]: Broadcom Inc. and subsidiaries NetXtreme BCM5720 Gigabit Ethernet PCIe [14e4:165f]
+22:00.0 Ethernet controller [0200]: Broadcom Inc. and subsidiaries BCM57508 NetXtreme-E 10Gb/25Gb/40Gb/50Gb/100Gb/200Gb Ethernet [14e4:1750] (rev 12)
+22:00.1 Ethernet controller [0200]: Broadcom Inc. and subsidiaries BCM57508 NetXtreme-E 10Gb/25Gb/40Gb/50Gb/100Gb/200Gb Ethernet [14e4:1750] (rev 12)
+
+===== rdma_infiniband_and_ucx =====
+command_missing=ibv_devices
+command_missing=ibv_devinfo
+command_missing=ibstat
+command_missing=ucx_info
+command_missing=ompi_info
+command_missing=mpirun
+
+===== bond_vlan_and_bridge_state =====
+2: eno12399np0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 hwmode VEB 
+4: eno12409np1: <BROADCAST,MULTICAST> mtu 1500 hwmode VEB 
+
+===== communication_summary =====
+node=ganymede
+all_addresses=10.1.0.3 
+neptune_ipv4=10.1.0.6
+ganymede_ipv4=127.0.1.1
+probe_complete=true
