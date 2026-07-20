@@ -36,3 +36,9 @@ index, name, memory.total [MiB], driver_version
 launch_vllm host=ganymede role=decode ip=10.1.0.3 http_port=33403 kv_port=34403
 NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=eno12399np0
 kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_consumer","kv_buffer_size":"8e9","kv_port":"34403","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31403","http_port":"33403","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 249403.1 ON ganymede CANCELLED AT 2026-07-20T18:46:11 ***
+srun: error: ganymede: task 0: Killed
+srun: Terminating StepId=249403.1
+srun: error: neptune: task 1: Killed

@@ -123,3 +123,108 @@ smoke_curl_rc=0
 pd_smoke_valid=true completion_tokens=32 text=' Stockholm, which is also the largest city in the country. Stockholm is located on the east coast of Sweden, on the Baltic Sea. The city is built'
 
 ===== pd_vllm_bench =====
+bench_rc=0
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x7c573f2b11b0>, seed=0, num_prompts=16, dataset_name='random', no_stream=False, dataset_path=None, no_oversample=False, skip_chat_template=False, disable_shuffle=False, custom_output_len=256, spec_bench_output_len=256, spec_bench_category=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, blazedit_min_distance=0.0, blazedit_max_distance=1.0, random_input_len=512, random_output_len=64, random_range_ratio=0.0, random_prefix_len=0, random_batch_size=1, no_reranker=False, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, random_mm_limit_mm_per_prompt={'image': 255, 'video': 1}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_output_len=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, label=None, backend='openai', base_url='http://10.1.0.3:30403', host='127.0.0.1', port=8000, endpoint='/v1/completions', header=None, max_concurrency=4, model='mistralai/Mistral-7B-v0.1', input_len=None, output_len=None, tokenizer=None, tokenizer_mode='auto', use_beam_search=False, logprobs=None, request_rate=1.0, burstiness=1.0, trust_remote_code=False, disable_tqdm=False, num_warmups=2, profile=False, save_result=False, save_detailed=False, append_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics=None, metric_percentiles='99', goodput=None, request_id_prefix='bench-ac0addb6-', top_p=None, top_k=None, min_p=None, temperature=0.0, frequency_penalty=None, presence_penalty=None, repetition_penalty=None, served_model_name=None, lora_modules=None, ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=0, extra_body=None)
+INFO 07-20 18:45:45 [datasets.py:612] Sampling input_len from [511, 511] and output_len from [64, 64]
+Starting initial single prompt test run...
+Skipping endpoint ready check.
+Warming up with 2 requests...
+  0%|          | 0/2 [00:00<?, ?it/s] 50%|█████     | 1/2 [00:04<00:04,  4.01s/it]100%|██████████| 2/2 [00:04<00:00,  2.03s/it]
+Warmup run completed.
+Starting main benchmark run...
+Traffic request rate: 1.0
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 4
+  0%|          | 0/16 [00:00<?, ?it/s]  6%|▋         | 1/16 [00:04<01:08,  4.59s/it] 12%|█▎        | 2/16 [00:05<00:36,  2.63s/it] 19%|█▉        | 3/16 [00:06<00:23,  1.81s/it] 25%|██▌       | 4/16 [00:07<00:16,  1.38s/it] 31%|███▏      | 5/16 [00:08<00:14,  1.33s/it] 38%|███▊      | 6/16 [00:09<00:12,  1.30s/it] 44%|████▍     | 7/16 [00:10<00:10,  1.15s/it] 50%|█████     | 8/16 [00:11<00:08,  1.01s/it] 56%|█████▋    | 9/16 [00:14<00:11,  1.58s/it] 62%|██████▎   | 10/16 [00:14<00:07,  1.22s/it] 69%|██████▉   | 11/16 [00:16<00:06,  1.28s/it] 75%|███████▌  | 12/16 [00:16<00:04,  1.09s/it] 81%|████████▏ | 13/16 [00:18<00:03,  1.23s/it] 88%|████████▊ | 14/16 [00:19<00:02,  1.34s/it] 94%|█████████▍| 15/16 [00:20<00:01,  1.01s/it]100%|██████████| 16/16 [00:20<00:00,  1.14it/s]100%|██████████| 16/16 [00:20<00:00,  1.29s/it]
+tip: install termplotlib and gnuplot to plot the metrics
+============ Serving Benchmark Result ============
+Successful requests:                     16        
+Failed requests:                         0         
+Maximum request concurrency:             4         
+Request rate configured (RPS):           1.00      
+Benchmark duration (s):                  20.71     
+Total input tokens:                      8176      
+Total generated tokens:                  1024      
+Request throughput (req/s):              0.77      
+Output token throughput (tok/s):         49.46     
+Peak output token throughput (tok/s):    67.00     
+Peak concurrent requests:                6.00      
+Total token throughput (tok/s):          444.33    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          271.21    
+Median TTFT (ms):                        270.19    
+P99 TTFT (ms):                           309.19    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          59.32     
+Median TPOT (ms):                        59.38     
+P99 TPOT (ms):                           59.63     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           59.32     
+Median ITL (ms):                         59.46     
+P99 ITL (ms):                            68.25     
+==================================================
+
+===== stop_servers_and_collect_logs =====
+stopping_server_step_pid=469643
+stopping_proxy_pid=469636
+--- proxy routes ---
+registry_add role=decode http=10.1.0.3:33403 zmq=10.1.0.3:34403
+registry_add role=prefill http=10.1.0.6:32403 zmq=10.1.0.6:34403
+route count=0 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_2175b22994224699b0b5047475886231 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=1 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_d95a3495c5a440f28be1b1fd7d25e7c7 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=2 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_f96b9247f67a4969a0dff0dbdbcdbd82 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=3 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_9318a9484f9d4209a9c4e54d5a3ae992 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=4 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_c6157c51ac2e4db6a98a69c7867dbe55 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=5 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_c4d8d64d19a2492082c963c9903db848 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=6 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_1f40bd9050bc4919bf592bd70a1eb67c prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=7 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_3ebf83536988486e8a9005799a7e1e23 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=8 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_c4c4c69b11674288871d02b6c30c8b34 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=9 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_39c8f0fca58c4e02b367847beea68e70 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=10 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_685f1d1838fd48e2ae266024769353a4 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=11 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_b6194906b4df4b0b8bf1e6e38ae64a29 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=12 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_14b31df2b16e4e73923016e80185ed87 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=13 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_77b44db15163462dacf2741bd5b62473 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=14 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_42b3c94fa2ab4755bd27460058160f84 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=15 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_95b3f35007f1455599d446ee1bde6ea6 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=16 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_1b3fc31f3e2b4c98834ff4818156f223 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=17 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_4a939632223b49d1adcd333a05196fab prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+route count=18 request_id=___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_1dce12e7d8784b7cbab0721cdfbb8c87 prefill_http=10.1.0.6:32403 decode_http=10.1.0.3:33403
+--- P2P connector evidence ---
+[0;36m(APIServer pid=421155)[0;0m INFO 07-20 18:44:43 [utils.py:261] non-default args: {'model_tag': 'mistralai/Mistral-7B-v0.1', 'api_server_count': 1, 'host': '0.0.0.0', 'port': 32403, 'model': 'mistralai/Mistral-7B-v0.1', 'dtype': 'float16', 'max_model_len': 4096, 'enforce_eager': True, 'gpu_memory_utilization': 0.82, 'max_num_batched_tokens': 4096, 'max_num_seqs': 32, 'kv_transfer_config': KVTransferConfig(kv_connector='P2pNcclConnector', engine_id='0bf94e9f-6b1e-4821-bc21-bea8d41e8ac5', kv_buffer_device='cuda', kv_buffer_size=10.0, kv_role='kv_producer', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=34403, kv_connector_extra_config={'proxy_ip': '10.1.0.3', 'proxy_port': '31403', 'http_port': '32403', 'send_type': 'PUT_ASYNC', 'nccl_num_channels': '16'}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='recompute')}
+[0;36m(EngineCore_DP0 pid=421333)[0;0m INFO 07-20 18:45:11 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 0bf94e9f-6b1e-4821-bc21-bea8d41e8ac5
+[0;36m(EngineCore_DP0 pid=421333)[0;0m INFO 07-20 18:45:24 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:0, local_rank:0, http_address:10.1.0.6:32403, zmq_address:10.1.0.6:34403, proxy_address:10.1.0.3:31403, send_type:PUT_ASYNC, buffer_size_threshold:10.00, nccl_num_channels:16
+[0;36m(EngineCore_DP0 pid=421333)[0;0m INFO 07-20 18:45:25 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 0bf94e9f-6b1e-4821-bc21-bea8d41e8ac5
+[0;36m(APIServer pid=469670)[0;0m INFO 07-20 18:44:34 [utils.py:261] non-default args: {'model_tag': 'mistralai/Mistral-7B-v0.1', 'api_server_count': 1, 'host': '0.0.0.0', 'port': 33403, 'model': 'mistralai/Mistral-7B-v0.1', 'dtype': 'float16', 'max_model_len': 4096, 'enforce_eager': True, 'gpu_memory_utilization': 0.82, 'max_num_batched_tokens': 4096, 'max_num_seqs': 32, 'kv_transfer_config': KVTransferConfig(kv_connector='P2pNcclConnector', engine_id='9ac4dc4a-7d77-416d-b2f4-2d555a00aef0', kv_buffer_device='cuda', kv_buffer_size=8000000000.0, kv_role='kv_consumer', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=34403, kv_connector_extra_config={'proxy_ip': '10.1.0.3', 'proxy_port': '31403', 'http_port': '33403', 'send_type': 'PUT_ASYNC', 'nccl_num_channels': '16'}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='recompute')}
+[0;36m(EngineCore_DP0 pid=469795)[0;0m INFO 07-20 18:44:55 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 9ac4dc4a-7d77-416d-b2f4-2d555a00aef0
+[0;36m(EngineCore_DP0 pid=469795)[0;0m INFO 07-20 18:45:06 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:0, local_rank:0, http_address:10.1.0.3:33403, zmq_address:10.1.0.3:34403, proxy_address:10.1.0.3:31403, send_type:PUT_ASYNC, buffer_size_threshold:8000000000.00, nccl_num_channels:16
+[0;36m(EngineCore_DP0 pid=469795)[0;0m INFO 07-20 18:45:07 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 9ac4dc4a-7d77-416d-b2f4-2d555a00aef0
+--- NCCL network evidence ---
+ganymede:469795:470149 [0] NCCL INFO NET/Socket : Using [0]eno12399np0:10.1.0.3<0>
+ganymede:469795:470149 [0] NCCL INFO Using network Socket
+ganymede:469795:470149 [0] NCCL INFO NET/Socket : GPU Direct RDMA Disabled for HCA 0 'eno12399np0'
+ganymede:469795:470385 [0] NCCL INFO Channel 01/1 : 0[0] -> 1[1] [receive] via NET/Socket/0/Shared
+ganymede:469795:470385 [0] NCCL INFO Channel 09/1 : 0[0] -> 1[1] [receive] via NET/Socket/0/Shared
+neptune:421333:421733 [0] NCCL INFO NET/Socket : Using [0]enp160s0f0np0:10.1.0.6<0>
+neptune:421333:421733 [0] NCCL INFO Using network Socket
+neptune:421333:421733 [0] NCCL INFO NET/Socket : GPU Direct RDMA Disabled for HCA 0 'enp160s0f0np0'
+neptune:421333:421820 [0] NCCL INFO Channel 01/1 : 0[0] -> 1[1] [send] via NET/Socket/0/Shared
+neptune:421333:421820 [0] NCCL INFO Channel 09/1 : 0[0] -> 1[1] [send] via NET/Socket/0/Shared
+nccl_socket_evidence_lines=6
+nccl_socket_path_verified=true
+
+===== network_and_gpu_telemetry_summary =====
+telemetry_file=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-184320-luqia-vllm-pd-tcp-2node-r2/pd_tcp_results/decode_ganymede_telemetry.csv samples=51
+network_rx_delta_bytes=1311056545
+network_tx_delta_bytes=17015876
+gpu_util_max_pct=99.0
+telemetry_file=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-184320-luqia-vllm-pd-tcp-2node-r2/pd_tcp_results/prefill_neptune_telemetry.csv samples=52
+network_rx_delta_bytes=42293072
+network_tx_delta_bytes=1276665100
+gpu_util_max_pct=46.0
+
+===== result =====
+pd_smoke_request_ok=true
+pd_bench_rc=0
+pd_over_100gbe_tcp_socket_ok=true
+job_exit_rc=0
+job_cleanup_rc=0
