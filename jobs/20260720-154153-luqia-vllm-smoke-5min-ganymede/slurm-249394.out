@@ -24,3 +24,18 @@ monitor_pid=443358
 pre_reset_command=sudo nvidia-smi -i 0 -rgc
 All done.
 set_command=sudo nvidia-smi -i 0 -lgc 990,990
+GPU clocks set to "(gpuClkMin 990, gpuClkMax 990)" for GPU 00000000:0D:00.0
+
+Warning: persistence mode is disabled on device 00000000:0D:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+set_frequency_rc=0
+index, name, clocks.current.sm [MHz], clocks.max.graphics [MHz]
+1, NVIDIA L4, 210 MHz, 2040 MHz
+
+===== start_vllm_server =====
+CUDA_VISIBLE_DEVICES=1
+model=mistralai/Mistral-7B-v0.1
+port=26394
+server_pid=443379
+waiting_for_server_s=5
+waiting_for_server_s=10
