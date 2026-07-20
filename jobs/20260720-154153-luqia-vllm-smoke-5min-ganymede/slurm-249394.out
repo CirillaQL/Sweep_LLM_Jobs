@@ -1,0 +1,26 @@
+
+===== job_info =====
+time=2026-07-20T15:44:42+02:00
+hostname=ganymede
+whoami=chjing
+HOME=/data/users/chjing
+SLURM_JOB_ID=249394
+SLURM_JOB_NODELIST=ganymede
+SLURM_JOB_GPUS=1
+CUDA_VISIBLE_DEVICES_initial=1
+python_bin=/data/users/chjing/miniforge3/envs/cuda-env/bin/python
+vllm_bin=/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm
+bench_duration_s=300
+target_sm_mhz=990
+output_dir=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-154153-luqia-vllm-smoke-5min-ganymede/vllm_smoke_results
+vllm_version=0.15.1
+torch_version=2.9.1+cu128
+cuda_available=True
+index, name, memory.total [MiB], driver_version
+1, NVIDIA L4, 23034 MiB, 595.71.05
+monitor_pid=443358
+
+===== set_locked_gpu_clock =====
+pre_reset_command=sudo nvidia-smi -i 0 -rgc
+All done.
+set_command=sudo nvidia-smi -i 0 -lgc 990,990
