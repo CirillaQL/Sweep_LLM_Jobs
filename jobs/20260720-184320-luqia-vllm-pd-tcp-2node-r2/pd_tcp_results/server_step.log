@@ -1,0 +1,38 @@
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=neptune role=prefill mode=serve
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+CUDA_VISIBLE_DEVICES=0
+host=ganymede role=decode mode=serve
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+CUDA_VISIBLE_DEVICES=1
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+launch_vllm host=neptune role=prefill ip=10.1.0.6 http_port=32403 kv_port=34403
+NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=enp160s0f0np0
+kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_producer","kv_buffer_size":"1e1","kv_port":"34403","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31403","http_port":"32403","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+1, NVIDIA L4, 23034 MiB, 595.71.05
+2, NVIDIA L4, 23034 MiB, 595.71.05
+3, NVIDIA L4, 23034 MiB, 595.71.05
+4, NVIDIA L4, 23034 MiB, 595.71.05
+5, NVIDIA L4, 23034 MiB, 595.71.05
+6, NVIDIA L4, 23034 MiB, 595.71.05
+7, NVIDIA L4, 23034 MiB, 595.71.05
+launch_vllm host=ganymede role=decode ip=10.1.0.3 http_port=33403 kv_port=34403
+NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=eno12399np0
+kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_consumer","kv_buffer_size":"8e9","kv_port":"34403","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31403","http_port":"33403","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}

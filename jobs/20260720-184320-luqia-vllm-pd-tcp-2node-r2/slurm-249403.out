@@ -82,3 +82,17 @@ host=ganymede import=vllm version=0.15.1
 host=ganymede import=aiohttp version=3.13.3
 host=ganymede import=msgpack version=1.1.2
 host=ganymede import=zmq version=27.1.0
+host=neptune import=torch version=2.9.1+cu128
+host=neptune import=vllm version=0.15.1
+host=neptune import=aiohttp version=3.13.3
+host=neptune import=msgpack version=1.1.2
+host=neptune import=zmq version=27.1.0
+preflight_rc=0
+
+===== start_proxy =====
+proxy_pid=469636
+waiting name=proxy elapsed_s=5 url=http://127.0.0.1:30403/health
+ready name=proxy elapsed_s=5 url=http://127.0.0.1:30403/health
+
+===== start_prefill_and_decode =====
+server_step_pid=469643
