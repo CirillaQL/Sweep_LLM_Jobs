@@ -1,0 +1,75 @@
+
+===== job_info =====
+time=2026-07-20T13:47:08+02:00
+hostname=ganymede
+whoami=chjing
+id=uid=10271(chjing) gid=0(root) groups=0(root),10002(admin),10272(chjing)
+SLURM_JOB_ID=249376
+SLURM_JOB_GPUS=1
+CUDA_VISIBLE_DEVICES_initial=1
+physical_gpu_id=1
+target_sm_mhz=990
+load_seconds=300
+monitor_interval_seconds=5
+source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-134327-luqia-cuda-lgc990-ganymede-rerun/compute_load.cu
+job_dir=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-134327-luqia-cuda-lgc990-ganymede-rerun
+
+===== compile_with_chjing_cuda_env =====
+nvcc_path=/data/users/chjing/miniforge3/envs/cuda-env/bin/nvcc
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2024 NVIDIA Corporation
+Built on Thu_Mar_28_02:18:24_PDT_2024
+Cuda compilation tools, release 12.4, V12.4.131
+Build cuda_12.4.r12.4/compiler.34097967_0
+nvcc_rc=0
+-rwxr-xr-x 1 chjing nogroup 974K Jul 20 13:47 /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-134327-luqia-cuda-lgc990-ganymede-rerun/compute_load
+
+===== baseline_before_locked_clock =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/20 13:47:11.729, 1, NVIDIA L4, Disabled, 210 MHz, 210 MHz, 405 MHz, 2040 MHz, 6251 MHz, 15.92 W, 72.00 W, 0 %, 0 MiB, 35
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Jul 20 13:47:11 2026
+Driver Version                                         : 595.71.05
+CUDA Version                                           : 13.2
+
+Attached GPUs                                          : 8
+GPU 00000000:37:00.0
+    Clocks
+        Graphics                                       : 210 MHz
+        SM                                             : 210 MHz
+        Memory                                         : 405 MHz
+        Video                                          : 765 MHz
+    Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Default Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Deferred Clocks
+        Memory                                         : N/A
+    Max Clocks
+        Graphics                                       : 2040 MHz
+        SM                                             : 2040 MHz
+        Memory                                         : 6251 MHz
+        Video                                          : 1770 MHz
+    Max Customer Boost Clocks
+        Graphics                                       : 2040 MHz
+    SM Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Memory Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Clock Policy
+        Auto Boost                                     : N/A
+        Auto Boost Default                             : N/A
+
+monitor_pid=425373
