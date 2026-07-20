@@ -24,9 +24,7 @@ JOB_DIR="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 OUT_DIR="${JOB_DIR}/vllm_bench_lgc990_results"
 mkdir -p "$OUT_DIR"
 
-GPU_ID="${SLURM_JOB_GPUS:-${CUDA_VISIBLE_DEVICES:-0}}"
-GPU_ID="${GPU_ID%%,*}"
-GPU_ID="${GPU_ID:-0}"
+GPU_ID=0
 
 SERVER_PID=""
 SMI_MONITOR_PID=""
@@ -276,8 +274,8 @@ sleep 5
 section "set_locked_gpu_clock"
 echo "pre_reset_command=sudo nvidia-smi -i ${GPU_ID} -rgc"
 timeout 30 sudo nvidia-smi -i "$GPU_ID" -rgc 2>&1 || true
-echo "set_command=sudo nvidia-smi -i ${GPU_ID} -lgc ${TARGET_SM_FREQ},${TARGET_SM_FREQ}"
-timeout 30 sudo nvidia-smi -i "$GPU_ID" -lgc "${TARGET_SM_FREQ},${TARGET_SM_FREQ}" 2>&1
+echo "set_command=sudo nvidia-smi -i 0 -lgc 990,990"
+timeout 30 sudo nvidia-smi -i 0 -lgc 990,990 2>&1
 SET_FREQ_RC=$?
 echo "set_frequency_rc=${SET_FREQ_RC}"
 if [ "$SET_FREQ_RC" -ne 0 ]; then
