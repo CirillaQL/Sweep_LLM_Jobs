@@ -109,3 +109,17 @@ waiting name=prefill elapsed_s=50 url=http://10.1.0.6:32403/v1/models
 waiting name=prefill elapsed_s=55 url=http://10.1.0.6:32403/v1/models
 waiting name=prefill elapsed_s=60 url=http://10.1.0.6:32403/v1/models
 waiting name=prefill elapsed_s=65 url=http://10.1.0.6:32403/v1/models
+waiting name=prefill elapsed_s=70 url=http://10.1.0.6:32403/v1/models
+ready name=prefill elapsed_s=70 url=http://10.1.0.6:32403/v1/models
+ready name=decode elapsed_s=0 url=http://10.1.0.3:33403/v1/models
+
+===== wait_for_pd_registry =====
+{"prefill": ["10.1.0.6:32403"], "decode": ["10.1.0.3:33403"]}
+registry_ready=true
+
+===== pd_smoke_request =====
+{"id":"cmpl-___prefill_addr_10.1.0.6:34403___decode_addr_10.1.0.3:34403_2175b22994224699b0b5047475886231","object":"text_completion","created":1784565933,"model":"mistralai/Mistral-7B-v0.1","choices":[{"index":0,"text":" Stockholm, which is also the largest city in the country. Stockholm is located on the east coast of Sweden, on the Baltic Sea. The city is built","logprobs":null,"finish_reason":"length","stop_reason":null,"token_ids":null,"prompt_logprobs":null,"prompt_token_ids":null}],"service_tier":null,"system_fingerprint":null,"usage":{"prompt_tokens":6,"total_tokens":38,"completion_tokens":32,"prompt_tokens_details":null},"kv_transfer_params":null}
+smoke_curl_rc=0
+pd_smoke_valid=true completion_tokens=32 text=' Stockholm, which is also the largest city in the country. Stockholm is located on the east coast of Sweden, on the Baltic Sea. The city is built'
+
+===== pd_vllm_bench =====
