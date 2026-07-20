@@ -81,3 +81,56 @@ GPU clocks set to "(gpuClkMin 990, gpuClkMax 990)" for GPU 00000000:4A:00.0
 Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
 All done.
 set_frequency_rc=0
+
+===== after_locked_clock_change =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/20 14:08:06.626, 0, NVIDIA L40S, Disabled, 990 MHz, 990 MHz, 9001 MHz, 2520 MHz, 9001 MHz, 60.01 W, 350.00 W, 0 %, 0 MiB, 23
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Jul 20 14:08:06 2026
+Driver Version                                         : 595.71.05
+CUDA Version                                           : 13.2
+
+Attached GPUs                                          : 4
+GPU 00000000:4A:00.0
+    Clocks
+        Graphics                                       : 990 MHz
+        SM                                             : 990 MHz
+        Memory                                         : 9001 MHz
+        Video                                          : 1185 MHz
+    Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Default Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Deferred Clocks
+        Memory                                         : N/A
+    Max Clocks
+        Graphics                                       : 2520 MHz
+        SM                                             : 2520 MHz
+        Memory                                         : 9001 MHz
+        Video                                          : 1965 MHz
+    Max Customer Boost Clocks
+        Graphics                                       : 2520 MHz
+    SM Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Memory Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Clock Policy
+        Auto Boost                                     : N/A
+        Auto Boost Default                             : N/A
+
+
+===== run_cuda_load =====
+CUDA_VISIBLE_DEVICES=0
+command=timeout 420 /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-140653-luqia-cuda-lgc990-neptune/compute_load 300 0
