@@ -14,3 +14,34 @@ vllm_bin=/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm
 target_sm_mhz=990
 bench_duration_s=300
 output_dir=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-163038-luqia-vllm-smoke-5min-neptune-lgc990/vllm_smoke_results
+vllm_version=0.15.1
+torch_version=2.9.1+cu128
+cuda_available=True
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+
+===== baseline_before_locked_clock =====
+timestamp, index, name, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], power.draw [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/20 16:32:33.047, 0, NVIDIA L40S, 210 MHz, 210 MHz, 405 MHz, 2520 MHz, 30.87 W, 0 %, 0 MiB, 22
+monitor_pid=403996
+
+===== set_locked_gpu_clock =====
+allocated_gpu_id=0
+pre_reset_command=sudo nvidia-smi -i 0 -rgc
+All done.
+set_command=sudo nvidia-smi -i 0 -lgc 990,990
+GPU clocks set to "(gpuClkMin 990, gpuClkMax 990)" for GPU 00000000:4A:00.0
+
+Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+set_frequency_rc=0
+
+===== after_locked_clock_change =====
+timestamp, index, name, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], power.draw [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/20 16:32:38.401, 0, NVIDIA L40S, 990 MHz, 990 MHz, 9001 MHz, 2520 MHz, 60.01 W, 0 %, 0 MiB, 23
+
+===== start_vllm_server =====
+CUDA_VISIBLE_DEVICES=0
+model=mistralai/Mistral-7B-v0.1
+port=28396
+server_pid=404046
