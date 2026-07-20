@@ -134,3 +134,136 @@ GPU 00000000:4A:00.0
 ===== run_cuda_load =====
 CUDA_VISIBLE_DEVICES=0
 command=timeout 420 /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-140653-luqia-cuda-lgc990-neptune/compute_load 300 0
+cuda_load_rc=0
+GPU: NVIDIA L40S
+Device: 0
+Duration: 300.0 seconds
+Launch: 1136 blocks x 256 threads
+Completed 7598 kernel launches in 300.039 seconds
+
+===== after_cuda_load =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/20 14:13:07.098, 0, NVIDIA L40S, Disabled, 990 MHz, 990 MHz, 9001 MHz, 2520 MHz, 9001 MHz, 137.14 W, 350.00 W, 96 %, 0 MiB, 39
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Jul 20 14:13:07 2026
+Driver Version                                         : 595.71.05
+CUDA Version                                           : 13.2
+
+Attached GPUs                                          : 4
+GPU 00000000:4A:00.0
+    Clocks
+        Graphics                                       : 990 MHz
+        SM                                             : 990 MHz
+        Memory                                         : 9001 MHz
+        Video                                          : 1185 MHz
+    Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Default Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Deferred Clocks
+        Memory                                         : N/A
+    Max Clocks
+        Graphics                                       : 2520 MHz
+        SM                                             : 2520 MHz
+        Memory                                         : 9001 MHz
+        Video                                          : 1965 MHz
+    Max Customer Boost Clocks
+        Graphics                                       : 2520 MHz
+    SM Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Memory Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Clock Policy
+        Auto Boost                                     : N/A
+        Auto Boost Default                             : N/A
+
+stopping_monitor_pid=383825
+
+===== frequency_summary =====
+monitor_file=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-140653-luqia-cuda-lgc990-neptune/gpu_frequency_monitor.csv
+set_frequency_rc=0
+target_sm_mhz=990.0
+all_sm_mhz_samples=62
+all_sm_mhz_min=210.0
+all_sm_mhz_max=990.0
+all_sm_mhz_mean=964.8
+active_sm_mhz_samples=59
+active_sm_mhz_min=990.0
+active_sm_mhz_max=990.0
+active_sm_mhz_mean=990.0
+active_graphics_mhz_samples=59
+active_graphics_mhz_min=990.0
+active_graphics_mhz_max=990.0
+active_graphics_mhz_mean=990.0
+active_power_w_samples=59
+active_power_w_min=134.3
+active_power_w_max=137.4
+active_power_w_mean=136.1
+active_above_target_plus_45=0
+cap_effective=True
+
+===== cleanup_and_restore =====
+reset_command=sudo nvidia-smi -i 0 -rgc
+All done.
+
+===== after_locked_clock_reset =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/20 14:13:07.506, 0, NVIDIA L40S, Disabled, 2520 MHz, 2520 MHz, 9001 MHz, 2520 MHz, 9001 MHz, 104.84 W, 350.00 W, 0 %, 0 MiB, 37
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Jul 20 14:13:07 2026
+Driver Version                                         : 595.71.05
+CUDA Version                                           : 13.2
+
+Attached GPUs                                          : 4
+GPU 00000000:4A:00.0
+    Clocks
+        Graphics                                       : 2520 MHz
+        SM                                             : 2520 MHz
+        Memory                                         : 9001 MHz
+        Video                                          : 1965 MHz
+    Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Default Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Deferred Clocks
+        Memory                                         : N/A
+    Max Clocks
+        Graphics                                       : 2520 MHz
+        SM                                             : 2520 MHz
+        Memory                                         : 9001 MHz
+        Video                                          : 1965 MHz
+    Max Customer Boost Clocks
+        Graphics                                       : 2520 MHz
+    SM Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Memory Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Clock Policy
+        Auto Boost                                     : N/A
+        Auto Boost Default                             : N/A
+
+job_exit_rc=0
