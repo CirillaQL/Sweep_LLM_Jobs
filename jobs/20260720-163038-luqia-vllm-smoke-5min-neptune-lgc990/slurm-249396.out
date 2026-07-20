@@ -230,3 +230,30 @@ bench_rc=0
 ===== post_bench_validation =====
 server_alive_after_bench=true
 {"object":"list","data":[{"id":"mistralai/Mistral-7B-v0.1","object":"model","created":1784558319,"owned_by":"vllm","root":"mistralai/Mistral-7B-v0.1","parent":null,"max_model_len":4096,"permission":[{"id":"modelperm-80f74088661fc5ac","object":"model_permission","created":1784558319,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}
+
+===== after_benchmark_before_reset =====
+timestamp, index, name, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], power.draw [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/20 16:38:39.151, 0, NVIDIA L40S, 990 MHz, 990 MHz, 9001 MHz, 2520 MHz, 157.66 W, 0 %, 42091 MiB, 40
+stopping_gpu_monitor_pid=403996
+
+===== gpu_frequency_summary =====
+monitor_file=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-163038-luqia-vllm-smoke-5min-neptune-lgc990/vllm_smoke_results/nvidia_smi_monitor.csv
+target_sm_mhz=990
+active_samples=46
+active_sm_min_mhz=990
+active_sm_max_mhz=990
+active_sm_mean_mhz=990.00
+active_samples_outside_target_15mhz=0
+cap_effective=True
+final_bench_elapsed_s=301
+final_bench_rc=0
+
+===== cleanup_and_restore =====
+stopping_vllm_server_pid=404046
+reset_clock_command=sudo nvidia-smi -i 0 -rgc
+All done.
+
+===== after_locked_clock_reset =====
+timestamp, index, name, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], power.draw [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/20 16:38:40.383, 0, NVIDIA L40S, 2520 MHz, 2520 MHz, 9001 MHz, 2520 MHz, 73.00 W, 100 %, 0 MiB, 39
+job_exit_rc=0
