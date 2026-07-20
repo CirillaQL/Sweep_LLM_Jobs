@@ -2,3 +2,21 @@
 [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
 launch host=neptune rank=1/2 iface=enp160s0f0np0 master=10.1.0.3:29400 CUDA_VISIBLE_DEVICES=0
 launch host=ganymede rank=0/2 iface=eno12399np0 master=10.1.0.3:29400 CUDA_VISIBLE_DEVICES=1
+rank=0 host=ganymede pre_init world_size=2 master=10.1.0.3:29400 interface=eno12399np0 CUDA_VISIBLE_DEVICES=1 route='local 10.1.0.3 dev lo src 10.1.0.3 uid 10271 \n    cache <local>' gpu='NVIDIA L4' torch=2.9.1+cu128 nccl=(2, 27, 5)
+rank=1 host=neptune pre_init world_size=2 master=10.1.0.3:29400 interface=enp160s0f0np0 CUDA_VISIBLE_DEVICES=0 route='10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 \n    cache' gpu='NVIDIA L40S' torch=2.9.1+cu128 nccl=(2, 27, 5)
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 1 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+rank=0 host=ganymede init_process_group_ok=true
+rank=1 host=neptune init_process_group_ok=true
+rank=0 host=ganymede correctness_all_reduce expected=3.0 actual=3.0 ok=True
+rank=1 host=neptune correctness_all_reduce expected=3.0 actual=3.0 ok=True
+/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+NCCL_BW size_mib=1 iterations=30 elapsed_s=0.067178 algbw_gbps=3.746 busbw_gbps=3.746
+NCCL_BW size_mib=16 iterations=20 elapsed_s=0.152192 algbw_gbps=17.638 busbw_gbps=17.638
+NCCL_BW size_mib=64 iterations=10 elapsed_s=0.235834 algbw_gbps=22.765 busbw_gbps=22.765
+NCCL_BW size_mib=256 iterations=5 elapsed_s=0.445972 algbw_gbps=24.076 busbw_gbps=24.076
+rank=0 host=ganymede nccl_all_reduce_complete=true
+rank=1 host=neptune nccl_all_reduce_complete=true
+[W720 17:33:06.431055157 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[W720 17:33:06.383718906 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())

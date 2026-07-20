@@ -78,3 +78,54 @@ preflight_rc=0
 [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
 launch host=neptune rank=1/2 iface=enp160s0f0np0 master=10.1.0.3:29400 CUDA_VISIBLE_DEVICES=0
 launch host=ganymede rank=0/2 iface=eno12399np0 master=10.1.0.3:29400 CUDA_VISIBLE_DEVICES=1
+rank=0 host=ganymede pre_init world_size=2 master=10.1.0.3:29400 interface=eno12399np0 CUDA_VISIBLE_DEVICES=1 route='local 10.1.0.3 dev lo src 10.1.0.3 uid 10271 \n    cache <local>' gpu='NVIDIA L4' torch=2.9.1+cu128 nccl=(2, 27, 5)
+rank=1 host=neptune pre_init world_size=2 master=10.1.0.3:29400 interface=enp160s0f0np0 CUDA_VISIBLE_DEVICES=0 route='10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 \n    cache' gpu='NVIDIA L40S' torch=2.9.1+cu128 nccl=(2, 27, 5)
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 1 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+rank=0 host=ganymede init_process_group_ok=true
+rank=1 host=neptune init_process_group_ok=true
+rank=0 host=ganymede correctness_all_reduce expected=3.0 actual=3.0 ok=True
+rank=1 host=neptune correctness_all_reduce expected=3.0 actual=3.0 ok=True
+/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py:4876: UserWarning: barrier(): using the device under current context. You can specify `device_id` in `init_process_group` to mute this warning.
+  warnings.warn(  # warn only once
+NCCL_BW size_mib=1 iterations=30 elapsed_s=0.067178 algbw_gbps=3.746 busbw_gbps=3.746
+NCCL_BW size_mib=16 iterations=20 elapsed_s=0.152192 algbw_gbps=17.638 busbw_gbps=17.638
+NCCL_BW size_mib=64 iterations=10 elapsed_s=0.235834 algbw_gbps=22.765 busbw_gbps=22.765
+NCCL_BW size_mib=256 iterations=5 elapsed_s=0.445972 algbw_gbps=24.076 busbw_gbps=24.076
+rank=0 host=ganymede nccl_all_reduce_complete=true
+rank=1 host=neptune nccl_all_reduce_complete=true
+[W720 17:33:06.431055157 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[W720 17:33:06.383718906 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+nccl_test_rc=0
+
+===== nccl_network_log_summary =====
+--- /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-173150-luqia-nccl-tcp-2node-r1/nccl_results/nccl-ganymede-459532.log ---
+ganymede:459532:459577 [0] NCCL INFO NET/Socket : Using [0]eno12399np0:10.1.0.3<0>
+ganymede:459532:459577 [0] NCCL INFO Using network Socket
+ganymede:459532:459577 [0] NCCL INFO ncclCommInitRankConfig comm 0x5b959a1e2550 rank 0 nranks 2 cudaDev 0 nvmlDev 1 busId 37000 commId 0x997e3a8ba41d6107 - Init START
+ganymede:459532:459577 [0] NCCL INFO NET/Socket : GPU Direct RDMA Disabled for HCA 0 'eno12399np0'
+ganymede:459532:459577 [0] NCCL INFO comm 0x5b959a1e2550 rank 0 nRanks 2 nNodes 2 localRanks 1 localRank 0 MNNVL 0
+ganymede:459532:459577 [0] NCCL INFO ncclCommInitRankConfig comm 0x5b959a1e2550 rank 0 nranks 2 cudaDev 0 nvmlDev 1 busId 37000 commId 0x997e3a8ba41d6107 - Init COMPLETE
+ganymede:459532:459581 [0] NCCL INFO Channel 00/0 : 1[0] -> 0[1] [receive] via NET/Socket/0
+ganymede:459532:459581 [0] NCCL INFO Channel 01/0 : 1[0] -> 0[1] [receive] via NET/Socket/0
+ganymede:459532:459581 [0] NCCL INFO Channel 00/0 : 0[1] -> 1[0] [send] via NET/Socket/0
+ganymede:459532:459581 [0] NCCL INFO Channel 01/0 : 0[1] -> 1[0] [send] via NET/Socket/0
+ganymede:459532:459581 [0] NCCL INFO Connected all rings, use ring PXN 0 GDR 0
+ganymede:459532:459584 [0] NCCL INFO comm 0x5b959a1e2550 rank 0 nranks 2 cudaDev 0 busId 37000 - Abort COMPLETE
+--- /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-173150-luqia-nccl-tcp-2node-r1/nccl_results/nccl-neptune-412508.log ---
+neptune:412508:412529 [0] NCCL INFO NET/Socket : Using [0]enp160s0f0np0:10.1.0.6<0>
+neptune:412508:412529 [0] NCCL INFO Using network Socket
+neptune:412508:412529 [0] NCCL INFO ncclCommInitRankConfig comm 0x5eb3a0275b10 rank 1 nranks 2 cudaDev 0 nvmlDev 0 busId 4a000 commId 0x997e3a8ba41d6107 - Init START
+neptune:412508:412529 [0] NCCL INFO NET/Socket : GPU Direct RDMA Disabled for HCA 0 'enp160s0f0np0'
+neptune:412508:412529 [0] NCCL INFO comm 0x5eb3a0275b10 rank 1 nRanks 2 nNodes 2 localRanks 1 localRank 0 MNNVL 0
+neptune:412508:412529 [0] NCCL INFO ncclCommInitRankConfig comm 0x5eb3a0275b10 rank 1 nranks 2 cudaDev 0 nvmlDev 0 busId 4a000 commId 0x997e3a8ba41d6107 - Init COMPLETE
+neptune:412508:412533 [0] NCCL INFO Channel 00/0 : 0[1] -> 1[0] [receive] via NET/Socket/0
+neptune:412508:412533 [0] NCCL INFO Channel 01/0 : 0[1] -> 1[0] [receive] via NET/Socket/0
+neptune:412508:412533 [0] NCCL INFO Channel 00/0 : 1[0] -> 0[1] [send] via NET/Socket/0
+neptune:412508:412533 [0] NCCL INFO Channel 01/0 : 1[0] -> 0[1] [send] via NET/Socket/0
+neptune:412508:412533 [0] NCCL INFO Connected all rings, use ring PXN 0 GDR 0
+neptune:412508:412557 [0] NCCL INFO comm 0x5eb3a0275b10 rank 1 nranks 2 cudaDev 0 busId 4a000 - Abort COMPLETE
+
+===== result =====
+nccl_cross_node_socket_ok=true
+job_exit_rc=0
