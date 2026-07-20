@@ -1,0 +1,52 @@
+
+===== allocation =====
+time=2026-07-20T18:38:34+02:00
+batch_host=ganymede
+SLURM_JOB_ID=249401
+SLURM_JOB_NODELIST=ganymede,neptune
+SLURM_JOB_GPUS=1
+model=mistralai/Mistral-7B-v0.1
+prefill=neptune:32401 ip=10.1.0.6 iface=enp160s0f0np0
+decode=ganymede:33401 ip=10.1.0.3 iface=eno12399np0
+proxy=10.1.0.3:30401 registry_port=31401
+kv_port=34401
+ganymede
+neptune
+JobId=249401 JobName=20260720-183247-luqia-vllm-pd-tcp-2node
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=00:20:00 TimeMin=N/A
+   SubmitTime=2026-07-20T18:38:33 EligibleTime=2026-07-20T18:38:33
+   AccrueTime=2026-07-20T18:38:33
+   StartTime=2026-07-20T18:38:33 EndTime=2026-07-20T18:58:33 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-20T18:38:33 Scheduler=Main
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede,neptune ExcNodeList=(null)
+   NodeList=ganymede,neptune
+   BatchHost=ganymede
+   NumNodes=2 NumCPUs=32 NumTasks=2 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=128G,node=2,billing=16,gres/gpu=2
+   AllocTRES=cpu=32,mem=128G,node=2,billing=32,gres/gpu=2,gres/gpu:l4=1,gres/gpu:l40s=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=64G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-183247-luqia-vllm-pd-tcp-2node/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-183247-luqia-vllm-pd-tcp-2node/slurm-249401.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-183247-luqia-vllm-pd-tcp-2node/slurm-249401.out
+   Power=
+   TresPerNode=gres/gpu:1
+   TresPerTask=cpu:8
+   
+
+
+===== 100gbe_and_environment_preflight =====
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+srun: fatal: cpus_per_task set by two different environment variables SLURM_CPUS_PER_TASK=16 != SLURM_TRES_PER_TASK=cpu:8
+preflight_rc=1
+job_cleanup_rc=1
