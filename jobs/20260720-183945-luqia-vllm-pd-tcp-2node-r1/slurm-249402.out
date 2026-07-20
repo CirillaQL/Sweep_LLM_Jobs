@@ -117,3 +117,11 @@ waiting name=proxy elapsed_s=35 url=http://127.0.0.1:30402/health
 waiting name=proxy elapsed_s=40 url=http://127.0.0.1:30402/health
 waiting name=proxy elapsed_s=45 url=http://127.0.0.1:30402/health
 waiting name=proxy elapsed_s=50 url=http://127.0.0.1:30402/health
+waiting name=proxy elapsed_s=55 url=http://127.0.0.1:30402/health
+waiting name=proxy elapsed_s=60 url=http://127.0.0.1:30402/health
+wait_timeout name=proxy url=http://127.0.0.1:30402/health
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-183247-luqia-vllm-pd-tcp-2node/pd_proxy.py", line 14, in <module>
+    from quart import Quart, jsonify, make_response, request
+ModuleNotFoundError: No module named 'quart'
+job_cleanup_rc=4
