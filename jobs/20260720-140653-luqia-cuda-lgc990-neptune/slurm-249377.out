@@ -1,0 +1,82 @@
+
+===== job_info =====
+time=2026-07-20T14:07:54+02:00
+hostname=neptune
+whoami=chjing
+id=uid=10271(chjing) gid=0(root) groups=0(root),10002(admin),10272(chjing)
+SLURM_JOB_ID=249377
+SLURM_JOB_GPUS=0
+CUDA_VISIBLE_DEVICES_initial=0
+physical_gpu_id=0
+target_sm_mhz=990
+load_seconds=300
+monitor_interval_seconds=5
+source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-140653-luqia-cuda-lgc990-neptune/compute_load.cu
+job_dir=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-140653-luqia-cuda-lgc990-neptune
+
+===== compile_with_chjing_cuda_env =====
+nvcc_path=/data/users/chjing/miniforge3/envs/cuda-env/bin/nvcc
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2024 NVIDIA Corporation
+Built on Thu_Mar_28_02:18:24_PDT_2024
+Cuda compilation tools, release 12.4, V12.4.131
+Build cuda_12.4.r12.4/compiler.34097967_0
+nvcc_rc=0
+-rwxr-xr-x 1 chjing nogroup 974K Jul 20 14:07 /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-140653-luqia-cuda-lgc990-neptune/compute_load
+
+===== baseline_before_locked_clock =====
+timestamp, index, name, persistence_mode, clocks.current.graphics [MHz], clocks.current.sm [MHz], clocks.current.memory [MHz], clocks.max.graphics [MHz], clocks.max.memory [MHz], power.draw [W], power.limit [W], utilization.gpu [%], memory.used [MiB], temperature.gpu
+2026/07/20 14:07:56.319, 0, NVIDIA L40S, Disabled, 210 MHz, 210 MHz, 405 MHz, 2520 MHz, 9001 MHz, 30.87 W, 350.00 W, 0 %, 0 MiB, 22
+
+==============NVSMI LOG==============
+
+Timestamp                                              : Mon Jul 20 14:07:56 2026
+Driver Version                                         : 595.71.05
+CUDA Version                                           : 13.2
+
+Attached GPUs                                          : 4
+GPU 00000000:4A:00.0
+    Clocks
+        Graphics                                       : 210 MHz
+        SM                                             : 210 MHz
+        Memory                                         : 405 MHz
+        Video                                          : 1185 MHz
+    Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Default Applications Clocks
+        Graphics                                       : Requested functionality has been deprecated
+        Memory                                         : Requested functionality has been deprecated
+    Deferred Clocks
+        Memory                                         : N/A
+    Max Clocks
+        Graphics                                       : 2520 MHz
+        SM                                             : 2520 MHz
+        Memory                                         : 9001 MHz
+        Video                                          : 1965 MHz
+    Max Customer Boost Clocks
+        Graphics                                       : 2520 MHz
+    SM Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Memory Clock Samples
+        Duration                                       : Not Found
+        Number of Samples                              : Not Found
+        Max                                            : Not Found
+        Min                                            : Not Found
+        Avg                                            : Not Found
+    Clock Policy
+        Auto Boost                                     : N/A
+        Auto Boost Default                             : N/A
+
+monitor_pid=383825
+
+===== set_locked_gpu_clock =====
+set_command=sudo nvidia-smi -i 0 -lgc 990,990
+GPU clocks set to "(gpuClkMin 990, gpuClkMax 990)" for GPU 00000000:4A:00.0
+
+Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
