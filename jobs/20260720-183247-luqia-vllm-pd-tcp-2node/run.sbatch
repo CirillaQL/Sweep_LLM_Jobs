@@ -14,13 +14,14 @@
 
 set -uo pipefail
 
-JOB_DIR="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-183247-luqia-vllm-pd-tcp-2node"
+SOURCE_JOB_DIR="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-183247-luqia-vllm-pd-tcp-2node"
+JOB_DIR="${JOB_DIR_OVERRIDE:-${SOURCE_JOB_DIR}}"
 OUT_DIR="${JOB_DIR}/pd_tcp_results"
 ENV_DIR="/data/users/chjing/miniforge3/envs/cuda-env"
 PYTHON_BIN="${ENV_DIR}/bin/python"
 VLLM_BIN="${ENV_DIR}/bin/vllm"
-NODE_SCRIPT="${JOB_DIR}/start_pd_node.sh"
-PROXY_SCRIPT="${JOB_DIR}/pd_proxy.py"
+NODE_SCRIPT="${SOURCE_JOB_DIR}/start_pd_node.sh"
+PROXY_SCRIPT="${SOURCE_JOB_DIR}/pd_proxy.py"
 MODEL="mistralai/Mistral-7B-v0.1"
 
 PREFILL_IP=10.1.0.6
@@ -42,6 +43,10 @@ export PATH="${ENV_DIR}/bin:${PATH}"
 export JOB_DIR OUT_DIR ENV_DIR PYTHON_BIN VLLM_BIN MODEL
 export PREFILL_IP DECODE_IP PROXY_IP PROXY_HTTP_PORT PROXY_REGISTER_PORT
 export PREFILL_HTTP_PORT DECODE_HTTP_PORT KV_PORT
+
+# Minerva may expose an SMT-adjusted SLURM_CPUS_PER_TASK that disagrees with
+# SLURM_TRES_PER_TASK=cpu:<requested>.  Nested srun rejects that combination.
+unset SLURM_CPUS_PER_TASK
 
 mkdir -p "$OUT_DIR"
 ulimit -n 65536
