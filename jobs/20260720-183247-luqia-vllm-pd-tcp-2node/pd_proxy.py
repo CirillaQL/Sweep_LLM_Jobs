@@ -11,7 +11,7 @@ from typing import Any, AsyncIterator
 import aiohttp
 import msgpack
 import zmq
-from quart import Quart, jsonify, make_response, request
+from aiohttp import web
 
 
 PREFILL_INSTANCES: dict[str, tuple[str, float]] = {}
@@ -74,7 +74,7 @@ def start_service_discovery(host: str, port: int) -> threading.Thread:
 
 
 HTTP_TIMEOUT = aiohttp.ClientTimeout(total=30 * 60)
-app = Quart(__name__)
+app = web.Application()
 
 
 async def forward_request(
@@ -103,15 +103,13 @@ def snapshot_registry() -> tuple[list[tuple[str, tuple[str, float]]], list[tuple
     return prefill, decode
 
 
-@app.get("/health")
-async def health():
-    return jsonify({"ok": True})
+async def health(_: web.Request) -> web.Response:
+    return web.json_response({"ok": True})
 
 
-@app.get("/registry")
-async def registry():
+async def registry(_: web.Request) -> web.Response:
     prefill, decode = snapshot_registry()
-    return jsonify(
+    return web.json_response(
         {
             "prefill": [item[0] for item in prefill],
             "decode": [item[0] for item in decode],
@@ -119,24 +117,25 @@ async def registry():
     )
 
 
-@app.post("/v1/completions")
-@app.post("/v1/chat/completions")
-async def handle_request():
+async def handle_request(request: web.Request) -> web.StreamResponse:
     global REQUEST_COUNT
     try:
-        original = await request.get_json()
+        original = await request.json()
         if not isinstance(original, dict):
-            return jsonify({"error": "request body must be a JSON object"}), 400
+            return web.json_response(
+                {"error": "request body must be a JSON object"}, status=400
+            )
 
         prefill, decode = snapshot_registry()
         if not prefill or not decode:
-            return jsonify(
+            return web.json_response(
                 {
                     "error": "PD instances are not ready",
                     "prefill_count": len(prefill),
                     "decode_count": len(decode),
-                }
-            ), 503
+                },
+                status=503,
+            )
 
         index = REQUEST_COUNT
         REQUEST_COUNT += 1
@@ -162,19 +161,31 @@ async def handle_request():
         ):
             pass
 
-        response = await make_response(
-            forward_request(
-                f"http://{decode_http}{request.path}", original, request_id
-            )
+        response = web.StreamResponse(
+            status=200,
+            headers={"Content-Type": "application/json"},
         )
-        response.timeout = None
+        await response.prepare(request)
+        async for chunk in forward_request(
+            f"http://{decode_http}{request.path}", original, request_id
+        ):
+            await response.write(chunk)
+        await response.write_eof()
         return response
     except Exception as exc:
         import traceback
 
         print(f"proxy_error type={type(exc).__name__} error={exc}", flush=True)
         traceback.print_exc()
-        return jsonify({"error": str(exc), "type": type(exc).__name__}), 502
+        return web.json_response(
+            {"error": str(exc), "type": type(exc).__name__}, status=502
+        )
+
+
+app.router.add_get("/health", health)
+app.router.add_get("/registry", registry)
+app.router.add_post("/v1/completions", handle_request)
+app.router.add_post("/v1/chat/completions", handle_request)
 
 
 if __name__ == "__main__":
@@ -187,6 +198,5 @@ if __name__ == "__main__":
         f"registry={register_host}:{register_port}",
         flush=True,
     )
-    discovery_thread = start_service_discovery(register_host, register_port)
-    app.run(host=http_host, port=http_port)
-    discovery_thread.join()
+    start_service_discovery(register_host, register_port)
+    web.run_app(app, host=http_host, port=http_port, print=None)

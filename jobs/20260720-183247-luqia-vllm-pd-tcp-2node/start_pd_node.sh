@@ -49,7 +49,7 @@ if [ "$MODE" = preflight ]; then
 import importlib
 import socket
 
-for name in ("torch", "vllm", "aiohttp", "msgpack", "zmq", "quart"):
+for name in ("torch", "vllm", "aiohttp", "msgpack", "zmq"):
     module = importlib.import_module(name)
     print(f"host={socket.gethostname()} import={name} version={getattr(module, '__version__', 'unknown')}")
 PY
