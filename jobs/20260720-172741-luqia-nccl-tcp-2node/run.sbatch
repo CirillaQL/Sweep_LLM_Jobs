@@ -14,11 +14,11 @@
 
 set -uo pipefail
 
-JOB_DIR="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-172741-luqia-nccl-tcp-2node"
+JOB_DIR="${JOB_DIR_OVERRIDE:-/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-172741-luqia-nccl-tcp-2node}"
 OUT_DIR="${JOB_DIR}/nccl_results"
 ENV_DIR="/data/users/chjing/miniforge3/envs/cuda-env"
 PYTHON_BIN="${ENV_DIR}/bin/python"
-TEST_SCRIPT="${JOB_DIR}/nccl_test.py"
+TEST_SCRIPT="${TEST_SCRIPT_OVERRIDE:-${JOB_DIR}/nccl_test.py}"
 MASTER_PORT=$((29000 + (${SLURM_JOB_ID:-0} % 1000)))
 
 export HOME="/data/users/chjing"
@@ -65,7 +65,7 @@ echo "MASTER_PORT=${MASTER_PORT}"
 echo "test_script=${TEST_SCRIPT}"
 
 section "per_node_preflight"
-srun --nodes=2 --ntasks=2 --ntasks-per-node=1 --gpus-per-task=1 bash -lc '
+srun --nodes=2 --ntasks=2 --ntasks-per-node=1 bash -lc '
   host=$(hostname -s)
   case "$host" in
     ganymede) iface=eno12399np0 ;;
@@ -86,7 +86,7 @@ fi
 
 section "nccl_socket_all_reduce"
 timeout --signal=TERM --kill-after=30s 360s \
-  srun --kill-on-bad-exit=1 --nodes=2 --ntasks=2 --ntasks-per-node=1 --gpus-per-task=1 bash -lc '
+  srun --kill-on-bad-exit=1 --nodes=2 --ntasks=2 --ntasks-per-node=1 bash -lc '
     host=$(hostname -s)
     case "$host" in
       ganymede) iface=eno12399np0 ;;
