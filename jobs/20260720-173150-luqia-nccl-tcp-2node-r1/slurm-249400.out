@@ -1,0 +1,80 @@
+
+===== allocation =====
+time=2026-07-20T17:32:57+02:00
+batch_host=ganymede
+SLURM_JOB_ID=249400
+SLURM_JOB_NODELIST=ganymede,neptune
+SLURM_NNODES=2
+SLURM_NTASKS=2
+SLURM_JOB_GPUS=1
+ganymede
+neptune
+JobId=249400 JobName=20260720-173150-luqia-nccl-tcp-2node-r1
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=00:10:00 TimeMin=N/A
+   SubmitTime=2026-07-20T17:32:56 EligibleTime=2026-07-20T17:32:56
+   AccrueTime=2026-07-20T17:32:56
+   StartTime=2026-07-20T17:32:56 EndTime=2026-07-20T17:42:56 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-20T17:32:56 Scheduler=Main
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede,neptune ExcNodeList=(null)
+   NodeList=ganymede,neptune
+   BatchHost=ganymede
+   NumNodes=2 NumCPUs=8 NumTasks=2 CPUs/Task=4 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=8,mem=32G,node=2,billing=8,gres/gpu=2
+   AllocTRES=cpu=8,mem=32G,node=2,billing=8,gres/gpu=2,gres/gpu:l4=1,gres/gpu:l40s=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=4 MinMemoryNode=16G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-173150-luqia-nccl-tcp-2node-r1/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-173150-luqia-nccl-tcp-2node-r1/slurm-249400.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-173150-luqia-nccl-tcp-2node-r1/slurm-249400.out
+   Power=
+   TresPerNode=gres/gpu:1
+   TresPerTask=cpu:4
+   
+
+MASTER_ADDR=10.1.0.3
+MASTER_PORT=29400
+test_script=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260720-172741-luqia-nccl-tcp-2node/nccl_test.py
+
+===== per_node_preflight =====
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=ganymede rank=0 localid=0 interface=eno12399np0 addresses=10.1.0.3  CUDA_VISIBLE_DEVICES=1
+host=neptune rank=1 localid=0 interface=enp160s0f0np0 addresses=10.1.0.6  CUDA_VISIBLE_DEVICES=0
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+local 10.1.0.3 dev lo src 10.1.0.3 uid 10271 
+    cache <local> 
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+1, NVIDIA L4, 23034 MiB, 595.71.05
+2, NVIDIA L4, 23034 MiB, 595.71.05
+3, NVIDIA L4, 23034 MiB, 595.71.05
+4, NVIDIA L4, 23034 MiB, 595.71.05
+5, NVIDIA L4, 23034 MiB, 595.71.05
+6, NVIDIA L4, 23034 MiB, 595.71.05
+7, NVIDIA L4, 23034 MiB, 595.71.05
+host=ganymede torch=2.9.1+cu128 cuda=True nccl=(2, 27, 5)
+host=neptune torch=2.9.1+cu128 cuda=True nccl=(2, 27, 5)
+preflight_rc=0
+
+===== nccl_socket_all_reduce =====
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+launch host=neptune rank=1/2 iface=enp160s0f0np0 master=10.1.0.3:29400 CUDA_VISIBLE_DEVICES=0
+launch host=ganymede rank=0/2 iface=eno12399np0 master=10.1.0.3:29400 CUDA_VISIBLE_DEVICES=1
