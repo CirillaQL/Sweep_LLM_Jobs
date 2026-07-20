@@ -4,4 +4,10 @@ WARNING: vllm bench serve no longer sets temperature==0 (greedy) in requests by 
 Starting initial single prompt test run...
 Skipping endpoint ready check.
 Warming up with 5 requests...
-  0%|          | 0/5 [00:00<?, ?it/s]
+  0%|          | 0/5 [00:00<?, ?it/s] 20%|██        | 1/5 [00:03<00:13,  3.30s/it]100%|██████████| 5/5 [00:03<00:00,  1.50it/s]
+Warmup run completed.
+Starting main benchmark run...
+Traffic request rate: 2.0
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: 64
+  0%|          | 0/120 [00:00<?, ?it/s]  1%|          | 1/120 [00:03<06:58,  3.52s/it]  2%|▏         | 2/120 [00:04<03:44,  1.90s/it]  2%|▎         | 3/120 [00:04<02:28,  1.27s/it]  3%|▎         | 4/120 [00:05<01:48,  1.07it/s]  4%|▍         | 5/120 [00:05<01:20,  1.43it/s]  5%|▌         | 6/120 [00:06<01:11,  1.59it/s]  6%|▌         | 7/120 [00:06<00:58,  1.94it/s]
