@@ -330,3 +330,65 @@ P99 ITL (ms):                            71.60
 
 ===== stop_servers_and_collect_logs =====
 stopping_server_step_pid=639685
+stopping_proxy_pid=639678
+--- proxy routes ---
+registry_add role=decode http=10.1.0.3:33104 zmq=10.1.0.3:34104
+registry_add role=prefill http=10.1.0.6:32104 zmq=10.1.0.6:34104
+route count=0 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_f8378bada7d14a478d1a383998f43ba5 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=1 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_933377f2e7a54aa29f936d9a1e907cc2 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=2 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_0797f467d2df402d9684c82bbb9cfe71 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=3 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_0ee22cb3487b4f7ab107c6000c299f65 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=4 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_924b730ced1a42e6a3c05757cc46d063 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=5 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_df727eacb7804269aad1c9ab5132bc4e prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=6 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_88bdbdd2389d4758a66a71a26f0b9c8c prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=7 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_f146451dc49a45a69d98a97818d48115 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=8 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_293115a1362544e3917ba467ceaaf69e prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=9 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_ca50beb9cdda4dd5b14add66c4e3d940 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=10 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_97785c57d6b94835a79346eacb8a9007 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=11 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_f1bba5ed92204d1ba197695607b9269a prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=12 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_bbb197e74a94416db7c091c3bdad54e9 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=13 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_f783efd765c9400eb177a8f4d83bfad3 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=14 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_f0edae9903c14e6ca6072c74ee46c5f6 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=15 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_f62834ab9c6544868136aa4fa62e0e72 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=16 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_aed46d5b9a194e1bb999b46dd2845578 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=17 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_0213242bfc30438ca97d52c04cca0a98 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+route count=18 request_id=___prefill_addr_10.1.0.6:34104___decode_addr_10.1.0.3:34104_3dae2ecbaf31443a923b792237306321 prefill_http=10.1.0.6:32104 decode_http=10.1.0.3:33104
+--- P2P connector evidence ---
+[0;36m(APIServer pid=559732)[0;0m INFO 07-21 13:48:55 [utils.py:261] non-default args: {'model_tag': 'mistralai/Mistral-7B-v0.1', 'api_server_count': 1, 'host': '0.0.0.0', 'port': 32104, 'model': 'mistralai/Mistral-7B-v0.1', 'dtype': 'float16', 'max_model_len': 4096, 'enforce_eager': True, 'gpu_memory_utilization': 0.82, 'max_num_batched_tokens': 4096, 'max_num_seqs': 32, 'kv_transfer_config': KVTransferConfig(kv_connector='P2pNcclConnector', engine_id='ec8f1381-57da-4809-87c3-73bd63d13f1c', kv_buffer_device='cuda', kv_buffer_size=10.0, kv_role='kv_producer', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=34104, kv_connector_extra_config={'proxy_ip': '10.1.0.3', 'proxy_port': '31104', 'http_port': '32104', 'send_type': 'PUT_ASYNC', 'nccl_num_channels': '16'}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='recompute')}
+[0;36m(EngineCore_DP0 pid=559919)[0;0m INFO 07-21 13:49:25 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: ec8f1381-57da-4809-87c3-73bd63d13f1c
+[0;36m(EngineCore_DP0 pid=559919)[0;0m INFO 07-21 13:49:39 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:0, local_rank:0, http_address:10.1.0.6:32104, zmq_address:10.1.0.6:34104, proxy_address:10.1.0.3:31104, send_type:PUT_ASYNC, buffer_size_threshold:10.00, nccl_num_channels:16
+[0;36m(EngineCore_DP0 pid=559919)[0;0m INFO 07-21 13:49:40 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: ec8f1381-57da-4809-87c3-73bd63d13f1c
+[0;36m(APIServer pid=639725)[0;0m INFO 07-21 13:48:49 [utils.py:261] non-default args: {'model_tag': 'mistralai/Mistral-7B-v0.1', 'api_server_count': 1, 'host': '0.0.0.0', 'port': 33104, 'model': 'mistralai/Mistral-7B-v0.1', 'dtype': 'float16', 'max_model_len': 4096, 'enforce_eager': True, 'gpu_memory_utilization': 0.82, 'max_num_batched_tokens': 4096, 'max_num_seqs': 32, 'kv_transfer_config': KVTransferConfig(kv_connector='P2pNcclConnector', engine_id='0bcdedc5-8922-4fc8-8b9e-a5ad5a26a065', kv_buffer_device='cuda', kv_buffer_size=8000000000.0, kv_role='kv_consumer', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=34104, kv_connector_extra_config={'proxy_ip': '10.1.0.3', 'proxy_port': '31104', 'http_port': '33104', 'send_type': 'PUT_ASYNC', 'nccl_num_channels': '16'}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='recompute')}
+[0;36m(EngineCore_DP0 pid=639902)[0;0m INFO 07-21 13:49:11 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 0bcdedc5-8922-4fc8-8b9e-a5ad5a26a065
+[0;36m(EngineCore_DP0 pid=639902)[0;0m INFO 07-21 13:49:22 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:0, local_rank:0, http_address:10.1.0.3:33104, zmq_address:10.1.0.3:34104, proxy_address:10.1.0.3:31104, send_type:PUT_ASYNC, buffer_size_threshold:8000000000.00, nccl_num_channels:16
+[0;36m(EngineCore_DP0 pid=639902)[0;0m INFO 07-21 13:49:22 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 0bcdedc5-8922-4fc8-8b9e-a5ad5a26a065
+--- NCCL network evidence ---
+ganymede:639902:640242 [0] NCCL INFO NET/Socket : Using [0]eno12399np0:10.1.0.3<0>
+ganymede:639902:640242 [0] NCCL INFO Using network Socket
+ganymede:639902:640242 [0] NCCL INFO NET/Socket : GPU Direct RDMA Disabled for HCA 0 'eno12399np0'
+ganymede:639902:640470 [0] NCCL INFO Channel 01/1 : 0[0] -> 1[2] [receive] via NET/Socket/0/Shared
+ganymede:639902:640470 [0] NCCL INFO Channel 09/1 : 0[0] -> 1[2] [receive] via NET/Socket/0/Shared
+neptune:559919:560323 [0] NCCL INFO NET/Socket : Using [0]enp160s0f0np0:10.1.0.6<0>
+neptune:559919:560323 [0] NCCL INFO Using network Socket
+neptune:559919:560323 [0] NCCL INFO NET/Socket : GPU Direct RDMA Disabled for HCA 0 'enp160s0f0np0'
+neptune:559919:560419 [0] NCCL INFO Channel 01/1 : 0[0] -> 1[2] [send] via NET/Socket/0/Shared
+neptune:559919:560419 [0] NCCL INFO Channel 09/1 : 0[0] -> 1[2] [send] via NET/Socket/0/Shared
+nccl_socket_evidence_lines=6
+nccl_socket_path_verified=true
+
+===== network_and_gpu_telemetry_summary =====
+telemetry_file=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260721-124503-luqia-vllm-scheduler-pd/scheduler_pd_results/decode_ganymede_telemetry.csv samples=58
+network_rx_delta_bytes=1283044415
+network_tx_delta_bytes=16973017
+gpu_util_max_pct=100.0
+telemetry_file=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260721-124503-luqia-vllm-scheduler-pd/scheduler_pd_results/prefill_neptune_telemetry.csv samples=60
+network_rx_delta_bytes=13085751
+network_tx_delta_bytes=1276635336
+gpu_util_max_pct=100.0
+
+===== result =====
+pd_smoke_request_ok=true
+pd_bench_rc=0
+pd_over_100gbe_tcp_socket_ok=true
+job_exit_rc=0
+job_cleanup_rc=0
