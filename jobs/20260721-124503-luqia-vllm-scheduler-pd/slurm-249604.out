@@ -1,0 +1,256 @@
+
+===== scheduler_decision =====
+scheduler_workload il=512 ol=64 rate=1 slo_ttft_ms=500 slo_tpot_ms=200
+{
+  "status": "OK",
+  "workload": {
+    "il": 512,
+    "ol": 64,
+    "rate": 1.0
+  },
+  "slos": {
+    "ttft_ms": 500,
+    "tpot_ms": 200
+  },
+  "tp_per_role": 1,
+  "recommended": {
+    "prefill": {
+      "phase": "prefill",
+      "gpu_type": "l40s",
+      "node_group": "neptune",
+      "tp": 1,
+      "freq_mhz": 480,
+      "is_safe": true,
+      "p_violate": 0.0636,
+      "rho_phase": 0.4111,
+      "rho_total": 0.4265,
+      "latency_ms": 422.3,
+      "power_per_gpu_w": 132.8,
+      "total_power_w": 132.8,
+      "p99_ttft_ms": 422.3
+    },
+    "decode": {
+      "phase": "decode",
+      "gpu_type": "l4",
+      "node_group": "ganymede",
+      "tp": 1,
+      "freq_mhz": 780,
+      "is_safe": true,
+      "p_violate": 0.1459,
+      "rho_phase": 0.0139,
+      "rho_total": 0.3834,
+      "latency_ms": 116.3,
+      "power_per_gpu_w": 47.5,
+      "total_power_w": 47.5,
+      "p99_tpot_ms": 116.3
+    },
+    "is_safe": true,
+    "predicted_cluster_power_w": 180.3,
+    "predicted_energy_per_request_j": 180.3
+  },
+  "alternatives": [
+    {
+      "prefill": {
+        "phase": "prefill",
+        "gpu_type": "l40s",
+        "node_group": "neptune",
+        "tp": 1,
+        "freq_mhz": 480,
+        "is_safe": true,
+        "p_violate": 0.0636,
+        "rho_phase": 0.4111,
+        "rho_total": 0.4265,
+        "latency_ms": 422.3,
+        "power_per_gpu_w": 132.8,
+        "total_power_w": 132.8,
+        "p99_ttft_ms": 422.3
+      },
+      "decode": {
+        "phase": "decode",
+        "gpu_type": "l4",
+        "node_group": "ganymede",
+        "tp": 1,
+        "freq_mhz": 990,
+        "is_safe": true,
+        "p_violate": 0.1459,
+        "rho_phase": 0.0139,
+        "rho_total": 0.3834,
+        "latency_ms": 115.7,
+        "power_per_gpu_w": 47.8,
+        "total_power_w": 47.8,
+        "p99_tpot_ms": 115.7
+      },
+      "is_safe": true,
+      "predicted_cluster_power_w": 180.6,
+      "predicted_energy_per_request_j": 180.6
+    },
+    {
+      "prefill": {
+        "phase": "prefill",
+        "gpu_type": "l40s",
+        "node_group": "neptune",
+        "tp": 1,
+        "freq_mhz": 480,
+        "is_safe": true,
+        "p_violate": 0.0636,
+        "rho_phase": 0.4111,
+        "rho_total": 0.4265,
+        "latency_ms": 422.3,
+        "power_per_gpu_w": 132.8,
+        "total_power_w": 132.8,
+        "p99_ttft_ms": 422.3
+      },
+      "decode": {
+        "phase": "decode",
+        "gpu_type": "l4",
+        "node_group": "ganymede",
+        "tp": 1,
+        "freq_mhz": 1200,
+        "is_safe": true,
+        "p_violate": 0.1105,
+        "rho_phase": 0.0087,
+        "rho_total": 0.2404,
+        "latency_ms": 76.4,
+        "power_per_gpu_w": 50.5,
+        "total_power_w": 50.5,
+        "p99_tpot_ms": 76.4
+      },
+      "is_safe": true,
+      "predicted_cluster_power_w": 183.3,
+      "predicted_energy_per_request_j": 183.3
+    },
+    {
+      "prefill": {
+        "phase": "prefill",
+        "gpu_type": "l40s",
+        "node_group": "neptune",
+        "tp": 1,
+        "freq_mhz": 480,
+        "is_safe": true,
+        "p_violate": 0.0636,
+        "rho_phase": 0.4111,
+        "rho_total": 0.4265,
+        "latency_ms": 422.3,
+        "power_per_gpu_w": 132.8,
+        "total_power_w": 132.8,
+        "p99_ttft_ms": 422.3
+      },
+      "decode": {
+        "phase": "decode",
+        "gpu_type": "l4",
+        "node_group": "ganymede",
+        "tp": 1,
+        "freq_mhz": 1410,
+        "is_safe": true,
+        "p_violate": 0.1105,
+        "rho_phase": 0.0087,
+        "rho_total": 0.2404,
+        "latency_ms": 77.8,
+        "power_per_gpu_w": 56.2,
+        "total_power_w": 56.2,
+        "p99_tpot_ms": 77.8
+      },
+      "is_safe": true,
+      "predicted_cluster_power_w": 189.0,
+      "predicted_energy_per_request_j": 189.0
+    }
+  ],
+  "num_candidates": 200,
+  "num_safe": 63
+}
+scheduler_rc=0
+
+===== allocation =====
+time=2026-07-21T13:48:20+02:00
+batch_host=ganymede
+SLURM_JOB_ID=249604
+SLURM_JOB_NODELIST=ganymede,neptune
+SLURM_JOB_GPUS=2
+model=mistralai/Mistral-7B-v0.1
+prefill=neptune:32104 ip=10.1.0.6
+decode=ganymede:33104 ip=10.1.0.3
+proxy=10.1.0.3:30104 registry_port=31104
+kv_port=34104
+ganymede
+neptune
+JobId=249604 JobName=20260721-124503-luqia-vllm-scheduler-pd
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=00:20:00 TimeMin=N/A
+   SubmitTime=2026-07-21T12:52:27 EligibleTime=2026-07-21T12:52:27
+   AccrueTime=2026-07-21T12:52:27
+   StartTime=2026-07-21T13:48:19 EndTime=2026-07-21T14:08:19 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-21T13:48:19 Scheduler=Main
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede,neptune ExcNodeList=(null)
+   NodeList=ganymede,neptune
+   BatchHost=ganymede
+   NumNodes=2 NumCPUs=32 NumTasks=2 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=128G,node=2,billing=16,gres/gpu=2
+   AllocTRES=cpu=32,mem=128G,node=2,billing=32,gres/gpu=2,gres/gpu:l4=1,gres/gpu:l40s=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=64G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260721-124503-luqia-vllm-scheduler-pd/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260721-124503-luqia-vllm-scheduler-pd/slurm-249604.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260721-124503-luqia-vllm-scheduler-pd/slurm-249604.out
+   Power=
+   TresPerNode=gres/gpu:1
+   TresPerTask=cpu:8
+   
+
+
+===== 100gbe_and_environment_preflight =====
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=ganymede node_group=ganymede role=decode mode=preflight
+scheduled_gpu=l4 scheduled_freq_mhz=780 gpu_id=2
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+CUDA_VISIBLE_DEVICES=2
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+host=neptune node_group=neptune role=prefill mode=preflight
+scheduled_gpu=l40s scheduled_freq_mhz=480 gpu_id=0
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+CUDA_VISIBLE_DEVICES=0
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+1, NVIDIA L4, 23034 MiB, 595.71.05
+2, NVIDIA L4, 23034 MiB, 595.71.05
+3, NVIDIA L4, 23034 MiB, 595.71.05
+4, NVIDIA L4, 23034 MiB, 595.71.05
+5, NVIDIA L4, 23034 MiB, 595.71.05
+6, NVIDIA L4, 23034 MiB, 595.71.05
+7, NVIDIA L4, 23034 MiB, 595.71.05
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+host=ganymede import=torch version=2.9.1+cu128
+host=ganymede import=vllm version=0.15.1
+host=ganymede import=aiohttp version=3.13.3
+host=ganymede import=msgpack version=1.1.2
+host=ganymede import=zmq version=27.1.0
+host=neptune import=torch version=2.9.1+cu128
+host=neptune import=vllm version=0.15.1
+host=neptune import=aiohttp version=3.13.3
+host=neptune import=msgpack version=1.1.2
+host=neptune import=zmq version=27.1.0
+preflight_rc=0
+
+===== start_proxy =====
+proxy_pid=639678
