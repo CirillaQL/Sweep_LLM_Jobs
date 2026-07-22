@@ -1,0 +1,119 @@
+{
+  "baseline_policy": "default DVFS, no scheduler, no -lgc",
+  "scheduler_policy": "per-workload scheduler rec_freq_mhz applied with -lgc",
+  "workload_window_note": "baseline uses explicit command start/end markers; scheduler starts after both clock probes and ends before the next clock change",
+  "workloads": [
+    {
+      "seq": 1,
+      "workload_id": "short_r1",
+      "input_len": 32,
+      "output_len": 32,
+      "request_rate": 1.0,
+      "baseline": {
+        "combined_energy_j": 4380.314762733531,
+        "combined_avg_power_w": 124.16201530169438,
+        "energy_per_request_j": 365.02623022779426,
+        "successful_requests": 12,
+        "benchmark_duration_s": 13.98,
+        "request_throughput_rps": 0.86,
+        "p99_ttft_ms": 240.75,
+        "p99_tpot_ms": 58.1
+      },
+      "scheduler": {
+        "combined_energy_j": 4417.485112158918,
+        "combined_avg_power_w": 92.60520948872508,
+        "energy_per_request_j": 368.1237593465765,
+        "successful_requests": 12,
+        "benchmark_duration_s": 14.18,
+        "request_throughput_rps": 0.85,
+        "p99_ttft_ms": 261.09,
+        "p99_tpot_ms": 64.74
+      },
+      "scheduler_minus_baseline": {
+        "energy_j": 37.17034942538703,
+        "energy_percent": 0.8485771328951464,
+        "avg_power_w": -31.5568058129693,
+        "energy_per_request_j": 3.0975291187822336,
+        "p99_ttft_ms": 20.339999999999975,
+        "p99_tpot_ms": 6.6399999999999935
+      }
+    },
+    {
+      "seq": 2,
+      "workload_id": "prefill_r1",
+      "input_len": 512,
+      "output_len": 128,
+      "request_rate": 1.0,
+      "baseline": {
+        "combined_energy_j": 5960.246138505994,
+        "combined_avg_power_w": 140.063340754181,
+        "energy_per_request_j": 496.68717820883285,
+        "successful_requests": 12,
+        "benchmark_duration_s": 19.8,
+        "request_throughput_rps": 0.61,
+        "p99_ttft_ms": 293.18,
+        "p99_tpot_ms": 61.09
+      },
+      "scheduler": {
+        "combined_energy_j": 4730.0129180198255,
+        "combined_avg_power_w": 105.8815940605785,
+        "energy_per_request_j": 394.1677431683188,
+        "successful_requests": 12,
+        "benchmark_duration_s": 20.37,
+        "request_throughput_rps": 0.59,
+        "p99_ttft_ms": 366.1,
+        "p99_tpot_ms": 66.04
+      },
+      "scheduler_minus_baseline": {
+        "energy_j": -1230.2332204861686,
+        "energy_percent": -20.640644562282137,
+        "avg_power_w": -34.18174669360252,
+        "energy_per_request_j": -102.51943504051405,
+        "p99_ttft_ms": 72.92000000000002,
+        "p99_tpot_ms": 4.950000000000003
+      }
+    },
+    {
+      "seq": 3,
+      "workload_id": "burst_r10",
+      "input_len": 128,
+      "output_len": 32,
+      "request_rate": 10.0,
+      "baseline": {
+        "combined_energy_j": 4687.124328908922,
+        "combined_avg_power_w": 146.08842340473475,
+        "energy_per_request_j": 46.871243289089215,
+        "successful_requests": 100,
+        "benchmark_duration_s": 15.42,
+        "request_throughput_rps": 6.49,
+        "p99_ttft_ms": 378.75,
+        "p99_tpot_ms": 62.19
+      },
+      "scheduler": {
+        "combined_energy_j": 3797.2618413785476,
+        "combined_avg_power_w": 117.40103882771768,
+        "energy_per_request_j": 37.972618413785476,
+        "successful_requests": 100,
+        "benchmark_duration_s": 15.81,
+        "request_throughput_rps": 6.32,
+        "p99_ttft_ms": 386.9,
+        "p99_tpot_ms": 63.78
+      },
+      "scheduler_minus_baseline": {
+        "energy_j": -889.862487530374,
+        "energy_percent": -18.9852546057279,
+        "avg_power_w": -28.68738457701707,
+        "energy_per_request_j": -8.898624875303739,
+        "p99_ttft_ms": 8.149999999999977,
+        "p99_tpot_ms": 1.5900000000000034
+      }
+    }
+  ],
+  "whole_recorded_process": {
+    "baseline_energy_j": 22464.105587694634,
+    "scheduler_energy_j": 24402.461931027174,
+    "scheduler_minus_baseline_j": 1938.3563433325398,
+    "scheduler_minus_baseline_percent": 8.62868248088333,
+    "warning": "whole-process totals include different control/probe overhead; use workload windows for inference comparison"
+  }
+}

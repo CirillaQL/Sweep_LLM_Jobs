@@ -286,3 +286,288 @@ stopping_proxy_pid=842990
 
 ===== parent_gpu_clock_reset =====
 reset_strategy=fresh_srun_after_server_step
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=ganymede node_group=ganymede role=decode mode=reset gpu_id=0
+frequency_policy=default_dvfs_no_lgc
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+host=neptune node_group=neptune role=prefill mode=reset gpu_id=0
+frequency_policy=default_dvfs_no_lgc
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+parent_reset_step=true host=neptune gpu_id=0
+reset_command_initial=sudo_nvidia_smi_rgc
+parent_reset_step=true host=ganymede gpu_id=0
+reset_command_initial=sudo_nvidia_smi_rgc
+All done.
+All done.
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 9278,
+  "active_samples": 18,
+  "active_clock_min_mhz": 2205.0,
+  "active_clock_max_mhz": 2520.0,
+  "active_clock_mean_mhz": 2244.1666666666665
+}
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 2320,
+  "active_samples": 16,
+  "active_clock_min_mhz": 1185.0,
+  "active_clock_max_mhz": 1275.0,
+  "active_clock_mean_mhz": 1222.5
+}
+reset_probe_active_min_mhz=2205.0 reset_probe_active_max_mhz=2520.0 reset_probe_active_mean_mhz=2244.1666666666665
+reset_command_final=sudo_nvidia_smi_rgc
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=neptune
+reset_probe_active_min_mhz=1185.0 reset_probe_active_max_mhz=1275.0 reset_probe_active_mean_mhz=1222.5
+reset_command_final=sudo_nvidia_smi_rgc
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=ganymede
+parent_reset_rc=0
+parent_reset_verified=true
+
+===== energy_summary =====
+{
+  "scope": "two allocated GPU board-power telemetry; excludes CPU, RAM, NIC, and fans",
+  "integration": "piecewise-linear trapezoidal integration",
+  "sample_period_s": 0.5,
+  "workloads": [
+    {
+      "seq": 1,
+      "workload_id": "short_r1",
+      "start_unix_ts": 1784715815.2888203,
+      "end_unix_ts": 1784715850.5678446,
+      "duration_s": 35.27902436256409,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 2789.5916902120957,
+          "energy_wh": 0.774886580614471,
+          "covered_s": 35.27902436256409
+        },
+        "ganymede_l4": {
+          "energy_j": 1590.7230725214358,
+          "energy_wh": 0.44186752014484326,
+          "covered_s": 35.27902436256409
+        }
+      },
+      "combined_energy_j": 4380.314762733531,
+      "combined_energy_wh": 1.2167541007593141,
+      "combined_avg_power_w": 124.16201530169438,
+      "successful_requests": 12,
+      "energy_per_request_j": 365.02623022779426
+    },
+    {
+      "seq": 2,
+      "workload_id": "prefill_r1",
+      "start_unix_ts": 1784715850.7399483,
+      "end_unix_ts": 1784715893.2938821,
+      "duration_s": 42.55393385887146,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 3617.825204131048,
+          "energy_wh": 1.0049514455919577,
+          "covered_s": 42.55393385887146
+        },
+        "ganymede_l4": {
+          "energy_j": 2342.420934374946,
+          "energy_wh": 0.6506724817708183,
+          "covered_s": 42.55393385887146
+        }
+      },
+      "combined_energy_j": 5960.246138505994,
+      "combined_energy_wh": 1.6556239273627762,
+      "combined_avg_power_w": 140.063340754181,
+      "successful_requests": 12,
+      "energy_per_request_j": 496.68717820883285
+    },
+    {
+      "seq": 3,
+      "workload_id": "burst_r10",
+      "start_unix_ts": 1784715893.359198,
+      "end_unix_ts": 1784715925.443358,
+      "duration_s": 32.08415985107422,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 3044.6333212937384,
+          "energy_wh": 0.8457314781371496,
+          "covered_s": 32.07987308502197
+        },
+        "ganymede_l4": {
+          "energy_j": 1642.4910076151832,
+          "energy_wh": 0.45624750211532866,
+          "covered_s": 31.722050189971924
+        }
+      },
+      "combined_energy_j": 4687.124328908922,
+      "combined_energy_wh": 1.3019789802524782,
+      "combined_avg_power_w": 146.08842340473475,
+      "successful_requests": 100,
+      "energy_per_request_j": 46.871243289089215
+    }
+  ],
+  "telemetry_total": {
+    "neptune_l40s": {
+      "energy_j": 13556.995629578822,
+      "energy_wh": 3.76583211932745,
+      "covered_s": 176.2949607372284,
+      "average_power_w": 76.89950735339411
+    },
+    "ganymede_l4": {
+      "energy_j": 7106.236116700168,
+      "energy_wh": 1.9739544768611579,
+      "covered_s": 175.89211773872375,
+      "average_power_w": 40.40110613288549
+    }
+  },
+  "telemetry_total_energy_j": 20663.23174627899,
+  "telemetry_total_energy_wh": 5.739786596188608,
+  "reset_probe_energy_j": 1800.8738414156437,
+  "reset_probe_energy_wh": 0.5002427337265677,
+  "total_recorded_gpu_energy_j": 22464.105587694634,
+  "total_recorded_gpu_energy_wh": 6.240029329915176
+}
+
+===== scheduler_vs_baseline_comparison =====
+{
+  "baseline_policy": "default DVFS, no scheduler, no -lgc",
+  "scheduler_policy": "per-workload scheduler rec_freq_mhz applied with -lgc",
+  "workload_window_note": "baseline uses explicit command start/end markers; scheduler starts after both clock probes and ends before the next clock change",
+  "workloads": [
+    {
+      "seq": 1,
+      "workload_id": "short_r1",
+      "input_len": 32,
+      "output_len": 32,
+      "request_rate": 1.0,
+      "baseline": {
+        "combined_energy_j": 4380.314762733531,
+        "combined_avg_power_w": 124.16201530169438,
+        "energy_per_request_j": 365.02623022779426,
+        "successful_requests": 12,
+        "benchmark_duration_s": 13.98,
+        "request_throughput_rps": 0.86,
+        "p99_ttft_ms": 240.75,
+        "p99_tpot_ms": 58.1
+      },
+      "scheduler": {
+        "combined_energy_j": 4417.485112158918,
+        "combined_avg_power_w": 92.60520948872508,
+        "energy_per_request_j": 368.1237593465765,
+        "successful_requests": 12,
+        "benchmark_duration_s": 14.18,
+        "request_throughput_rps": 0.85,
+        "p99_ttft_ms": 261.09,
+        "p99_tpot_ms": 64.74
+      },
+      "scheduler_minus_baseline": {
+        "energy_j": 37.17034942538703,
+        "energy_percent": 0.8485771328951464,
+        "avg_power_w": -31.5568058129693,
+        "energy_per_request_j": 3.0975291187822336,
+        "p99_ttft_ms": 20.339999999999975,
+        "p99_tpot_ms": 6.6399999999999935
+      }
+    },
+    {
+      "seq": 2,
+      "workload_id": "prefill_r1",
+      "input_len": 512,
+      "output_len": 128,
+      "request_rate": 1.0,
+      "baseline": {
+        "combined_energy_j": 5960.246138505994,
+        "combined_avg_power_w": 140.063340754181,
+        "energy_per_request_j": 496.68717820883285,
+        "successful_requests": 12,
+        "benchmark_duration_s": 19.8,
+        "request_throughput_rps": 0.61,
+        "p99_ttft_ms": 293.18,
+        "p99_tpot_ms": 61.09
+      },
+      "scheduler": {
+        "combined_energy_j": 4730.0129180198255,
+        "combined_avg_power_w": 105.8815940605785,
+        "energy_per_request_j": 394.1677431683188,
+        "successful_requests": 12,
+        "benchmark_duration_s": 20.37,
+        "request_throughput_rps": 0.59,
+        "p99_ttft_ms": 366.1,
+        "p99_tpot_ms": 66.04
+      },
+      "scheduler_minus_baseline": {
+        "energy_j": -1230.2332204861686,
+        "energy_percent": -20.640644562282137,
+        "avg_power_w": -34.18174669360252,
+        "energy_per_request_j": -102.51943504051405,
+        "p99_ttft_ms": 72.92000000000002,
+        "p99_tpot_ms": 4.950000000000003
+      }
+    },
+    {
+      "seq": 3,
+      "workload_id": "burst_r10",
+      "input_len": 128,
+      "output_len": 32,
+      "request_rate": 10.0,
+      "baseline": {
+        "combined_energy_j": 4687.124328908922,
+        "combined_avg_power_w": 146.08842340473475,
+        "energy_per_request_j": 46.871243289089215,
+        "successful_requests": 100,
+        "benchmark_duration_s": 15.42,
+        "request_throughput_rps": 6.49,
+        "p99_ttft_ms": 378.75,
+        "p99_tpot_ms": 62.19
+      },
+      "scheduler": {
+        "combined_energy_j": 3797.2618413785476,
+        "combined_avg_power_w": 117.40103882771768,
+        "energy_per_request_j": 37.972618413785476,
+        "successful_requests": 100,
+        "benchmark_duration_s": 15.81,
+        "request_throughput_rps": 6.32,
+        "p99_ttft_ms": 386.9,
+        "p99_tpot_ms": 63.78
+      },
+      "scheduler_minus_baseline": {
+        "energy_j": -889.862487530374,
+        "energy_percent": -18.9852546057279,
+        "avg_power_w": -28.68738457701707,
+        "energy_per_request_j": -8.898624875303739,
+        "p99_ttft_ms": 8.149999999999977,
+        "p99_tpot_ms": 1.5900000000000034
+      }
+    }
+  ],
+  "whole_recorded_process": {
+    "baseline_energy_j": 22464.105587694634,
+    "scheduler_energy_j": 24402.461931027174,
+    "scheduler_minus_baseline_j": 1938.3563433325398,
+    "scheduler_minus_baseline_percent": 8.62868248088333,
+    "warning": "whole-process totals include different control/probe overhead; use workload windows for inference comparison"
+  }
+}
+
+===== result =====
+frequency_policy=default_dvfs_no_scheduler_no_lgc
+workload_count=3 bench_failures=0
+parent_reset_verified=true
+job_exit_rc=0
+job_cleanup_rc=0

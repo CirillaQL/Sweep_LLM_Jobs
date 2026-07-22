@@ -1,0 +1,99 @@
+{
+  "scope": "two allocated GPU board-power telemetry; excludes CPU, RAM, NIC, and fans",
+  "integration": "piecewise-linear trapezoidal integration",
+  "sample_period_s": 0.5,
+  "workloads": [
+    {
+      "seq": 1,
+      "workload_id": "short_r1",
+      "start_unix_ts": 1784715815.2888203,
+      "end_unix_ts": 1784715850.5678446,
+      "duration_s": 35.27902436256409,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 2789.5916902120957,
+          "energy_wh": 0.774886580614471,
+          "covered_s": 35.27902436256409
+        },
+        "ganymede_l4": {
+          "energy_j": 1590.7230725214358,
+          "energy_wh": 0.44186752014484326,
+          "covered_s": 35.27902436256409
+        }
+      },
+      "combined_energy_j": 4380.314762733531,
+      "combined_energy_wh": 1.2167541007593141,
+      "combined_avg_power_w": 124.16201530169438,
+      "successful_requests": 12,
+      "energy_per_request_j": 365.02623022779426
+    },
+    {
+      "seq": 2,
+      "workload_id": "prefill_r1",
+      "start_unix_ts": 1784715850.7399483,
+      "end_unix_ts": 1784715893.2938821,
+      "duration_s": 42.55393385887146,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 3617.825204131048,
+          "energy_wh": 1.0049514455919577,
+          "covered_s": 42.55393385887146
+        },
+        "ganymede_l4": {
+          "energy_j": 2342.420934374946,
+          "energy_wh": 0.6506724817708183,
+          "covered_s": 42.55393385887146
+        }
+      },
+      "combined_energy_j": 5960.246138505994,
+      "combined_energy_wh": 1.6556239273627762,
+      "combined_avg_power_w": 140.063340754181,
+      "successful_requests": 12,
+      "energy_per_request_j": 496.68717820883285
+    },
+    {
+      "seq": 3,
+      "workload_id": "burst_r10",
+      "start_unix_ts": 1784715893.359198,
+      "end_unix_ts": 1784715925.443358,
+      "duration_s": 32.08415985107422,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 3044.6333212937384,
+          "energy_wh": 0.8457314781371496,
+          "covered_s": 32.07987308502197
+        },
+        "ganymede_l4": {
+          "energy_j": 1642.4910076151832,
+          "energy_wh": 0.45624750211532866,
+          "covered_s": 31.722050189971924
+        }
+      },
+      "combined_energy_j": 4687.124328908922,
+      "combined_energy_wh": 1.3019789802524782,
+      "combined_avg_power_w": 146.08842340473475,
+      "successful_requests": 100,
+      "energy_per_request_j": 46.871243289089215
+    }
+  ],
+  "telemetry_total": {
+    "neptune_l40s": {
+      "energy_j": 13556.995629578822,
+      "energy_wh": 3.76583211932745,
+      "covered_s": 176.2949607372284,
+      "average_power_w": 76.89950735339411
+    },
+    "ganymede_l4": {
+      "energy_j": 7106.236116700168,
+      "energy_wh": 1.9739544768611579,
+      "covered_s": 175.89211773872375,
+      "average_power_w": 40.40110613288549
+    }
+  },
+  "telemetry_total_energy_j": 20663.23174627899,
+  "telemetry_total_energy_wh": 5.739786596188608,
+  "reset_probe_energy_j": 1800.8738414156437,
+  "reset_probe_energy_wh": 0.5002427337265677,
+  "total_recorded_gpu_energy_j": 22464.105587694634,
+  "total_recorded_gpu_energy_wh": 6.240029329915176
+}
