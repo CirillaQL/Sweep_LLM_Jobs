@@ -112,3 +112,33 @@ dynamic_clock_ack host=neptune seq=2 target_mhz=480 rc=0 observed_active_mean_mh
   "active_clock_mean_mhz": 780.0
 }
 dynamic_clock_ack host=ganymede seq=2 target_mhz=780 rc=0 observed_active_mean_mhz=780
+dynamic_clock_apply host=neptune seq=3 target_mhz=735
+GPU clocks set to "(gpuClkMin 735, gpuClkMax 735)" for GPU 00000000:4A:00.0
+
+Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+dynamic_clock_apply host=ganymede seq=3 target_mhz=1200
+GPU clocks set to "(gpuClkMin 1200, gpuClkMax 1200)" for GPU 00000000:0D:00.0
+
+Warning: persistence mode is disabled on device 00000000:0D:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 1240,
+  "active_samples": 7,
+  "active_clock_min_mhz": 735.0,
+  "active_clock_max_mhz": 735.0,
+  "active_clock_mean_mhz": 735.0
+}
+dynamic_clock_ack host=neptune seq=3 target_mhz=735 rc=0 observed_active_mean_mhz=735
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 886,
+  "active_samples": 6,
+  "active_clock_min_mhz": 1200.0,
+  "active_clock_max_mhz": 1200.0,
+  "active_clock_mean_mhz": 1200.0
+}
+dynamic_clock_ack host=ganymede seq=3 target_mhz=1200 rc=0 observed_active_mean_mhz=1200
