@@ -1,0 +1,15 @@
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:14 [utils.py:325] 
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:14 [utils.py:325]        █     █     █▄   ▄█
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:14 [utils.py:325]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.15.1
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:14 [utils.py:325]   █▄█▀ █     █     █     █  model   mistralai/Mistral-7B-v0.1
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:14 [utils.py:325]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:14 [utils.py:325] 
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:14 [utils.py:261] non-default args: {'model_tag': 'mistralai/Mistral-7B-v0.1', 'api_server_count': 1, 'host': '0.0.0.0', 'port': 32319, 'model': 'mistralai/Mistral-7B-v0.1', 'dtype': 'float16', 'max_model_len': 4096, 'enforce_eager': True, 'gpu_memory_utilization': 0.82, 'max_num_batched_tokens': 4096, 'max_num_seqs': 32, 'kv_transfer_config': KVTransferConfig(kv_connector='P2pNcclConnector', engine_id='4d75c981-6d13-4440-a0ae-7ddfbab01627', kv_buffer_device='cuda', kv_buffer_size=10.0, kv_role='kv_producer', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=34319, kv_connector_extra_config={'proxy_ip': '10.1.0.3', 'proxy_port': '31319', 'http_port': '32319', 'send_type': 'PUT_ASYNC', 'nccl_num_channels': '16'}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='recompute')}
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:15 [model.py:541] Resolved architecture: MistralForCausalLM
+[0;36m(APIServer pid=725715)[0;0m WARNING 07-22 11:38:15 [model.py:1885] Casting torch.bfloat16 to torch.float16.
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:15 [model.py:1561] Using max model len 4096
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:15 [scheduler.py:226] Chunked prefill is enabled with max_num_batched_tokens=4096.
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:15 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(APIServer pid=725715)[0;0m WARNING 07-22 11:38:15 [vllm.py:662] Enforce eager set, overriding optimization level to -O0
+[0;36m(APIServer pid=725715)[0;0m INFO 07-22 11:38:15 [vllm.py:762] Cudagraph is disabled under eager mode
+[0;36m(APIServer pid=725715)[0;0m WARNING 07-22 11:38:15 [vllm.py:980] Turning off hybrid kv cache manager because `--kv-transfer-config` is set. This will reduce the performance of vLLM on LLMs with sliding window attention or Mamba attention. If you are a developer of kv connector, please consider supporting hybrid kv cache manager for your connector by making sure your connector is a subclass of `SupportsHMA` defined in kv_connector/v1/base.py and use --no-disable-hybrid-kv-cache-manager to start vLLM.
