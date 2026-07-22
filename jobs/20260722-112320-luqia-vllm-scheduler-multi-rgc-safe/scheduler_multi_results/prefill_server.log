@@ -24,3 +24,24 @@
 [Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
 [0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:34 [parallel_state.py:1423] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
 [0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:35 [gpu_model_runner.py:4033] Starting to load model mistralai/Mistral-7B-v0.1...
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:36 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
+[0;36m(EngineCore_DP0 pid=723845)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+[0;36m(EngineCore_DP0 pid=723845)[0;0m Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:01<00:01,  1.85s/it]
+[0;36m(EngineCore_DP0 pid=723845)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:05<00:00,  3.13s/it]
+[0;36m(EngineCore_DP0 pid=723845)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:05<00:00,  2.93s/it]
+[0;36m(EngineCore_DP0 pid=723845)[0;0m 
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:43 [default_loader.py:291] Loading weights took 5.99 seconds
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:43 [gpu_model_runner.py:4130] Model loading took 13.5 GiB memory and 7.717972 seconds
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:45 [gpu_worker.py:356] Available KV cache memory: 22.44 GiB
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:45 [kv_cache_utils.py:1307] GPU KV cache size: 183,840 tokens
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:45 [kv_cache_utils.py:1312] Maximum concurrency for 4,096 tokens per request: 44.71x
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:45 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 38050275-e026-48ac-b796-350115ad5f5d
+[0;36m(EngineCore_DP0 pid=723845)[0;0m WARNING 07-22 11:31:45 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:56 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:0, local_rank:0, http_address:10.1.0.6:32318, zmq_address:10.1.0.6:34318, proxy_address:10.1.0.3:31318, send_type:PUT_ASYNC, buffer_size_threshold:10.00, nccl_num_channels:16
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:56 [utils.py:38] Connectors do not specify a kv cache layout, defaulting to NHD.
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:56 [core.py:272] init engine (profile, create kv cache, warmup model) took 12.62 seconds
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:56 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 38050275-e026-48ac-b796-350115ad5f5d
+[0;36m(EngineCore_DP0 pid=723845)[0;0m WARNING 07-22 11:31:56 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:57 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(EngineCore_DP0 pid=723845)[0;0m WARNING 07-22 11:31:57 [vllm.py:669] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+[0;36m(EngineCore_DP0 pid=723845)[0;0m INFO 07-22 11:31:57 [vllm.py:762] Cudagraph is disabled under eager mode
