@@ -302,3 +302,32 @@ reset_probe_active_max_mhz=1275 gpu_max_mhz=2040 previous_rec_freq_mhz=2040
 reset_gpu_clock_verified=false reason=failed_to_reach_default_range
 srun: error: ganymede: task 0: Exited with exit code 17
 srun: Terminating StepId=249819.2
+parent_reset_rc=17
+parent_reset_verified=false
+
+===== observed_frequency_summary =====
+clock_probe=clock_1_ganymede.json target_mhz=360 active_min_mhz=360.0 active_max_mhz=360.0 active_mean_mhz=360.0
+clock_probe=clock_1_neptune.json target_mhz=480 active_min_mhz=480.0 active_max_mhz=480.0 active_mean_mhz=480.0
+clock_probe=clock_2_ganymede.json target_mhz=780 active_min_mhz=780.0 active_max_mhz=780.0 active_mean_mhz=780.0
+clock_probe=clock_2_neptune.json target_mhz=480 active_min_mhz=480.0 active_max_mhz=480.0 active_mean_mhz=480.0
+clock_probe=clock_3_ganymede.json target_mhz=2040 active_min_mhz=1215.0 active_max_mhz=1290.0 active_mean_mhz=1252.5
+clock_probe=clock_3_neptune.json target_mhz=990 active_min_mhz=990.0 active_max_mhz=990.0 active_mean_mhz=990.0
+telemetry_file=decode_ganymede_telemetry.csv samples=96
+telemetry_seq=0 target_mhz=360 active_samples=2 active_min_mhz=360.0 active_max_mhz=360.0
+telemetry_seq=1 target_mhz=360 active_samples=8 active_min_mhz=360.0 active_max_mhz=360.0
+telemetry_seq=2 target_mhz=780 active_samples=15 active_min_mhz=780.0 active_max_mhz=780.0
+telemetry_seq=3 target_mhz=2040 active_samples=1 active_min_mhz=1230.0 active_max_mhz=1230.0
+telemetry_file=prefill_neptune_telemetry.csv samples=98
+telemetry_seq=0 target_mhz=480 active_samples=3 active_min_mhz=480.0 active_max_mhz=480.0
+telemetry_seq=1 target_mhz=480 active_samples=2 active_min_mhz=480.0 active_max_mhz=480.0
+telemetry_seq=2 target_mhz=480 active_samples=3 active_min_mhz=480.0 active_max_mhz=480.0
+telemetry_seq=3 target_mhz=990 active_samples=1 active_min_mhz=990.0 active_max_mhz=990.0
+
+===== result =====
+workload_count=3
+bench_failures=0
+parent_reset_verified=false
+job_exit_rc=11
+
+===== parent_gpu_clock_reset =====
+reset_strategy=fresh_srun_after_server_step
