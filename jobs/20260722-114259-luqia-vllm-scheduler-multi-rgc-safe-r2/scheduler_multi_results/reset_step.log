@@ -1,2 +1,68 @@
 [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
 [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=neptune node_group=neptune role=prefill mode=reset
+scheduled_gpu=l40s scheduled_freq_mhz=735 gpu_id=0
+host=ganymede node_group=ganymede role=decode mode=reset
+scheduled_gpu=l4 scheduled_freq_mhz=1200 gpu_id=0
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+CUDA_VISIBLE_DEVICES=0
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+CUDA_VISIBLE_DEVICES=0
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+1, NVIDIA L4, 23034 MiB, 595.71.05
+2, NVIDIA L4, 23034 MiB, 595.71.05
+3, NVIDIA L4, 23034 MiB, 595.71.05
+4, NVIDIA L4, 23034 MiB, 595.71.05
+5, NVIDIA L4, 23034 MiB, 595.71.05
+6, NVIDIA L4, 23034 MiB, 595.71.05
+7, NVIDIA L4, 23034 MiB, 595.71.05
+parent_reset_step=true host=neptune gpu_id=0 rec_freq_mhz=735
+reset_command_initial=sudo_nvidia_smi_rgc
+parent_reset_step=true host=ganymede gpu_id=0 rec_freq_mhz=1200
+reset_command_initial=sudo_nvidia_smi_rgc
+All done.
+All done.
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 9309,
+  "active_samples": 18,
+  "active_clock_min_mhz": 2220.0,
+  "active_clock_max_mhz": 2280.0,
+  "active_clock_mean_mhz": 2241.6666666666665
+}
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 2345,
+  "active_samples": 16,
+  "active_clock_min_mhz": 1185.0,
+  "active_clock_max_mhz": 1260.0,
+  "active_clock_mean_mhz": 1223.4375
+}
+reset_probe_active_min_mhz=2220 reset_probe_active_max_mhz=2280 gpu_max_mhz=2520 previous_rec_freq_mhz=735
+reset_probe_departed_previous_target=true
+reset_command_final=sudo_nvidia_smi_rgc
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=neptune gpu_id=0
+reset_probe_active_min_mhz=1185 reset_probe_active_max_mhz=1260 gpu_max_mhz=2040 previous_rec_freq_mhz=1200
+reset_probe_departed_previous_target=indeterminate reason=default_dvfs_range_includes_previous_target
+reset_command_final=sudo_nvidia_smi_rgc
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=ganymede gpu_id=0
