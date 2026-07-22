@@ -1,0 +1,448 @@
+#!/usr/bin/env bash
+#SBATCH --job-name=vllm-scheduler-multi-rgc-safe
+#SBATCH --partition=long
+#SBATCH --time=00:28:00
+#SBATCH --nodes=2
+#SBATCH --nodelist=ganymede,neptune
+#SBATCH --ntasks=2
+#SBATCH --ntasks-per-node=1
+#SBATCH --gpus-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=64G
+#SBATCH --signal=B:TERM@90
+#SBATCH --output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-112320-luqia-vllm-scheduler-multi-rgc-safe/slurm-%j.out
+#SBATCH --error=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-112320-luqia-vllm-scheduler-multi-rgc-safe/slurm-%j.err
+
+set -uo pipefail
+
+SOURCE_JOB_DIR="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-112320-luqia-vllm-scheduler-multi-rgc-safe"
+JOB_DIR="${JOB_DIR_OVERRIDE:-${SOURCE_JOB_DIR}}"
+OUT_DIR="${JOB_DIR}/scheduler_multi_results"
+ENV_DIR="/data/users/chjing/miniforge3/envs/cuda-env"
+PYTHON_BIN="${ENV_DIR}/bin/python"
+VLLM_BIN="${ENV_DIR}/bin/vllm"
+NODE_SCRIPT="${SOURCE_JOB_DIR}/start_pd_node.sh"
+PROXY_SCRIPT="${SOURCE_JOB_DIR}/pd_proxy.py"
+CLOCK_PROBE="${SOURCE_JOB_DIR}/clock_probe.py"
+SCHEDULER_SCRIPT="${SOURCE_JOB_DIR}/scheduler.py"
+MODEL_BUNDLE="${SOURCE_JOB_DIR}/model_bundle.json"
+WORKLOAD_FILE="${SOURCE_JOB_DIR}/workloads.csv"
+PLACEMENT_FILE="${OUT_DIR}/active_placement.json"
+CLOCK_CONTROL_DIR="${OUT_DIR}/clock_control"
+MODEL="mistralai/Mistral-7B-v0.1"
+
+SLO_TTFT_MS=500
+SLO_TPOT_MS=200
+BENCH_WINDOW_SECONDS=10
+BENCH_TIMEOUT_SECONDS=180
+
+PROXY_IP=10.1.0.3
+PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
+PROXY_HTTP_PORT=$((30000 + PORT_OFFSET))
+PROXY_REGISTER_PORT=$((31000 + PORT_OFFSET))
+PREFILL_HTTP_PORT=$((32000 + PORT_OFFSET))
+DECODE_HTTP_PORT=$((33000 + PORT_OFFSET))
+KV_PORT=$((34000 + PORT_OFFSET))
+PREFILL_IP=10.1.0.6
+DECODE_IP=10.1.0.3
+
+export HOME="/data/users/chjing"
+export USER=chjing
+export LOGNAME=chjing
+export HF_HOME="${HOME}/.cache/huggingface"
+export XDG_CACHE_HOME="${HOME}/.cache"
+export PATH="${ENV_DIR}/bin:${PATH}"
+
+export JOB_DIR OUT_DIR ENV_DIR PYTHON_BIN VLLM_BIN MODEL PLACEMENT_FILE CLOCK_PROBE
+export CLOCK_CONTROL_DIR PROXY_IP PROXY_HTTP_PORT PROXY_REGISTER_PORT
+export PREFILL_HTTP_PORT DECODE_HTTP_PORT PREFILL_IP DECODE_IP KV_PORT
+
+# Minerva may expose an SMT-adjusted value that conflicts with the requested
+# Slurm TRES when this batch script launches nested srun steps.
+unset SLURM_CPUS_PER_TASK
+
+mkdir -p "$OUT_DIR" "$CLOCK_CONTROL_DIR"
+ulimit -n 65536
+
+PROXY_PID=""
+SERVER_STEP_PID=""
+FINAL_RC=0
+RESET_REQUIRED=false
+RESET_DONE=false
+BENCH_FAILURES=0
+
+section() {
+  echo
+  echo "===== $1 ====="
+}
+
+stop_components() {
+  if [ -n "$SERVER_STEP_PID" ] && kill -0 "$SERVER_STEP_PID" 2>/dev/null; then
+    echo "stopping_server_step_pid=${SERVER_STEP_PID}"
+    kill "$SERVER_STEP_PID" 2>/dev/null || true
+    wait "$SERVER_STEP_PID" 2>/dev/null || true
+  fi
+  SERVER_STEP_PID=""
+  if [ -n "$PROXY_PID" ] && kill -0 "$PROXY_PID" 2>/dev/null; then
+    echo "stopping_proxy_pid=${PROXY_PID}"
+    kill "$PROXY_PID" 2>/dev/null || true
+    wait "$PROXY_PID" 2>/dev/null || true
+  fi
+  PROXY_PID=""
+}
+
+reset_gpu_clocks() {
+  if [ "$RESET_REQUIRED" != true ] || [ "$RESET_DONE" = true ]; then
+    return 0
+  fi
+  section "parent_gpu_clock_reset"
+  echo "reset_strategy=fresh_srun_after_server_step"
+  srun --kill-on-bad-exit=1 --nodes=2 --ntasks=2 --ntasks-per-node=1 \
+    "$NODE_SCRIPT" reset > "${OUT_DIR}/reset_step.log" 2>&1
+  local reset_rc=$?
+  cat "${OUT_DIR}/reset_step.log" 2>/dev/null || true
+  echo "parent_reset_rc=${reset_rc}"
+  if [ "$reset_rc" -ne 0 ]; then
+    echo "parent_reset_verified=false"
+    return "$reset_rc"
+  fi
+  RESET_DONE=true
+  echo "parent_reset_verified=true"
+  return 0
+}
+
+cleanup() {
+  local rc=$?
+  trap - EXIT INT TERM
+  stop_components
+  if ! reset_gpu_clocks; then
+    echo "cleanup_reset_failed=true"
+    if [ "$rc" -eq 0 ]; then
+      rc=30
+    fi
+  fi
+  echo "job_cleanup_rc=${rc}"
+  exit "$rc"
+}
+
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+wait_for_url() {
+  local name="$1"
+  local url="$2"
+  local max_seconds="$3"
+  local elapsed=0
+  while ! curl -fsS "$url" >/dev/null 2>&1; do
+    sleep 5
+    elapsed=$((elapsed + 5))
+    echo "waiting name=${name} elapsed_s=${elapsed} url=${url}"
+    if [ -n "$SERVER_STEP_PID" ] && ! kill -0 "$SERVER_STEP_PID" 2>/dev/null; then
+      echo "server_step_died_while_waiting=true"
+      return 1
+    fi
+    if [ "$elapsed" -ge "$max_seconds" ]; then
+      echo "wait_timeout name=${name} url=${url}"
+      return 1
+    fi
+  done
+  echo "ready name=${name} elapsed_s=${elapsed} url=${url}"
+}
+
+placement_values() {
+  "$PYTHON_BIN" - "$1" <<'PY'
+import json
+import sys
+
+result = json.load(open(sys.argv[1], encoding="utf-8"))
+if result.get("status") != "OK":
+    raise SystemExit(f"unsafe scheduler result: {result.get('status')}")
+recommended = result["recommended"]
+prefill = recommended["prefill"]
+decode = recommended["decode"]
+print(
+    prefill["node_group"], int(prefill["rec_freq_mhz"]),
+    decode["node_group"], int(decode["rec_freq_mhz"]),
+    recommended["predicted_cluster_power_w"],
+)
+PY
+}
+
+write_clock_request() {
+  local seq="$1"
+  local neptune_freq="$2"
+  local ganymede_freq="$3"
+  printf '%s %s\n' "$seq" "$neptune_freq" > "${CLOCK_CONTROL_DIR}/neptune.request.tmp"
+  mv "${CLOCK_CONTROL_DIR}/neptune.request.tmp" "${CLOCK_CONTROL_DIR}/neptune.request"
+  printf '%s %s\n' "$seq" "$ganymede_freq" > "${CLOCK_CONTROL_DIR}/ganymede.request.tmp"
+  mv "${CLOCK_CONTROL_DIR}/ganymede.request.tmp" "${CLOCK_CONTROL_DIR}/ganymede.request"
+  echo "clock_request seq=${seq} neptune_mhz=${neptune_freq} ganymede_mhz=${ganymede_freq}"
+}
+
+wait_clock_ack() {
+  local seq="$1"
+  local node_group="$2"
+  local target="$3"
+  local ack="${CLOCK_CONTROL_DIR}/${node_group}.ack"
+  local elapsed=0
+  while true; do
+    if [ -s "$ack" ]; then
+      local ack_seq ack_target ack_rc observed
+      read -r ack_seq ack_target ack_rc observed < "$ack" || true
+      if [ "${ack_seq:-}" = "$seq" ]; then
+        echo "clock_ack seq=${ack_seq} node_group=${node_group} target_mhz=${ack_target} rc=${ack_rc} observed_active_mean_mhz=${observed:-NA}"
+        if [ "$ack_target" != "$target" ] || [ "$ack_rc" != 0 ]; then
+          return 1
+        fi
+        return 0
+      fi
+    fi
+    sleep 1
+    elapsed=$((elapsed + 1))
+    if [ "$elapsed" -ge 45 ]; then
+      echo "clock_ack_timeout seq=${seq} node_group=${node_group} target_mhz=${target}"
+      return 1
+    fi
+  done
+}
+
+section "scheduler_sweep"
+echo "workload_source=Dual_Sweep_LLM_Phase2_common_measured_grid"
+echo "slo_ttft_ms=${SLO_TTFT_MS} slo_tpot_ms=${SLO_TPOT_MS}"
+FIRST_PLACEMENT=""
+WORKLOAD_COUNT=0
+while IFS=, read -r workload_id il ol rate description; do
+  if [ "$workload_id" = workload_id ] || [ -z "$workload_id" ]; then
+    continue
+  fi
+  WORKLOAD_COUNT=$((WORKLOAD_COUNT + 1))
+  placement="${OUT_DIR}/placement_${WORKLOAD_COUNT}_${workload_id}.json"
+  echo "scheduler_workload seq=${WORKLOAD_COUNT} id=${workload_id} il=${il} ol=${ol} rate=${rate} description=${description}"
+  "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
+    --bundle "$MODEL_BUNDLE" --il "$il" --ol "$ol" --rate "$rate" \
+    --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
+    --output "$placement" > "${OUT_DIR}/scheduler_${WORKLOAD_COUNT}_${workload_id}.json"
+  scheduler_rc=$?
+  if [ "$scheduler_rc" -ne 0 ]; then
+    echo "scheduler_failed seq=${WORKLOAD_COUNT} rc=${scheduler_rc}"
+    exit 20
+  fi
+  values=$(placement_values "$placement") || exit 21
+  read -r prefill_node prefill_freq decode_node decode_freq predicted_power <<< "$values"
+  echo "scheduler_selected seq=${WORKLOAD_COUNT} prefill=${prefill_node}:${prefill_freq} decode=${decode_node}:${decode_freq} predicted_cluster_power_w=${predicted_power}"
+  if [ "$prefill_node" != neptune ] || [ "$decode_node" != ganymede ]; then
+    echo "role_change_requires_restart=true seq=${WORKLOAD_COUNT}; reduced test requires fixed roles"
+    exit 22
+  fi
+  if [ -z "$FIRST_PLACEMENT" ]; then
+    FIRST_PLACEMENT="$placement"
+  fi
+done < "$WORKLOAD_FILE"
+
+if [ "$WORKLOAD_COUNT" -ne 3 ] || [ -z "$FIRST_PLACEMENT" ]; then
+  echo "unexpected_workload_count=${WORKLOAD_COUNT}"
+  exit 23
+fi
+cp "$FIRST_PLACEMENT" "$PLACEMENT_FILE"
+
+section "allocation"
+echo "time=$(date --iso-8601=seconds)"
+echo "batch_host=$(hostname -s)"
+echo "SLURM_JOB_ID=${SLURM_JOB_ID:-unset}"
+echo "SLURM_JOB_NODELIST=${SLURM_JOB_NODELIST:-unset}"
+echo "model=${MODEL} workload_count=${WORKLOAD_COUNT} slurm_time_limit=00:28:00"
+scontrol show hostnames "${SLURM_JOB_NODELIST:-}" 2>&1 || true
+scontrol show job "${SLURM_JOB_ID:-}" 2>&1 || true
+
+if [ "$(hostname -s)" != ganymede ]; then
+  echo "expected_batch_host_ganymede=true actual=$(hostname -s)"
+  exit 2
+fi
+if [ ! -x "$PYTHON_BIN" ] || [ ! -x "$VLLM_BIN" ]; then
+  echo "vllm_environment_missing=true"
+  exit 3
+fi
+
+section "100gbe_and_environment_preflight"
+srun --nodes=2 --ntasks=2 --ntasks-per-node=1 "$NODE_SCRIPT" preflight 2>&1 | tee "${OUT_DIR}/preflight.log"
+PREFLIGHT_RC=${PIPESTATUS[0]}
+echo "preflight_rc=${PREFLIGHT_RC}"
+if [ "$PREFLIGHT_RC" -ne 0 ]; then
+  exit "$PREFLIGHT_RC"
+fi
+
+section "start_proxy"
+export PROXY_REGISTER_HOST=0.0.0.0
+export PROXY_HTTP_HOST=0.0.0.0
+"$PYTHON_BIN" -u "$PROXY_SCRIPT" > "${OUT_DIR}/proxy.log" 2>&1 &
+PROXY_PID=$!
+echo "proxy_pid=${PROXY_PID}"
+if ! wait_for_url proxy "http://127.0.0.1:${PROXY_HTTP_PORT}/health" 60; then
+  tail -n 200 "${OUT_DIR}/proxy.log" || true
+  exit 4
+fi
+
+section "start_prefill_and_decode_once"
+RESET_REQUIRED=true
+srun --kill-on-bad-exit=1 --nodes=2 --ntasks=2 --ntasks-per-node=1 \
+  "$NODE_SCRIPT" serve > "${OUT_DIR}/server_step.log" 2>&1 &
+SERVER_STEP_PID=$!
+echo "server_step_pid=${SERVER_STEP_PID}"
+
+if ! wait_for_url prefill "http://${PREFILL_IP}:${PREFILL_HTTP_PORT}/v1/models" 600; then
+  FINAL_RC=5
+fi
+if [ "$FINAL_RC" -eq 0 ] && ! wait_for_url decode "http://${DECODE_IP}:${DECODE_HTTP_PORT}/v1/models" 600; then
+  FINAL_RC=6
+fi
+if [ "$FINAL_RC" -ne 0 ]; then
+  tail -n 240 "${OUT_DIR}/prefill_server.log" 2>/dev/null || true
+  tail -n 240 "${OUT_DIR}/decode_server.log" 2>/dev/null || true
+  exit "$FINAL_RC"
+fi
+
+section "wait_for_pd_registry"
+REGISTRY_FILE="${OUT_DIR}/registry.json"
+REGISTRY_READY=false
+for attempt in $(seq 1 60); do
+  curl -fsS "http://${PROXY_IP}:${PROXY_HTTP_PORT}/registry" > "$REGISTRY_FILE" 2>/dev/null || true
+  if "$PYTHON_BIN" - "$REGISTRY_FILE" <<'PY'
+import json
+import sys
+try:
+    data = json.load(open(sys.argv[1], encoding="utf-8"))
+except Exception:
+    raise SystemExit(1)
+raise SystemExit(0 if len(data.get("prefill", [])) == 1 and len(data.get("decode", [])) == 1 else 1)
+PY
+  then
+    REGISTRY_READY=true
+    break
+  fi
+  sleep 2
+done
+cat "$REGISTRY_FILE" 2>/dev/null || true
+echo
+echo "registry_ready=${REGISTRY_READY}"
+if [ "$REGISTRY_READY" != true ]; then
+  exit 7
+fi
+
+section "pd_smoke_request"
+SMOKE_FILE="${OUT_DIR}/smoke_response.json"
+curl -fsS --max-time 180 -X POST "http://${PROXY_IP}:${PROXY_HTTP_PORT}/v1/completions" \
+  -H "Content-Type: application/json" \
+  --data-binary "{\"model\":\"${MODEL}\",\"prompt\":\"The capital of Sweden is\",\"max_tokens\":8,\"temperature\":0,\"stream\":false}" \
+  > "$SMOKE_FILE"
+SMOKE_RC=$?
+echo "smoke_curl_rc=${SMOKE_RC}"
+if [ "$SMOKE_RC" -ne 0 ]; then
+  exit 8
+fi
+
+section "multi_workload_bench"
+SEQ=0
+while IFS=, read -r workload_id il ol rate description; do
+  if [ "$workload_id" = workload_id ] || [ -z "$workload_id" ]; then
+    continue
+  fi
+  SEQ=$((SEQ + 1))
+  placement="${OUT_DIR}/placement_${SEQ}_${workload_id}.json"
+  cp "$placement" "$PLACEMENT_FILE"
+  values=$(placement_values "$placement") || { FINAL_RC=21; break; }
+  read -r prefill_node neptune_freq decode_node ganymede_freq predicted_power <<< "$values"
+
+  section "workload_${SEQ}_${workload_id}"
+  echo "workload_start time=$(date --iso-8601=seconds) seq=${SEQ} id=${workload_id} il=${il} ol=${ol} request_rate=${rate}"
+  echo "recommendation neptune_prefill_mhz=${neptune_freq} ganymede_decode_mhz=${ganymede_freq} predicted_cluster_power_w=${predicted_power}"
+  write_clock_request "$SEQ" "$neptune_freq" "$ganymede_freq"
+  if ! wait_clock_ack "$SEQ" neptune "$neptune_freq"; then
+    FINAL_RC=24
+    break
+  fi
+  if ! wait_clock_ack "$SEQ" ganymede "$ganymede_freq"; then
+    FINAL_RC=25
+    break
+  fi
+
+  NUM_PROMPTS=$((rate * BENCH_WINDOW_SECONDS))
+  if [ "$NUM_PROMPTS" -lt 12 ]; then
+    NUM_PROMPTS=12
+  fi
+  if [ "$NUM_PROMPTS" -gt 120 ]; then
+    NUM_PROMPTS=120
+  fi
+  BENCH_FILE="${OUT_DIR}/bench_${SEQ}_${workload_id}.txt"
+  echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${BENCH_WINDOW_SECONDS} timeout_s=${BENCH_TIMEOUT_SECONDS}"
+  timeout --signal=INT --kill-after=20s "${BENCH_TIMEOUT_SECONDS}s" "$VLLM_BIN" bench serve \
+    --backend openai --base-url "http://${PROXY_IP}:${PROXY_HTTP_PORT}" --model "$MODEL" \
+    --num-prompts "$NUM_PROMPTS" --request-rate "$rate" --dataset-name random \
+    --random-input-len "$il" --random-output-len "$ol" --max-concurrency 16 \
+    --num-warmups 1 --temperature 0 > "$BENCH_FILE" 2>&1
+  BENCH_RC=$?
+  echo "bench_rc=${BENCH_RC} seq=${SEQ} id=${workload_id}"
+  tail -n 80 "$BENCH_FILE" || true
+  if [ "$BENCH_RC" -ne 0 ]; then
+    BENCH_FAILURES=$((BENCH_FAILURES + 1))
+    FINAL_RC=9
+  fi
+  if [ -n "$SERVER_STEP_PID" ] && ! kill -0 "$SERVER_STEP_PID" 2>/dev/null; then
+    echo "server_step_died_during_sweep=true seq=${SEQ}"
+    FINAL_RC=26
+    break
+  fi
+done < "$WORKLOAD_FILE"
+
+section "stop_servers_then_reset"
+stop_components
+if ! reset_gpu_clocks; then
+  FINAL_RC=11
+fi
+
+section "observed_frequency_summary"
+"$PYTHON_BIN" - "$OUT_DIR" <<'PY'
+import csv
+import glob
+import json
+import os
+import sys
+
+out_dir = sys.argv[1]
+for path in sorted(glob.glob(os.path.join(out_dir, "clock_*_*.json"))):
+    data = json.load(open(path, encoding="utf-8"))
+    print(
+        f"clock_probe={os.path.basename(path)} target_mhz={data.get('target_freq_mhz')} "
+        f"active_min_mhz={data.get('active_clock_min_mhz')} "
+        f"active_max_mhz={data.get('active_clock_max_mhz')} "
+        f"active_mean_mhz={data.get('active_clock_mean_mhz')}"
+    )
+for path in sorted(glob.glob(os.path.join(out_dir, "*_telemetry.csv"))):
+    with open(path, newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    print(f"telemetry_file={os.path.basename(path)} samples={len(rows)}")
+    by_seq = {}
+    for row in rows:
+        by_seq.setdefault(row.get("workload_seq", "0"), []).append(row)
+    for seq, samples in sorted(by_seq.items(), key=lambda item: int(item[0] or 0)):
+        active = []
+        for row in samples:
+            try:
+                if float(row["gpu_util_pct"].strip()) >= 10:
+                    active.append(float(row["gpu_sm_mhz"].strip()))
+            except (TypeError, ValueError):
+                pass
+        target = samples[-1].get("target_freq_mhz", "NA") if samples else "NA"
+        print(
+            f"telemetry_seq={seq} target_mhz={target} active_samples={len(active)} "
+            f"active_min_mhz={min(active) if active else 'NA'} "
+            f"active_max_mhz={max(active) if active else 'NA'}"
+        )
+PY
+
+section "result"
+echo "workload_count=${WORKLOAD_COUNT}"
+echo "bench_failures=${BENCH_FAILURES}"
+echo "parent_reset_verified=${RESET_DONE}"
+echo "job_exit_rc=${FINAL_RC}"
+exit "$FINAL_RC"
