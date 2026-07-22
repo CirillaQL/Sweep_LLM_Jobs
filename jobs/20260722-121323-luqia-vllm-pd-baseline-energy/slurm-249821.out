@@ -1,0 +1,54 @@
+
+===== fixed_baseline_configuration =====
+placement=neptune:prefill,ganymede:decode
+frequency_policy=default_dvfs_no_scheduler_no_lgc
+workload_file=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-121323-luqia-vllm-pd-baseline-energy/workloads.csv
+workload_id,input_len,output_len,request_rate,description
+short_r1,32,32,1,short_prompt_short_decode
+prefill_r1,512,128,1,longer_prefill_low_rate
+burst_r10,128,32,10,short_decode_higher_rate
+
+===== allocation =====
+time=2026-07-22T12:19:57+02:00
+SLURM_JOB_ID=249821 nodes=ganymede,neptune
+slurm_time_limit=00:20:00
+JobId=249821 JobName=20260722-121323-luqia-vllm-pd-baseline-energy
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=00:20:00 TimeMin=N/A
+   SubmitTime=2026-07-22T12:19:56 EligibleTime=2026-07-22T12:19:56
+   AccrueTime=2026-07-22T12:19:56
+   StartTime=2026-07-22T12:19:56 EndTime=2026-07-22T12:39:56 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-22T12:19:56 Scheduler=Main
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede,neptune ExcNodeList=(null)
+   NodeList=ganymede,neptune
+   BatchHost=ganymede
+   NumNodes=2 NumCPUs=32 NumTasks=2 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=128G,node=2,billing=16,gres/gpu=2
+   AllocTRES=cpu=32,mem=128G,node=2,billing=32,gres/gpu=2,gres/gpu:l4=1,gres/gpu:l40s=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=64G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-121323-luqia-vllm-pd-baseline-energy/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-121323-luqia-vllm-pd-baseline-energy/slurm-249821.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-121323-luqia-vllm-pd-baseline-energy/slurm-249821.out
+   Power=
+   TresPerNode=gres/gpu:1
+   TresPerTask=cpu:8
+   
+
+
+===== preflight =====
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+slurmstepd-ganymede: error: execve(): /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-121323-luqia-vllm-pd-baseline-energy/start_pd_node.sh: Permission denied
+srun: error: ganymede: task 0: Exited with exit code 13
+slurmstepd-neptune: error: execve(): /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-121323-luqia-vllm-pd-baseline-energy/start_pd_node.sh: Permission denied
+srun: error: neptune: task 1: Exited with exit code 13
+job_cleanup_rc=13
