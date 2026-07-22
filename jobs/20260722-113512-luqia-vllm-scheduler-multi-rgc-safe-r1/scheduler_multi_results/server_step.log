@@ -52,3 +52,8 @@ index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
 launch_vllm host=ganymede role=decode ip=10.1.0.3 http_port=33319 kv_port=34319
 NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=eno12399np0
 kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_consumer","kv_buffer_size":"8e9","kv_port":"34319","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31319","http_port":"33319","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
+dynamic_clock_apply host=ganymede seq=1 target_mhz=360
+GPU clocks set to "(gpuClkMin 360, gpuClkMax 360)" for GPU 00000000:0D:00.0
+
+Warning: persistence mode is disabled on device 00000000:0D:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
