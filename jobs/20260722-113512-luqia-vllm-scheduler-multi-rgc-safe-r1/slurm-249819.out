@@ -1,0 +1,100 @@
+
+===== scheduler_sweep =====
+workload_source=Dual_Sweep_LLM_Phase2_common_measured_grid
+slo_ttft_ms=500 slo_tpot_ms=200
+scheduler_workload seq=1 id=short_r1 il=32 ol=32 rate=1 description=short_prompt_short_decode
+scheduler_selected seq=1 prefill=neptune:480 decode=ganymede:360 predicted_cluster_power_w=147.8
+scheduler_workload seq=2 id=prefill_r1 il=512 ol=128 rate=1 description=longer_prefill_low_rate
+scheduler_selected seq=2 prefill=neptune:480 decode=ganymede:780 predicted_cluster_power_w=206.0
+scheduler_workload seq=3 id=burst_r10 il=128 ol=128 rate=10 description=balanced_higher_rate
+scheduler_selected seq=3 prefill=neptune:990 decode=ganymede:2040 predicted_cluster_power_w=248.3
+
+===== allocation =====
+time=2026-07-22T11:37:50+02:00
+batch_host=ganymede
+SLURM_JOB_ID=249819
+SLURM_JOB_NODELIST=ganymede,neptune
+model=mistralai/Mistral-7B-v0.1 workload_count=3 slurm_time_limit=00:28:00
+ganymede
+neptune
+JobId=249819 JobName=20260722-113512-luqia-vllm-scheduler-multi-rgc-safe-r1
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=00:28:00 TimeMin=N/A
+   SubmitTime=2026-07-22T11:37:49 EligibleTime=2026-07-22T11:37:49
+   AccrueTime=2026-07-22T11:37:49
+   StartTime=2026-07-22T11:37:49 EndTime=2026-07-22T12:05:49 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-22T11:37:49 Scheduler=Backfill
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede,neptune ExcNodeList=(null)
+   NodeList=ganymede,neptune
+   BatchHost=ganymede
+   NumNodes=2 NumCPUs=32 NumTasks=2 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=128G,node=2,billing=16,gres/gpu=2
+   AllocTRES=cpu=32,mem=128G,node=2,billing=32,gres/gpu=2,gres/gpu:l4=1,gres/gpu:l40s=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=64G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-113512-luqia-vllm-scheduler-multi-rgc-safe-r1/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-113512-luqia-vllm-scheduler-multi-rgc-safe-r1/slurm-249819.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-113512-luqia-vllm-scheduler-multi-rgc-safe-r1/slurm-249819.out
+   Power=
+   TresPerNode=gres/gpu:1
+   TresPerTask=cpu:8
+   
+
+
+===== 100gbe_and_environment_preflight =====
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=ganymede node_group=ganymede role=decode mode=preflight
+scheduled_gpu=l4 scheduled_freq_mhz=360 gpu_id=0
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+CUDA_VISIBLE_DEVICES=0
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+host=neptune node_group=neptune role=prefill mode=preflight
+scheduled_gpu=l40s scheduled_freq_mhz=480 gpu_id=0
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+CUDA_VISIBLE_DEVICES=0
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+1, NVIDIA L4, 23034 MiB, 595.71.05
+2, NVIDIA L4, 23034 MiB, 595.71.05
+3, NVIDIA L4, 23034 MiB, 595.71.05
+4, NVIDIA L4, 23034 MiB, 595.71.05
+5, NVIDIA L4, 23034 MiB, 595.71.05
+6, NVIDIA L4, 23034 MiB, 595.71.05
+7, NVIDIA L4, 23034 MiB, 595.71.05
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+host=neptune import=torch version=2.9.1+cu128
+host=neptune import=vllm version=0.15.1
+host=neptune import=aiohttp version=3.13.3
+host=neptune import=msgpack version=1.1.2
+host=neptune import=zmq version=27.1.0
+host=ganymede import=torch version=2.9.1+cu128
+host=ganymede import=vllm version=0.15.1
+host=ganymede import=aiohttp version=3.13.3
+host=ganymede import=msgpack version=1.1.2
+host=ganymede import=zmq version=27.1.0
+preflight_rc=0
+
+===== start_proxy =====
+proxy_pid=833518
