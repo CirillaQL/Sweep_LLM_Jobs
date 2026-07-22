@@ -134,3 +134,11 @@ ready name=decode elapsed_s=15 url=http://10.1.0.3:33322/v1/models
 registry_ready=true
 
 ===== pd_smoke_request =====
+smoke_curl_rc=0
+
+===== baseline_multi_workload_bench =====
+
+===== workload_1_short_r1 =====
+baseline_workload seq=1 il=32 ol=32 rate=1 num_prompts=12
+phase_control seq=1 phase=benchmark workload_id=short_r1
+energy_event unix_ts=1784715815.288820267 event=workload_start seq=1 workload_id=short_r1
