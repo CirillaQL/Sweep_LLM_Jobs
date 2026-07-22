@@ -1,0 +1,28 @@
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=ganymede node_group=ganymede role=decode mode=reset gpu_id=0
+frequency_policy=default_dvfs_no_lgc
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+host=neptune node_group=neptune role=prefill mode=reset gpu_id=0
+frequency_policy=default_dvfs_no_lgc
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+parent_reset_step=true host=neptune gpu_id=0
+reset_command_initial=sudo_nvidia_smi_rgc
+parent_reset_step=true host=ganymede gpu_id=0
+reset_command_initial=sudo_nvidia_smi_rgc
+All done.
+All done.

@@ -24,3 +24,9 @@ launch_vllm host=neptune role=prefill default_dvfs=true
 kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_producer","kv_buffer_size":"1e1","kv_port":"34322","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31322","http_port":"32322","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
 launch_vllm host=ganymede role=decode default_dvfs=true
 kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_consumer","kv_buffer_size":"8e9","kv_port":"34322","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31322","http_port":"33322","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 249822.2 ON ganymede CANCELLED AT 2026-07-22T12:25:25 ***
+srun: error: neptune: task 1: Killed
+srun: Terminating StepId=249822.2
+srun: error: ganymede: task 0: Killed
