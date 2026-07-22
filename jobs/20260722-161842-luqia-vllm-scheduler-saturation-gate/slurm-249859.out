@@ -1,0 +1,54 @@
+
+===== scheduler_sweep_with_saturation_gate =====
+workload_source=Dual_Sweep_LLM_Phase2_common_measured_grid
+slo_ttft_ms=500 slo_tpot_ms=200 saturation_threshold=0.30
+saturation_model=five_seed_mean_local_retrained_75
+placement=l40s_prefill_l4_decode fixed_for_paired_historical_comparison
+scheduler_workload seq=1 id=short_r1 il=32 ol=32 rate=1 description=short_prompt_short_decode
+saturation_gate_selected seq=1 prefill=neptune:480 decode=ganymede:360 predicted_cluster_power_w=147.8
+scheduler_workload seq=2 id=prefill_r1 il=512 ol=128 rate=1 description=longer_prefill_low_rate
+saturation_gate_selected seq=2 prefill=neptune:480 decode=ganymede:780 predicted_cluster_power_w=206.0
+scheduler_workload seq=3 id=burst_r10 il=128 ol=32 rate=10 description=short_decode_higher_rate
+saturation_gate_no_admit seq=3 id=burst_r10
+
+===== allocation =====
+time=2026-07-22T18:53:30+02:00
+batch_host=ganymede
+SLURM_JOB_ID=249859
+SLURM_JOB_NODELIST=ganymede,neptune
+model=mistralai/Mistral-7B-v0.1 workload_count=3 slurm_time_limit=00:28:00
+ganymede
+neptune
+JobId=249859 JobName=20260722-161842-luqia-vllm-scheduler-saturation-gate
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:02 TimeLimit=00:28:00 TimeMin=N/A
+   SubmitTime=2026-07-22T16:29:54 EligibleTime=2026-07-22T16:29:54
+   AccrueTime=2026-07-22T16:29:54
+   StartTime=2026-07-22T18:53:29 EndTime=2026-07-22T19:21:29 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-22T18:53:29 Scheduler=Main
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede,neptune ExcNodeList=(null)
+   NodeList=ganymede,neptune
+   BatchHost=ganymede
+   NumNodes=2 NumCPUs=32 NumTasks=2 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=128G,node=2,billing=16,gres/gpu=2
+   AllocTRES=cpu=32,mem=128G,node=2,billing=32,gres/gpu=2,gres/gpu:l4=1,gres/gpu:l40s=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=64G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-161842-luqia-vllm-scheduler-saturation-gate/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-161842-luqia-vllm-scheduler-saturation-gate/slurm-249859.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-161842-luqia-vllm-scheduler-saturation-gate/slurm-249859.out
+   Power=
+   TresPerNode=gres/gpu:1
+   TresPerTask=cpu:8
+   
+
+
+===== 100gbe_and_environment_preflight =====
