@@ -1,0 +1,21 @@
+decision placement=l40s-prefill-l4-decode workload=threshold_long_prompt scheduler_rc=0
+validation placement=l40s-prefill-l4-decode workload=threshold_long_prompt rc=0
+decision placement=l40s-prefill-l4-decode workload=long_decode scheduler_rc=0
+validation placement=l40s-prefill-l4-decode workload=long_decode rc=0
+decision placement=l40s-prefill-l4-decode workload=moderate_burst scheduler_rc=0
+validation placement=l40s-prefill-l4-decode workload=moderate_burst rc=0
+decision placement=l40s-prefill-l4-decode workload=extreme_rps scheduler_rc=0
+validation placement=l40s-prefill-l4-decode workload=extreme_rps rc=0
+decision placement=auto workload=threshold_long_prompt scheduler_rc=0
+validation placement=auto workload=threshold_long_prompt rc=0
+decision placement=auto workload=long_decode scheduler_rc=0
+validation placement=auto workload=long_decode rc=0
+decision placement=auto workload=moderate_burst scheduler_rc=0
+validation placement=auto workload=moderate_burst rc=0
+decision placement=auto workload=extreme_rps scheduler_rc=0
+validation placement=auto workload=extreme_rps rc=0
+decision_count=8
+gpu_tres_requested=false
+gpu_commands_executed=false
+vllm_started=false
+job_exit_rc=0
