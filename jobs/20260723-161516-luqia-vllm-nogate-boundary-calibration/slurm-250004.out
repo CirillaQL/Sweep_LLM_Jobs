@@ -1,0 +1,93 @@
+
+===== scheduler_sweep =====
+workload_source=Dual_Sweep_LLM_Phase2_common_measured_grid
+slo_ttft_ms=500 slo_tpot_ms=200
+scheduler_workload seq=1 id=threshold_long_prompt il=1024 ol=128 rate=1 description=decode_saturation_probability_just_above_gate
+scheduler_selected seq=1 prefill=neptune:1245 decode=ganymede:2040 predicted_cluster_power_w=258.3
+scheduler_workload seq=2 id=long_decode il=512 ol=1024 rate=1 description=long_generation_strong_predicted_saturation
+scheduler_selected seq=2 prefill=neptune:735 decode=ganymede:2040 predicted_cluster_power_w=256.8
+scheduler_workload seq=3 id=moderate_burst il=128 ol=128 rate=5 description=calibration_pd_throughput_below_requested_rate
+scheduler_selected seq=3 prefill=neptune:480 decode=ganymede:1200 predicted_cluster_power_w=208.1
+scheduler_workload seq=4 id=extreme_rps il=2 ol=64 rate=50 description=calibration_l4_extreme_request_rate
+scheduler_selected seq=4 prefill=neptune:480 decode=ganymede:780 predicted_cluster_power_w=146.0
+
+===== allocation =====
+time=2026-07-23T16:17:44+02:00
+batch_host=ganymede
+SLURM_JOB_ID=250004
+SLURM_JOB_NODELIST=ganymede,neptune
+model=mistralai/Mistral-7B-v0.1 workload_count=4 slurm_time_limit=00:28:00
+ganymede
+neptune
+JobId=250004 JobName=20260723-161516-luqia-vllm-nogate-boundary-calibration
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=00:35:00 TimeMin=N/A
+   SubmitTime=2026-07-23T16:17:43 EligibleTime=2026-07-23T16:17:43
+   AccrueTime=2026-07-23T16:17:43
+   StartTime=2026-07-23T16:17:43 EndTime=2026-07-23T16:52:43 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-23T16:17:43 Scheduler=Backfill
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede,neptune ExcNodeList=(null)
+   NodeList=ganymede,neptune
+   BatchHost=ganymede
+   NumNodes=2 NumCPUs=32 NumTasks=2 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=128G,node=2,billing=16,gres/gpu=2
+   AllocTRES=cpu=32,mem=128G,node=2,billing=32,gres/gpu=2,gres/gpu:l4=1,gres/gpu:l40s=1
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=64G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260723-161516-luqia-vllm-nogate-boundary-calibration/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260723-161516-luqia-vllm-nogate-boundary-calibration/slurm-250004.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260723-161516-luqia-vllm-nogate-boundary-calibration/slurm-250004.out
+   Power=
+   TresPerNode=gres/gpu:1
+   TresPerTask=cpu:8
+   
+
+
+===== 100gbe_and_environment_preflight =====
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=ganymede node_group=ganymede role=decode mode=preflight
+scheduled_gpu=l4 scheduled_freq_mhz=2040 gpu_id=5
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+CUDA_VISIBLE_DEVICES=5
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+host=neptune node_group=neptune role=prefill mode=preflight
+scheduled_gpu=l40s scheduled_freq_mhz=1245 gpu_id=0
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+CUDA_VISIBLE_DEVICES=0
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+1, NVIDIA L4, 23034 MiB, 595.71.05
+2, NVIDIA L4, 23034 MiB, 595.71.05
+3, NVIDIA L4, 23034 MiB, 595.71.05
+4, NVIDIA L4, 23034 MiB, 595.71.05
+5, NVIDIA L4, 23034 MiB, 595.71.05
+6, NVIDIA L4, 23034 MiB, 595.71.05
+7, NVIDIA L4, 23034 MiB, 595.71.05
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+host=ganymede import=torch version=2.9.1+cu128
+host=ganymede import=vllm version=0.15.1
+host=ganymede import=aiohttp version=3.13.3
+host=ganymede import=msgpack version=1.1.2
+host=ganymede import=zmq version=27.1.0
