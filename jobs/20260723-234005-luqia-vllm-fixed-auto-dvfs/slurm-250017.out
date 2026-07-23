@@ -148,3 +148,13 @@ registry_ready=true
 
 ===== pd_smoke_request =====
 smoke_curl_rc=0
+vllm_burstiness_supported=false
+
+===== multi_workload_bench =====
+
+===== workload_1_steady_start =====
+workload_start time=2026-07-23T23:46:57+02:00 seq=1 id=steady_start il=32 ol=32 request_rate=1 window_seconds=12 burstiness=1.0 description=low_rate_poisson_start
+fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=auto
+automatic_dvfs_window seq=1 manual_clock_commands=false
+bench_config num_prompts=12 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784843217.475720625 event=workload_start seq=1 workload_id=steady_start
