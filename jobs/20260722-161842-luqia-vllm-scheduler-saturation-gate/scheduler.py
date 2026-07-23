@@ -262,21 +262,31 @@ class PDPlacementScheduler:
 
     def recommend(self, il, ol, rate, slo_ttft, slo_tpot, tp=1,
                   policy="latency_plus_saturation", placement="auto",
-                  overload_action="min-slo-violation"):
+                  overload_action="min-slo-violation",
+                  max_l4_freq=None, max_l40s_freq=None):
         if tp != 1:
             raise ValueError("This job allocates one GPU per node, so TP must be 1")
         if slo_ttft not in self.common_slos or slo_tpot not in self.common_slos:
             raise ValueError(f"Cross-pool SLO must be one of {self.common_slos}")
 
         predictions = {}
+        max_frequencies = {"l4": max_l4_freq, "l40s": max_l40s_freq}
         for gpu, pool in self.pools.items():
+            frequencies = [
+                freq for freq in pool.frequencies
+                if max_frequencies[gpu] is None or freq <= max_frequencies[gpu]
+            ]
+            if not frequencies:
+                raise ValueError(
+                    f"No {gpu} frequencies remain under limit {max_frequencies[gpu]}"
+                )
             predictions[(gpu, "prefill")] = [
                 pool.predict("prefill", il, ol, tp, freq, rate, slo_ttft)
-                for freq in pool.frequencies
+                for freq in frequencies
             ]
             predictions[(gpu, "decode")] = [
                 pool.predict("decode", il, ol, tp, freq, rate, slo_tpot)
-                for freq in pool.frequencies
+                for freq in frequencies
             ]
             for phase in ("prefill", "decode"):
                 for prediction in predictions[(gpu, phase)]:
@@ -429,6 +439,8 @@ def main():
     parser.add_argument("--overload-action",
                         choices=("reject", "min-slo-violation"),
                         default="min-slo-violation")
+    parser.add_argument("--max-l4-freq", type=int)
+    parser.add_argument("--max-l40s-freq", type=int)
     parser.add_argument("--il", type=int, required=True)
     parser.add_argument("--ol", type=int, required=True)
     parser.add_argument("--rate", type=float, required=True)
@@ -444,6 +456,7 @@ def main():
     result = scheduler.recommend(
         args.il, args.ol, args.rate, args.slo_ttft, args.slo_tpot, args.tp,
         args.policy, args.placement, args.overload_action,
+        args.max_l4_freq, args.max_l40s_freq,
     )
     payload = json.dumps(result, indent=2)
     if args.output:

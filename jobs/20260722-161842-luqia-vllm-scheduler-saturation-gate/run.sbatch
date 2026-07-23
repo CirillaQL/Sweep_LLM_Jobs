@@ -29,6 +29,7 @@ MODEL_BUNDLE="${SOURCE_JOB_DIR}/model_bundle.json"
 SATURATION_BUNDLE="${SOURCE_JOB_DIR}/saturation_bundle.json"
 WORKLOAD_FILE="${WORKLOAD_FILE_OVERRIDE:-${SOURCE_JOB_DIR}/workloads.csv}"
 ENERGY_SUMMARY_SCRIPT="${SOURCE_JOB_DIR}/energy_summary.py"
+LIVE_SUMMARY_SCRIPT="${SOURCE_JOB_DIR}/summarize_live_results.py"
 COMPARE_SCRIPT="${SOURCE_JOB_DIR}/compare_gate_results.py"
 REFERENCE_COMPARISON="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-122040-luqia-vllm-pd-baseline-energy-r1/baseline_results/comparison.json"
 PLACEMENT_FILE="${OUT_DIR}/active_placement.json"
@@ -37,12 +38,18 @@ MODEL="mistralai/Mistral-7B-v0.1"
 
 SLO_TTFT_MS=500
 SLO_TPOT_MS=200
-BENCH_WINDOW_SECONDS=10
-BENCH_TIMEOUT_SECONDS=180
+BENCH_WINDOW_SECONDS="${BENCH_WINDOW_SECONDS_OVERRIDE:-10}"
+BENCH_TIMEOUT_SECONDS="${BENCH_TIMEOUT_SECONDS_OVERRIDE:-180}"
+MIN_PROMPTS="${MIN_PROMPTS_OVERRIDE:-12}"
+MAX_PROMPTS="${MAX_PROMPTS_OVERRIDE:-120}"
 EXPECTED_WORKLOAD_COUNT="${EXPECTED_WORKLOAD_COUNT_OVERRIDE:-3}"
 ALLOW_ZERO_ADMIT="${ALLOW_ZERO_ADMIT_OVERRIDE:-false}"
 SCHEDULER_PLACEMENT="${SCHEDULER_PLACEMENT_OVERRIDE:-l40s-prefill-l4-decode}"
 OVERLOAD_ACTION="${OVERLOAD_ACTION_OVERRIDE:-min-slo-violation}"
+RUN_REFERENCE_COMPARISON="${RUN_REFERENCE_COMPARISON_OVERRIDE:-true}"
+ONLINE_SCHEDULING="${ONLINE_SCHEDULING_OVERRIDE:-false}"
+MAX_L4_FREQ="${MAX_L4_FREQ_OVERRIDE:-}"
+MAX_L40S_FREQ="${MAX_L40S_FREQ_OVERRIDE:-}"
 
 PROXY_IP=10.1.0.3
 PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
@@ -197,6 +204,80 @@ print(
 PY
 }
 
+schedule_one() {
+  local seq="$1"
+  local workload_id="$2"
+  local il="$3"
+  local ol="$4"
+  local rate="$5"
+  local latency_decision="${OUT_DIR}/decision_latency_${seq}_${workload_id}.json"
+  local gate_decision="${OUT_DIR}/decision_gate_${seq}_${workload_id}.json"
+  local limit_args=()
+  if [ -n "$MAX_L4_FREQ" ]; then
+    limit_args+=(--max-l4-freq "$MAX_L4_FREQ")
+  fi
+  if [ -n "$MAX_L40S_FREQ" ]; then
+    limit_args+=(--max-l40s-freq "$MAX_L40S_FREQ")
+  fi
+
+  echo "scheduler_workload seq=${seq} id=${workload_id} il=${il} ol=${ol} rate=${rate} online=${ONLINE_SCHEDULING}"
+  "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
+    --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
+    --policy latency_only --placement "$SCHEDULER_PLACEMENT" \
+    --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" \
+    --il "$il" --ol "$ol" --rate "$rate" \
+    --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
+    --output "$latency_decision" > "${OUT_DIR}/scheduler_latency_${seq}_${workload_id}.json"
+  local latency_rc=$?
+  if [ "$latency_rc" -ne 0 ]; then
+    echo "latency_only_scheduler_failed seq=${seq} rc=${latency_rc}"
+    return 20
+  fi
+
+  "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
+    --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
+    --policy latency_plus_saturation --placement "$SCHEDULER_PLACEMENT" \
+    --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" \
+    --il "$il" --ol "$ol" --rate "$rate" \
+    --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
+    --output "$gate_decision" > "${OUT_DIR}/scheduler_gate_${seq}_${workload_id}.json"
+  local gate_rc=$?
+  if [ "$gate_rc" -ne 0 ] && [ "$gate_rc" -ne 2 ]; then
+    echo "saturation_gate_scheduler_failed seq=${seq} rc=${gate_rc}"
+    return 21
+  fi
+  if [ "$gate_rc" -eq 2 ]; then
+    GATE_REJECTED=$((GATE_REJECTED + 1))
+    echo "saturation_gate_no_admit seq=${seq} id=${workload_id}"
+    return 2
+  fi
+
+  GATE_ADMITTED=$((GATE_ADMITTED + 1))
+  local gate_status overload_probability values
+  read -r gate_status overload_probability <<< "$(decision_status "$gate_decision")"
+  if [ "$gate_status" = OVERLOAD_FALLBACK ]; then
+    OVERLOAD_FALLBACKS=$((OVERLOAD_FALLBACKS + 1))
+    echo "overload_fallback_selected seq=${seq} id=${workload_id} predicted_violation_probability=${overload_probability}"
+  elif [ "$gate_status" != OK ]; then
+    echo "unexpected_gate_status seq=${seq} id=${workload_id} status=${gate_status}"
+    return 22
+  fi
+
+  values=$(placement_values "$gate_decision") || return 22
+  local prefill_node prefill_freq decode_node decode_freq predicted_power
+  read -r prefill_node prefill_freq decode_node decode_freq predicted_power <<< "$values"
+  echo "scheduler_selected seq=${seq} status=${gate_status} prefill=${prefill_node}:${prefill_freq} decode=${decode_node}:${decode_freq} predicted_cluster_power_w=${predicted_power}"
+  if [ "$SCHEDULER_PLACEMENT" = l40s-prefill-l4-decode ] && \
+    { [ "$prefill_node" != neptune ] || [ "$decode_node" != ganymede ]; }; then
+    echo "unexpected_role_selection=true seq=${seq}"
+    return 23
+  fi
+  if [ -z "$FIRST_PLACEMENT" ]; then
+    FIRST_PLACEMENT="$gate_decision"
+  fi
+  return 0
+}
+
 write_clock_request() {
   local seq="$1"
   local neptune_freq="$2"
@@ -242,67 +323,24 @@ echo "slo_ttft_ms=${SLO_TTFT_MS} slo_tpot_ms=${SLO_TPOT_MS} saturation_threshold
 echo "saturation_model=five_seed_mean_local_retrained_75"
 echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
+echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
 FIRST_PLACEMENT=""
 WORKLOAD_COUNT=0
-while IFS=, read -r workload_id il ol rate description; do
+while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   if [ "$workload_id" = workload_id ] || [ -z "$workload_id" ]; then
     continue
   fi
   WORKLOAD_COUNT=$((WORKLOAD_COUNT + 1))
-  latency_decision="${OUT_DIR}/decision_latency_${WORKLOAD_COUNT}_${workload_id}.json"
-  gate_decision="${OUT_DIR}/decision_gate_${WORKLOAD_COUNT}_${workload_id}.json"
-  echo "scheduler_workload seq=${WORKLOAD_COUNT} id=${workload_id} il=${il} ol=${ol} rate=${rate} description=${description}"
-
-  "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
-    --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
-    --policy latency_only --placement "$SCHEDULER_PLACEMENT" \
-    --overload-action "$OVERLOAD_ACTION" \
-    --il "$il" --ol "$ol" --rate "$rate" \
-    --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
-    --output "$latency_decision" > "${OUT_DIR}/scheduler_latency_${WORKLOAD_COUNT}_${workload_id}.json"
-  latency_rc=$?
-  if [ "$latency_rc" -ne 0 ]; then
-    echo "latency_only_scheduler_failed seq=${WORKLOAD_COUNT} rc=${latency_rc}"
-    exit 20
-  fi
-
-  "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
-    --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
-    --policy latency_plus_saturation --placement "$SCHEDULER_PLACEMENT" \
-    --overload-action "$OVERLOAD_ACTION" \
-    --il "$il" --ol "$ol" --rate "$rate" \
-    --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
-    --output "$gate_decision" > "${OUT_DIR}/scheduler_gate_${WORKLOAD_COUNT}_${workload_id}.json"
-  gate_rc=$?
-  if [ "$gate_rc" -ne 0 ] && [ "$gate_rc" -ne 2 ]; then
-    echo "saturation_gate_scheduler_failed seq=${WORKLOAD_COUNT} rc=${gate_rc}"
-    exit 21
-  fi
-
-  if [ "$gate_rc" -eq 2 ]; then
-    GATE_REJECTED=$((GATE_REJECTED + 1))
-    echo "saturation_gate_no_admit seq=${WORKLOAD_COUNT} id=${workload_id}"
+  if [ "$ONLINE_SCHEDULING" = true ] && [ "$WORKLOAD_COUNT" -gt 1 ]; then
     continue
   fi
-  GATE_ADMITTED=$((GATE_ADMITTED + 1))
-  read -r gate_status overload_probability <<< "$(decision_status "$gate_decision")"
-  if [ "$gate_status" = OVERLOAD_FALLBACK ]; then
-    OVERLOAD_FALLBACKS=$((OVERLOAD_FALLBACKS + 1))
-    echo "overload_fallback_selected seq=${WORKLOAD_COUNT} id=${workload_id} predicted_violation_probability=${overload_probability}"
-  elif [ "$gate_status" != OK ]; then
-    echo "unexpected_gate_status seq=${WORKLOAD_COUNT} id=${workload_id} status=${gate_status}"
-    exit 22
+  schedule_one "$WORKLOAD_COUNT" "$workload_id" "$il" "$ol" "$rate"
+  schedule_rc=$?
+  if [ "$schedule_rc" -eq 2 ]; then
+    continue
   fi
-  values=$(placement_values "$gate_decision") || exit 22
-  read -r prefill_node prefill_freq decode_node decode_freq predicted_power <<< "$values"
-  echo "saturation_gate_selected seq=${WORKLOAD_COUNT} prefill=${prefill_node}:${prefill_freq} decode=${decode_node}:${decode_freq} predicted_cluster_power_w=${predicted_power}"
-  if [ "$SCHEDULER_PLACEMENT" = l40s-prefill-l4-decode ] && \
-    { [ "$prefill_node" != neptune ] || [ "$decode_node" != ganymede ]; }; then
-    echo "unexpected_role_selection=true seq=${WORKLOAD_COUNT}"
-    exit 23
-  fi
-  if [ -z "$FIRST_PLACEMENT" ]; then
-    FIRST_PLACEMENT="$gate_decision"
+  if [ "$schedule_rc" -ne 0 ]; then
+    exit "$schedule_rc"
   fi
 done < "$WORKLOAD_FILE"
 
@@ -353,12 +391,20 @@ if [ ! -x "$PYTHON_BIN" ] || [ ! -x "$VLLM_BIN" ]; then
   exit 3
 fi
 for required in "$MODEL_BUNDLE" "$SATURATION_BUNDLE" "$ENERGY_SUMMARY_SCRIPT" \
-  "$COMPARE_SCRIPT" "$REFERENCE_COMPARISON"; do
+  "$LIVE_SUMMARY_SCRIPT"; do
   if [ ! -s "$required" ]; then
     echo "required_artifact_missing=${required}"
     exit 3
   fi
 done
+if [ "$RUN_REFERENCE_COMPARISON" = true ]; then
+  for required in "$COMPARE_SCRIPT" "$REFERENCE_COMPARISON"; do
+    if [ ! -s "$required" ]; then
+      echo "required_artifact_missing=${required}"
+      exit 3
+    fi
+  done
+fi
 
 section "100gbe_and_environment_preflight"
 srun --nodes=2 --ntasks=2 --ntasks-per-node=1 "$NODE_SCRIPT" preflight 2>&1 | tee "${OUT_DIR}/preflight.log"
@@ -437,13 +483,43 @@ if [ "$SMOKE_RC" -ne 0 ]; then
   exit 8
 fi
 
+VLLM_BURSTINESS_SUPPORTED=false
+if "$VLLM_BIN" bench serve --help 2>&1 | grep -q -- "--burstiness"; then
+  VLLM_BURSTINESS_SUPPORTED=true
+fi
+echo "vllm_burstiness_supported=${VLLM_BURSTINESS_SUPPORTED}"
+
 section "multi_workload_bench"
 SEQ=0
-while IFS=, read -r workload_id il ol rate description; do
+while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   if [ "$workload_id" = workload_id ] || [ -z "$workload_id" ]; then
     continue
   fi
   SEQ=$((SEQ + 1))
+  if [ "$ONLINE_SCHEDULING" = true ]; then
+    window_seconds="$field5"
+    burstiness="$field6"
+    description="$field7"
+  else
+    window_seconds="$BENCH_WINDOW_SECONDS"
+    burstiness=1
+    description="$field5"
+  fi
+
+  if [ "$ONLINE_SCHEDULING" = true ] && [ "$SEQ" -gt 1 ]; then
+    section "online_scheduler_window_${SEQ}_${workload_id}"
+    schedule_one "$SEQ" "$workload_id" "$il" "$ol" "$rate"
+    schedule_rc=$?
+    if [ "$schedule_rc" -eq 2 ]; then
+      echo "online_scheduler_action=NO_ADMIT seq=${SEQ} id=${workload_id}"
+      continue
+    fi
+    if [ "$schedule_rc" -ne 0 ]; then
+      FINAL_RC="$schedule_rc"
+      break
+    fi
+  fi
+
   placement="${OUT_DIR}/decision_gate_${SEQ}_${workload_id}.json"
   if ! values=$(placement_values "$placement" 2>/dev/null); then
     section "workload_${SEQ}_${workload_id}_not_admitted"
@@ -454,7 +530,7 @@ while IFS=, read -r workload_id il ol rate description; do
   read -r prefill_node neptune_freq decode_node ganymede_freq predicted_power <<< "$values"
 
   section "workload_${SEQ}_${workload_id}"
-  echo "workload_start time=$(date --iso-8601=seconds) seq=${SEQ} id=${workload_id} il=${il} ol=${ol} request_rate=${rate}"
+  echo "workload_start time=$(date --iso-8601=seconds) seq=${SEQ} id=${workload_id} il=${il} ol=${ol} request_rate=${rate} window_seconds=${window_seconds} burstiness=${burstiness} description=${description}"
   echo "recommendation neptune_prefill_mhz=${neptune_freq} ganymede_decode_mhz=${ganymede_freq} predicted_cluster_power_w=${predicted_power}"
   write_clock_request "$SEQ" "$neptune_freq" "$ganymede_freq"
   if ! wait_clock_ack "$SEQ" neptune "$neptune_freq"; then
@@ -466,21 +542,26 @@ while IFS=, read -r workload_id il ol rate description; do
     break
   fi
 
-  NUM_PROMPTS=$((rate * BENCH_WINDOW_SECONDS))
-  if [ "$NUM_PROMPTS" -lt 12 ]; then
-    NUM_PROMPTS=12
+  NUM_PROMPTS=$((rate * window_seconds))
+  if [ "$NUM_PROMPTS" -lt "$MIN_PROMPTS" ]; then
+    NUM_PROMPTS="$MIN_PROMPTS"
   fi
-  if [ "$NUM_PROMPTS" -gt 120 ]; then
-    NUM_PROMPTS=120
+  if [ "$NUM_PROMPTS" -gt "$MAX_PROMPTS" ]; then
+    NUM_PROMPTS="$MAX_PROMPTS"
   fi
   BENCH_FILE="${OUT_DIR}/bench_${SEQ}_${workload_id}.txt"
-  echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${BENCH_WINDOW_SECONDS} timeout_s=${BENCH_TIMEOUT_SECONDS}"
+  BURSTINESS_ARGS=()
+  if [ "$VLLM_BURSTINESS_SUPPORTED" = true ] && [ -n "$burstiness" ]; then
+    BURSTINESS_ARGS+=(--burstiness "$burstiness")
+  fi
+  echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${window_seconds} timeout_s=${BENCH_TIMEOUT_SECONDS} finite_rate_random_arrivals=true burstiness_applied=${VLLM_BURSTINESS_SUPPORTED}"
   START_TS=$(date +%s.%N)
   echo "${START_TS},workload_start,${SEQ},${workload_id},latency_plus_saturation" >> "${OUT_DIR}/events.csv"
   echo "energy_event unix_ts=${START_TS} event=workload_start seq=${SEQ} workload_id=${workload_id}"
   timeout --signal=INT --kill-after=20s "${BENCH_TIMEOUT_SECONDS}s" "$VLLM_BIN" bench serve \
     --backend openai --base-url "http://${PROXY_IP}:${PROXY_HTTP_PORT}" --model "$MODEL" \
     --num-prompts "$NUM_PROMPTS" --request-rate "$rate" --dataset-name random \
+    "${BURSTINESS_ARGS[@]}" \
     --random-input-len "$il" --random-output-len "$ol" --max-concurrency 16 \
     --num-warmups 1 --temperature 0 > "$BENCH_FILE" 2>&1
   BENCH_RC=$?
@@ -560,6 +641,24 @@ if [ "$ENERGY_RC" -ne 0 ]; then
 fi
 
 if [ "$ENERGY_RC" -eq 0 ]; then
+  section "live_performance_power_summary"
+  "$PYTHON_BIN" "$LIVE_SUMMARY_SCRIPT" \
+    --out-dir "$OUT_DIR" \
+    --workloads "$WORKLOAD_FILE" \
+    --slo-ttft "$SLO_TTFT_MS" \
+    --slo-tpot "$SLO_TPOT_MS" \
+    --output-json "${OUT_DIR}/live_summary.json" \
+    --output-csv "${OUT_DIR}/live_summary.csv" \
+    > "${OUT_DIR}/live_summary.log" 2>&1
+  LIVE_SUMMARY_RC=$?
+  cat "${OUT_DIR}/live_summary.log" 2>/dev/null || true
+  if [ "$LIVE_SUMMARY_RC" -ne 0 ]; then
+    echo "live_summary_failed_rc=${LIVE_SUMMARY_RC}"
+    FINAL_RC=29
+  fi
+fi
+
+if [ "$ENERGY_RC" -eq 0 ] && [ "$RUN_REFERENCE_COMPARISON" = true ]; then
   section "saturation_gate_power_comparison"
   "$PYTHON_BIN" "$COMPARE_SCRIPT" \
     --out-dir "$OUT_DIR" \

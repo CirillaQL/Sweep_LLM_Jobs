@@ -80,6 +80,14 @@ losses are not included. The historical controls are separate runs, so the
 result is a functional/initial optimization check rather than a confidence
 interval.
 
+The telemetry stream also records GPU/memory utilization, SM and memory
+clocks, temperature, used/total GPU memory, power limit, P-state, and 100 GbE
+RX/TX counters. `summarize_live_results.py` joins each event window with the
+scheduler prediction, vLLM performance, integrated energy, and per-node
+telemetry statistics. New workload sets can disable the workload-specific
+historical comparison with `RUN_REFERENCE_COMPARISON_OVERRIDE=false` while
+still producing the generic live summary.
+
 ## Frequency safety
 
 Each admitted workload applies the scheduler's `rec_freq_mhz` with `-lgc`.
