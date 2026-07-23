@@ -27,7 +27,7 @@ CLOCK_PROBE="${SOURCE_JOB_DIR}/clock_probe.py"
 SCHEDULER_SCRIPT="${SOURCE_JOB_DIR}/scheduler.py"
 MODEL_BUNDLE="${SOURCE_JOB_DIR}/model_bundle.json"
 SATURATION_BUNDLE="${SOURCE_JOB_DIR}/saturation_bundle.json"
-WORKLOAD_FILE="${SOURCE_JOB_DIR}/workloads.csv"
+WORKLOAD_FILE="${WORKLOAD_FILE_OVERRIDE:-${SOURCE_JOB_DIR}/workloads.csv}"
 ENERGY_SUMMARY_SCRIPT="${SOURCE_JOB_DIR}/energy_summary.py"
 COMPARE_SCRIPT="${SOURCE_JOB_DIR}/compare_gate_results.py"
 REFERENCE_COMPARISON="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-122040-luqia-vllm-pd-baseline-energy-r1/baseline_results/comparison.json"
@@ -39,6 +39,9 @@ SLO_TTFT_MS=500
 SLO_TPOT_MS=200
 BENCH_WINDOW_SECONDS=10
 BENCH_TIMEOUT_SECONDS=180
+EXPECTED_WORKLOAD_COUNT="${EXPECTED_WORKLOAD_COUNT_OVERRIDE:-3}"
+ALLOW_ZERO_ADMIT="${ALLOW_ZERO_ADMIT_OVERRIDE:-false}"
+SCHEDULER_PLACEMENT="${SCHEDULER_PLACEMENT_OVERRIDE:-l40s-prefill-l4-decode}"
 
 PROXY_IP=10.1.0.3
 PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
@@ -221,7 +224,7 @@ section "scheduler_sweep_with_saturation_gate"
 echo "workload_source=Dual_Sweep_LLM_Phase2_common_measured_grid"
 echo "slo_ttft_ms=${SLO_TTFT_MS} slo_tpot_ms=${SLO_TPOT_MS} saturation_threshold=0.30"
 echo "saturation_model=five_seed_mean_local_retrained_75"
-echo "placement=l40s_prefill_l4_decode fixed_for_paired_historical_comparison"
+echo "placement=${SCHEDULER_PLACEMENT}"
 FIRST_PLACEMENT=""
 WORKLOAD_COUNT=0
 while IFS=, read -r workload_id il ol rate description; do
@@ -235,7 +238,7 @@ while IFS=, read -r workload_id il ol rate description; do
 
   "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
     --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
-    --policy latency_only --placement l40s-prefill-l4-decode \
+    --policy latency_only --placement "$SCHEDULER_PLACEMENT" \
     --il "$il" --ol "$ol" --rate "$rate" \
     --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
     --output "$latency_decision" > "${OUT_DIR}/scheduler_latency_${WORKLOAD_COUNT}_${workload_id}.json"
@@ -247,7 +250,7 @@ while IFS=, read -r workload_id il ol rate description; do
 
   "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
     --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
-    --policy latency_plus_saturation --placement l40s-prefill-l4-decode \
+    --policy latency_plus_saturation --placement "$SCHEDULER_PLACEMENT" \
     --il "$il" --ol "$ol" --rate "$rate" \
     --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
     --output "$gate_decision" > "${OUT_DIR}/scheduler_gate_${WORKLOAD_COUNT}_${workload_id}.json"
@@ -266,7 +269,8 @@ while IFS=, read -r workload_id il ol rate description; do
   values=$(placement_values "$gate_decision") || exit 22
   read -r prefill_node prefill_freq decode_node decode_freq predicted_power <<< "$values"
   echo "saturation_gate_selected seq=${WORKLOAD_COUNT} prefill=${prefill_node}:${prefill_freq} decode=${decode_node}:${decode_freq} predicted_cluster_power_w=${predicted_power}"
-  if [ "$prefill_node" != neptune ] || [ "$decode_node" != ganymede ]; then
+  if [ "$SCHEDULER_PLACEMENT" = l40s-prefill-l4-decode ] && \
+    { [ "$prefill_node" != neptune ] || [ "$decode_node" != ganymede ]; }; then
     echo "unexpected_role_selection=true seq=${WORKLOAD_COUNT}"
     exit 23
   fi
@@ -275,8 +279,30 @@ while IFS=, read -r workload_id il ol rate description; do
   fi
 done < "$WORKLOAD_FILE"
 
-if [ "$WORKLOAD_COUNT" -ne 3 ] || [ "$GATE_ADMITTED" -lt 1 ] || [ -z "$FIRST_PLACEMENT" ]; then
+if [ "$WORKLOAD_COUNT" -ne "$EXPECTED_WORKLOAD_COUNT" ]; then
   echo "unexpected_scheduler_counts workloads=${WORKLOAD_COUNT} admitted=${GATE_ADMITTED} rejected=${GATE_REJECTED}"
+  exit 24
+fi
+
+if [ "$GATE_ADMITTED" -eq 0 ]; then
+  if [ "$ALLOW_ZERO_ADMIT" != true ]; then
+    echo "unexpected_scheduler_counts workloads=${WORKLOAD_COUNT} admitted=${GATE_ADMITTED} rejected=${GATE_REJECTED}"
+    exit 24
+  fi
+  section "result"
+  echo "workload_count=${WORKLOAD_COUNT}"
+  echo "gate_admitted=${GATE_ADMITTED} gate_rejected=${GATE_REJECTED}"
+  echo "decision_only=true"
+  echo "gpu_allocated=false"
+  echo "vllm_started=false"
+  echo "clock_control_requested=false"
+  echo "parent_reset_verified=not_required"
+  echo "job_exit_rc=0"
+  exit 0
+fi
+
+if [ -z "$FIRST_PLACEMENT" ]; then
+  echo "missing_first_placement=true"
   exit 24
 fi
 cp "$FIRST_PLACEMENT" "$PLACEMENT_FILE"
