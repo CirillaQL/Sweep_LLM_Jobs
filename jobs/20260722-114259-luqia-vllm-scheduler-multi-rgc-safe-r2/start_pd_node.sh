@@ -6,6 +6,7 @@ MODE="${1:-serve}"
 HOST=$(hostname -s)
 VISIBLE_GPUS="${CUDA_VISIBLE_DEVICES:-0}"
 GPU_ID="${VISIBLE_GPUS%%,*}"
+CLOCK_ACK_TOLERANCE_MHZ="${CLOCK_ACK_TOLERANCE_MHZ_OVERRIDE:-90}"
 
 case "$HOST" in
   neptune)
@@ -220,20 +221,22 @@ clock_controller() {
           rc=32
         else
           observed=$(
-            "$PYTHON_BIN" - "$probe_file" "$target" <<'PY'
+            "$PYTHON_BIN" - "$probe_file" "$target" "$CLOCK_ACK_TOLERANCE_MHZ" <<'PY'
 import json
 import sys
 
-path, target_text = sys.argv[1:]
+path, target_text, tolerance_text = sys.argv[1:]
 target = int(target_text)
+tolerance = int(tolerance_text)
 data = json.load(open(path, encoding="utf-8"))
 data["target_freq_mhz"] = target
+data["ack_tolerance_mhz"] = tolerance
 with open(path, "w", encoding="utf-8") as handle:
     json.dump(data, handle, indent=2)
     handle.write("\n")
 mean = float(data["active_clock_mean_mhz"])
 print(round(mean))
-raise SystemExit(0 if abs(mean - target) <= 90 else 1)
+raise SystemExit(0 if abs(mean - target) <= tolerance else 1)
 PY
           ) || rc=33
         fi
@@ -242,7 +245,7 @@ PY
         # A partial read is harmless because the parent only accepts a complete
         # matching sequence and retries once per second.
         printf '%s %s %s %s\n' "$seq" "$target" "$rc" "$observed" > "$ack_file"
-        echo "dynamic_clock_ack host=${HOST} seq=${seq} target_mhz=${target} rc=${rc} observed_active_mean_mhz=${observed}"
+        echo "dynamic_clock_ack host=${HOST} seq=${seq} target_mhz=${target} tolerance_mhz=${CLOCK_ACK_TOLERANCE_MHZ} rc=${rc} observed_active_mean_mhz=${observed}"
         last_seq="$seq"
       fi
     fi
