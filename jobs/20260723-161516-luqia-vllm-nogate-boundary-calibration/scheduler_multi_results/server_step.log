@@ -72,3 +72,19 @@ GPU clocks set to "(gpuClkMin 1245, gpuClkMax 1245)" for GPU 00000000:4A:00.0
 
 Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
 All done.
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 2032,
+  "active_samples": 7,
+  "active_clock_min_mhz": 1245.0,
+  "active_clock_max_mhz": 1245.0,
+  "active_clock_mean_mhz": 1245.0
+}
+dynamic_clock_ack host=neptune seq=1 target_mhz=1245 rc=0 observed_active_mean_mhz=1245
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 250004.1 ON ganymede CANCELLED AT 2026-07-23T16:19:51 ***
+srun: error: ganymede: task 0: Killed
+srun: Terminating StepId=250004.1
+srun: error: neptune: task 1: Killed
