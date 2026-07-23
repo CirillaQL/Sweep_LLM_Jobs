@@ -624,3 +624,12 @@ scheduler_selected seq=10 status=OVERLOAD_FALLBACK prefill=neptune:2520 decode=g
 ===== workload_10_prefill_peak =====
 workload_start time=2026-07-23T23:17:09+02:00 seq=10 id=prefill_peak il=1024 ol=32 request_rate=2 window_seconds=10 burstiness=4.0 description=long_prompt_burst
 recommendation neptune_prefill_mhz=2520 ganymede_decode_mhz=780 predicted_cluster_power_w=251.4
+clock_request seq=10 neptune_mhz=2520 ganymede_mhz=780
+clock_ack seq=10 node_group=neptune target_mhz=2520 rc=33 observed_active_mean_mhz=2240
+
+===== stop_servers_then_reset =====
+stopping_server_step_pid=1162984
+stopping_proxy_pid=1162969
+
+===== parent_gpu_clock_reset =====
+reset_strategy=fresh_srun_after_server_step
