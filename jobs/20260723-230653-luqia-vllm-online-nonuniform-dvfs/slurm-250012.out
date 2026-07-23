@@ -134,3 +134,7 @@ vllm_burstiness_supported=false
 workload_start time=2026-07-23T23:10:36+02:00 seq=1 id=steady_start il=32 ol=32 request_rate=1 window_seconds=12 burstiness=1.0 description=low_rate_poisson_start
 recommendation neptune_prefill_mhz=480 ganymede_decode_mhz=360 predicted_cluster_power_w=147.8
 clock_request seq=1 neptune_mhz=480 ganymede_mhz=360
+clock_ack seq=1 node_group=neptune target_mhz=480 rc=0 observed_active_mean_mhz=480
+clock_ack seq=1 node_group=ganymede target_mhz=360 rc=0 observed_active_mean_mhz=360
+bench_config num_prompts=12 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784841054.454757405 event=workload_start seq=1 workload_id=steady_start
