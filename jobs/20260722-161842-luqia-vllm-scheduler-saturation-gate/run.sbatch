@@ -50,6 +50,7 @@ RUN_REFERENCE_COMPARISON="${RUN_REFERENCE_COMPARISON_OVERRIDE:-true}"
 ONLINE_SCHEDULING="${ONLINE_SCHEDULING_OVERRIDE:-false}"
 MAX_L4_FREQ="${MAX_L4_FREQ_OVERRIDE:-}"
 MAX_L40S_FREQ="${MAX_L40S_FREQ_OVERRIDE:-}"
+CLOCK_MISMATCH_ACTION="${CLOCK_MISMATCH_ACTION_OVERRIDE:-abort}"
 
 PROXY_IP=10.1.0.3
 PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
@@ -302,7 +303,14 @@ wait_clock_ack() {
       if [ "${ack_seq:-}" = "$seq" ] && [ -n "${ack_target:-}" ] && \
         [ -n "${ack_rc:-}" ] && [ -n "${observed:-}" ]; then
         echo "clock_ack seq=${ack_seq} node_group=${node_group} target_mhz=${ack_target} rc=${ack_rc} observed_active_mean_mhz=${observed:-NA}"
-        if [ "$ack_target" != "$target" ] || [ "$ack_rc" != 0 ]; then
+        if [ "$ack_target" != "$target" ]; then
+          return 1
+        fi
+        if [ "$ack_rc" != 0 ]; then
+          if [ "$ack_rc" = 33 ] && [ "$CLOCK_MISMATCH_ACTION" = continue ]; then
+            echo "clock_target_not_sustained seq=${ack_seq} node_group=${node_group} target_mhz=${ack_target} observed_active_mean_mhz=${observed:-NA} action=continue"
+            return 0
+          fi
           return 1
         fi
         return 0
@@ -324,6 +332,7 @@ echo "saturation_model=five_seed_mean_local_retrained_75"
 echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
 echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
+echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION}"
 FIRST_PLACEMENT=""
 WORKLOAD_COUNT=0
 while IFS=, read -r workload_id il ol rate field5 field6 field7; do
