@@ -564,3 +564,13 @@ P99 ITL (ms):                            75.61
 
 ===== online_scheduler_window_9_quiet_window =====
 scheduler_workload seq=9 id=quiet_window il=32 ol=32 rate=1 online=true
+scheduler_selected seq=9 status=OK prefill=neptune:480 decode=ganymede:360 predicted_cluster_power_w=147.8
+
+===== workload_9_quiet_window =====
+workload_start time=2026-07-23T23:16:30+02:00 seq=9 id=quiet_window il=32 ol=32 request_rate=1 window_seconds=12 burstiness=0.5 description=quiet_period_after_pressure
+recommendation neptune_prefill_mhz=480 ganymede_decode_mhz=360 predicted_cluster_power_w=147.8
+clock_request seq=9 neptune_mhz=480 ganymede_mhz=360
+clock_ack seq=9 node_group=neptune target_mhz=480 rc=0 observed_active_mean_mhz=480
+clock_ack seq=9 node_group=ganymede target_mhz=360 rc=0 observed_active_mean_mhz=360
+bench_config num_prompts=12 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784841396.674651602 event=workload_start seq=9 workload_id=quiet_window
