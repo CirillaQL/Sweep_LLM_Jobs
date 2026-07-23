@@ -49,3 +49,6 @@ Warning: persistence mode is disabled on device 00000000:0D:00.0. See the Known 
 All done.
 index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
 0, NVIDIA L4, 360 MHz, 2040 MHz
+launch_vllm host=ganymede role=decode ip=10.1.0.3 http_port=33014 kv_port=34014
+NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=eno12399np0
+kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_consumer","kv_buffer_size":"8e9","kv_port":"34014","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31014","http_port":"33014","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
