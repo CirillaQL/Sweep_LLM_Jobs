@@ -130,6 +130,7 @@ def main():
     parser.add_argument("--slo-tpot", type=float, required=True)
     parser.add_argument("--output-json", type=Path, required=True)
     parser.add_argument("--output-csv", type=Path, required=True)
+    parser.add_argument("--no-decisions", action="store_true")
     args = parser.parse_args()
 
     with args.workloads.open(newline="", encoding="utf-8") as handle:
@@ -150,37 +151,51 @@ def main():
     for seq, workload in enumerate(workloads, start=1):
         workload_id = workload["workload_id"]
         decision_path = args.out_dir / f"decision_gate_{seq}_{workload_id}.json"
-        if not decision_path.exists():
-            csv_rows.append({
+        if args.no_decisions:
+            decision = None
+            recommended = None
+            row = {
                 "seq": seq,
                 "workload_id": workload_id,
                 "input_len": int(workload["input_len"]),
                 "output_len": int(workload["output_len"]),
                 "configured_request_rate_rps": float(workload["request_rate"]),
-                "decision_status": "NOT_EXECUTED",
-            })
-            results.append({
-                "workload": csv_rows[-1].copy(),
-                "decision": None,
-                "performance": {},
-                "telemetry": {},
-                "energy": {},
-                "summary": csv_rows[-1].copy(),
-            })
-            continue
-        decision = json.loads(decision_path.read_text(encoding="utf-8"))
-        recommended = decision.get("recommended")
-        row = {
-            "seq": seq,
-            "workload_id": workload_id,
-            "input_len": int(workload["input_len"]),
-            "output_len": int(workload["output_len"]),
-            "configured_request_rate_rps": float(workload["request_rate"]),
-            "decision_status": decision["status"],
-            "decision_mode": decision.get("decision_mode"),
-            "num_candidates": decision["num_candidates"],
-            "num_safe": decision["num_safe"],
-        }
+                "decision_status": "FIXED_AUTO_DVFS",
+                "prefill_gpu": "l40s",
+                "decode_gpu": "l4",
+            }
+        else:
+            if not decision_path.exists():
+                csv_rows.append({
+                    "seq": seq,
+                    "workload_id": workload_id,
+                    "input_len": int(workload["input_len"]),
+                    "output_len": int(workload["output_len"]),
+                    "configured_request_rate_rps": float(workload["request_rate"]),
+                    "decision_status": "NOT_EXECUTED",
+                })
+                results.append({
+                    "workload": csv_rows[-1].copy(),
+                    "decision": None,
+                    "performance": {},
+                    "telemetry": {},
+                    "energy": {},
+                    "summary": csv_rows[-1].copy(),
+                })
+                continue
+            decision = json.loads(decision_path.read_text(encoding="utf-8"))
+            recommended = decision.get("recommended")
+            row = {
+                "seq": seq,
+                "workload_id": workload_id,
+                "input_len": int(workload["input_len"]),
+                "output_len": int(workload["output_len"]),
+                "configured_request_rate_rps": float(workload["request_rate"]),
+                "decision_status": decision["status"],
+                "decision_mode": decision.get("decision_mode"),
+                "num_candidates": decision["num_candidates"],
+                "num_safe": decision["num_safe"],
+            }
         nested = {"workload": row.copy(), "decision": decision}
 
         if recommended:

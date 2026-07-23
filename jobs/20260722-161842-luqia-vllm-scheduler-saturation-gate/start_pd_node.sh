@@ -7,6 +7,7 @@ HOST=$(hostname -s)
 VISIBLE_GPUS="${CUDA_VISIBLE_DEVICES:-0}"
 GPU_ID="${VISIBLE_GPUS%%,*}"
 CLOCK_ACK_TOLERANCE_MHZ="${CLOCK_ACK_TOLERANCE_MHZ_OVERRIDE:-90}"
+GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
 
 case "$HOST" in
   neptune)
@@ -64,6 +65,7 @@ esac
 
 echo "host=${HOST} node_group=${NODE_GROUP} role=${ROLE} mode=${MODE}"
 echo "scheduled_gpu=${EXPECTED_GPU} scheduled_freq_mhz=${TARGET_FREQ} gpu_id=${GPU_ID}"
+echo "gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
 echo "node_ip=${NODE_IP} peer_ip=${PEER_IP} interface=${IFACE}"
 echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-unset}"
 ip -brief address show dev "$IFACE" 2>&1 || true
@@ -253,12 +255,19 @@ PY
   done
 }
 
-echo "lock_gpu_clock gpu_id=${GPU_ID} target_mhz=${TARGET_FREQ}"
-if ! sudo nvidia-smi -i "$GPU_ID" -lgc "${TARGET_FREQ},${TARGET_FREQ}"; then
-  echo "lock_gpu_clock_failed=true"
-  exit 14
+if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
+  echo "lock_gpu_clock gpu_id=${GPU_ID} target_mhz=${TARGET_FREQ}"
+  if ! sudo nvidia-smi -i "$GPU_ID" -lgc "${TARGET_FREQ},${TARGET_FREQ}"; then
+    echo "lock_gpu_clock_failed=true"
+    exit 14
+  fi
+  CLOCK_LOCKED=true
+elif [ "$GPU_CLOCK_CONTROL_MODE" = auto ]; then
+  echo "automatic_dvfs_enabled=true manual_clock_commands=false"
+else
+  echo "unsupported_gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
+  exit 20
 fi
-CLOCK_LOCKED=true
 nvidia-smi -i "$GPU_ID" --query-gpu=index,name,clocks.current.graphics,clocks.max.graphics --format=csv 2>&1 || true
 
 echo "launch_vllm host=${HOST} role=${ROLE} ip=${NODE_IP} http_port=${HTTP_PORT} kv_port=${KV_PORT}"
@@ -280,8 +289,10 @@ echo "kv_transfer_config=${KV_CONFIG}"
 SERVER_PID=$!
 monitor &
 MONITOR_PID=$!
-clock_controller &
-CLOCK_CONTROLLER_PID=$!
+if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
+  clock_controller &
+  CLOCK_CONTROLLER_PID=$!
+fi
 
 wait "$SERVER_PID"
 exit $?

@@ -17,7 +17,7 @@ set -uo pipefail
 
 SOURCE_JOB_DIR="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-161842-luqia-vllm-scheduler-saturation-gate"
 JOB_DIR="${JOB_DIR_OVERRIDE:-${SOURCE_JOB_DIR}}"
-OUT_DIR="${JOB_DIR}/saturation_gate_results"
+OUT_DIR="${JOB_DIR}/${OUT_DIR_NAME_OVERRIDE:-saturation_gate_results}"
 ENV_DIR="/data/users/chjing/miniforge3/envs/cuda-env"
 PYTHON_BIN="${ENV_DIR}/bin/python"
 VLLM_BIN="${ENV_DIR}/bin/vllm"
@@ -51,6 +51,10 @@ ONLINE_SCHEDULING="${ONLINE_SCHEDULING_OVERRIDE:-false}"
 MAX_L4_FREQ="${MAX_L4_FREQ_OVERRIDE:-}"
 MAX_L40S_FREQ="${MAX_L40S_FREQ_OVERRIDE:-}"
 CLOCK_MISMATCH_ACTION="${CLOCK_MISMATCH_ACTION_OVERRIDE:-abort}"
+SCHEDULER_ENABLED="${SCHEDULER_ENABLED_OVERRIDE:-true}"
+FIXED_PLACEMENT_FILE="${FIXED_PLACEMENT_FILE_OVERRIDE:-}"
+GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
+POLICY_LABEL="${POLICY_LABEL_OVERRIDE:-latency_plus_saturation}"
 
 PROXY_IP=10.1.0.3
 PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
@@ -72,6 +76,7 @@ export PATH="${ENV_DIR}/bin:${PATH}"
 export JOB_DIR OUT_DIR ENV_DIR PYTHON_BIN VLLM_BIN MODEL PLACEMENT_FILE CLOCK_PROBE
 export CLOCK_CONTROL_DIR PROXY_IP PROXY_HTTP_PORT PROXY_REGISTER_PORT
 export PREFILL_HTTP_PORT DECODE_HTTP_PORT PREFILL_IP DECODE_IP KV_PORT
+export GPU_CLOCK_CONTROL_MODE_OVERRIDE
 
 # Minerva may expose an SMT-adjusted value that conflicts with the requested
 # Slurm TRES when this batch script launches nested srun steps.
@@ -333,6 +338,7 @@ echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
 echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
 echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION}"
+echo "scheduler_enabled=${SCHEDULER_ENABLED} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE} policy_label=${POLICY_LABEL}"
 FIRST_PLACEMENT=""
 WORKLOAD_COUNT=0
 while IFS=, read -r workload_id il ol rate field5 field6 field7; do
@@ -340,6 +346,9 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
     continue
   fi
   WORKLOAD_COUNT=$((WORKLOAD_COUNT + 1))
+  if [ "$SCHEDULER_ENABLED" != true ]; then
+    continue
+  fi
   if [ "$ONLINE_SCHEDULING" = true ] && [ "$WORKLOAD_COUNT" -gt 1 ]; then
     continue
   fi
@@ -353,12 +362,20 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   fi
 done < "$WORKLOAD_FILE"
 
+if [ "$SCHEDULER_ENABLED" != true ]; then
+  if [ -z "$FIXED_PLACEMENT_FILE" ] || [ ! -s "$FIXED_PLACEMENT_FILE" ]; then
+    echo "fixed_placement_missing=${FIXED_PLACEMENT_FILE:-unset}"
+    exit 24
+  fi
+  FIRST_PLACEMENT="$FIXED_PLACEMENT_FILE"
+fi
+
 if [ "$WORKLOAD_COUNT" -ne "$EXPECTED_WORKLOAD_COUNT" ]; then
   echo "unexpected_scheduler_counts workloads=${WORKLOAD_COUNT} admitted=${GATE_ADMITTED} rejected=${GATE_REJECTED}"
   exit 24
 fi
 
-if [ "$GATE_ADMITTED" -eq 0 ]; then
+if [ "$SCHEDULER_ENABLED" = true ] && [ "$GATE_ADMITTED" -eq 0 ]; then
   if [ "$ALLOW_ZERO_ADMIT" != true ]; then
     echo "unexpected_scheduler_counts workloads=${WORKLOAD_COUNT} admitted=${GATE_ADMITTED} rejected=${GATE_REJECTED}"
     exit 24
@@ -435,7 +452,11 @@ if ! wait_for_url proxy "http://127.0.0.1:${PROXY_HTTP_PORT}/health" 60; then
 fi
 
 section "start_prefill_and_decode_once"
-RESET_REQUIRED=true
+if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
+  RESET_REQUIRED=true
+else
+  RESET_REQUIRED=false
+fi
 srun --kill-on-bad-exit=1 --nodes=2 --ntasks=2 --ntasks-per-node=1 \
   "$NODE_SCRIPT" serve > "${OUT_DIR}/server_step.log" 2>&1 &
 SERVER_STEP_PID=$!
@@ -515,7 +536,7 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
     description="$field5"
   fi
 
-  if [ "$ONLINE_SCHEDULING" = true ] && [ "$SEQ" -gt 1 ]; then
+  if [ "$SCHEDULER_ENABLED" = true ] && [ "$ONLINE_SCHEDULING" = true ] && [ "$SEQ" -gt 1 ]; then
     section "online_scheduler_window_${SEQ}_${workload_id}"
     schedule_one "$SEQ" "$workload_id" "$il" "$ol" "$rate"
     schedule_rc=$?
@@ -529,7 +550,11 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
     fi
   fi
 
-  placement="${OUT_DIR}/decision_gate_${SEQ}_${workload_id}.json"
+  if [ "$SCHEDULER_ENABLED" = true ]; then
+    placement="${OUT_DIR}/decision_gate_${SEQ}_${workload_id}.json"
+  else
+    placement="$FIXED_PLACEMENT_FILE"
+  fi
   if ! values=$(placement_values "$placement" 2>/dev/null); then
     section "workload_${SEQ}_${workload_id}_not_admitted"
     echo "saturation_gate_action=NO_ADMIT seq=${SEQ} id=${workload_id}"
@@ -540,15 +565,22 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
 
   section "workload_${SEQ}_${workload_id}"
   echo "workload_start time=$(date --iso-8601=seconds) seq=${SEQ} id=${workload_id} il=${il} ol=${ol} request_rate=${rate} window_seconds=${window_seconds} burstiness=${burstiness} description=${description}"
-  echo "recommendation neptune_prefill_mhz=${neptune_freq} ganymede_decode_mhz=${ganymede_freq} predicted_cluster_power_w=${predicted_power}"
-  write_clock_request "$SEQ" "$neptune_freq" "$ganymede_freq"
-  if ! wait_clock_ack "$SEQ" neptune "$neptune_freq"; then
-    FINAL_RC=24
-    break
-  fi
-  if ! wait_clock_ack "$SEQ" ganymede "$ganymede_freq"; then
-    FINAL_RC=25
-    break
+  echo "fixed_placement prefill_node=${prefill_node} decode_node=${decode_node} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
+  if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
+    echo "recommendation neptune_prefill_mhz=${neptune_freq} ganymede_decode_mhz=${ganymede_freq} predicted_cluster_power_w=${predicted_power}"
+    write_clock_request "$SEQ" "$neptune_freq" "$ganymede_freq"
+    if ! wait_clock_ack "$SEQ" neptune "$neptune_freq"; then
+      FINAL_RC=24
+      break
+    fi
+    if ! wait_clock_ack "$SEQ" ganymede "$ganymede_freq"; then
+      FINAL_RC=25
+      break
+    fi
+  else
+    printf '%s 0\n' "$SEQ" > "${CLOCK_CONTROL_DIR}/neptune.request"
+    printf '%s 0\n' "$SEQ" > "${CLOCK_CONTROL_DIR}/ganymede.request"
+    echo "automatic_dvfs_window seq=${SEQ} manual_clock_commands=false"
   fi
 
   NUM_PROMPTS=$((rate * window_seconds))
@@ -565,7 +597,7 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   fi
   echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${window_seconds} timeout_s=${BENCH_TIMEOUT_SECONDS} finite_rate_random_arrivals=true burstiness_applied=${VLLM_BURSTINESS_SUPPORTED}"
   START_TS=$(date +%s.%N)
-  echo "${START_TS},workload_start,${SEQ},${workload_id},latency_plus_saturation" >> "${OUT_DIR}/events.csv"
+  echo "${START_TS},workload_start,${SEQ},${workload_id},${POLICY_LABEL}" >> "${OUT_DIR}/events.csv"
   echo "energy_event unix_ts=${START_TS} event=workload_start seq=${SEQ} workload_id=${workload_id}"
   timeout --signal=INT --kill-after=20s "${BENCH_TIMEOUT_SECONDS}s" "$VLLM_BIN" bench serve \
     --backend openai --base-url "http://${PROXY_IP}:${PROXY_HTTP_PORT}" --model "$MODEL" \
@@ -575,7 +607,7 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
     --num-warmups 1 --temperature 0 > "$BENCH_FILE" 2>&1
   BENCH_RC=$?
   END_TS=$(date +%s.%N)
-  echo "${END_TS},workload_end,${SEQ},${workload_id},latency_plus_saturation" >> "${OUT_DIR}/events.csv"
+  echo "${END_TS},workload_end,${SEQ},${workload_id},${POLICY_LABEL}" >> "${OUT_DIR}/events.csv"
   echo "energy_event unix_ts=${END_TS} event=workload_end seq=${SEQ} workload_id=${workload_id}"
   echo "bench_rc=${BENCH_RC} seq=${SEQ} id=${workload_id}"
   tail -n 80 "$BENCH_FILE" || true
@@ -651,6 +683,10 @@ fi
 
 if [ "$ENERGY_RC" -eq 0 ]; then
   section "live_performance_power_summary"
+  LIVE_SUMMARY_ARGS=()
+  if [ "$SCHEDULER_ENABLED" != true ]; then
+    LIVE_SUMMARY_ARGS+=(--no-decisions)
+  fi
   "$PYTHON_BIN" "$LIVE_SUMMARY_SCRIPT" \
     --out-dir "$OUT_DIR" \
     --workloads "$WORKLOAD_FILE" \
@@ -658,6 +694,7 @@ if [ "$ENERGY_RC" -eq 0 ]; then
     --slo-tpot "$SLO_TPOT_MS" \
     --output-json "${OUT_DIR}/live_summary.json" \
     --output-csv "${OUT_DIR}/live_summary.csv" \
+    "${LIVE_SUMMARY_ARGS[@]}" \
     > "${OUT_DIR}/live_summary.log" 2>&1
   LIVE_SUMMARY_RC=$?
   cat "${OUT_DIR}/live_summary.log" 2>/dev/null || true
@@ -689,6 +726,8 @@ echo "workload_count=${WORKLOAD_COUNT}"
 echo "gate_admitted=${GATE_ADMITTED} gate_rejected=${GATE_REJECTED}"
 echo "overload_fallbacks=${OVERLOAD_FALLBACKS}"
 echo "bench_failures=${BENCH_FAILURES}"
-echo "parent_reset_verified=${RESET_DONE}"
+echo "parent_reset_verified=$([ "$RESET_REQUIRED" = true ] && echo "$RESET_DONE" || echo not_required)"
+echo "scheduler_enabled=${SCHEDULER_ENABLED}"
+echo "gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
 echo "job_exit_rc=${FINAL_RC}"
 exit "$FINAL_RC"
