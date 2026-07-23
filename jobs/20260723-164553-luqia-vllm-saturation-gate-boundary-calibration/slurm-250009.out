@@ -1,0 +1,61 @@
+
+===== saturation_gate_placement_l40s-prefill-l4-decode =====
+
+===== scheduler_sweep_with_saturation_gate =====
+workload_source=Dual_Sweep_LLM_Phase2_common_measured_grid
+slo_ttft_ms=500 slo_tpot_ms=200 saturation_threshold=0.30
+saturation_model=five_seed_mean_local_retrained_75
+placement=l40s-prefill-l4-decode
+scheduler_workload seq=1 id=threshold_long_prompt il=1024 ol=128 rate=1 description=decode_saturation_probability_just_above_gate
+saturation_gate_no_admit seq=1 id=threshold_long_prompt
+scheduler_workload seq=2 id=long_decode il=512 ol=1024 rate=1 description=long_generation_strong_predicted_saturation
+saturation_gate_no_admit seq=2 id=long_decode
+scheduler_workload seq=3 id=moderate_burst il=128 ol=128 rate=5 description=calibration_pd_throughput_below_requested_rate
+saturation_gate_no_admit seq=3 id=moderate_burst
+scheduler_workload seq=4 id=extreme_rps il=2 ol=64 rate=50 description=calibration_l4_extreme_request_rate
+saturation_gate_no_admit seq=4 id=extreme_rps
+
+===== result =====
+workload_count=4
+gate_admitted=0 gate_rejected=4
+decision_only=true
+gpu_allocated=false
+vllm_started=false
+clock_control_requested=false
+parent_reset_verified=not_required
+job_exit_rc=0
+job_cleanup_rc=0
+placement=l40s-prefill-l4-decode rc=0
+
+===== saturation_gate_placement_auto =====
+
+===== scheduler_sweep_with_saturation_gate =====
+workload_source=Dual_Sweep_LLM_Phase2_common_measured_grid
+slo_ttft_ms=500 slo_tpot_ms=200 saturation_threshold=0.30
+saturation_model=five_seed_mean_local_retrained_75
+placement=auto
+scheduler_workload seq=1 id=threshold_long_prompt il=1024 ol=128 rate=1 description=decode_saturation_probability_just_above_gate
+saturation_gate_no_admit seq=1 id=threshold_long_prompt
+scheduler_workload seq=2 id=long_decode il=512 ol=1024 rate=1 description=long_generation_strong_predicted_saturation
+saturation_gate_no_admit seq=2 id=long_decode
+scheduler_workload seq=3 id=moderate_burst il=128 ol=128 rate=5 description=calibration_pd_throughput_below_requested_rate
+saturation_gate_no_admit seq=3 id=moderate_burst
+scheduler_workload seq=4 id=extreme_rps il=2 ol=64 rate=50 description=calibration_l4_extreme_request_rate
+saturation_gate_no_admit seq=4 id=extreme_rps
+
+===== result =====
+workload_count=4
+gate_admitted=0 gate_rejected=4
+decision_only=true
+gpu_allocated=false
+vllm_started=false
+clock_control_requested=false
+parent_reset_verified=not_required
+job_exit_rc=0
+job_cleanup_rc=0
+placement=auto rc=0
+
+===== wrapper_result =====
+gpu_tres_requested=false
+placements_tested=2
+wrapper_exit_rc=0
