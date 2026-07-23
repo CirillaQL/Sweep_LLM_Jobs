@@ -209,7 +209,8 @@ def main():
             )
             metrics.update({
                 "throughput_ratio": throughput_ratio,
-                "measured_saturated": throughput_ratio < 0.95,
+                "measured_saturated": None,
+                "saturation_assessment": "INCONCLUSIVE_FINITE_POISSON",
                 "ttft_slo_ok": metrics["p99_ttft_ms"] <= args.slo_ttft,
                 "tpot_slo_ok": metrics["p99_tpot_ms"] <= args.slo_tpot,
             })
@@ -242,7 +243,10 @@ def main():
 
     payload = {
         "slo": {"ttft_ms": args.slo_ttft, "tpot_ms": args.slo_tpot},
-        "saturation_definition": "request_throughput_rps / configured_request_rate_rps < 0.95",
+        "saturation_definition": (
+            "inconclusive for fixed-count finite-rate Poisson windows; "
+            "throughput ratio includes arrival spacing and tail drain"
+        ),
         "power_scope": energy["scope"],
         "workloads": results,
     }
