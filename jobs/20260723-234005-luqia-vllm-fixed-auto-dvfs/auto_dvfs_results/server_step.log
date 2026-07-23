@@ -46,3 +46,9 @@ index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
 launch_vllm host=ganymede role=decode ip=10.1.0.3 http_port=33017 kv_port=34017
 NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=eno12399np0
 kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_consumer","kv_buffer_size":"8e9","kv_port":"34017","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31017","http_port":"33017","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 250017.1 ON ganymede CANCELLED AT 2026-07-23T23:54:35 ***
+srun: error: neptune: task 1: Killed
+srun: Terminating StepId=250017.1
+srun: error: ganymede: task 0: Killed
