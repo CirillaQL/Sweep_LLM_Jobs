@@ -9,4 +9,31 @@ Starting main benchmark run...
 Traffic request rate: 3.0
 Burstiness factor: 1.0 (Poisson process)
 Maximum request concurrency: 16
-  0%|          | 0/36 [00:00<?, ?it/s]  3%|▎         | 1/36 [00:02<01:21,  2.32s/it]
+  0%|          | 0/36 [00:00<?, ?it/s]  3%|▎         | 1/36 [00:02<01:21,  2.32s/it]  6%|▌         | 2/36 [00:02<00:42,  1.26s/it]  8%|▊         | 3/36 [00:03<00:26,  1.25it/s] 11%|█         | 4/36 [00:03<00:18,  1.71it/s] 14%|█▍        | 5/36 [00:03<00:13,  2.26it/s] 17%|█▋        | 6/36 [00:03<00:11,  2.50it/s] 19%|█▉        | 7/36 [00:03<00:08,  3.22it/s] 22%|██▏       | 8/36 [00:04<00:11,  2.42it/s] 25%|██▌       | 9/36 [00:05<00:16,  1.66it/s] 28%|██▊       | 10/36 [00:05<00:11,  2.20it/s] 31%|███       | 11/36 [00:06<00:11,  2.20it/s] 33%|███▎      | 12/36 [00:06<00:09,  2.52it/s] 36%|███▌      | 13/36 [00:06<00:08,  2.84it/s] 39%|███▉      | 14/36 [00:07<00:11,  1.86it/s] 50%|█████     | 18/36 [00:08<00:04,  3.92it/s] 53%|█████▎    | 19/36 [00:08<00:04,  3.47it/s] 56%|█████▌    | 20/36 [00:09<00:05,  2.89it/s] 58%|█████▊    | 21/36 [00:10<00:07,  1.89it/s] 61%|██████    | 22/36 [00:10<00:07,  1.90it/s] 64%|██████▍   | 23/36 [00:10<00:05,  2.26it/s] 67%|██████▋   | 24/36 [00:11<00:05,  2.17it/s] 72%|███████▏  | 26/36 [00:11<00:03,  3.02it/s] 78%|███████▊  | 28/36 [00:12<00:03,  2.64it/s] 81%|████████  | 29/36 [00:12<00:02,  2.95it/s] 83%|████████▎ | 30/36 [00:12<00:01,  3.46it/s] 86%|████████▌ | 31/36 [00:13<00:01,  4.02it/s] 89%|████████▉ | 32/36 [00:13<00:01,  3.34it/s] 92%|█████████▏| 33/36 [00:13<00:00,  3.97it/s] 94%|█████████▍| 34/36 [00:13<00:00,  3.72it/s]100%|██████████| 36/36 [00:14<00:00,  4.98it/s]100%|██████████| 36/36 [00:14<00:00,  2.53it/s]
+tip: install termplotlib and gnuplot to plot the metrics
+============ Serving Benchmark Result ============
+Successful requests:                     36        
+Failed requests:                         0         
+Maximum request concurrency:             16        
+Request rate configured (RPS):           3.00      
+Benchmark duration (s):                  14.23     
+Total input tokens:                      4572      
+Total generated tokens:                  1152      
+Request throughput (req/s):              2.53      
+Output token throughput (tok/s):         80.93     
+Peak output token throughput (tok/s):    118.00    
+Peak concurrent requests:                13.00     
+Total token throughput (tok/s):          402.14    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          269.92    
+Median TTFT (ms):                        254.19    
+P99 TTFT (ms):                           433.72    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          64.05     
+Median TPOT (ms):                        63.93     
+P99 TPOT (ms):                           65.08     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           64.05     
+Median ITL (ms):                         63.86     
+P99 ITL (ms):                            74.86     
+==================================================
