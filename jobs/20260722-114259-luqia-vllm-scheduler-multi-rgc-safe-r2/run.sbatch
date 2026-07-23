@@ -26,15 +26,18 @@ PROXY_SCRIPT="${SOURCE_JOB_DIR}/pd_proxy.py"
 CLOCK_PROBE="${SOURCE_JOB_DIR}/clock_probe.py"
 SCHEDULER_SCRIPT="${SOURCE_JOB_DIR}/scheduler.py"
 MODEL_BUNDLE="${SOURCE_JOB_DIR}/model_bundle.json"
-WORKLOAD_FILE="${SOURCE_JOB_DIR}/workloads.csv"
+WORKLOAD_FILE="${WORKLOAD_FILE_OVERRIDE:-${SOURCE_JOB_DIR}/workloads.csv}"
 PLACEMENT_FILE="${OUT_DIR}/active_placement.json"
 CLOCK_CONTROL_DIR="${OUT_DIR}/clock_control"
 MODEL="mistralai/Mistral-7B-v0.1"
 
 SLO_TTFT_MS=500
 SLO_TPOT_MS=200
-BENCH_WINDOW_SECONDS=10
-BENCH_TIMEOUT_SECONDS=180
+BENCH_WINDOW_SECONDS="${BENCH_WINDOW_SECONDS_OVERRIDE:-10}"
+BENCH_TIMEOUT_SECONDS="${BENCH_TIMEOUT_SECONDS_OVERRIDE:-180}"
+MIN_PROMPTS="${MIN_PROMPTS_OVERRIDE:-12}"
+MAX_PROMPTS="${MAX_PROMPTS_OVERRIDE:-120}"
+EXPECTED_WORKLOAD_COUNT="${EXPECTED_WORKLOAD_COUNT_OVERRIDE:-3}"
 
 PROXY_IP=10.1.0.3
 PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
@@ -243,7 +246,7 @@ while IFS=, read -r workload_id il ol rate description; do
   fi
 done < "$WORKLOAD_FILE"
 
-if [ "$WORKLOAD_COUNT" -ne 3 ] || [ -z "$FIRST_PLACEMENT" ]; then
+if [ "$WORKLOAD_COUNT" -ne "$EXPECTED_WORKLOAD_COUNT" ] || [ -z "$FIRST_PLACEMENT" ]; then
   echo "unexpected_workload_count=${WORKLOAD_COUNT}"
   exit 23
 fi
@@ -370,11 +373,11 @@ while IFS=, read -r workload_id il ol rate description; do
   fi
 
   NUM_PROMPTS=$((rate * BENCH_WINDOW_SECONDS))
-  if [ "$NUM_PROMPTS" -lt 12 ]; then
-    NUM_PROMPTS=12
+  if [ "$NUM_PROMPTS" -lt "$MIN_PROMPTS" ]; then
+    NUM_PROMPTS="$MIN_PROMPTS"
   fi
-  if [ "$NUM_PROMPTS" -gt 120 ]; then
-    NUM_PROMPTS=120
+  if [ "$NUM_PROMPTS" -gt "$MAX_PROMPTS" ]; then
+    NUM_PROMPTS="$MAX_PROMPTS"
   fi
   BENCH_FILE="${OUT_DIR}/bench_${SEQ}_${workload_id}.txt"
   echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${BENCH_WINDOW_SECONDS} timeout_s=${BENCH_TIMEOUT_SECONDS}"
