@@ -676,3 +676,13 @@ P99 ITL (ms):                            78.56
 ===== online_scheduler_window_11_decode_peak =====
 scheduler_workload seq=11 id=decode_peak il=32 ol=512 rate=1 online=true
 overload_fallback_selected seq=11 id=decode_peak predicted_violation_probability=0.75667
+scheduler_selected seq=11 status=OVERLOAD_FALLBACK prefill=neptune:2265 decode=ganymede:780 predicted_cluster_power_w=310.8
+
+===== workload_11_decode_peak =====
+workload_start time=2026-07-23T23:28:36+02:00 seq=11 id=decode_peak il=32 ol=512 request_rate=1 window_seconds=10 burstiness=2.0 description=long_decode_burst
+recommendation neptune_prefill_mhz=2265 ganymede_decode_mhz=780 predicted_cluster_power_w=310.8
+clock_request seq=11 neptune_mhz=2265 ganymede_mhz=780
+clock_ack seq=11 node_group=neptune target_mhz=2265 rc=0 observed_active_mean_mhz=2235
+clock_ack seq=11 node_group=ganymede target_mhz=780 rc=0 observed_active_mean_mhz=780
+bench_config num_prompts=10 nominal_window_s=10 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784842122.286495814 event=workload_start seq=11 workload_id=decode_peak
