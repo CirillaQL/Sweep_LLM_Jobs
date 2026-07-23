@@ -16,6 +16,29 @@ to the live two-node vLLM prefill/decode path.
   role GPUs have `mean(p_saturated) < 0.30`.
 - Safe candidates are ranked by predicted cluster board power.
 
+## Overload fallback
+
+Normal operation still requires both latency and saturation safety. The
+latency-safe predicate now also checks the predicted P99 value directly
+against the requested TTFT/TPOT threshold, preventing a classifier guard from
+marking a candidate safe when its own latency regression already exceeds the
+SLO.
+
+When no candidate is safe, the default action is
+`min-slo-violation`. The scheduler returns `OVERLOAD_FALLBACK`, keeps the
+selected candidate's `is_safe=false`, and ranks all candidates by:
+
+1. predicted union of prefill/decode latency-violation and saturation
+   probabilities;
+2. maximum normalized predicted TTFT/TPOT excess;
+3. joint latency-violation probability;
+4. predicted cluster power.
+
+The probability union is an independence approximation used only to rank
+best-effort overload choices; it is not reported as a calibrated end-to-end
+probability. Gate-only experiments can retain the old hard-reject behavior
+with `--overload-action reject`.
+
 The model target follows the source project exactly:
 
 ```text

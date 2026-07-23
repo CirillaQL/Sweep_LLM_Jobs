@@ -27,6 +27,7 @@ for placement in l40s-prefill-l4-decode auto; do
     WORKLOAD_FILE_OVERRIDE="${WORKLOAD_FILE}" \
     EXPECTED_WORKLOAD_COUNT_OVERRIDE=4 \
     ALLOW_ZERO_ADMIT_OVERRIDE=true \
+    OVERLOAD_ACTION_OVERRIDE=reject \
     SCHEDULER_PLACEMENT_OVERRIDE="${placement}" \
     bash "${SOURCE_JOB}/run.sbatch"
   rc=$?

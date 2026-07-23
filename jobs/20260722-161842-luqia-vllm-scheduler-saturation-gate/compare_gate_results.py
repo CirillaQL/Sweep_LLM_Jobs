@@ -87,13 +87,17 @@ def main() -> None:
             "no_gate_decode_p_saturated": no_gate_rec["decode"]["p_saturated"],
         })
 
-        if gated["status"] == "OK":
+        if gated["status"] in {"OK", "OVERLOAD_FALLBACK"}:
             measured = energy_by_id[workload_id]
             metrics = bench_metrics(args.out_dir / f"bench_{seq}_{workload_id}.txt")
             rec = gated["recommended"]
             energy_j = measured["combined_energy_j"]
             row.update({
                 "gate_admitted": True,
+                "gate_overload_fallback": gated["status"] == "OVERLOAD_FALLBACK",
+                "gate_predicted_overload_violation_probability": rec[
+                    "predicted_overload_violation_probability"
+                ],
                 "gate_prefill_freq_mhz": rec["prefill"]["freq_mhz"],
                 "gate_decode_freq_mhz": rec["decode"]["freq_mhz"],
                 "gate_prefill_p_saturated": rec["prefill"]["p_saturated"],

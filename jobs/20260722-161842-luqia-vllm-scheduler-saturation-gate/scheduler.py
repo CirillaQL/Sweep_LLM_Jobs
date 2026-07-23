@@ -66,6 +66,15 @@ def sigmoid(value):
     return z / (1.0 + z)
 
 
+def union_probability(*probabilities):
+    """Probability that at least one modeled violation occurs."""
+    survival = 1.0
+    for probability in probabilities:
+        bounded = min(1.0, max(0.0, float(probability)))
+        survival *= 1.0 - bounded
+    return 1.0 - survival
+
+
 class PoolScheduler:
     def __init__(self, gpu_type, bundle):
         self.gpu_type = gpu_type
@@ -252,7 +261,8 @@ class PDPlacementScheduler:
         self.common_slos = sorted(set(self.pools["l4"].slos) & set(self.pools["l40s"].slos))
 
     def recommend(self, il, ol, rate, slo_ttft, slo_tpot, tp=1,
-                  policy="latency_plus_saturation", placement="auto"):
+                  policy="latency_plus_saturation", placement="auto",
+                  overload_action="min-slo-violation"):
         if tp != 1:
             raise ValueError("This job allocates one GPU per node, so TP must be 1")
         if slo_ttft not in self.common_slos or slo_tpot not in self.common_slos:
@@ -277,6 +287,8 @@ class PDPlacementScheduler:
 
         if policy not in {"latency_only", "latency_plus_saturation"}:
             raise ValueError(f"Unsupported policy: {policy}")
+        if overload_action not in {"reject", "min-slo-violation"}:
+            raise ValueError(f"Unsupported overload action: {overload_action}")
         if placement == "auto":
             placement_pairs = (("l40s", "l4"), ("l4", "l40s"))
         elif placement == "l40s-prefill-l4-decode":
@@ -290,10 +302,33 @@ class PDPlacementScheduler:
                 predictions[(prefill_gpu, "prefill")], predictions[(decode_gpu, "decode")]
             ):
                 cluster_power = prefill["total_power_w"] + decode["total_power_w"]
-                latency_safe = prefill["is_safe"] and decode["is_safe"]
+                latency_safe = (
+                    prefill["is_safe"]
+                    and decode["is_safe"]
+                    and prefill["p99_ttft_ms"] <= slo_ttft
+                    and decode["p99_tpot_ms"] <= slo_tpot
+                )
                 saturation_safe = prefill["saturation_safe"] and decode["saturation_safe"]
                 is_safe = latency_safe and (
                     saturation_safe if policy == "latency_plus_saturation" else True
+                )
+                latency_violation_probability = union_probability(
+                    prefill["p_violate"], decode["p_violate"]
+                )
+                saturation_probability = union_probability(
+                    prefill["p_saturated"], decode["p_saturated"]
+                )
+                if policy == "latency_plus_saturation":
+                    overload_violation_probability = union_probability(
+                        latency_violation_probability, saturation_probability
+                    )
+                else:
+                    overload_violation_probability = latency_violation_probability
+                ttft_excess_ratio = max(
+                    0.0, prefill["p99_ttft_ms"] / float(slo_ttft) - 1.0
+                )
+                tpot_excess_ratio = max(
+                    0.0, decode["p99_tpot_ms"] / float(slo_tpot) - 1.0
                 )
                 candidates.append({
                     "prefill": prefill,
@@ -301,28 +336,71 @@ class PDPlacementScheduler:
                     "latency_safe": latency_safe,
                     "saturation_safe": saturation_safe,
                     "is_safe": is_safe,
+                    "predicted_joint_latency_violation_probability": round(
+                        latency_violation_probability, 6
+                    ),
+                    "predicted_joint_saturation_probability": round(
+                        saturation_probability, 6
+                    ),
+                    "predicted_overload_violation_probability": round(
+                        overload_violation_probability, 6
+                    ),
+                    "predicted_ttft_excess_ratio": round(ttft_excess_ratio, 6),
+                    "predicted_tpot_excess_ratio": round(tpot_excess_ratio, 6),
+                    "predicted_max_slo_excess_ratio": round(
+                        max(ttft_excess_ratio, tpot_excess_ratio), 6
+                    ),
                     "predicted_cluster_power_w": round(cluster_power, 1),
                     "predicted_energy_per_request_j": round(cluster_power / rate, 3),
                 })
 
         safe = [candidate for candidate in candidates if candidate["is_safe"]]
         if not safe:
-            return {
-                "status": "NO_SAFE_CONFIG",
-                "policy": policy,
-                "placement": placement,
-                "workload": {"il": il, "ol": ol, "rate": rate},
-                "slos": {"ttft_ms": slo_ttft, "tpot_ms": slo_tpot},
-                "saturation_threshold": self.saturation.threshold,
+            counts = {
                 "num_candidates": len(candidates),
                 "num_latency_safe": sum(item["latency_safe"] for item in candidates),
                 "num_saturation_safe": sum(item["saturation_safe"] for item in candidates),
                 "num_safe": 0,
             }
+            if overload_action == "min-slo-violation":
+                candidates.sort(key=lambda item: (
+                    item["predicted_overload_violation_probability"],
+                    item["predicted_max_slo_excess_ratio"],
+                    item["predicted_joint_latency_violation_probability"],
+                    item["predicted_cluster_power_w"],
+                ))
+                return {
+                    "status": "OVERLOAD_FALLBACK",
+                    "decision_mode": "overload_min_slo_violation",
+                    "selection_criterion": (
+                        "min predicted union of latency-SLO and saturation "
+                        "violation probabilities"
+                    ),
+                    "policy": policy,
+                    "placement": placement,
+                    "workload": {"il": il, "ol": ol, "rate": rate},
+                    "slos": {"ttft_ms": slo_ttft, "tpot_ms": slo_tpot},
+                    "saturation_threshold": self.saturation.threshold,
+                    "tp_per_role": tp,
+                    "recommended": candidates[0],
+                    "alternatives": candidates[1:4],
+                    **counts,
+                }
+            return {
+                "status": "NO_SAFE_CONFIG",
+                "decision_mode": "reject",
+                "policy": policy,
+                "placement": placement,
+                "workload": {"il": il, "ol": ol, "rate": rate},
+                "slos": {"ttft_ms": slo_ttft, "tpot_ms": slo_tpot},
+                "saturation_threshold": self.saturation.threshold,
+                **counts,
+            }
         safe.sort(key=lambda item: (item["predicted_cluster_power_w"],
                                     item["prefill"]["latency_ms"] + item["decode"]["latency_ms"]))
         return {
             "status": "OK",
+            "decision_mode": "safe_min_power",
             "policy": policy,
             "placement": placement,
             "workload": {"il": il, "ol": ol, "rate": rate},
@@ -348,6 +426,9 @@ def main():
                         default="latency_plus_saturation")
     parser.add_argument("--placement", choices=("auto", "l40s-prefill-l4-decode"),
                         default="auto")
+    parser.add_argument("--overload-action",
+                        choices=("reject", "min-slo-violation"),
+                        default="min-slo-violation")
     parser.add_argument("--il", type=int, required=True)
     parser.add_argument("--ol", type=int, required=True)
     parser.add_argument("--rate", type=float, required=True)
@@ -362,13 +443,13 @@ def main():
     )
     result = scheduler.recommend(
         args.il, args.ol, args.rate, args.slo_ttft, args.slo_tpot, args.tp,
-        args.policy, args.placement,
+        args.policy, args.placement, args.overload_action,
     )
     payload = json.dumps(result, indent=2)
     if args.output:
         args.output.write_text(payload + "\n", encoding="utf-8")
     print(payload)
-    raise SystemExit(0 if result["status"] == "OK" else 2)
+    raise SystemExit(0 if result["status"] in {"OK", "OVERLOAD_FALLBACK"} else 2)
 
 
 if __name__ == "__main__":

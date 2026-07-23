@@ -42,6 +42,7 @@ BENCH_TIMEOUT_SECONDS=180
 EXPECTED_WORKLOAD_COUNT="${EXPECTED_WORKLOAD_COUNT_OVERRIDE:-3}"
 ALLOW_ZERO_ADMIT="${ALLOW_ZERO_ADMIT_OVERRIDE:-false}"
 SCHEDULER_PLACEMENT="${SCHEDULER_PLACEMENT_OVERRIDE:-l40s-prefill-l4-decode}"
+OVERLOAD_ACTION="${OVERLOAD_ACTION_OVERRIDE:-min-slo-violation}"
 
 PROXY_IP=10.1.0.3
 PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
@@ -82,6 +83,7 @@ RESET_DONE=false
 BENCH_FAILURES=0
 GATE_ADMITTED=0
 GATE_REJECTED=0
+OVERLOAD_FALLBACKS=0
 
 section() {
   echo
@@ -168,8 +170,8 @@ import json
 import sys
 
 result = json.load(open(sys.argv[1], encoding="utf-8"))
-if result.get("status") != "OK":
-    raise SystemExit(f"unsafe scheduler result: {result.get('status')}")
+if result.get("status") not in {"OK", "OVERLOAD_FALLBACK"}:
+    raise SystemExit(f"unusable scheduler result: {result.get('status')}")
 recommended = result["recommended"]
 prefill = recommended["prefill"]
 decode = recommended["decode"]
@@ -177,6 +179,20 @@ print(
     prefill["node_group"], int(prefill["rec_freq_mhz"]),
     decode["node_group"], int(decode["rec_freq_mhz"]),
     recommended["predicted_cluster_power_w"],
+)
+PY
+}
+
+decision_status() {
+  "$PYTHON_BIN" - "$1" <<'PY'
+import json
+import sys
+
+result = json.load(open(sys.argv[1], encoding="utf-8"))
+recommended = result.get("recommended", {})
+print(
+    result.get("status", "UNKNOWN"),
+    recommended.get("predicted_overload_violation_probability", "NA"),
 )
 PY
 }
@@ -225,6 +241,7 @@ echo "workload_source=Dual_Sweep_LLM_Phase2_common_measured_grid"
 echo "slo_ttft_ms=${SLO_TTFT_MS} slo_tpot_ms=${SLO_TPOT_MS} saturation_threshold=0.30"
 echo "saturation_model=five_seed_mean_local_retrained_75"
 echo "placement=${SCHEDULER_PLACEMENT}"
+echo "overload_action=${OVERLOAD_ACTION}"
 FIRST_PLACEMENT=""
 WORKLOAD_COUNT=0
 while IFS=, read -r workload_id il ol rate description; do
@@ -239,6 +256,7 @@ while IFS=, read -r workload_id il ol rate description; do
   "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
     --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
     --policy latency_only --placement "$SCHEDULER_PLACEMENT" \
+    --overload-action "$OVERLOAD_ACTION" \
     --il "$il" --ol "$ol" --rate "$rate" \
     --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
     --output "$latency_decision" > "${OUT_DIR}/scheduler_latency_${WORKLOAD_COUNT}_${workload_id}.json"
@@ -251,6 +269,7 @@ while IFS=, read -r workload_id il ol rate description; do
   "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
     --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
     --policy latency_plus_saturation --placement "$SCHEDULER_PLACEMENT" \
+    --overload-action "$OVERLOAD_ACTION" \
     --il "$il" --ol "$ol" --rate "$rate" \
     --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
     --output "$gate_decision" > "${OUT_DIR}/scheduler_gate_${WORKLOAD_COUNT}_${workload_id}.json"
@@ -266,6 +285,14 @@ while IFS=, read -r workload_id il ol rate description; do
     continue
   fi
   GATE_ADMITTED=$((GATE_ADMITTED + 1))
+  read -r gate_status overload_probability <<< "$(decision_status "$gate_decision")"
+  if [ "$gate_status" = OVERLOAD_FALLBACK ]; then
+    OVERLOAD_FALLBACKS=$((OVERLOAD_FALLBACKS + 1))
+    echo "overload_fallback_selected seq=${WORKLOAD_COUNT} id=${workload_id} predicted_violation_probability=${overload_probability}"
+  elif [ "$gate_status" != OK ]; then
+    echo "unexpected_gate_status seq=${WORKLOAD_COUNT} id=${workload_id} status=${gate_status}"
+    exit 22
+  fi
   values=$(placement_values "$gate_decision") || exit 22
   read -r prefill_node prefill_freq decode_node decode_freq predicted_power <<< "$values"
   echo "saturation_gate_selected seq=${WORKLOAD_COUNT} prefill=${prefill_node}:${prefill_freq} decode=${decode_node}:${decode_freq} predicted_cluster_power_w=${predicted_power}"
@@ -292,6 +319,7 @@ if [ "$GATE_ADMITTED" -eq 0 ]; then
   section "result"
   echo "workload_count=${WORKLOAD_COUNT}"
   echo "gate_admitted=${GATE_ADMITTED} gate_rejected=${GATE_REJECTED}"
+  echo "overload_fallbacks=${OVERLOAD_FALLBACKS}"
   echo "decision_only=true"
   echo "gpu_allocated=false"
   echo "vllm_started=false"
@@ -551,6 +579,7 @@ fi
 section "result"
 echo "workload_count=${WORKLOAD_COUNT}"
 echo "gate_admitted=${GATE_ADMITTED} gate_rejected=${GATE_REJECTED}"
+echo "overload_fallbacks=${OVERLOAD_FALLBACKS}"
 echo "bench_failures=${BENCH_FAILURES}"
 echo "parent_reset_verified=${RESET_DONE}"
 echo "job_exit_rc=${FINAL_RC}"
