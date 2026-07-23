@@ -9,4 +9,31 @@ Starting main benchmark run...
 Traffic request rate: 1.0
 Burstiness factor: 1.0 (Poisson process)
 Maximum request concurrency: 16
-  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:31<04:43, 31.55s/it]
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:31<04:43, 31.55s/it] 20%|██        | 2/10 [00:32<01:49, 13.71s/it] 30%|███       | 3/10 [00:33<00:54,  7.82s/it] 40%|████      | 4/10 [00:34<00:30,  5.02s/it] 50%|█████     | 5/10 [00:34<00:16,  3.38s/it] 60%|██████    | 6/10 [00:35<00:10,  2.52s/it] 70%|███████   | 7/10 [00:36<00:05,  1.87s/it] 80%|████████  | 8/10 [00:37<00:03,  1.86s/it] 90%|█████████ | 9/10 [00:40<00:02,  2.14s/it]100%|██████████| 10/10 [00:41<00:00,  1.60s/it]100%|██████████| 10/10 [00:41<00:00,  4.12s/it]
+tip: install termplotlib and gnuplot to plot the metrics
+============ Serving Benchmark Result ============
+Successful requests:                     10        
+Failed requests:                         0         
+Maximum request concurrency:             16        
+Request rate configured (RPS):           1.00      
+Benchmark duration (s):                  41.16     
+Total input tokens:                      310       
+Total generated tokens:                  5120      
+Request throughput (req/s):              0.24      
+Output token throughput (tok/s):         124.39    
+Peak output token throughput (tok/s):    170.00    
+Peak concurrent requests:                10.00     
+Total token throughput (tok/s):          131.92    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          210.82    
+Median TTFT (ms):                        214.25    
+P99 TTFT (ms):                           242.76    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          60.48     
+Median TPOT (ms):                        60.53     
+P99 TPOT (ms):                           60.60     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           60.48     
+Median ITL (ms):                         60.63     
+P99 ITL (ms):                            63.70     
+==================================================
