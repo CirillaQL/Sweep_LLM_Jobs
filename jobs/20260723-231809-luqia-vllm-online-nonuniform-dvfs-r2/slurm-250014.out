@@ -736,3 +736,7 @@ scheduler_selected seq=12 status=OK prefill=neptune:210 decode=ganymede:570 pred
 workload_start time=2026-07-23T23:30:11+02:00 seq=12 id=final_recovery il=128 ol=32 request_rate=1 window_seconds=12 burstiness=1.0 description=recovery_to_low_rate
 recommendation neptune_prefill_mhz=210 ganymede_decode_mhz=570 predicted_cluster_power_w=156.7
 clock_request seq=12 neptune_mhz=210 ganymede_mhz=570
+clock_ack seq=12 node_group=neptune target_mhz=210 rc=0 observed_active_mean_mhz=210
+clock_ack seq=12 node_group=ganymede target_mhz=570 rc=0 observed_active_mean_mhz=570
+bench_config num_prompts=12 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784842219.095595781 event=workload_start seq=12 workload_id=final_recovery
