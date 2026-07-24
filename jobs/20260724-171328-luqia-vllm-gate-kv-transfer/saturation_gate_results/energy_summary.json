@@ -1,0 +1,315 @@
+{
+  "scope": "two allocated GPU board-power telemetry; excludes CPU, RAM, NIC, and fans",
+  "integration": "piecewise-linear trapezoidal integration",
+  "sample_period_s": 0.5,
+  "workloads": [
+    {
+      "seq": 1,
+      "workload_id": "steady_start",
+      "start_unix_ts": 1784906336.0096858,
+      "end_unix_ts": 1784906364.7388642,
+      "duration_s": 28.729178428649902,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 1776.4554923341036,
+          "energy_wh": 0.4934598589816954,
+          "covered_s": 28.729178428649902
+        },
+        "ganymede_l4": {
+          "energy_j": 1054.183723432538,
+          "energy_wh": 0.2928288120645939,
+          "covered_s": 28.729178428649902
+        }
+      },
+      "combined_energy_j": 2830.6392157666414,
+      "combined_energy_wh": 0.7862886710462893,
+      "combined_avg_power_w": 98.52837326332357,
+      "successful_requests": 12,
+      "energy_per_request_j": 235.88660131388679
+    },
+    {
+      "seq": 2,
+      "workload_id": "short_ramp",
+      "start_unix_ts": 1784906372.748501,
+      "end_unix_ts": 1784906407.3049185,
+      "duration_s": 34.55641746520996,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 2240.1658578900733,
+          "energy_wh": 0.6222682938583537,
+          "covered_s": 34.55641746520996
+        },
+        "ganymede_l4": {
+          "energy_j": 1220.0870193320945,
+          "energy_wh": 0.3389130609255818,
+          "covered_s": 34.55641746520996
+        }
+      },
+      "combined_energy_j": 3460.2528772221676,
+      "combined_energy_wh": 0.9611813547839354,
+      "combined_avg_power_w": 100.13343775308346,
+      "successful_requests": 48,
+      "energy_per_request_j": 72.08860160879516
+    },
+    {
+      "seq": 3,
+      "workload_id": "prefill_shift",
+      "start_unix_ts": 1784906414.1893237,
+      "end_unix_ts": 1784906445.619384,
+      "duration_s": 31.430060386657715,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 2067.4059085120452,
+          "energy_wh": 0.5742794190311237,
+          "covered_s": 31.430060386657715
+        },
+        "ganymede_l4": {
+          "energy_j": 1180.0341386790935,
+          "energy_wh": 0.3277872607441926,
+          "covered_s": 31.430060386657715
+        }
+      },
+      "combined_energy_j": 3247.4400471911385,
+      "combined_energy_wh": 0.9020666797753163,
+      "combined_avg_power_w": 103.32274285319859,
+      "successful_requests": 36,
+      "energy_per_request_j": 90.20666797753162
+    },
+    {
+      "seq": 4,
+      "workload_id": "decode_shift",
+      "start_unix_ts": 1784906453.5274582,
+      "end_unix_ts": 1784906499.275064,
+      "duration_s": 45.74760580062866,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 3220.613738450525,
+          "energy_wh": 0.894614927347368,
+          "covered_s": 45.74760580062866
+        },
+        "ganymede_l4": {
+          "energy_j": 1933.6114395331308,
+          "energy_wh": 0.537114288759203,
+          "covered_s": 45.74760580062866
+        }
+      },
+      "combined_energy_j": 5154.225177983656,
+      "combined_energy_wh": 1.4317292161065711,
+      "combined_avg_power_w": 112.66655571979304,
+      "successful_requests": 24,
+      "energy_per_request_j": 214.75938241598567
+    },
+    {
+      "seq": 5,
+      "workload_id": "sudden_burst",
+      "start_unix_ts": 1784906507.2045848,
+      "end_unix_ts": 1784906538.4045627,
+      "duration_s": 31.19997787475586,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 2267.765982583762,
+          "energy_wh": 0.629934995162156,
+          "covered_s": 31.19997787475586
+        },
+        "ganymede_l4": {
+          "energy_j": 1225.0568655960165,
+          "energy_wh": 0.34029357377667124,
+          "covered_s": 31.19997787475586
+        }
+      },
+      "combined_energy_j": 3492.8228481797782,
+      "combined_energy_wh": 0.9702285689388273,
+      "combined_avg_power_w": 111.94952965033504,
+      "successful_requests": 80,
+      "energy_per_request_j": 43.66028560224723
+    },
+    {
+      "seq": 6,
+      "workload_id": "short_recovery",
+      "start_unix_ts": 1784906545.3059595,
+      "end_unix_ts": 1784906579.7678962,
+      "duration_s": 34.461936712265015,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 2128.5894698369507,
+          "energy_wh": 0.5912748527324863,
+          "covered_s": 34.461936712265015
+        },
+        "ganymede_l4": {
+          "energy_j": 1243.831339103268,
+          "energy_wh": 0.3455087053064633,
+          "covered_s": 34.461936712265015
+        }
+      },
+      "combined_energy_j": 3372.4208089402186,
+      "combined_energy_wh": 0.9367835580389496,
+      "combined_avg_power_w": 97.85929435997058,
+      "successful_requests": 24,
+      "energy_per_request_j": 140.51753370584245
+    },
+    {
+      "seq": 7,
+      "workload_id": "long_prefill",
+      "start_unix_ts": 1784906587.699223,
+      "end_unix_ts": 1784906618.9625943,
+      "duration_s": 31.263371229171753,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 2304.8781878409513,
+          "energy_wh": 0.6402439410669309,
+          "covered_s": 31.263371229171753
+        },
+        "ganymede_l4": {
+          "energy_j": 1189.8905897029179,
+          "energy_wh": 0.3305251638063661,
+          "covered_s": 31.263371229171753
+        }
+      },
+      "combined_energy_j": 3494.768777543869,
+      "combined_energy_wh": 0.9707691048732969,
+      "combined_avg_power_w": 111.78477048831225,
+      "successful_requests": 24,
+      "energy_per_request_j": 145.61536573099454
+    },
+    {
+      "seq": 8,
+      "workload_id": "mixed_pressure",
+      "start_unix_ts": 1784906625.885228,
+      "end_unix_ts": 1784906673.5710685,
+      "duration_s": 47.68584060668945,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 3168.4422126129316,
+          "energy_wh": 0.8801228368369255,
+          "covered_s": 47.68584060668945
+        },
+        "ganymede_l4": {
+          "energy_j": 2068.027021269785,
+          "energy_wh": 0.5744519503527181,
+          "covered_s": 47.68584060668945
+        }
+      },
+      "combined_energy_j": 5236.469233882717,
+      "combined_energy_wh": 1.4545747871896437,
+      "combined_avg_power_w": 109.81182605278717,
+      "successful_requests": 30,
+      "energy_per_request_j": 174.54897446275723
+    },
+    {
+      "seq": 9,
+      "workload_id": "quiet_window",
+      "start_unix_ts": 1784906680.5193284,
+      "end_unix_ts": 1784906713.665366,
+      "duration_s": 33.146037578582764,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 2047.9595177779247,
+          "energy_wh": 0.5688776438272013,
+          "covered_s": 33.146037578582764
+        },
+        "ganymede_l4": {
+          "energy_j": 1193.1097781530464,
+          "energy_wh": 0.33141938282029065,
+          "covered_s": 33.146037578582764
+        }
+      },
+      "combined_energy_j": 3241.069295930971,
+      "combined_energy_wh": 0.9002970266474919,
+      "combined_avg_power_w": 97.78150067702754,
+      "successful_requests": 12,
+      "energy_per_request_j": 270.08910799424757
+    },
+    {
+      "seq": 10,
+      "workload_id": "prefill_peak",
+      "start_unix_ts": 1784906720.5665064,
+      "end_unix_ts": 1784906752.5584245,
+      "duration_s": 31.991918087005615,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 2670.319936126471,
+          "energy_wh": 0.7417555378129086,
+          "covered_s": 31.991918087005615
+        },
+        "ganymede_l4": {
+          "energy_j": 1158.9580814569322,
+          "energy_wh": 0.3219328004047034,
+          "covered_s": 31.991918087005615
+        }
+      },
+      "combined_energy_j": 3829.278017583403,
+      "combined_energy_wh": 1.063688338217612,
+      "combined_avg_power_w": 119.69516823496645,
+      "successful_requests": 20,
+      "energy_per_request_j": 191.46390087917015
+    },
+    {
+      "seq": 11,
+      "workload_id": "decode_peak",
+      "start_unix_ts": 1784906760.5312884,
+      "end_unix_ts": 1784906849.2474887,
+      "duration_s": 88.71620035171509,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 6123.268772432096,
+          "energy_wh": 1.7009079923422488,
+          "covered_s": 88.71620035171509
+        },
+        "ganymede_l4": {
+          "energy_j": 4564.556761539587,
+          "energy_wh": 1.2679324337609963,
+          "covered_s": 88.71620035171509
+        }
+      },
+      "combined_energy_j": 10687.825533971682,
+      "combined_energy_wh": 2.968840426103245,
+      "combined_avg_power_w": 120.47208392153668,
+      "successful_requests": 10,
+      "energy_per_request_j": 1068.7825533971682
+    },
+    {
+      "seq": 12,
+      "workload_id": "final_recovery",
+      "start_unix_ts": 1784906858.0858238,
+      "end_unix_ts": 1784906891.7692573,
+      "duration_s": 33.683433532714844,
+      "nodes": {
+        "neptune_l40s": {
+          "energy_j": 2040.3054870486264,
+          "energy_wh": 0.566751524180174,
+          "covered_s": 33.56779909133911
+        },
+        "ganymede_l4": {
+          "energy_j": 1194.6097497951985,
+          "energy_wh": 0.33183604160977737,
+          "covered_s": 32.941487312316895
+        }
+      },
+      "combined_energy_j": 3234.915236843825,
+      "combined_energy_wh": 0.8985875657899514,
+      "combined_avg_power_w": 96.03876141967332,
+      "successful_requests": 12,
+      "energy_per_request_j": 269.5762697369854
+    }
+  ],
+  "telemetry_total": {
+    "neptune_l40s": {
+      "energy_j": 46885.22374080191,
+      "energy_wh": 13.023673261333863,
+      "covered_s": 663.8169281482697,
+      "average_power_w": 70.62975009026835
+    },
+    "ganymede_l4": {
+      "energy_j": 23756.914373595715,
+      "energy_wh": 6.599142881554365,
+      "covered_s": 663.0607168674469,
+      "average_power_w": 35.829168836652684
+    }
+  },
+  "telemetry_total_energy_j": 70642.13811439762,
+  "telemetry_total_energy_wh": 19.622816142888226,
+  "reset_probe_energy_j": 1834.982969031334,
+  "reset_probe_energy_wh": 0.5097174913975928,
+  "total_recorded_gpu_energy_j": 72477.12108342895,
+  "total_recorded_gpu_energy_wh": 20.13253363428582
+}
