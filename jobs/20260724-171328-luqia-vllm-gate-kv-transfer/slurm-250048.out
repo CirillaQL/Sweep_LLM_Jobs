@@ -472,3 +472,8 @@ scheduler_selected seq=7 policy=latency_plus_saturation status=OVERLOAD_FALLBACK
 workload_start time=2026-07-24T17:23:00+02:00 seq=7 id=long_prefill il=512 ol=32 request_rate=2 window_seconds=12 burstiness=2.5 description=long_prompt_pressure
 fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
 recommendation neptune_prefill_mhz=1755 ganymede_decode_mhz=570 predicted_cluster_power_w=190.8
+clock_request seq=7 neptune_mhz=1755 ganymede_mhz=570
+clock_ack seq=7 node_group=neptune target_mhz=1755 rc=0 observed_active_mean_mhz=1755
+clock_ack seq=7 node_group=ganymede target_mhz=570 rc=0 observed_active_mean_mhz=570
+bench_config num_prompts=24 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784906587.699223088 event=workload_start seq=7 workload_id=long_prefill
