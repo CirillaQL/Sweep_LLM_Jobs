@@ -353,3 +353,14 @@ P99 ITL (ms):                            82.42
 ===== online_scheduler_window_5_sudden_burst =====
 scheduler_workload seq=5 id=sudden_burst il=128 ol=32 rate=8 online=true active_policy=latency_only
 overload_fallback_selected seq=5 id=sudden_burst policy=latency_only predicted_violation_probability=0.356725
+scheduler_selected seq=5 policy=latency_only status=OVERLOAD_FALLBACK prefill=neptune:1755 decode=ganymede:780 predicted_cluster_power_w=205.6
+
+===== workload_5_sudden_burst =====
+workload_start time=2026-07-24T10:29:11+02:00 seq=5 id=sudden_burst il=128 ol=32 request_rate=8 window_seconds=10 burstiness=4.0 description=highly_bursty_prefill_pressure
+fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
+recommendation neptune_prefill_mhz=1755 ganymede_decode_mhz=780 predicted_cluster_power_w=205.6
+clock_request seq=5 neptune_mhz=1755 ganymede_mhz=780
+clock_ack seq=5 node_group=neptune target_mhz=1755 rc=0 observed_active_mean_mhz=1755
+clock_ack seq=5 node_group=ganymede target_mhz=780 rc=0 observed_active_mean_mhz=780
+bench_config num_prompts=80 nominal_window_s=10 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784881758.639868472 event=workload_start seq=5 workload_id=sudden_burst
