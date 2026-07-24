@@ -1,0 +1,54 @@
+
+===== scheduler_sweep_with_saturation_gate =====
+workload_source=Dual_Sweep_LLM_Phase2_common_measured_grid
+slo_ttft_ms=500 slo_tpot_ms=200 saturation_threshold=0.30
+saturation_model=five_seed_mean_local_retrained_75
+placement=l40s-prefill-l4-decode
+overload_action=min-slo-violation
+online_scheduling=true max_l4_freq=780 max_l40s_freq=2520
+clock_mismatch_action=continue
+scheduler_enabled=true active_scheduler_policy=latency_only gpu_clock_control_mode=manual policy_label=gate_off_latency_only
+scheduler_workload seq=1 id=steady_start il=32 ol=32 rate=1 online=true active_policy=latency_only
+scheduler_selected seq=1 policy=latency_only status=OK prefill=neptune:480 decode=ganymede:360 predicted_cluster_power_w=147.8
+
+===== allocation =====
+time=2026-07-24T10:24:23+02:00
+batch_host=ganymede
+SLURM_JOB_ID=250025
+SLURM_JOB_NODELIST=ganymede,neptune
+model=mistralai/Mistral-7B-v0.1 workload_count=12 slurm_time_limit=00:28:00
+ganymede
+neptune
+JobId=250025 JobName=20260724-102000-luqia-vllm-gate-ablation-exclusive-off
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=01:00:00 TimeMin=N/A
+   SubmitTime=2026-07-24T10:16:02 EligibleTime=2026-07-24T10:16:02
+   AccrueTime=2026-07-24T10:16:02
+   StartTime=2026-07-24T10:24:22 EndTime=2026-07-24T11:24:22 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-24T10:24:22 Scheduler=Main
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede,neptune ExcNodeList=(null)
+   NodeList=ganymede,neptune
+   BatchHost=ganymede
+   NumNodes=2 NumCPUs=256 NumTasks=2 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=128G,node=2,billing=16,gres/gpu=2
+   AllocTRES=cpu=256,mem=128G,node=2,billing=256,gres/gpu=4,gres/gpu:l4=8,gres/gpu:l40s=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=64G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260724-102000-luqia-vllm-gate-ablation-exclusive-off/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260724-102000-luqia-vllm-gate-ablation-exclusive-off/slurm-250025.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260724-102000-luqia-vllm-gate-ablation-exclusive-off/slurm-250025.out
+   Power=
+   TresPerNode=gres/gpu:1
+   TresPerTask=cpu:8
+   
+
+
+===== 100gbe_and_environment_preflight =====
