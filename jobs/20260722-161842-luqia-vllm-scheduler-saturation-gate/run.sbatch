@@ -56,6 +56,12 @@ FIXED_PLACEMENT_FILE="${FIXED_PLACEMENT_FILE_OVERRIDE:-}"
 GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
 POLICY_LABEL="${POLICY_LABEL_OVERRIDE:-latency_plus_saturation}"
 ACTIVE_SCHEDULER_POLICY="${ACTIVE_SCHEDULER_POLICY_OVERRIDE:-latency_plus_saturation}"
+KV_EFFECTIVE_BANDWIDTH_GBPS="${KV_EFFECTIVE_BANDWIDTH_GBPS_OVERRIDE:-}"
+KV_NUM_LAYERS="${KV_NUM_LAYERS_OVERRIDE:-32}"
+KV_NUM_HEADS="${KV_NUM_HEADS_OVERRIDE:-8}"
+KV_HEAD_DIM="${KV_HEAD_DIM_OVERRIDE:-128}"
+KV_BYTES_PER_ELEMENT="${KV_BYTES_PER_ELEMENT_OVERRIDE:-2}"
+DISPATCH_MS="${DISPATCH_MS_OVERRIDE:-0}"
 
 if [ -f "${JOB_DIR}/CANCEL_BEFORE_RUN" ]; then
   echo "cancel_before_run=true job_dir=${JOB_DIR}"
@@ -227,6 +233,16 @@ schedule_one() {
   local gate_decision="${OUT_DIR}/decision_gate_${seq}_${workload_id}.json"
   local active_decision="${OUT_DIR}/decision_active_${seq}_${workload_id}.json"
   local limit_args=()
+  local kv_args=(
+    --kv-num-layers "$KV_NUM_LAYERS"
+    --kv-num-heads "$KV_NUM_HEADS"
+    --kv-head-dim "$KV_HEAD_DIM"
+    --kv-bytes-per-element "$KV_BYTES_PER_ELEMENT"
+    --dispatch-ms "$DISPATCH_MS"
+  )
+  if [ -n "$KV_EFFECTIVE_BANDWIDTH_GBPS" ]; then
+    kv_args+=(--kv-effective-bandwidth-gbps "$KV_EFFECTIVE_BANDWIDTH_GBPS")
+  fi
   if [ -n "$MAX_L4_FREQ" ]; then
     limit_args+=(--max-l4-freq "$MAX_L4_FREQ")
   fi
@@ -238,7 +254,7 @@ schedule_one() {
   "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
     --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
     --policy latency_only --placement "$SCHEDULER_PLACEMENT" \
-    --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" \
+    --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" "${kv_args[@]}" \
     --il "$il" --ol "$ol" --rate "$rate" \
     --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
     --output "$latency_decision" > "${OUT_DIR}/scheduler_latency_${seq}_${workload_id}.json"
@@ -251,7 +267,7 @@ schedule_one() {
   "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
     --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
     --policy latency_plus_saturation --placement "$SCHEDULER_PLACEMENT" \
-    --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" \
+    --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" "${kv_args[@]}" \
     --il "$il" --ol "$ol" --rate "$rate" \
     --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
     --output "$gate_decision" > "${OUT_DIR}/scheduler_gate_${seq}_${workload_id}.json"
@@ -362,6 +378,7 @@ echo "saturation_model=five_seed_mean_local_retrained_75"
 echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
 echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
+echo "kv_effective_bandwidth_gbps=${KV_EFFECTIVE_BANDWIDTH_GBPS:-disabled} kv_num_layers=${KV_NUM_LAYERS} kv_num_heads=${KV_NUM_HEADS} kv_head_dim=${KV_HEAD_DIM} kv_bytes_per_element=${KV_BYTES_PER_ELEMENT} dispatch_ms=${DISPATCH_MS}"
 echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION}"
 echo "scheduler_enabled=${SCHEDULER_ENABLED} active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE} policy_label=${POLICY_LABEL}"
 FIRST_PLACEMENT=""

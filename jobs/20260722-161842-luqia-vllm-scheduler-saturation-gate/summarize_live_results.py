@@ -202,11 +202,22 @@ def main():
         if recommended:
             prefill = recommended["prefill"]
             decode = recommended["decode"]
+            kv_transfer = decision.get("kv_transfer_model", {})
             row.update({
                 "recommended_is_safe": recommended["is_safe"],
                 "prefill_gpu": prefill["gpu_type"],
                 "prefill_target_freq_mhz": prefill["freq_mhz"],
                 "prefill_predicted_p99_ttft_ms": prefill["p99_ttft_ms"],
+                "prefill_predicted_p99_queue_plus_prefill_ms": prefill.get(
+                    "p99_queue_plus_prefill_ms", prefill["p99_ttft_ms"]
+                ),
+                "predicted_kv_transfer_ms": prefill.get("kv_transfer_ms", 0.0),
+                "predicted_dispatch_ms": prefill.get("dispatch_ms", 0.0),
+                "kv_bytes_per_token": kv_transfer.get("kv_bytes_per_token"),
+                "kv_total_bytes": kv_transfer.get("kv_total_bytes"),
+                "kv_effective_bandwidth_gbps": kv_transfer.get(
+                    "effective_bandwidth_gbps"
+                ),
                 "prefill_predicted_p_saturated": prefill["p_saturated"],
                 "decode_gpu": decode["gpu_type"],
                 "decode_target_freq_mhz": decode["freq_mhz"],

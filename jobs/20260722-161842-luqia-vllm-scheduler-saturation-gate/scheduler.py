@@ -16,6 +16,10 @@ from pathlib import Path
 
 LOG_LATENCY_CAP = 15.0
 NODE_GROUPS = {"l40s": "neptune", "l4": "ganymede"}
+DEFAULT_KV_NUM_LAYERS = 32
+DEFAULT_KV_NUM_HEADS = 8
+DEFAULT_KV_HEAD_DIM = 128
+DEFAULT_KV_BYTES_PER_ELEMENT = 2
 
 
 def tree_predict(tree, row):
@@ -73,6 +77,69 @@ def union_probability(*probabilities):
         bounded = min(1.0, max(0.0, float(probability)))
         survival *= 1.0 - bounded
     return 1.0 - survival
+
+
+def kv_transfer_estimate(input_tokens, effective_bandwidth_gbps, num_layers,
+                         num_kv_heads, head_dim, bytes_per_element,
+                         dispatch_ms=0.0):
+    """Estimate cross-node prompt KV transfer time.
+
+    The aggregate KV payload per prompt token is:
+      2 (K and V) * layers * KV heads * head dimension * element bytes.
+    The transfer model intentionally uses measured effective bandwidth rather
+    than physical link speed.
+    """
+    dimensions = {
+        "num_layers": num_layers,
+        "num_kv_heads": num_kv_heads,
+        "head_dim": head_dim,
+        "bytes_per_element": bytes_per_element,
+    }
+    for name, value in dimensions.items():
+        if int(value) <= 0:
+            raise ValueError(f"{name} must be positive, got {value}")
+    if dispatch_ms < 0:
+        raise ValueError(f"dispatch_ms must be non-negative, got {dispatch_ms}")
+
+    bytes_per_token = (
+        2 * int(num_layers) * int(num_kv_heads)
+        * int(head_dim) * int(bytes_per_element)
+    )
+    total_bytes = int(input_tokens) * bytes_per_token
+    enabled = effective_bandwidth_gbps is not None
+    if enabled:
+        if effective_bandwidth_gbps <= 0:
+            raise ValueError(
+                "kv effective bandwidth must be positive when enabled, "
+                f"got {effective_bandwidth_gbps}"
+            )
+        transfer_ms = (
+            total_bytes * 8.0 / (effective_bandwidth_gbps * 1e9) * 1000.0
+        )
+    else:
+        transfer_ms = 0.0
+    return {
+        "enabled": enabled,
+        "formula": (
+            "T_kv = input_tokens * "
+            "(2 * layers * num_kv_heads * head_dim * bytes_per_element) * 8 "
+            "/ effective_bandwidth_gbps"
+        ),
+        "ttft_formula": (
+            "predicted_p99_ttft = predicted_p99_queue_plus_prefill "
+            "+ T_kv + T_dispatch"
+        ),
+        "input_tokens": int(input_tokens),
+        "num_layers": int(num_layers),
+        "num_kv_heads": int(num_kv_heads),
+        "head_dim": int(head_dim),
+        "bytes_per_element": int(bytes_per_element),
+        "kv_bytes_per_token": bytes_per_token,
+        "kv_total_bytes": total_bytes,
+        "effective_bandwidth_gbps": effective_bandwidth_gbps,
+        "kv_transfer_ms": round(transfer_ms, 6),
+        "dispatch_ms": round(float(dispatch_ms), 6),
+    }
 
 
 class PoolScheduler:
@@ -252,13 +319,25 @@ class SaturationEnsemble:
 
 
 class PDPlacementScheduler:
-    def __init__(self, bundle_path, saturation_bundle_path, saturation_threshold=None):
+    def __init__(self, bundle_path, saturation_bundle_path, saturation_threshold=None,
+                 kv_effective_bandwidth_gbps=None,
+                 kv_num_layers=DEFAULT_KV_NUM_LAYERS,
+                 kv_num_heads=DEFAULT_KV_NUM_HEADS,
+                 kv_head_dim=DEFAULT_KV_HEAD_DIM,
+                 kv_bytes_per_element=DEFAULT_KV_BYTES_PER_ELEMENT,
+                 dispatch_ms=0.0):
         bundle = json.loads(Path(bundle_path).read_text(encoding="utf-8"))
         if bundle.get("format") != "sweep-llm-portable-model-v1":
             raise ValueError("Unsupported model bundle")
         self.pools = {gpu: PoolScheduler(gpu, bundle) for gpu in ("l4", "l40s")}
         self.saturation = SaturationEnsemble(saturation_bundle_path, saturation_threshold)
         self.common_slos = sorted(set(self.pools["l4"].slos) & set(self.pools["l40s"].slos))
+        self.kv_effective_bandwidth_gbps = kv_effective_bandwidth_gbps
+        self.kv_num_layers = kv_num_layers
+        self.kv_num_heads = kv_num_heads
+        self.kv_head_dim = kv_head_dim
+        self.kv_bytes_per_element = kv_bytes_per_element
+        self.dispatch_ms = dispatch_ms
 
     def recommend(self, il, ol, rate, slo_ttft, slo_tpot, tp=1,
                   policy="latency_plus_saturation", placement="auto",
@@ -269,6 +348,15 @@ class PDPlacementScheduler:
         if slo_ttft not in self.common_slos or slo_tpot not in self.common_slos:
             raise ValueError(f"Cross-pool SLO must be one of {self.common_slos}")
 
+        kv_transfer = kv_transfer_estimate(
+            il,
+            self.kv_effective_bandwidth_gbps,
+            self.kv_num_layers,
+            self.kv_num_heads,
+            self.kv_head_dim,
+            self.kv_bytes_per_element,
+            self.dispatch_ms,
+        )
         predictions = {}
         max_frequencies = {"l4": max_l4_freq, "l40s": max_l40s_freq}
         for gpu, pool in self.pools.items():
@@ -294,6 +382,23 @@ class PDPlacementScheduler:
                         gpu, il, ol, tp, prediction["freq_mhz"], rate
                     )
                     prediction.update(saturation)
+                    if phase == "prefill":
+                        queue_plus_prefill_ms = prediction["p99_ttft_ms"]
+                        prediction["p99_queue_plus_prefill_ms"] = queue_plus_prefill_ms
+                        prediction["kv_transfer_ms"] = kv_transfer["kv_transfer_ms"]
+                        prediction["dispatch_ms"] = kv_transfer["dispatch_ms"]
+                        prediction["p99_ttft_ms"] = round(
+                            queue_plus_prefill_ms
+                            + kv_transfer["kv_transfer_ms"]
+                            + kv_transfer["dispatch_ms"],
+                            1,
+                        )
+                        prediction["ttft_components_ms"] = {
+                            "queue_plus_prefill": queue_plus_prefill_ms,
+                            "kv_transfer": kv_transfer["kv_transfer_ms"],
+                            "dispatch": kv_transfer["dispatch_ms"],
+                            "total": prediction["p99_ttft_ms"],
+                        }
 
         if policy not in {"latency_only", "latency_plus_saturation"}:
             raise ValueError(f"Unsupported policy: {policy}")
@@ -390,6 +495,7 @@ class PDPlacementScheduler:
                     "placement": placement,
                     "workload": {"il": il, "ol": ol, "rate": rate},
                     "slos": {"ttft_ms": slo_ttft, "tpot_ms": slo_tpot},
+                    "kv_transfer_model": kv_transfer,
                     "saturation_threshold": self.saturation.threshold,
                     "tp_per_role": tp,
                     "recommended": candidates[0],
@@ -403,6 +509,7 @@ class PDPlacementScheduler:
                 "placement": placement,
                 "workload": {"il": il, "ol": ol, "rate": rate},
                 "slos": {"ttft_ms": slo_ttft, "tpot_ms": slo_tpot},
+                "kv_transfer_model": kv_transfer,
                 "saturation_threshold": self.saturation.threshold,
                 **counts,
             }
@@ -415,6 +522,7 @@ class PDPlacementScheduler:
             "placement": placement,
             "workload": {"il": il, "ol": ol, "rate": rate},
             "slos": {"ttft_ms": slo_ttft, "tpot_ms": slo_tpot},
+            "kv_transfer_model": kv_transfer,
             "saturation_threshold": self.saturation.threshold,
             "tp_per_role": tp,
             "recommended": safe[0],
@@ -432,6 +540,13 @@ def main():
     parser.add_argument("--saturation-bundle", type=Path,
                         default=Path(__file__).with_name("saturation_bundle.json"))
     parser.add_argument("--saturation-threshold", type=float)
+    parser.add_argument("--kv-effective-bandwidth-gbps", type=float)
+    parser.add_argument("--kv-num-layers", type=int, default=DEFAULT_KV_NUM_LAYERS)
+    parser.add_argument("--kv-num-heads", type=int, default=DEFAULT_KV_NUM_HEADS)
+    parser.add_argument("--kv-head-dim", type=int, default=DEFAULT_KV_HEAD_DIM)
+    parser.add_argument("--kv-bytes-per-element", type=int,
+                        default=DEFAULT_KV_BYTES_PER_ELEMENT)
+    parser.add_argument("--dispatch-ms", type=float, default=0.0)
     parser.add_argument("--policy", choices=("latency_only", "latency_plus_saturation"),
                         default="latency_plus_saturation")
     parser.add_argument("--placement", choices=("auto", "l40s-prefill-l4-decode"),
@@ -451,7 +566,15 @@ def main():
     args = parser.parse_args()
 
     scheduler = PDPlacementScheduler(
-        args.bundle, args.saturation_bundle, args.saturation_threshold
+        args.bundle,
+        args.saturation_bundle,
+        args.saturation_threshold,
+        args.kv_effective_bandwidth_gbps,
+        args.kv_num_layers,
+        args.kv_num_heads,
+        args.kv_head_dim,
+        args.kv_bytes_per_element,
+        args.dispatch_ms,
     )
     result = scheduler.recommend(
         args.il, args.ol, args.rate, args.slo_ttft, args.slo_tpot, args.tp,
