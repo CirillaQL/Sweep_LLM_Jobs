@@ -409,3 +409,14 @@ P99 ITL (ms):                            82.47
 
 ===== online_scheduler_window_6_short_recovery =====
 scheduler_workload seq=6 id=short_recovery il=32 ol=32 rate=2 online=true active_policy=latency_plus_saturation
+scheduler_selected seq=6 policy=latency_plus_saturation status=OK prefill=neptune:210 decode=ganymede:360 predicted_cluster_power_w=148.7
+
+===== workload_6_short_recovery =====
+workload_start time=2026-07-24T10:18:20+02:00 seq=6 id=short_recovery il=32 ol=32 request_rate=2 window_seconds=12 burstiness=0.5 description=lower_variance_recovery
+fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
+recommendation neptune_prefill_mhz=210 ganymede_decode_mhz=360 predicted_cluster_power_w=148.7
+clock_request seq=6 neptune_mhz=210 ganymede_mhz=360
+clock_ack seq=6 node_group=neptune target_mhz=210 rc=0 observed_active_mean_mhz=210
+clock_ack seq=6 node_group=ganymede target_mhz=360 rc=0 observed_active_mean_mhz=360
+bench_config num_prompts=24 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784881106.511170438 event=workload_start seq=6 workload_id=short_recovery
