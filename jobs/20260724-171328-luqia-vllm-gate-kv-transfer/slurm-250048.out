@@ -640,3 +640,8 @@ workload_start time=2026-07-24T17:25:14+02:00 seq=10 id=prefill_peak il=1024 ol=
 fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
 recommendation neptune_prefill_mhz=2520 ganymede_decode_mhz=780 predicted_cluster_power_w=251.4
 clock_request seq=10 neptune_mhz=2520 ganymede_mhz=780
+clock_ack seq=10 node_group=neptune target_mhz=2520 rc=33 observed_active_mean_mhz=2225
+clock_target_not_sustained seq=10 node_group=neptune target_mhz=2520 observed_active_mean_mhz=2225 action=continue
+clock_ack seq=10 node_group=ganymede target_mhz=780 rc=0 observed_active_mean_mhz=780
+bench_config num_prompts=20 nominal_window_s=10 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784906720.566506350 event=workload_start seq=10 workload_id=prefill_peak
