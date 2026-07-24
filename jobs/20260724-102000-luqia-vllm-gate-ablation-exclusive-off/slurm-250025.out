@@ -243,3 +243,13 @@ P99 ITL (ms):                            83.30
 ===== online_scheduler_window_3_prefill_shift =====
 scheduler_workload seq=3 id=prefill_shift il=128 ol=32 rate=3 online=true active_policy=latency_only
 scheduler_selected seq=3 policy=latency_only status=OK prefill=neptune:480 decode=ganymede:570 predicted_cluster_power_w=177.2
+
+===== workload_3_prefill_shift =====
+workload_start time=2026-07-24T10:27:36+02:00 seq=3 id=prefill_shift il=128 ol=32 request_rate=3 window_seconds=12 burstiness=2.0 description=input_length_shift
+fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
+recommendation neptune_prefill_mhz=480 ganymede_decode_mhz=570 predicted_cluster_power_w=177.2
+clock_request seq=3 neptune_mhz=480 ganymede_mhz=570
+clock_ack seq=3 node_group=neptune target_mhz=480 rc=0 observed_active_mean_mhz=480
+clock_ack seq=3 node_group=ganymede target_mhz=570 rc=0 observed_active_mean_mhz=570
+bench_config num_prompts=36 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784881663.335911532 event=workload_start seq=3 workload_id=prefill_shift
