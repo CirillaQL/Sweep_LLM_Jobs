@@ -577,3 +577,10 @@ P99 ITL (ms):                            77.24
 
 ===== online_scheduler_window_9_quiet_window =====
 scheduler_workload seq=9 id=quiet_window il=32 ol=32 rate=1 online=true active_policy=latency_plus_saturation
+scheduler_selected seq=9 policy=latency_plus_saturation status=OK prefill=neptune:480 decode=ganymede:360 predicted_cluster_power_w=147.8
+
+===== workload_9_quiet_window =====
+workload_start time=2026-07-24T17:24:34+02:00 seq=9 id=quiet_window il=32 ol=32 request_rate=1 window_seconds=12 burstiness=0.5 description=quiet_period_after_pressure
+fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
+recommendation neptune_prefill_mhz=480 ganymede_decode_mhz=360 predicted_cluster_power_w=147.8
+clock_request seq=9 neptune_mhz=480 ganymede_mhz=360
