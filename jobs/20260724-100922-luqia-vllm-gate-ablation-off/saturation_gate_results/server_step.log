@@ -1,0 +1,10 @@
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=neptune node_group=neptune role=prefill mode=serve
+scheduled_gpu=l40s scheduled_freq_mhz=480 gpu_id=0
+gpu_clock_control_mode=manual
+host=ganymede node_group=ganymede role=decode mode=serve
+scheduled_gpu=l4 scheduled_freq_mhz=360 gpu_id=0
+gpu_clock_control_mode=manual
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+CUDA_VISIBLE_DEVICES=0

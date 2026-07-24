@@ -1,0 +1,56 @@
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=ganymede node_group=ganymede role=decode mode=serve
+scheduled_gpu=l4 scheduled_freq_mhz=360 gpu_id=1
+gpu_clock_control_mode=manual
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+CUDA_VISIBLE_DEVICES=1
+host=neptune node_group=neptune role=prefill mode=serve
+scheduled_gpu=l40s scheduled_freq_mhz=480 gpu_id=1
+gpu_clock_control_mode=manual
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+CUDA_VISIBLE_DEVICES=1
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+1, NVIDIA L4, 23034 MiB, 595.71.05
+2, NVIDIA L4, 23034 MiB, 595.71.05
+3, NVIDIA L4, 23034 MiB, 595.71.05
+4, NVIDIA L4, 23034 MiB, 595.71.05
+5, NVIDIA L4, 23034 MiB, 595.71.05
+6, NVIDIA L4, 23034 MiB, 595.71.05
+7, NVIDIA L4, 23034 MiB, 595.71.05
+lock_gpu_clock gpu_id=1 target_mhz=480
+lock_gpu_clock gpu_id=1 target_mhz=360
+GPU clocks set to "(gpuClkMin 480, gpuClkMax 480)" for GPU 00000000:61:00.0
+
+Warning: persistence mode is disabled on device 00000000:61:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+GPU clocks set to "(gpuClkMin 360, gpuClkMax 360)" for GPU 00000000:37:00.0
+
+Warning: persistence mode is disabled on device 00000000:37:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+1, NVIDIA L40S, 210 MHz, 2520 MHz
+1, NVIDIA L4, 210 MHz, 2040 MHz
+launch_vllm host=neptune role=prefill ip=10.1.0.6 http_port=32024 kv_port=34024
+NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=enp160s0f0np0
+kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_producer","kv_buffer_size":"1e1","kv_port":"34024","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31024","http_port":"32024","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
+launch_vllm host=ganymede role=decode ip=10.1.0.3 http_port=33024 kv_port=34024
+NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=eno12399np0
+kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_consumer","kv_buffer_size":"8e9","kv_port":"34024","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31024","http_port":"33024","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
