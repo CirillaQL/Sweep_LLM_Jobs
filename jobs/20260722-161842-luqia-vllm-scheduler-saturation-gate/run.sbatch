@@ -57,6 +57,12 @@ GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
 POLICY_LABEL="${POLICY_LABEL_OVERRIDE:-latency_plus_saturation}"
 ACTIVE_SCHEDULER_POLICY="${ACTIVE_SCHEDULER_POLICY_OVERRIDE:-latency_plus_saturation}"
 
+if [ -f "${JOB_DIR}/CANCEL_BEFORE_RUN" ]; then
+  echo "cancel_before_run=true job_dir=${JOB_DIR}"
+  echo "job_exit_rc=0"
+  exit 0
+fi
+
 PROXY_IP=10.1.0.3
 PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
 PROXY_HTTP_PORT=$((30000 + PORT_OFFSET))
