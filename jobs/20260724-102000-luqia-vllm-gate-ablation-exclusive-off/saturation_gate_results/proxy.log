@@ -1,1 +1,4 @@
 proxy_start hostname=ganymede http=0.0.0.0:30025 registry=0.0.0.0:31025
+registry_add role=prefill http=10.1.0.6:32025 zmq=10.1.0.6:34025
+registry_add role=decode http=10.1.0.3:33025 zmq=10.1.0.3:34025
+route count=0 request_id=___prefill_addr_10.1.0.6:34025___decode_addr_10.1.0.3:34025_7f63780cfdc2426989952381a39c4f86 prefill_http=10.1.0.6:32025 decode_http=10.1.0.3:33025
