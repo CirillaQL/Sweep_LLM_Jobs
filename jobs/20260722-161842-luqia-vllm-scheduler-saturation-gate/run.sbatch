@@ -55,6 +55,7 @@ SCHEDULER_ENABLED="${SCHEDULER_ENABLED_OVERRIDE:-true}"
 FIXED_PLACEMENT_FILE="${FIXED_PLACEMENT_FILE_OVERRIDE:-}"
 GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
 POLICY_LABEL="${POLICY_LABEL_OVERRIDE:-latency_plus_saturation}"
+ACTIVE_SCHEDULER_POLICY="${ACTIVE_SCHEDULER_POLICY_OVERRIDE:-latency_plus_saturation}"
 
 PROXY_IP=10.1.0.3
 PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
@@ -218,6 +219,7 @@ schedule_one() {
   local rate="$5"
   local latency_decision="${OUT_DIR}/decision_latency_${seq}_${workload_id}.json"
   local gate_decision="${OUT_DIR}/decision_gate_${seq}_${workload_id}.json"
+  local active_decision="${OUT_DIR}/decision_active_${seq}_${workload_id}.json"
   local limit_args=()
   if [ -n "$MAX_L4_FREQ" ]; then
     limit_args+=(--max-l4-freq "$MAX_L4_FREQ")
@@ -226,7 +228,7 @@ schedule_one() {
     limit_args+=(--max-l40s-freq "$MAX_L40S_FREQ")
   fi
 
-  echo "scheduler_workload seq=${seq} id=${workload_id} il=${il} ol=${ol} rate=${rate} online=${ONLINE_SCHEDULING}"
+  echo "scheduler_workload seq=${seq} id=${workload_id} il=${il} ol=${ol} rate=${rate} online=${ONLINE_SCHEDULING} active_policy=${ACTIVE_SCHEDULER_POLICY}"
   "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
     --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
     --policy latency_only --placement "$SCHEDULER_PLACEMENT" \
@@ -235,7 +237,7 @@ schedule_one() {
     --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
     --output "$latency_decision" > "${OUT_DIR}/scheduler_latency_${seq}_${workload_id}.json"
   local latency_rc=$?
-  if [ "$latency_rc" -ne 0 ]; then
+  if [ "$latency_rc" -ne 0 ] && [ "$latency_rc" -ne 2 ]; then
     echo "latency_only_scheduler_failed seq=${seq} rc=${latency_rc}"
     return 20
   fi
@@ -252,34 +254,51 @@ schedule_one() {
     echo "saturation_gate_scheduler_failed seq=${seq} rc=${gate_rc}"
     return 21
   fi
-  if [ "$gate_rc" -eq 2 ]; then
+
+  local active_source active_rc
+  case "$ACTIVE_SCHEDULER_POLICY" in
+    latency_only)
+      active_source="$latency_decision"
+      active_rc="$latency_rc"
+      ;;
+    latency_plus_saturation)
+      active_source="$gate_decision"
+      active_rc="$gate_rc"
+      ;;
+    *)
+      echo "unsupported_active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY}"
+      return 21
+      ;;
+  esac
+  cp "$active_source" "$active_decision"
+  if [ "$active_rc" -eq 2 ]; then
     GATE_REJECTED=$((GATE_REJECTED + 1))
-    echo "saturation_gate_no_admit seq=${seq} id=${workload_id}"
+    echo "active_policy_no_admit seq=${seq} id=${workload_id} policy=${ACTIVE_SCHEDULER_POLICY}"
     return 2
   fi
 
   GATE_ADMITTED=$((GATE_ADMITTED + 1))
-  local gate_status overload_probability values
-  read -r gate_status overload_probability <<< "$(decision_status "$gate_decision")"
-  if [ "$gate_status" = OVERLOAD_FALLBACK ]; then
+  local active_status overload_probability values
+  read -r active_status overload_probability <<< "$(decision_status "$active_decision")"
+  if [ "$active_status" = OVERLOAD_FALLBACK ]; then
     OVERLOAD_FALLBACKS=$((OVERLOAD_FALLBACKS + 1))
-    echo "overload_fallback_selected seq=${seq} id=${workload_id} predicted_violation_probability=${overload_probability}"
-  elif [ "$gate_status" != OK ]; then
-    echo "unexpected_gate_status seq=${seq} id=${workload_id} status=${gate_status}"
+    echo "overload_fallback_selected seq=${seq} id=${workload_id} policy=${ACTIVE_SCHEDULER_POLICY} predicted_violation_probability=${overload_probability}"
+  elif [ "$active_status" != OK ]; then
+    echo "unexpected_active_status seq=${seq} id=${workload_id} status=${active_status}"
     return 22
   fi
 
-  values=$(placement_values "$gate_decision") || return 22
+  values=$(placement_values "$active_decision") || return 22
   local prefill_node prefill_freq decode_node decode_freq predicted_power
   read -r prefill_node prefill_freq decode_node decode_freq predicted_power <<< "$values"
-  echo "scheduler_selected seq=${seq} status=${gate_status} prefill=${prefill_node}:${prefill_freq} decode=${decode_node}:${decode_freq} predicted_cluster_power_w=${predicted_power}"
+  echo "scheduler_selected seq=${seq} policy=${ACTIVE_SCHEDULER_POLICY} status=${active_status} prefill=${prefill_node}:${prefill_freq} decode=${decode_node}:${decode_freq} predicted_cluster_power_w=${predicted_power}"
   if [ "$SCHEDULER_PLACEMENT" = l40s-prefill-l4-decode ] && \
     { [ "$prefill_node" != neptune ] || [ "$decode_node" != ganymede ]; }; then
     echo "unexpected_role_selection=true seq=${seq}"
     return 23
   fi
   if [ -z "$FIRST_PLACEMENT" ]; then
-    FIRST_PLACEMENT="$gate_decision"
+    FIRST_PLACEMENT="$active_decision"
   fi
   return 0
 }
@@ -338,7 +357,7 @@ echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
 echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
 echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION}"
-echo "scheduler_enabled=${SCHEDULER_ENABLED} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE} policy_label=${POLICY_LABEL}"
+echo "scheduler_enabled=${SCHEDULER_ENABLED} active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE} policy_label=${POLICY_LABEL}"
 FIRST_PLACEMENT=""
 WORKLOAD_COUNT=0
 while IFS=, read -r workload_id il ol rate field5 field6 field7; do
@@ -551,7 +570,7 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   fi
 
   if [ "$SCHEDULER_ENABLED" = true ]; then
-    placement="${OUT_DIR}/decision_gate_${SEQ}_${workload_id}.json"
+    placement="${OUT_DIR}/decision_active_${SEQ}_${workload_id}.json"
   else
     placement="$FIXED_PLACEMENT_FILE"
   fi
@@ -686,6 +705,8 @@ if [ "$ENERGY_RC" -eq 0 ]; then
   LIVE_SUMMARY_ARGS=()
   if [ "$SCHEDULER_ENABLED" != true ]; then
     LIVE_SUMMARY_ARGS+=(--no-decisions)
+  else
+    LIVE_SUMMARY_ARGS+=(--decision-prefix decision_active)
   fi
   "$PYTHON_BIN" "$LIVE_SUMMARY_SCRIPT" \
     --out-dir "$OUT_DIR" \
@@ -728,6 +749,7 @@ echo "overload_fallbacks=${OVERLOAD_FALLBACKS}"
 echo "bench_failures=${BENCH_FAILURES}"
 echo "parent_reset_verified=$([ "$RESET_REQUIRED" = true ] && echo "$RESET_DONE" || echo not_required)"
 echo "scheduler_enabled=${SCHEDULER_ENABLED}"
+echo "active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY}"
 echo "gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
 echo "job_exit_rc=${FINAL_RC}"
 exit "$FINAL_RC"

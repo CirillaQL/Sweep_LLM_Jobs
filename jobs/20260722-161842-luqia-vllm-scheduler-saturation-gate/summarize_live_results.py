@@ -131,6 +131,7 @@ def main():
     parser.add_argument("--output-json", type=Path, required=True)
     parser.add_argument("--output-csv", type=Path, required=True)
     parser.add_argument("--no-decisions", action="store_true")
+    parser.add_argument("--decision-prefix", default="decision_gate")
     args = parser.parse_args()
 
     with args.workloads.open(newline="", encoding="utf-8") as handle:
@@ -150,7 +151,7 @@ def main():
     csv_rows = []
     for seq, workload in enumerate(workloads, start=1):
         workload_id = workload["workload_id"]
-        decision_path = args.out_dir / f"decision_gate_{seq}_{workload_id}.json"
+        decision_path = args.out_dir / f"{args.decision_prefix}_{seq}_{workload_id}.json"
         if args.no_decisions:
             decision = None
             recommended = None
