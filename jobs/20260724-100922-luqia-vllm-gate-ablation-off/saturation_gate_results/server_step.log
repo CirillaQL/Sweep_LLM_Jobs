@@ -54,3 +54,8 @@ index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
 launch_vllm host=ganymede role=decode ip=10.1.0.3 http_port=33023 kv_port=34023
 NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=eno12399np0
 kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_consumer","kv_buffer_size":"8e9","kv_port":"34023","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31023","http_port":"33023","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
+reset_gpu_clock gpu_id=0
+All done.
+node_server_exit host=ganymede role=decode rc=1
+srun: error: ganymede: task 0: Exited with exit code 1
+srun: Terminating StepId=250023.1
