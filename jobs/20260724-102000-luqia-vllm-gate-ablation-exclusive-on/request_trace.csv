@@ -1,0 +1,13 @@
+workload_id,input_len,output_len,request_rate,window_seconds,burstiness,description
+steady_start,32,32,1,12,1.0,low_rate_poisson_start
+short_ramp,32,32,4,12,1.5,rate_jump_with_moderate_burstiness
+prefill_shift,128,32,3,12,2.0,input_length_shift
+decode_shift,32,128,2,12,0.8,output_length_shift
+sudden_burst,128,32,8,10,4.0,highly_bursty_prefill_pressure
+short_recovery,32,32,2,12,0.5,lower_variance_recovery
+long_prefill,512,32,2,12,2.5,long_prompt_pressure
+mixed_pressure,128,128,3,10,3.0,prefill_decode_combined_pressure
+quiet_window,32,32,1,12,0.5,quiet_period_after_pressure
+prefill_peak,1024,32,2,10,4.0,long_prompt_burst
+decode_peak,32,512,1,10,2.0,long_decode_burst
+final_recovery,128,32,1,12,1.0,recovery_to_low_rate
