@@ -354,3 +354,43 @@ dynamic_clock_ack host=neptune seq=10 target_mhz=1245 rc=0 observed_active_mean_
   "active_clock_mean_mhz": 1242.5
 }
 dynamic_clock_ack host=ganymede seq=10 target_mhz=1830 rc=33 observed_active_mean_mhz=1242
+dynamic_clock_apply host=ganymede seq=11 target_mhz=1830
+GPU clocks set to "(gpuClkMin 1830, gpuClkMax 1830)" for GPU 00000000:0D:00.0
+
+Warning: persistence mode is disabled on device 00000000:0D:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+dynamic_clock_apply host=neptune seq=11 target_mhz=1755
+GPU clocks set to "(gpuClkMin 1755, gpuClkMax 1755)" for GPU 00000000:4A:00.0
+
+Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-161842-luqia-vllm-scheduler-saturation-gate/clock_probe.py", line 80, in <module>
+    main()
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-161842-luqia-vllm-scheduler-saturation-gate/clock_probe.py", line 43, in main
+    torch.cuda.set_device(0)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/torch/cuda/__init__.py", line 567, in set_device
+    torch._C._cuda_setDevice(device)
+torch.AcceleratorError: CUDA error: out of memory
+Search for `cudaErrorMemoryAllocation' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+dynamic_clock_ack host=ganymede seq=11 target_mhz=1830 rc=32 observed_active_mean_mhz=NA
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 2839,
+  "active_samples": 7,
+  "active_clock_min_mhz": 1755.0,
+  "active_clock_max_mhz": 1755.0,
+  "active_clock_mean_mhz": 1755.0
+}
+dynamic_clock_ack host=neptune seq=11 target_mhz=1755 rc=0 observed_active_mean_mhz=1755
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 250141.1 ON ganymede CANCELLED AT 2026-07-25T18:03:09 ***
+srun: error: ganymede: task 0: Killed
+srun: Terminating StepId=250141.1
+srun: error: neptune: task 1: Killed
