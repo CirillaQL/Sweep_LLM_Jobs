@@ -196,3 +196,8 @@ workload_start time=2026-07-25T17:43:30+02:00 seq=2 id=sanity_min_bursty il=32 o
 fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
 recommendation neptune_prefill_mhz=1755 ganymede_decode_mhz=2040 predicted_cluster_power_w=219.3
 clock_request seq=2 neptune_mhz=1755 ganymede_mhz=2040
+clock_ack seq=2 node_group=neptune target_mhz=1755 rc=0 observed_active_mean_mhz=1755
+clock_ack seq=2 node_group=ganymede target_mhz=2040 rc=33 observed_active_mean_mhz=1248
+clock_target_not_sustained seq=2 node_group=ganymede target_mhz=2040 observed_active_mean_mhz=1248 action=continue
+bench_config num_prompts=64 nominal_window_s=8 timeout_s=180 finite_rate_random_arrivals=true burstiness_applied=false
+energy_event unix_ts=1784994217.038961879 event=workload_start seq=2 workload_id=sanity_min_bursty
