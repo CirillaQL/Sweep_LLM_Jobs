@@ -271,6 +271,23 @@ PY
         # A partial read is harmless because the parent only accepts a complete
         # matching sequence and retries once per second.
         printf '%s %s %s %s\n' "$seq" "$target" "$rc" "$observed" > "$ack_file"
+        ack_publish_rc=1
+        ack_payload=$(
+          printf '{"node_group":"%s","seq":%s,"target_mhz":%s,"rc":%s,"observed_mhz":"%s"}' \
+            "$NODE_GROUP" "$seq" "$target" "$rc" "$observed"
+        )
+        for ack_publish_attempt in 1 2 3; do
+          if curl -fsS --connect-timeout 2 --max-time 5 \
+            -H "Content-Type: application/json" \
+            -d "$ack_payload" \
+            "http://${PROXY_IP}:${PROXY_HTTP_PORT}/control/clock-ack" \
+            >/dev/null 2>&1; then
+            ack_publish_rc=0
+            break
+          fi
+          sleep 1
+        done
+        echo "clock_ack_transport host=${HOST} seq=${seq} transport=http rc=${ack_publish_rc} attempts=${ack_publish_attempt}"
         echo "dynamic_clock_ack host=${HOST} seq=${seq} target_mhz=${target} rc=${rc} observed_mhz=${observed} verification_mode=${CLOCK_ACK_MODE}"
         last_seq="$seq"
       fi

@@ -55,6 +55,7 @@ SCHEDULER_ENABLED="${SCHEDULER_ENABLED_OVERRIDE:-true}"
 FIXED_PLACEMENT_FILE="${FIXED_PLACEMENT_FILE_OVERRIDE:-}"
 GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
 CLOCK_ACK_MODE="${CLOCK_ACK_MODE_OVERRIDE:-monitor}"
+CLOCK_ACK_TRANSPORT="${CLOCK_ACK_TRANSPORT_OVERRIDE:-http_with_file_fallback}"
 POLICY_LABEL="${POLICY_LABEL_OVERRIDE:-latency_plus_saturation}"
 ACTIVE_SCHEDULER_POLICY="${ACTIVE_SCHEDULER_POLICY_OVERRIDE:-latency_plus_saturation}"
 KV_EFFECTIVE_BANDWIDTH_GBPS="${KV_EFFECTIVE_BANDWIDTH_GBPS_OVERRIDE:-}"
@@ -63,6 +64,14 @@ KV_NUM_HEADS="${KV_NUM_HEADS_OVERRIDE:-8}"
 KV_HEAD_DIM="${KV_HEAD_DIM_OVERRIDE:-128}"
 KV_BYTES_PER_ELEMENT="${KV_BYTES_PER_ELEMENT_OVERRIDE:-2}"
 DISPATCH_MS="${DISPATCH_MS_OVERRIDE:-0}"
+
+case "$CLOCK_ACK_TRANSPORT" in
+  http|file|http_with_file_fallback) ;;
+  *)
+    echo "unsupported_clock_ack_transport=${CLOCK_ACK_TRANSPORT}"
+    exit 26
+    ;;
+esac
 
 if [ -f "${JOB_DIR}/CANCEL_BEFORE_RUN" ]; then
   echo "cancel_before_run=true job_dir=${JOB_DIR}"
@@ -92,6 +101,7 @@ export CLOCK_CONTROL_DIR PROXY_IP PROXY_HTTP_PORT PROXY_REGISTER_PORT
 export PREFILL_HTTP_PORT DECODE_HTTP_PORT PREFILL_IP DECODE_IP KV_PORT
 export GPU_CLOCK_CONTROL_MODE_OVERRIDE
 export CLOCK_ACK_MODE_OVERRIDE="$CLOCK_ACK_MODE"
+export CLOCK_ACK_TRANSPORT_OVERRIDE="$CLOCK_ACK_TRANSPORT"
 
 # Minerva may expose an SMT-adjusted value that conflicts with the requested
 # Slurm TRES when this batch script launches nested srun steps.
@@ -345,12 +355,32 @@ wait_clock_ack() {
   local ack="${CLOCK_CONTROL_DIR}/${node_group}.ack"
   local elapsed=0
   while true; do
-    if [ -s "$ack" ]; then
-      local ack_seq ack_target ack_rc observed
+    local ack_seq ack_target ack_rc observed ack_source ack_line
+    ack_source=""
+    ack_line=""
+    if [ "$CLOCK_ACK_TRANSPORT" = http ] || \
+      [ "$CLOCK_ACK_TRANSPORT" = http_with_file_fallback ]; then
+      ack_line=$(
+        curl -fsS --connect-timeout 1 --max-time 2 \
+          "http://${PROXY_IP}:${PROXY_HTTP_PORT}/control/clock-ack/${node_group}/${seq}" \
+          2>/dev/null || true
+      )
+      if [ -n "$ack_line" ]; then
+        read -r ack_seq ack_target ack_rc observed <<< "$ack_line"
+        ack_source=http
+      fi
+    fi
+    if [ -z "$ack_source" ] && \
+      { [ "$CLOCK_ACK_TRANSPORT" = file ] || \
+        [ "$CLOCK_ACK_TRANSPORT" = http_with_file_fallback ]; } && \
+      [ -s "$ack" ]; then
       read -r ack_seq ack_target ack_rc observed < "$ack" || true
+      ack_source=file
+    fi
+    if [ -n "$ack_source" ]; then
       if [ "${ack_seq:-}" = "$seq" ] && [ -n "${ack_target:-}" ] && \
         [ -n "${ack_rc:-}" ] && [ -n "${observed:-}" ]; then
-        echo "clock_ack seq=${ack_seq} node_group=${node_group} target_mhz=${ack_target} rc=${ack_rc} observed_mhz=${observed:-NA} verification_mode=${CLOCK_ACK_MODE}"
+        echo "clock_ack seq=${ack_seq} node_group=${node_group} target_mhz=${ack_target} rc=${ack_rc} observed_mhz=${observed:-NA} verification_mode=${CLOCK_ACK_MODE} transport=${ack_source}"
         if [ "$ack_target" != "$target" ]; then
           return 1
         fi
@@ -381,7 +411,7 @@ echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
 echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
 echo "kv_effective_bandwidth_gbps=${KV_EFFECTIVE_BANDWIDTH_GBPS:-disabled} kv_num_layers=${KV_NUM_LAYERS} kv_num_heads=${KV_NUM_HEADS} kv_head_dim=${KV_HEAD_DIM} kv_bytes_per_element=${KV_BYTES_PER_ELEMENT} dispatch_ms=${DISPATCH_MS}"
-echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION} clock_ack_mode=${CLOCK_ACK_MODE}"
+echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION} clock_ack_mode=${CLOCK_ACK_MODE} clock_ack_transport=${CLOCK_ACK_TRANSPORT}"
 echo "scheduler_enabled=${SCHEDULER_ENABLED} active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE} policy_label=${POLICY_LABEL}"
 FIRST_PLACEMENT=""
 WORKLOAD_COUNT=0

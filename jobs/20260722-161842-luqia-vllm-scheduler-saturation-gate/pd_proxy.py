@@ -20,6 +20,7 @@ PREFILL_LOCK = threading.Lock()
 DECODE_LOCK = threading.Lock()
 PING_TTL_SECONDS = 10
 REQUEST_COUNT = 0
+CLOCK_ACKS: dict[tuple[str, int], dict[str, Any]] = {}
 
 
 def remove_expired(instances: dict[str, tuple[str, float]]) -> None:
@@ -117,6 +118,53 @@ async def registry(_: web.Request) -> web.Response:
     )
 
 
+async def publish_clock_ack(request: web.Request) -> web.Response:
+    try:
+        payload = await request.json()
+        node_group = str(payload["node_group"])
+        seq = int(payload["seq"])
+        target_mhz = int(payload["target_mhz"])
+        rc = int(payload["rc"])
+        observed_mhz = str(payload["observed_mhz"])
+    except (KeyError, TypeError, ValueError):
+        return web.json_response({"error": "invalid clock acknowledgement"}, status=400)
+    if node_group not in {"neptune", "ganymede"} or seq < 1:
+        return web.json_response({"error": "invalid clock acknowledgement"}, status=400)
+    ack = {
+        "node_group": node_group,
+        "seq": seq,
+        "target_mhz": target_mhz,
+        "rc": rc,
+        "observed_mhz": observed_mhz,
+        "published_at": time.time(),
+    }
+    CLOCK_ACKS[(node_group, seq)] = ack
+    print(
+        f"clock_ack_publish node_group={node_group} seq={seq} "
+        f"target_mhz={target_mhz} rc={rc} observed_mhz={observed_mhz}",
+        flush=True,
+    )
+    return web.json_response({"ok": True})
+
+
+async def read_clock_ack(request: web.Request) -> web.Response:
+    node_group = request.match_info["node_group"]
+    try:
+        seq = int(request.match_info["seq"])
+    except ValueError:
+        raise web.HTTPBadRequest(text="invalid sequence")
+    ack = CLOCK_ACKS.get((node_group, seq))
+    if ack is None:
+        raise web.HTTPNotFound(text="clock acknowledgement not available")
+    return web.Response(
+        text=(
+            f"{ack['seq']} {ack['target_mhz']} {ack['rc']} "
+            f"{ack['observed_mhz']}\n"
+        ),
+        content_type="text/plain",
+    )
+
+
 async def handle_request(request: web.Request) -> web.StreamResponse:
     global REQUEST_COUNT
     try:
@@ -184,6 +232,8 @@ async def handle_request(request: web.Request) -> web.StreamResponse:
 
 app.router.add_get("/health", health)
 app.router.add_get("/registry", registry)
+app.router.add_post("/control/clock-ack", publish_clock_ack)
+app.router.add_get("/control/clock-ack/{node_group}/{seq}", read_clock_ack)
 app.router.add_post("/v1/completions", handle_request)
 app.router.add_post("/v1/chat/completions", handle_request)
 
