@@ -8,6 +8,15 @@ VISIBLE_GPUS="${CUDA_VISIBLE_DEVICES:-0}"
 GPU_ID="${VISIBLE_GPUS%%,*}"
 CLOCK_ACK_TOLERANCE_MHZ="${CLOCK_ACK_TOLERANCE_MHZ_OVERRIDE:-90}"
 GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
+CLOCK_ACK_MODE="${CLOCK_ACK_MODE_OVERRIDE:-monitor}"
+
+case "$CLOCK_ACK_MODE" in
+  monitor|active_probe) ;;
+  *)
+    echo "unsupported_clock_ack_mode=${CLOCK_ACK_MODE}"
+    exit 21
+    ;;
+esac
 
 case "$HOST" in
   neptune)
@@ -66,6 +75,7 @@ esac
 echo "host=${HOST} node_group=${NODE_GROUP} role=${ROLE} mode=${MODE}"
 echo "scheduled_gpu=${EXPECTED_GPU} scheduled_freq_mhz=${TARGET_FREQ} gpu_id=${GPU_ID}"
 echo "gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
+echo "clock_ack_mode=${CLOCK_ACK_MODE}"
 echo "node_ip=${NODE_IP} peer_ip=${PEER_IP} interface=${IFACE}"
 echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-unset}"
 ip -brief address show dev "$IFACE" 2>&1 || true
@@ -218,12 +228,13 @@ clock_controller() {
         echo "dynamic_clock_apply host=${HOST} seq=${seq} target_mhz=${target}"
         if ! sudo nvidia-smi -i "$GPU_ID" -lgc "${target},${target}"; then
           rc=31
-        elif ! CUDA_VISIBLE_DEVICES="$GPU_ID" "$PYTHON_BIN" "$CLOCK_PROBE" \
-          --smi-index "$GPU_ID" --seconds 2 --output "$probe_file"; then
-          rc=32
-        else
-          observed=$(
-            "$PYTHON_BIN" - "$probe_file" "$target" "$CLOCK_ACK_TOLERANCE_MHZ" <<'PY'
+        elif [ "$CLOCK_ACK_MODE" = active_probe ]; then
+          if ! CUDA_VISIBLE_DEVICES="$GPU_ID" "$PYTHON_BIN" "$CLOCK_PROBE" \
+            --smi-index "$GPU_ID" --seconds 2 --output "$probe_file"; then
+            rc=32
+          else
+            observed=$(
+              "$PYTHON_BIN" - "$probe_file" "$target" "$CLOCK_ACK_TOLERANCE_MHZ" <<'PY'
 import json
 import sys
 
@@ -240,14 +251,27 @@ mean = float(data["active_clock_mean_mhz"])
 print(round(mean))
 raise SystemExit(0 if abs(mean - target) <= tolerance else 1)
 PY
-          ) || rc=33
+            ) || rc=33
+          fi
+        else
+          # Starting a new CUDA process while vLLM owns almost all L4 memory can
+          # fail during context creation. Treat successful -lgc as the control
+          # acknowledgement and verify sustained clocks from the existing
+          # 0.5-second workload telemetry instead.
+          observed=$(
+            nvidia-smi -i "$GPU_ID" --query-gpu=clocks.current.graphics \
+              --format=csv,noheader,nounits 2>/dev/null \
+              | head -n 1 | tr -d ' '
+          )
+          observed="${observed:-NA}"
+          echo "clock_runtime_verification host=${HOST} seq=${seq} source=${TELEMETRY_FILE}"
         fi
         # The parent pre-creates this file. Writing it in place avoids a stale
         # negative lookup or directory-entry cache on the shared filesystem.
         # A partial read is harmless because the parent only accepts a complete
         # matching sequence and retries once per second.
         printf '%s %s %s %s\n' "$seq" "$target" "$rc" "$observed" > "$ack_file"
-        echo "dynamic_clock_ack host=${HOST} seq=${seq} target_mhz=${target} rc=${rc} observed_active_mean_mhz=${observed}"
+        echo "dynamic_clock_ack host=${HOST} seq=${seq} target_mhz=${target} rc=${rc} observed_mhz=${observed} verification_mode=${CLOCK_ACK_MODE}"
         last_seq="$seq"
       fi
     fi

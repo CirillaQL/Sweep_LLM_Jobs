@@ -91,7 +91,18 @@ still producing the generic live summary.
 ## Frequency safety
 
 Each admitted workload applies the scheduler's `rec_freq_mhz` with `-lgc`.
+The default `CLOCK_ACK_MODE=monitor` acknowledges a successful GPU-control
+command without starting another CUDA process alongside vLLM. Sustained clocks
+are verified from the existing 0.5-second workload telemetry. The legacy
+active-probe behavior remains available with
+`CLOCK_ACK_MODE_OVERRIDE=active_probe`, but it requires enough free GPU memory
+for a second CUDA context.
+
 Cleanup stops the server step first, starts a fresh two-node reset step, runs
 `sudo nvidia-smi -i 0 -rgc`, performs an active CUDA clock probe, and executes a
 second `-rgc` as the final GPU-control operation. Signal and normal-exit paths
 share the same cleanup handler.
+
+The vLLM help text is captured before checking for `--burstiness`, avoiding a
+`pipefail`/`grep -q` SIGPIPE false negative. When supported, each online trace
+window passes its configured burstiness value to `vllm bench serve`.

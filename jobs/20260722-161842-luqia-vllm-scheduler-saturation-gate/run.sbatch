@@ -54,6 +54,7 @@ CLOCK_MISMATCH_ACTION="${CLOCK_MISMATCH_ACTION_OVERRIDE:-abort}"
 SCHEDULER_ENABLED="${SCHEDULER_ENABLED_OVERRIDE:-true}"
 FIXED_PLACEMENT_FILE="${FIXED_PLACEMENT_FILE_OVERRIDE:-}"
 GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
+CLOCK_ACK_MODE="${CLOCK_ACK_MODE_OVERRIDE:-monitor}"
 POLICY_LABEL="${POLICY_LABEL_OVERRIDE:-latency_plus_saturation}"
 ACTIVE_SCHEDULER_POLICY="${ACTIVE_SCHEDULER_POLICY_OVERRIDE:-latency_plus_saturation}"
 KV_EFFECTIVE_BANDWIDTH_GBPS="${KV_EFFECTIVE_BANDWIDTH_GBPS_OVERRIDE:-}"
@@ -90,6 +91,7 @@ export JOB_DIR OUT_DIR ENV_DIR PYTHON_BIN VLLM_BIN MODEL PLACEMENT_FILE CLOCK_PR
 export CLOCK_CONTROL_DIR PROXY_IP PROXY_HTTP_PORT PROXY_REGISTER_PORT
 export PREFILL_HTTP_PORT DECODE_HTTP_PORT PREFILL_IP DECODE_IP KV_PORT
 export GPU_CLOCK_CONTROL_MODE_OVERRIDE
+export CLOCK_ACK_MODE_OVERRIDE="$CLOCK_ACK_MODE"
 
 # Minerva may expose an SMT-adjusted value that conflicts with the requested
 # Slurm TRES when this batch script launches nested srun steps.
@@ -348,13 +350,13 @@ wait_clock_ack() {
       read -r ack_seq ack_target ack_rc observed < "$ack" || true
       if [ "${ack_seq:-}" = "$seq" ] && [ -n "${ack_target:-}" ] && \
         [ -n "${ack_rc:-}" ] && [ -n "${observed:-}" ]; then
-        echo "clock_ack seq=${ack_seq} node_group=${node_group} target_mhz=${ack_target} rc=${ack_rc} observed_active_mean_mhz=${observed:-NA}"
+        echo "clock_ack seq=${ack_seq} node_group=${node_group} target_mhz=${ack_target} rc=${ack_rc} observed_mhz=${observed:-NA} verification_mode=${CLOCK_ACK_MODE}"
         if [ "$ack_target" != "$target" ]; then
           return 1
         fi
         if [ "$ack_rc" != 0 ]; then
           if [ "$ack_rc" = 33 ] && [ "$CLOCK_MISMATCH_ACTION" = continue ]; then
-            echo "clock_target_not_sustained seq=${ack_seq} node_group=${node_group} target_mhz=${ack_target} observed_active_mean_mhz=${observed:-NA} action=continue"
+            echo "clock_target_not_sustained seq=${ack_seq} node_group=${node_group} target_mhz=${ack_target} observed_mhz=${observed:-NA} action=continue"
             return 0
           fi
           return 1
@@ -379,7 +381,7 @@ echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
 echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
 echo "kv_effective_bandwidth_gbps=${KV_EFFECTIVE_BANDWIDTH_GBPS:-disabled} kv_num_layers=${KV_NUM_LAYERS} kv_num_heads=${KV_NUM_HEADS} kv_head_dim=${KV_HEAD_DIM} kv_bytes_per_element=${KV_BYTES_PER_ELEMENT} dispatch_ms=${DISPATCH_MS}"
-echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION}"
+echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION} clock_ack_mode=${CLOCK_ACK_MODE}"
 echo "scheduler_enabled=${SCHEDULER_ENABLED} active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE} policy_label=${POLICY_LABEL}"
 FIRST_PLACEMENT=""
 WORKLOAD_COUNT=0
@@ -556,7 +558,8 @@ if [ "$SMOKE_RC" -ne 0 ]; then
 fi
 
 VLLM_BURSTINESS_SUPPORTED=false
-if "$VLLM_BIN" bench serve --help 2>&1 | grep -q -- "--burstiness"; then
+VLLM_BENCH_HELP=$("$VLLM_BIN" bench serve --help 2>&1 || true)
+if [[ "$VLLM_BENCH_HELP" == *"--burstiness"* ]]; then
   VLLM_BURSTINESS_SUPPORTED=true
 fi
 echo "vllm_burstiness_supported=${VLLM_BURSTINESS_SUPPORTED}"
@@ -637,7 +640,7 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   if [ "$VLLM_BURSTINESS_SUPPORTED" = true ] && [ -n "$burstiness" ]; then
     BURSTINESS_ARGS+=(--burstiness "$burstiness")
   fi
-  echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${window_seconds} timeout_s=${BENCH_TIMEOUT_SECONDS} finite_rate_random_arrivals=true burstiness_applied=${VLLM_BURSTINESS_SUPPORTED}"
+  echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${window_seconds} timeout_s=${BENCH_TIMEOUT_SECONDS} finite_rate_random_arrivals=true burstiness_applied=${VLLM_BURSTINESS_SUPPORTED} burstiness_value=${burstiness:-none}"
   START_TS=$(date +%s.%N)
   echo "${START_TS},workload_start,${SEQ},${workload_id},${POLICY_LABEL}" >> "${OUT_DIR}/events.csv"
   echo "energy_event unix_ts=${START_TS} event=workload_start seq=${SEQ} workload_id=${workload_id}"
