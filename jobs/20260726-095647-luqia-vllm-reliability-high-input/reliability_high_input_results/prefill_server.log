@@ -1192,3 +1192,339 @@
 [0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:05:49 [serving.py:120]     raise VLLMValidationError(
 [0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:05:49 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
 [0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:59862 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:46570 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:12 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:46578 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:46588 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:46594 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:13 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:46602 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:46614 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:46628 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:14 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:46630 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:15 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:46632 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43712 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:17 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43718 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43732 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43738 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:18 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43742 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43758 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43764 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43780 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:19 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43782 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:20 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43788 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:21 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43794 - "POST /v1/completions HTTP/1.1" 400 Bad Request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120] Error in preprocessing prompt inputs
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120] Traceback (most recent call last):
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/completion/serving.py", line 114, in render_completion_request
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]     engine_prompts = await renderer.render_prompt_and_embeds(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 263, in render_prompt_and_embeds
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]     token_prompts = await self.render_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 235, in render_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]     return await asyncio.gather(*tasks)
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 302, in _create_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]     return await self._create_prompt_from_text(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 342, in _create_prompt_from_text
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]     return self._create_tokens_prompt(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/renderer.py", line 398, in _create_tokens_prompt
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120]     raise VLLMValidationError(
+[0;36m(APIServer pid=1514226)[0;0m ERROR 07-26 10:06:22 [serving.py:120] vllm.exceptions.VLLMValidationError: This model's maximum context length is 4095 tokens. However, your request has 4096 input tokens. Please reduce the length of the input messages. (parameter=input_tokens, value=4096)
+[0;36m(APIServer pid=1514226)[0;0m INFO:     10.1.0.3:43810 - "POST /v1/completions HTTP/1.1" 400 Bad Request
