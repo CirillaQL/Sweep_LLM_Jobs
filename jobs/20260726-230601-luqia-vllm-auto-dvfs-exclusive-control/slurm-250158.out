@@ -126,3 +126,18 @@ ready name=prefill elapsed_s=70 url=http://10.1.0.6:32158/v1/models
 ready name=decode elapsed_s=0 url=http://10.1.0.3:33158/v1/models
 
 ===== wait_for_pd_registry =====
+{"prefill": ["10.1.0.6:32158"], "decode": ["10.1.0.3:33158"]}
+registry_ready=true
+
+===== pd_smoke_request =====
+smoke_curl_rc=0
+vllm_burstiness_supported=true
+
+===== multi_workload_bench =====
+
+===== workload_1_steady_start =====
+workload_start time=2026-07-26T23:10:10+02:00 seq=1 id=steady_start il=32 ol=32 request_rate=1 window_seconds=12 burstiness=1.0 description=low_rate_poisson_start
+fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=auto
+automatic_dvfs_window seq=1 manual_clock_commands=false
+bench_config num_prompts=12 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=true burstiness_value=1.0
+energy_event unix_ts=1785100210.731118338 event=workload_start seq=1 workload_id=steady_start
