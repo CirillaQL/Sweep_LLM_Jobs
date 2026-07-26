@@ -166,7 +166,10 @@ def main():
                 "combined_energy_j": round(item["combined_energy_j"], 6),
                 "combined_energy_wh": round(item["combined_energy_wh"], 9),
                 "combined_avg_power_w": round(item["combined_avg_power_w"], 6),
-                "energy_per_request_j": round(item["energy_per_request_j"], 6),
+                "energy_per_request_j": (
+                    round(item["energy_per_request_j"], 6)
+                    if item["energy_per_request_j"] is not None else ""
+                ),
             })
     print(json.dumps(payload, indent=2))
 

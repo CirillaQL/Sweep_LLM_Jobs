@@ -103,6 +103,12 @@ Cleanup stops the server step first, starts a fresh two-node reset step, runs
 second `-rgc` as the final GPU-control operation. Signal and normal-exit paths
 share the same cleanup handler.
 
-The vLLM help text is captured before checking for `--burstiness`, avoiding a
-`pipefail`/`grep -q` SIGPIPE false negative. When supported, each online trace
-window passes its configured burstiness value to `vllm bench serve`.
+The pinned vLLM environment supports `--burstiness`, so each online trace
+window passes its configured value directly. Other environments can disable
+the flag with `VLLM_BURSTINESS_SUPPORTED_OVERRIDE=false`.
+
+The parent parses successful and failed request counts from every benchmark;
+a zero-success or nonzero-failure result marks the workload as failed even
+when `vllm bench serve` itself exits zero. Energy integration still emits JSON
+and CSV rows for such windows, with a blank per-request value when the request
+count is zero.

@@ -557,11 +557,14 @@ if [ "$SMOKE_RC" -ne 0 ]; then
   exit 8
 fi
 
-VLLM_BURSTINESS_SUPPORTED=false
-VLLM_BENCH_HELP=$("$VLLM_BIN" bench serve --help 2>&1 || true)
-if [[ "$VLLM_BENCH_HELP" == *"--burstiness"* ]]; then
-  VLLM_BURSTINESS_SUPPORTED=true
-fi
+VLLM_BURSTINESS_SUPPORTED="${VLLM_BURSTINESS_SUPPORTED_OVERRIDE:-true}"
+case "$VLLM_BURSTINESS_SUPPORTED" in
+  true|false) ;;
+  *)
+    echo "invalid_vllm_burstiness_supported=${VLLM_BURSTINESS_SUPPORTED}"
+    exit 8
+    ;;
+esac
 echo "vllm_burstiness_supported=${VLLM_BURSTINESS_SUPPORTED}"
 
 section "multi_workload_bench"
@@ -656,7 +659,22 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   echo "energy_event unix_ts=${END_TS} event=workload_end seq=${SEQ} workload_id=${workload_id}"
   echo "bench_rc=${BENCH_RC} seq=${SEQ} id=${workload_id}"
   tail -n 80 "$BENCH_FILE" || true
-  if [ "$BENCH_RC" -ne 0 ]; then
+  read -r BENCH_SUCCESSFUL BENCH_FAILED <<< "$(
+    "$PYTHON_BIN" - "$BENCH_FILE" <<'PY'
+import re
+import sys
+
+text = open(sys.argv[1], encoding="utf-8", errors="replace").read()
+successful = re.search(r"Successful requests:\s+(\d+)", text)
+failed = re.search(r"Failed requests:\s+(\d+)", text)
+print(
+    int(successful.group(1)) if successful else -1,
+    int(failed.group(1)) if failed else -1,
+)
+PY
+  )"
+  echo "bench_request_counts seq=${SEQ} id=${workload_id} successful=${BENCH_SUCCESSFUL} failed=${BENCH_FAILED}"
+  if [ "$BENCH_RC" -ne 0 ] || [ "$BENCH_SUCCESSFUL" -le 0 ] || [ "$BENCH_FAILED" -ne 0 ]; then
     BENCH_FAILURES=$((BENCH_FAILURES + 1))
     FINAL_RC=9
   fi
