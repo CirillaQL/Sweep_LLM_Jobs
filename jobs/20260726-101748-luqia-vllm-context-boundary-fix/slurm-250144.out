@@ -143,3 +143,11 @@ workload_start time=2026-07-26T10:20:25+02:00 seq=1 id=input_4032_burst il=4032 
 fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
 recommendation neptune_prefill_mhz=1755 ganymede_decode_mhz=1830 predicted_cluster_power_w=230.3
 clock_request seq=1 neptune_mhz=1755 ganymede_mhz=1830
+clock_ack_timeout seq=1 node_group=neptune target_mhz=1755
+
+===== stop_servers_then_reset =====
+stopping_server_step_pid=1705185
+stopping_proxy_pid=1705178
+
+===== parent_gpu_clock_reset =====
+reset_strategy=fresh_srun_after_server_step
