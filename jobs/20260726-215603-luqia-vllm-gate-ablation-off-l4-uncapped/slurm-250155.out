@@ -370,3 +370,59 @@ clock_ack seq=5 node_group=neptune target_mhz=735 rc=0 observed_mhz=210 verifica
 clock_ack seq=5 node_group=ganymede target_mhz=1200 rc=0 observed_mhz=1200 verification_mode=monitor transport=http
 bench_config num_prompts=80 nominal_window_s=10 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=true burstiness_value=4.0
 energy_event unix_ts=1785096204.828122825 event=workload_start seq=5 workload_id=sudden_burst
+energy_event unix_ts=1785096234.282453315 event=workload_end seq=5 workload_id=sudden_burst
+bench_rc=0 seq=5 id=sudden_burst
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x792818fcd120>, seed=0, num_prompts=80, dataset_name='random', no_stream=False, dataset_path=None, no_oversample=False, skip_chat_template=False, disable_shuffle=False, custom_output_len=256, spec_bench_output_len=256, spec_bench_category=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=None, blazedit_min_distance=0.0, blazedit_max_distance=1.0, random_input_len=128, random_output_len=32, random_range_ratio=0.0, random_prefix_len=0, random_batch_size=1, no_reranker=False, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, random_mm_limit_mm_per_prompt={'image': 255, 'video': 1}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_output_len=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, label=None, backend='openai', base_url='http://10.1.0.3:30155', host='127.0.0.1', port=8000, endpoint='/v1/completions', header=None, max_concurrency=16, model='mistralai/Mistral-7B-v0.1', input_len=None, output_len=None, tokenizer=None, tokenizer_mode='auto', use_beam_search=False, logprobs=None, request_rate=8.0, burstiness=4.0, trust_remote_code=False, disable_tqdm=False, num_warmups=1, profile=False, save_result=False, save_detailed=False, append_result=False, metadata=None, result_dir=None, result_filename=None, ignore_eos=False, percentile_metrics=None, metric_percentiles='99', goodput=None, request_id_prefix='bench-7af949c0-', top_p=None, top_k=None, min_p=None, temperature=0.0, frequency_penalty=None, presence_penalty=None, repetition_penalty=None, served_model_name=None, lora_modules=None, ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=0, extra_body=None)
+INFO 07-26 22:03:37 [datasets.py:612] Sampling input_len from [127, 127] and output_len from [32, 32]
+Starting initial single prompt test run...
+Skipping endpoint ready check.
+Warming up with 1 requests...
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:01<00:00,  1.92s/it]100%|██████████| 1/1 [00:01<00:00,  1.92s/it]
+Warmup run completed.
+Starting main benchmark run...
+Traffic request rate: 8.0
+Burstiness factor: 4.0 (Gamma distribution)
+Maximum request concurrency: 16
+  0%|          | 0/80 [00:00<?, ?it/s]  1%|▏         | 1/80 [00:02<03:01,  2.30s/it]  2%|▎         | 2/80 [00:02<01:25,  1.10s/it]  4%|▍         | 3/80 [00:02<00:56,  1.35it/s]  6%|▋         | 5/80 [00:02<00:26,  2.80it/s]  8%|▊         | 6/80 [00:03<00:21,  3.40it/s]  9%|▉         | 7/80 [00:03<00:18,  3.85it/s] 11%|█▏        | 9/80 [00:03<00:14,  4.95it/s] 12%|█▎        | 10/80 [00:03<00:12,  5.51it/s] 14%|█▍        | 11/80 [00:03<00:13,  4.99it/s] 15%|█▌        | 12/80 [00:04<00:12,  5.55it/s] 18%|█▊        | 14/80 [00:04<00:08,  7.76it/s] 19%|█▉        | 15/80 [00:04<00:11,  5.74it/s] 21%|██▏       | 17/80 [00:04<00:09,  6.43it/s] 22%|██▎       | 18/80 [00:04<00:10,  6.13it/s] 24%|██▍       | 19/80 [00:05<00:10,  5.89it/s] 26%|██▋       | 21/80 [00:05<00:07,  8.05it/s] 28%|██▊       | 22/80 [00:05<00:08,  7.09it/s] 30%|███       | 24/80 [00:05<00:06,  9.20it/s] 32%|███▎      | 26/80 [00:05<00:06,  7.89it/s] 34%|███▍      | 27/80 [00:06<00:08,  6.55it/s] 35%|███▌      | 28/80 [00:06<00:08,  6.14it/s] 39%|███▉      | 31/80 [00:06<00:07,  6.50it/s] 41%|████▏     | 33/80 [00:06<00:06,  7.41it/s] 42%|████▎     | 34/80 [00:07<00:06,  6.83it/s] 44%|████▍     | 35/80 [00:07<00:07,  5.98it/s] 48%|████▊     | 38/80 [00:07<00:05,  7.20it/s] 51%|█████▏    | 41/80 [00:07<00:04,  8.66it/s] 52%|█████▎    | 42/80 [00:08<00:04,  8.50it/s] 54%|█████▍    | 43/80 [00:08<00:05,  6.98it/s] 55%|█████▌    | 44/80 [00:08<00:06,  5.57it/s] 59%|█████▉    | 47/80 [00:09<00:05,  6.48it/s] 61%|██████▏   | 49/80 [00:09<00:03,  7.97it/s] 62%|██████▎   | 50/80 [00:09<00:04,  7.21it/s] 64%|██████▍   | 51/80 [00:09<00:05,  5.35it/s] 68%|██████▊   | 54/80 [00:10<00:03,  6.69it/s] 71%|███████▏  | 57/80 [00:10<00:02,  9.54it/s] 74%|███████▍  | 59/80 [00:10<00:02,  7.76it/s] 76%|███████▋  | 61/80 [00:11<00:02,  6.46it/s] 79%|███████▉  | 63/80 [00:11<00:02,  6.39it/s] 82%|████████▎ | 66/80 [00:11<00:01,  7.77it/s] 84%|████████▍ | 67/80 [00:12<00:02,  5.43it/s] 88%|████████▊ | 70/80 [00:12<00:01,  6.59it/s] 92%|█████████▎| 74/80 [00:12<00:00, 10.06it/s] 95%|█████████▌| 76/80 [00:13<00:00,  5.97it/s] 99%|█████████▉| 79/80 [00:13<00:00,  7.27it/s]100%|██████████| 80/80 [00:13<00:00,  5.91it/s]
+tip: install termplotlib and gnuplot to plot the metrics
+============ Serving Benchmark Result ============
+Successful requests:                     80        
+Failed requests:                         0         
+Maximum request concurrency:             16        
+Request rate configured (RPS):           8.00      
+Benchmark duration (s):                  13.53     
+Total input tokens:                      10160     
+Total generated tokens:                  2560      
+Request throughput (req/s):              5.91      
+Output token throughput (tok/s):         189.26    
+Peak output token throughput (tok/s):    233.00    
+Peak concurrent requests:                24.00     
+Total token throughput (tok/s):          940.41    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          294.73    
+Median TTFT (ms):                        278.31    
+P99 TTFT (ms):                           437.28    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          62.87     
+Median TPOT (ms):                        63.14     
+P99 TPOT (ms):                           63.58     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           62.87     
+Median ITL (ms):                         62.55     
+P99 ITL (ms):                            76.91     
+==================================================
+bench_request_counts seq=5 id=sudden_burst successful=80 failed=0
+
+===== online_scheduler_window_6_short_recovery =====
+scheduler_workload seq=6 id=short_recovery il=32 ol=32 rate=2 online=true active_policy=latency_only
+scheduler_selected seq=6 policy=latency_only status=OK prefill=neptune:210 decode=ganymede:360 predicted_cluster_power_w=148.7
+
+===== workload_6_short_recovery =====
+workload_start time=2026-07-26T22:03:54+02:00 seq=6 id=short_recovery il=32 ol=32 request_rate=2 window_seconds=12 burstiness=0.5 description=lower_variance_recovery
+fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
+recommendation neptune_prefill_mhz=210 ganymede_decode_mhz=360 predicted_cluster_power_w=148.7
+clock_request seq=6 neptune_mhz=210 ganymede_mhz=360
+clock_ack seq=6 node_group=neptune target_mhz=210 rc=0 observed_mhz=735 verification_mode=monitor transport=http
+clock_ack seq=6 node_group=ganymede target_mhz=360 rc=0 observed_mhz=1200 verification_mode=monitor transport=http
+bench_config num_prompts=24 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=true burstiness_value=0.5
+energy_event unix_ts=1785096237.129320725 event=workload_start seq=6 workload_id=short_recovery
