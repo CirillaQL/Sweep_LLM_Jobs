@@ -366,3 +366,8 @@ scheduler_selected seq=5 policy=latency_plus_saturation status=OVERLOAD_FALLBACK
 workload_start time=2026-07-26T10:05:03+02:00 seq=5 id=input_4096_limit il=4096 ol=1 request_rate=1 window_seconds=12 burstiness=1.0 description=absolute_input_limit_random_prompt_realizes_4095
 fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
 recommendation neptune_prefill_mhz=1755 ganymede_decode_mhz=1830 predicted_cluster_power_w=221.0
+clock_request seq=5 neptune_mhz=1755 ganymede_mhz=1830
+clock_ack seq=5 node_group=neptune target_mhz=1755 rc=0 observed_mhz=1755 verification_mode=monitor
+clock_ack seq=5 node_group=ganymede target_mhz=1830 rc=0 observed_mhz=1830 verification_mode=monitor
+bench_config num_prompts=32 nominal_window_s=12 timeout_s=180 finite_rate_random_arrivals=true burstiness_applied=false burstiness_value=1.0
+energy_event unix_ts=1785053104.346980046 event=workload_start seq=5 workload_id=input_4096_limit
