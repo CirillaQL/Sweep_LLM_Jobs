@@ -64,3 +64,11 @@ All done.
 clock_runtime_verification host=ganymede seq=1 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260726-221504-luqia-vllm-gate-ablation-on-l4-uncapped/saturation_gate_results/decode_ganymede_telemetry.csv
 clock_ack_transport host=ganymede seq=1 transport=http rc=0 attempts=1
 dynamic_clock_ack host=ganymede seq=1 target_mhz=360 rc=0 observed_mhz=360 verification_mode=monitor
+dynamic_clock_apply host=neptune seq=1 target_mhz=480
+GPU clocks set to "(gpuClkMin 480, gpuClkMax 480)" for GPU 00000000:4A:00.0
+
+Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+clock_runtime_verification host=neptune seq=1 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260726-221504-luqia-vllm-gate-ablation-on-l4-uncapped/saturation_gate_results/prefill_neptune_telemetry.csv
+clock_ack_transport host=neptune seq=1 transport=http rc=0 attempts=1
+dynamic_clock_ack host=neptune seq=1 target_mhz=480 rc=0 observed_mhz=480 verification_mode=monitor
