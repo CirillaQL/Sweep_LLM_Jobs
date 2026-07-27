@@ -360,3 +360,12 @@ bench_request_counts seq=4 id=decode_shift successful=24 failed=0
 
 ===== online_scheduler_window_5_sudden_burst =====
 scheduler_workload seq=5 id=sudden_burst il=128 ol=32 rate=8 online=true active_policy=latency_plus_saturation
+overload_fallback_selected seq=5 id=sudden_burst policy=latency_plus_saturation predicted_violation_probability=0.499362
+scheduler_selected seq=5 policy=latency_plus_saturation status=OVERLOAD_FALLBACK prefill=neptune:1755 decode=ganymede:2040 predicted_cluster_power_w=225.7
+
+===== workload_5_sudden_burst =====
+workload_start time=2026-07-27T10:27:18+02:00 seq=5 id=sudden_burst il=128 ol=32 request_rate=8 window_seconds=10 burstiness=4.0 description=highly_bursty_prefill_pressure
+fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
+recommendation neptune_prefill_mhz=1755 ganymede_decode_mhz=2040 predicted_cluster_power_w=225.7
+clock_request seq=5 neptune_mhz=1755 ganymede_mhz=2040
+clock_ack seq=5 node_group=neptune target_mhz=1755 rc=0 observed_mhz=2265 verification_mode=monitor transport=http
