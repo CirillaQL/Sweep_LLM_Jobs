@@ -124,3 +124,22 @@ waiting name=prefill elapsed_s=50 url=http://10.1.0.6:32162/v1/models
 waiting name=prefill elapsed_s=55 url=http://10.1.0.6:32162/v1/models
 waiting name=prefill elapsed_s=60 url=http://10.1.0.6:32162/v1/models
 waiting name=prefill elapsed_s=65 url=http://10.1.0.6:32162/v1/models
+waiting name=prefill elapsed_s=70 url=http://10.1.0.6:32162/v1/models
+ready name=prefill elapsed_s=70 url=http://10.1.0.6:32162/v1/models
+ready name=decode elapsed_s=0 url=http://10.1.0.3:33162/v1/models
+
+===== wait_for_pd_registry =====
+{"prefill": ["10.1.0.6:32162"], "decode": ["10.1.0.3:33162"]}
+registry_ready=true
+
+===== pd_smoke_request =====
+smoke_curl_rc=0
+vllm_burstiness_supported=true
+
+===== multi_workload_bench =====
+
+===== workload_1_threshold_long_prompt =====
+workload_start time=2026-07-27T11:55:37+02:00 seq=1 id=threshold_long_prompt il=1024 ol=128 request_rate=1 window_seconds=12 burstiness=1.0 description=proven_latency_safe_capacity_saturation
+fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
+recommendation neptune_prefill_mhz=1755 ganymede_decode_mhz=2040 predicted_cluster_power_w=269.4
+clock_request seq=1 neptune_mhz=1755 ganymede_mhz=2040
