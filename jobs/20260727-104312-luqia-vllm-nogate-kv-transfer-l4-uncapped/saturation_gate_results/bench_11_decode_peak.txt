@@ -9,4 +9,31 @@ Starting main benchmark run...
 Traffic request rate: 1.0
 Burstiness factor: 2.0 (Gamma distribution)
 Maximum request concurrency: 16
-  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:35<05:23, 35.95s/it] 20%|██        | 2/10 [00:37<02:03, 15.45s/it]
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:35<05:23, 35.95s/it] 20%|██        | 2/10 [00:37<02:03, 15.45s/it] 30%|███       | 3/10 [00:39<01:06,  9.44s/it] 40%|████      | 4/10 [00:39<00:35,  5.85s/it] 50%|█████     | 5/10 [00:40<00:19,  3.96s/it] 60%|██████    | 6/10 [00:41<00:11,  2.92s/it] 70%|███████   | 7/10 [00:42<00:06,  2.33s/it] 80%|████████  | 8/10 [00:43<00:03,  1.81s/it] 90%|█████████ | 9/10 [00:43<00:01,  1.53s/it]100%|██████████| 10/10 [00:44<00:00,  1.30s/it]100%|██████████| 10/10 [00:44<00:00,  4.47s/it]
+tip: install termplotlib and gnuplot to plot the metrics
+============ Serving Benchmark Result ============
+Successful requests:                     10        
+Failed requests:                         0         
+Maximum request concurrency:             16        
+Request rate configured (RPS):           1.00      
+Benchmark duration (s):                  44.69     
+Total input tokens:                      310       
+Total generated tokens:                  5120      
+Request throughput (req/s):              0.22      
+Output token throughput (tok/s):         114.56    
+Peak output token throughput (tok/s):    160.00    
+Peak concurrent requests:                10.00     
+Total token throughput (tok/s):          121.50    
+---------------Time to First Token----------------
+Mean TTFT (ms):                          246.30    
+Median TTFT (ms):                        250.31    
+P99 TTFT (ms):                           294.21    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          67.10     
+Median TPOT (ms):                        67.26     
+P99 TPOT (ms):                           67.43     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           67.10     
+Median ITL (ms):                         67.33     
+P99 ITL (ms):                            71.08     
+==================================================
