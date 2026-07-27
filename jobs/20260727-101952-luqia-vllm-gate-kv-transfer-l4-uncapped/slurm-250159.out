@@ -199,3 +199,6 @@ fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode
 recommendation neptune_prefill_mhz=210 ganymede_decode_mhz=360 predicted_cluster_power_w=161.7
 clock_request seq=2 neptune_mhz=210 ganymede_mhz=360
 clock_ack seq=2 node_group=neptune target_mhz=210 rc=0 observed_mhz=210 verification_mode=monitor transport=http
+clock_ack seq=2 node_group=ganymede target_mhz=360 rc=0 observed_mhz=360 verification_mode=monitor transport=http
+bench_config num_prompts=48 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=true burstiness_value=1.5
+energy_event unix_ts=1785140723.181721677 event=workload_start seq=2 workload_id=short_ramp
