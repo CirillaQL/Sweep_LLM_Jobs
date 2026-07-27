@@ -197,3 +197,8 @@ scheduler_selected seq=2 policy=latency_only status=OK prefill=neptune:735 decod
 workload_start time=2026-07-27T11:28:03+02:00 seq=2 id=long_decode il=512 ol=1024 request_rate=1 window_seconds=12 burstiness=1.0 description=proven_long_decode_capacity_saturation
 fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
 recommendation neptune_prefill_mhz=735 ganymede_decode_mhz=2040 predicted_cluster_power_w=256.8
+clock_request seq=2 neptune_mhz=735 ganymede_mhz=2040
+clock_ack seq=2 node_group=neptune target_mhz=735 rc=0 observed_mhz=1245 verification_mode=monitor transport=http
+clock_ack seq=2 node_group=ganymede target_mhz=2040 rc=0 observed_mhz=2040 verification_mode=monitor transport=http
+bench_config num_prompts=12 nominal_window_s=12 timeout_s=300 finite_rate_random_arrivals=true burstiness_applied=true burstiness_value=1.0
+energy_event unix_ts=1785144484.346735973 event=workload_start seq=2 workload_id=long_decode
