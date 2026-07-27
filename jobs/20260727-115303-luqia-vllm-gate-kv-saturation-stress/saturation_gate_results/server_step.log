@@ -120,3 +120,19 @@ All done.
 clock_runtime_verification host=ganymede seq=4 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260727-115303-luqia-vllm-gate-kv-saturation-stress/saturation_gate_results/decode_ganymede_telemetry.csv
 clock_ack_transport host=ganymede seq=4 transport=http rc=0 attempts=1
 dynamic_clock_ack host=ganymede seq=4 target_mhz=2040 rc=0 observed_mhz=2040 verification_mode=monitor
+dynamic_clock_apply host=ganymede seq=5 target_mhz=2040
+GPU clocks set to "(gpuClkMin 2040, gpuClkMax 2040)" for GPU 00000000:0D:00.0
+
+Warning: persistence mode is disabled on device 00000000:0D:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+clock_runtime_verification host=ganymede seq=5 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260727-115303-luqia-vllm-gate-kv-saturation-stress/saturation_gate_results/decode_ganymede_telemetry.csv
+clock_ack_transport host=ganymede seq=5 transport=http rc=0 attempts=1
+dynamic_clock_ack host=ganymede seq=5 target_mhz=2040 rc=0 observed_mhz=2040 verification_mode=monitor
+dynamic_clock_apply host=neptune seq=5 target_mhz=2520
+GPU clocks set to "(gpuClkMin 2520, gpuClkMax 2520)" for GPU 00000000:4A:00.0
+
+Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+clock_runtime_verification host=neptune seq=5 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260727-115303-luqia-vllm-gate-kv-saturation-stress/saturation_gate_results/prefill_neptune_telemetry.csv
+clock_ack_transport host=neptune seq=5 transport=http rc=0 attempts=1
+dynamic_clock_ack host=neptune seq=5 target_mhz=2520 rc=0 observed_mhz=2265 verification_mode=monitor
