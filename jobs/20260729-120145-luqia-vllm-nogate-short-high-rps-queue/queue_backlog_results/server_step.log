@@ -88,3 +88,25 @@ All done.
 clock_runtime_verification host=ganymede seq=2 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260729-120145-luqia-vllm-nogate-short-high-rps-queue/queue_backlog_results/decode_ganymede_telemetry.csv
 clock_ack_transport host=ganymede seq=2 transport=http rc=0 attempts=1
 dynamic_clock_ack host=ganymede seq=2 target_mhz=2040 rc=0 observed_mhz=360 verification_mode=monitor
+dynamic_clock_apply host=neptune seq=3 target_mhz=480
+GPU clocks set to "(gpuClkMin 480, gpuClkMax 480)" for GPU 00000000:4A:00.0
+
+Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+clock_runtime_verification host=neptune seq=3 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260729-120145-luqia-vllm-nogate-short-high-rps-queue/queue_backlog_results/prefill_neptune_telemetry.csv
+clock_ack_transport host=neptune seq=3 transport=http rc=0 attempts=1
+dynamic_clock_ack host=neptune seq=3 target_mhz=480 rc=0 observed_mhz=735 verification_mode=monitor
+dynamic_clock_apply host=ganymede seq=3 target_mhz=360
+GPU clocks set to "(gpuClkMin 360, gpuClkMax 360)" for GPU 00000000:0D:00.0
+
+Warning: persistence mode is disabled on device 00000000:0D:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+clock_runtime_verification host=ganymede seq=3 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260729-120145-luqia-vllm-nogate-short-high-rps-queue/queue_backlog_results/decode_ganymede_telemetry.csv
+clock_ack_transport host=ganymede seq=3 transport=http rc=0 attempts=1
+dynamic_clock_ack host=ganymede seq=3 target_mhz=360 rc=0 observed_mhz=2040 verification_mode=monitor
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 250242.1 ON ganymede CANCELLED AT 2026-07-29T12:12:04 ***
+srun: error: ganymede: task 0: Killed
+srun: Terminating StepId=250242.1
+srun: error: neptune: task 1: Killed
