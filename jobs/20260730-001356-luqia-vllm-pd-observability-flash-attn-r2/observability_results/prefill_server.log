@@ -23,3 +23,24 @@
 [Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
 [Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
 [0;36m(EngineCore_DP0 pid=2273822)[0;0m INFO 07-30 00:17:17 [parallel_state.py:1423] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m INFO 07-30 00:17:18 [gpu_model_runner.py:4033] Starting to load model mistralai/Mistral-7B-v0.1...
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m INFO 07-30 00:17:19 [cuda.py:328] Using AttentionBackendEnum.FLASH_ATTN backend.
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m Exception in thread Thread-1 (_report_usage_worker):
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m Traceback (most recent call last):
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m     self.run()
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/threading.py", line 953, in run
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m     self._target(*self._args, **self._kwargs)
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/usage/usage_lib.py", line 173, in _report_usage_worker
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m     self._report_usage_once(model_architecture, usage_context, extra_kvs)
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/usage/usage_lib.py", line 241, in _report_usage_once
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m     self._write_to_file(data)
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/usage/usage_lib.py", line 270, in _write_to_file
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m     os.makedirs(os.path.dirname(_USAGE_STATS_JSON_PATH), exist_ok=True)
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m     makedirs(head, exist_ok=exist_ok)
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 225, in makedirs
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m     mkdir(name, mode)
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m PermissionError: [Errno 13] Permission denied: '/root/.config'
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+[0;36m(EngineCore_DP0 pid=2273822)[0;0m Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:02<00:02,  2.21s/it]
