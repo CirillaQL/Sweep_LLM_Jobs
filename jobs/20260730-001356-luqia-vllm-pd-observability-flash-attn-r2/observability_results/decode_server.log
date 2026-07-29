@@ -44,3 +44,176 @@
 [0;36m(EngineCore_DP0 pid=2521882)[0;0m PermissionError: [Errno 13] Permission denied: '/root/.config'
 [0;36m(EngineCore_DP0 pid=2521882)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
 [0;36m(EngineCore_DP0 pid=2521882)[0;0m Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:02<00:02,  2.41s/it]
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:07<00:00,  4.09s/it]
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:07<00:00,  3.84s/it]
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m 
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m INFO 07-30 00:17:24 [default_loader.py:291] Loading weights took 7.81 seconds
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m INFO 07-30 00:17:25 [gpu_model_runner.py:4130] Model loading took 13.5 GiB memory and 8.864094 seconds
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m INFO 07-30 00:17:26 [gpu_worker.py:356] Available KV cache memory: 4.11 GiB
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m INFO 07-30 00:17:26 [kv_cache_utils.py:1307] GPU KV cache size: 33,648 tokens
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m INFO 07-30 00:17:26 [kv_cache_utils.py:1312] Maximum concurrency for 4,096 tokens per request: 8.18x
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/tvm_ffi/_optional_torch_c_dlpack.py:174: UserWarning: Failed to JIT torch c dlpack extension, EnvTensorAllocator will not be enabled.
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m We recommend installing via `pip install torch-c-dlpack-ext`
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   warnings.warn(
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946] EngineCore failed to start.
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946] Traceback (most recent call last):
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 937, in run_engine_core
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 691, in __init__
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     super().__init__(
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 112, in __init__
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     num_gpu_blocks, num_cpu_blocks, kv_cache_config = self._initialize_kv_caches(
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 269, in _initialize_kv_caches
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     self.model_executor.initialize_from_config(kv_cache_configs)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/abstract.py", line 115, in initialize_from_config
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     self.collective_rpc("initialize_from_config", args=(kv_cache_configs,))
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/uniproc_executor.py", line 75, in collective_rpc
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     result = run_method(self.driver_worker, method, args, kwargs)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/serial_utils.py", line 461, in run_method
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     return func(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/worker_base.py", line 320, in initialize_from_config
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     self.worker.initialize_from_config(kv_cache_config)  # type: ignore
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_worker.py", line 403, in initialize_from_config
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     ensure_kv_transfer_initialized(self.vllm_config, kv_cache_config)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_transfer_state.py", line 67, in ensure_kv_transfer_initialized
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     _KV_CONNECTOR_AGENT = KVConnectorFactory.create_connector(
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/factory.py", line 52, in create_connector
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     connector_cls, compat_sig = cls._get_connector_class_with_compat(
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/factory.py", line 111, in _get_connector_class_with_compat
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     connector_cls = cls._registry[connector_name]()
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/factory.py", line 37, in loader
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     module = importlib.import_module(module_path)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/importlib/__init__.py", line 126, in import_module
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     return _bootstrap._gcd_import(name[level:], package, level)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_connector.py", line 21, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     from vllm.model_executor.layers.attention.mla_attention import MLACommonMetadata
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/layers/attention/mla_attention.py", line 270, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     from flashinfer import BatchPrefillWithRaggedKVCacheWrapper
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/__init__.py", line 23, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     from . import jit as jit
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/__init__.py", line 22, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     from . import cubin_loader
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/cubin_loader.py", line 27, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     from .core import logger
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/core.py", line 18, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     os.makedirs(jit_env.FLASHINFER_WORKSPACE_DIR, exist_ok=True)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     makedirs(head, exist_ok=exist_ok)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     makedirs(head, exist_ok=exist_ok)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     makedirs(head, exist_ok=exist_ok)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 225, in makedirs
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946]     mkdir(name, mode)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m ERROR 07-30 00:17:27 [core.py:946] PermissionError: [Errno 13] Permission denied: '/root/.cache'
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m Process EngineCore_DP0:
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m Traceback (most recent call last):
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     self.run()
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/multiprocessing/process.py", line 108, in run
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     self._target(*self._args, **self._kwargs)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 950, in run_engine_core
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     raise e
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 937, in run_engine_core
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 691, in __init__
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     super().__init__(
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 112, in __init__
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     num_gpu_blocks, num_cpu_blocks, kv_cache_config = self._initialize_kv_caches(
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 269, in _initialize_kv_caches
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     self.model_executor.initialize_from_config(kv_cache_configs)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/abstract.py", line 115, in initialize_from_config
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     self.collective_rpc("initialize_from_config", args=(kv_cache_configs,))
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/uniproc_executor.py", line 75, in collective_rpc
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     result = run_method(self.driver_worker, method, args, kwargs)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/serial_utils.py", line 461, in run_method
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     return func(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/worker_base.py", line 320, in initialize_from_config
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     self.worker.initialize_from_config(kv_cache_config)  # type: ignore
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_worker.py", line 403, in initialize_from_config
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     ensure_kv_transfer_initialized(self.vllm_config, kv_cache_config)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_transfer_state.py", line 67, in ensure_kv_transfer_initialized
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     _KV_CONNECTOR_AGENT = KVConnectorFactory.create_connector(
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/factory.py", line 52, in create_connector
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     connector_cls, compat_sig = cls._get_connector_class_with_compat(
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/factory.py", line 111, in _get_connector_class_with_compat
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     connector_cls = cls._registry[connector_name]()
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/factory.py", line 37, in loader
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     module = importlib.import_module(module_path)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/importlib/__init__.py", line 126, in import_module
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     return _bootstrap._gcd_import(name[level:], package, level)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_connector.py", line 21, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     from vllm.model_executor.layers.attention.mla_attention import MLACommonMetadata
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/layers/attention/mla_attention.py", line 270, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     from flashinfer import BatchPrefillWithRaggedKVCacheWrapper
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/__init__.py", line 23, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     from . import jit as jit
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/__init__.py", line 22, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     from . import cubin_loader
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/cubin_loader.py", line 27, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     from .core import logger
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/core.py", line 18, in <module>
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     os.makedirs(jit_env.FLASHINFER_WORKSPACE_DIR, exist_ok=True)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     makedirs(head, exist_ok=exist_ok)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     makedirs(head, exist_ok=exist_ok)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     makedirs(head, exist_ok=exist_ok)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 225, in makedirs
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m     mkdir(name, mode)
+[0;36m(EngineCore_DP0 pid=2521882)[0;0m PermissionError: [Errno 13] Permission denied: '/root/.cache'
+[rank0]:[W730 00:17:27.707266386 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[0;36m(APIServer pid=2521471)[0;0m Traceback (most recent call last):
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm", line 8, in <module>
+[0;36m(APIServer pid=2521471)[0;0m     sys.exit(main())
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/cli/main.py", line 73, in main
+[0;36m(APIServer pid=2521471)[0;0m     args.dispatch_function(args)
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/cli/serve.py", line 111, in cmd
+[0;36m(APIServer pid=2521471)[0;0m     uvloop.run(run_server(args))
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvloop/__init__.py", line 69, in run
+[0;36m(APIServer pid=2521471)[0;0m     return loop.run_until_complete(wrapper())
+[0;36m(APIServer pid=2521471)[0;0m   File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvloop/__init__.py", line 48, in wrapper
+[0;36m(APIServer pid=2521471)[0;0m     return await main
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 919, in run_server
+[0;36m(APIServer pid=2521471)[0;0m     await run_server_worker(listen_address, sock, args, **uvicorn_kwargs)
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 938, in run_server_worker
+[0;36m(APIServer pid=2521471)[0;0m     async with build_async_engine_client(
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 199, in __aenter__
+[0;36m(APIServer pid=2521471)[0;0m     return await anext(self.gen)
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 147, in build_async_engine_client
+[0;36m(APIServer pid=2521471)[0;0m     async with build_async_engine_client_from_engine_args(
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 199, in __aenter__
+[0;36m(APIServer pid=2521471)[0;0m     return await anext(self.gen)
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 188, in build_async_engine_client_from_engine_args
+[0;36m(APIServer pid=2521471)[0;0m     async_llm = AsyncLLM.from_vllm_config(
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/async_llm.py", line 228, in from_vllm_config
+[0;36m(APIServer pid=2521471)[0;0m     return cls(
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/async_llm.py", line 155, in __init__
+[0;36m(APIServer pid=2521471)[0;0m     self.engine_core = EngineCoreClient.make_async_mp_client(
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 122, in make_async_mp_client
+[0;36m(APIServer pid=2521471)[0;0m     return AsyncMPClient(*client_args)
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 819, in __init__
+[0;36m(APIServer pid=2521471)[0;0m     super().__init__(
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 479, in __init__
+[0;36m(APIServer pid=2521471)[0;0m     with launch_core_engines(vllm_config, executor_class, log_stats) as (
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 142, in __exit__
+[0;36m(APIServer pid=2521471)[0;0m     next(self.gen)
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/utils.py", line 933, in launch_core_engines
+[0;36m(APIServer pid=2521471)[0;0m     wait_for_engine_startup(
+[0;36m(APIServer pid=2521471)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/utils.py", line 992, in wait_for_engine_startup
+[0;36m(APIServer pid=2521471)[0;0m     raise RuntimeError(
+[0;36m(APIServer pid=2521471)[0;0m RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
