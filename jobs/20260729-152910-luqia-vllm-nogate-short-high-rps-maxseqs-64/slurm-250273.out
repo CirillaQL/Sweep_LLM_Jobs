@@ -10,3 +10,46 @@ kv_effective_bandwidth_gbps=24.076 kv_num_layers=32 kv_num_heads=8 kv_head_dim=1
 clock_mismatch_action=continue clock_ack_mode=monitor clock_ack_transport=http_with_file_fallback
 scheduler_enabled=true active_scheduler_policy=latency_only gpu_clock_control_mode=manual policy_label=gate_off_short_high_rps_queue_maxseqs_64
 scheduler_workload seq=1 id=short_baseline il=32 ol=32 rate=1 online=true active_policy=latency_only
+scheduler_selected seq=1 policy=latency_only status=OK prefill=neptune:480 decode=ganymede:360 predicted_cluster_power_w=147.8
+
+===== allocation =====
+time=2026-07-29T15:53:29+02:00
+batch_host=ganymede
+SLURM_JOB_ID=250273
+SLURM_JOB_NODELIST=ganymede,neptune
+model=mistralai/Mistral-7B-v0.1 workload_count=3 slurm_time_limit=00:28:00
+ganymede
+neptune
+JobId=250273 JobName=20260729-152910-luqia-vllm-nogate-short-high-rps-maxseqs-64
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:01 TimeLimit=00:30:00 TimeMin=N/A
+   SubmitTime=2026-07-29T15:32:22 EligibleTime=2026-07-29T15:32:22
+   AccrueTime=2026-07-29T15:32:22
+   StartTime=2026-07-29T15:53:28 EndTime=2026-07-29T16:23:28 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-29T15:53:28 Scheduler=Main
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede,neptune ExcNodeList=(null)
+   NodeList=ganymede,neptune
+   BatchHost=ganymede
+   NumNodes=2 NumCPUs=256 NumTasks=2 CPUs/Task=16 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=16,mem=128G,node=2,billing=16,gres/gpu=2
+   AllocTRES=cpu=256,mem=128G,node=2,billing=256,gres/gpu=4,gres/gpu:l4=8,gres/gpu:l40s=4
+   Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=*
+   MinCPUsNode=16 MinMemoryNode=64G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260729-152910-luqia-vllm-nogate-short-high-rps-maxseqs-64/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260729-152910-luqia-vllm-nogate-short-high-rps-maxseqs-64/slurm-250273.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260729-152910-luqia-vllm-nogate-short-high-rps-maxseqs-64/slurm-250273.out
+   Power=
+   TresPerNode=gres/gpu:1
+   TresPerTask=cpu:8
+   
+
+
+===== 100gbe_and_environment_preflight =====
