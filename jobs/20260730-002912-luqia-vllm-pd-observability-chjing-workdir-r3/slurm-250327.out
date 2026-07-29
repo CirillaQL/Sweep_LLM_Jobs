@@ -103,3 +103,26 @@ phase=start_metrics_collector
 phase=streaming_benchmark
 stream_bench_rc=0
 phase=drain_observation
+drain_observer_rc=0
+phase=queue_state_join
+queue_state_rows=1130 output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/observability_results/queue_state_at_arrival.csv
+phase=vllm_log_csv_export
+vllm_log_events=3319 output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/observability_results/vllm_observability_log_events.csv
+phase=artifact_check
+artifact=requests.csv bytes=423835
+artifact=token_timestamps.csv bytes=5151194
+artifact=client_events.csv bytes=776876
+artifact=window_summary.csv bytes=1845
+artifact=workload_events.csv bytes=3866
+artifact=vllm_metrics_long.csv bytes=75907632
+artifact=vllm_metrics_snapshots.csv bytes=189786
+artifact=drain_samples.csv bytes=574
+artifact=drain_summary.csv bytes=133
+artifact=proxy_events.csv bytes=3820563
+artifact=vllm_observability_log_events.csv bytes=1328982
+artifact=otel_batches.csv bytes=4826
+artifact=otel_spans.csv bytes=2400909
+artifact=job_metadata.csv bytes=649
+artifact=queue_state_at_arrival.csv bytes=603600
+job_exit_rc=0
+job_cleanup_rc=0
