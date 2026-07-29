@@ -15,3 +15,84 @@ vendored_otel_bundle=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-0029
 phase=local_otel_preflight
 local_otel_preflight_ok=true
 phase=node_preflight
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=ganymede node_group=ganymede role=decode mode=preflight
+expected_gpu=l4 gpu_id=0
+gpu_dvfs=automatic_hardware manual_frequency_control=false scheduler_prediction=false
+node_work_dir=/data/users/chjing/vllm_job_work/250327/ganymede
+node_cwd=/data/users/chjing/vllm_job_work/250327/ganymede
+flashinfer_workspace_base=/data/users/chjing/vllm_job_work/250327/ganymede/flashinfer
+xdg_cache_home=/data/users/chjing/vllm_job_work/250327/ganymede/xdg-cache xdg_config_home=/data/users/chjing/vllm_job_work/250327/ganymede/xdg-config
+host=neptune node_group=neptune role=prefill mode=preflight
+expected_gpu=l40s gpu_id=0
+gpu_dvfs=automatic_hardware manual_frequency_control=false scheduler_prediction=false
+node_work_dir=/data/users/chjing/vllm_job_work/250327/neptune
+node_cwd=/data/users/chjing/vllm_job_work/250327/neptune
+flashinfer_workspace_base=/data/users/chjing/vllm_job_work/250327/neptune/flashinfer
+xdg_cache_home=/data/users/chjing/vllm_job_work/250327/neptune/xdg-cache xdg_config_home=/data/users/chjing/vllm_job_work/250327/neptune/xdg-config
+max_num_seqs=64
+max_num_seqs=64
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+CUDA_VISIBLE_DEVICES=0
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+CUDA_VISIBLE_DEVICES=0
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+1, NVIDIA L4, 23034 MiB, 595.71.05
+2, NVIDIA L4, 23034 MiB, 595.71.05
+3, NVIDIA L4, 23034 MiB, 595.71.05
+4, NVIDIA L4, 23034 MiB, 595.71.05
+5, NVIDIA L4, 23034 MiB, 595.71.05
+6, NVIDIA L4, 23034 MiB, 595.71.05
+7, NVIDIA L4, 23034 MiB, 595.71.05
+/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/tvm_ffi/_optional_torch_c_dlpack.py:174: UserWarning: Failed to JIT torch c dlpack extension, EnvTensorAllocator will not be enabled.
+We recommend installing via `pip install torch-c-dlpack-ext`
+  warnings.warn(
+/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/tvm_ffi/_optional_torch_c_dlpack.py:174: UserWarning: Failed to JIT torch c dlpack extension, EnvTensorAllocator will not be enabled.
+We recommend installing via `pip install torch-c-dlpack-ext`
+  warnings.warn(
+host=ganymede import=torch version=2.9.1+cu128
+host=ganymede import=vllm version=0.15.1
+host=ganymede import=aiohttp version=3.13.3
+host=ganymede import=msgpack version=1.1.2
+host=ganymede import=zmq version=27.1.0
+host=ganymede import=opentelemetry.sdk.trace version=unknown
+host=ganymede import=opentelemetry.exporter.otlp.proto.http.trace_exporter version=unknown
+host=ganymede import=opentelemetry.proto.collector.trace.v1.trace_service_pb2 version=unknown
+host=ganymede import=vllm.v1.attention.backends.flash_attn version=unknown
+host=ganymede import=vllm.distributed.kv_transfer.kv_connector.v1.p2p.p2p_nccl_connector version=unknown
+host=ganymede flashinfer_workspace=/data/users/chjing/vllm_job_work/250327/ganymede/flashinfer/.cache/flashinfer/0.6.1/89 writable=true
+host=neptune import=torch version=2.9.1+cu128
+host=neptune import=vllm version=0.15.1
+host=neptune import=aiohttp version=3.13.3
+host=neptune import=msgpack version=1.1.2
+host=neptune import=zmq version=27.1.0
+host=neptune import=opentelemetry.sdk.trace version=unknown
+host=neptune import=opentelemetry.exporter.otlp.proto.http.trace_exporter version=unknown
+host=neptune import=opentelemetry.proto.collector.trace.v1.trace_service_pb2 version=unknown
+host=neptune import=vllm.v1.attention.backends.flash_attn version=unknown
+host=neptune import=vllm.distributed.kv_transfer.kv_connector.v1.p2p.p2p_nccl_connector version=unknown
+host=neptune flashinfer_workspace=/data/users/chjing/vllm_job_work/250327/neptune/flashinfer/.cache/flashinfer/0.6.1/89 writable=true
+node_preflight_ok=true host=ganymede
+node_preflight_ok=true host=neptune
+phase=start_otlp_collector
+ready label=otlp url=http://127.0.0.1:35327/health
+phase=start_proxy
+ready label=proxy url=http://127.0.0.1:30327/health
+phase=start_pd_servers
