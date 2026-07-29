@@ -1,0 +1,7 @@
+window_id,input_tokens,max_tokens,request_rate,duration_s,max_concurrency,timeout_s,retries,inter_window_pause_s,shared_prefix_tokens,cancel_fraction,cancel_after_s
+baseline_short,32,32,1,20,16,120,1,5,16,0,0
+prefill_heavy,1024,32,2,30,32,180,1,5,768,0,0
+decode_heavy,32,256,2,30,32,240,1,5,16,0,0
+timeout_retry_probe,32,128,2,5,16,0.05,1,5,16,0,0
+queue_pressure,32,32,32,30,512,240,1,0,16,0.02,0.25
+recovery_short,32,32,1,20,16,120,1,0,16,0,0
