@@ -135,3 +135,13 @@ ready name=decode elapsed_s=0 url=http://10.1.0.3:33272/v1/models
 registry_ready=true
 
 ===== pd_smoke_request =====
+smoke_curl_rc=0
+vllm_burstiness_supported=true
+
+===== multi_workload_bench =====
+
+===== workload_1_short_baseline =====
+workload_start time=2026-07-29T15:48:16+02:00 seq=1 id=short_baseline il=32 ol=32 request_rate=1 window_seconds=12 burstiness=1.0 description=short_request_low_rate_baseline
+fixed_placement prefill_node=neptune decode_node=ganymede gpu_clock_control_mode=manual
+recommendation neptune_prefill_mhz=480 ganymede_decode_mhz=360 predicted_cluster_power_w=147.8
+clock_request seq=1 neptune_mhz=480 ganymede_mhz=360
