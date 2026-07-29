@@ -1,0 +1,12 @@
+
+===== scheduler_sweep_with_saturation_gate =====
+workload_source=Dual_Sweep_LLM_Phase2_common_measured_grid
+slo_ttft_ms=500 slo_tpot_ms=200 saturation_threshold=0.30
+saturation_model=five_seed_mean_local_retrained_75
+placement=l40s-prefill-l4-decode
+overload_action=min-slo-violation
+online_scheduling=true max_l4_freq=none max_l40s_freq=2520
+kv_effective_bandwidth_gbps=24.076 kv_num_layers=32 kv_num_heads=8 kv_head_dim=128 kv_bytes_per_element=2 dispatch_ms=0
+clock_mismatch_action=continue clock_ack_mode=monitor clock_ack_transport=http_with_file_fallback
+scheduler_enabled=true active_scheduler_policy=latency_only gpu_clock_control_mode=manual policy_label=gate_off_short_high_rps_queue_maxseqs_64
+scheduler_workload seq=1 id=short_baseline il=32 ol=32 rate=1 online=true active_policy=latency_only
