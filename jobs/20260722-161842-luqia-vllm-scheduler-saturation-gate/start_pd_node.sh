@@ -9,6 +9,14 @@ GPU_ID="${VISIBLE_GPUS%%,*}"
 CLOCK_ACK_TOLERANCE_MHZ="${CLOCK_ACK_TOLERANCE_MHZ_OVERRIDE:-90}"
 GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
 CLOCK_ACK_MODE="${CLOCK_ACK_MODE_OVERRIDE:-monitor}"
+MAX_NUM_SEQS="${MAX_NUM_SEQS_OVERRIDE:-32}"
+
+case "$MAX_NUM_SEQS" in
+  ''|*[!0-9]*|0)
+    echo "invalid_max_num_seqs=${MAX_NUM_SEQS:-unset}"
+    exit 22
+    ;;
+esac
 
 case "$CLOCK_ACK_MODE" in
   monitor|active_probe) ;;
@@ -76,6 +84,7 @@ echo "host=${HOST} node_group=${NODE_GROUP} role=${ROLE} mode=${MODE}"
 echo "scheduled_gpu=${EXPECTED_GPU} scheduled_freq_mhz=${TARGET_FREQ} gpu_id=${GPU_ID}"
 echo "gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
 echo "clock_ack_mode=${CLOCK_ACK_MODE}"
+echo "max_num_seqs=${MAX_NUM_SEQS}"
 echo "node_ip=${NODE_IP} peer_ip=${PEER_IP} interface=${IFACE}"
 echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-unset}"
 ip -brief address show dev "$IFACE" 2>&1 || true
@@ -323,7 +332,7 @@ echo "kv_transfer_config=${KV_CONFIG}"
   --enforce-eager \
   --max-model-len 4096 \
   --max-num-batched-tokens 4096 \
-  --max-num-seqs 32 \
+  --max-num-seqs "$MAX_NUM_SEQS" \
   --gpu-memory-utilization 0.82 \
   --kv-transfer-config "$KV_CONFIG" \
   > "$SERVER_LOG" 2>&1 &
