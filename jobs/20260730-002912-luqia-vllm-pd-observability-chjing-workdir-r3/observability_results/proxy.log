@@ -133,3 +133,331 @@ route count=128 client_request_id=decode_heavy-00048-87ab17b4d8ae internal_reque
 route count=129 client_request_id=decode_heavy-00049-97730b282cf3 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00049-97730b282cf3_184c168ceb024e8cb9f8384ea822f303 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
 route count=130 client_request_id=decode_heavy-00050-23711786227f internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00050-23711786227f_d1313160d0af48d4bd8174def53f9019 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
 route count=131 client_request_id=decode_heavy-00051-58f479f81785 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00051-58f479f81785_42bb7f42243843a6b6b6e55d5931b5a4 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+route count=132 client_request_id=decode_heavy-00052-83f4e3debe70 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00052-83f4e3debe70_6730597d210f4c239f609fe2a3eecbf1 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+route count=133 client_request_id=decode_heavy-00053-54e50aa0098f internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00053-54e50aa0098f_1d182aa71d914732b705d58901ce63a8 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+route count=134 client_request_id=decode_heavy-00054-c49c07315692 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00054-c49c07315692_eed8506d48194e79890183c5418fb2df prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+route count=135 client_request_id=decode_heavy-00055-d38c38b0bfba internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00055-d38c38b0bfba_fe6a8ddc34ce431e98e0123b4e5b2a80 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+route count=136 client_request_id=decode_heavy-00056-53ca6126bd6b internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00056-53ca6126bd6b_3f05aba8c1064ad28fd562455e71b19b prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+route count=137 client_request_id=decode_heavy-00057-c3aaba33d4b8 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00057-c3aaba33d4b8_3443ca2f019a414cb6a7fd07c9eb0cd3 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+route count=138 client_request_id=decode_heavy-00058-3165a7b747ab internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00058-3165a7b747ab_afc6f1f2ab26497db79fba83ff477f31 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+route count=139 client_request_id=decode_heavy-00059-bf43cd857890 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_decode_heavy-00059-bf43cd857890_e754c18579cd4fd0a70927b7cffc7b2a prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+route count=140 client_request_id=timeout_retry_probe-00000-72384c2addec internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00000-72384c2addec_f61fcabcc09f4b9484ba0bad8c8fe43f prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=141 client_request_id=timeout_retry_probe-00000-72384c2addec internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00000-72384c2addec_04a00bd6e4774841b8efb5f1cff2a399 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=142 client_request_id=timeout_retry_probe-00001-066bcd633b0e internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00001-066bcd633b0e_3ffef57531354eda95a8206ec7195d55 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=143 client_request_id=timeout_retry_probe-00001-066bcd633b0e internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00001-066bcd633b0e_49315490f97a4b26803dd3a8f468814d prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=144 client_request_id=timeout_retry_probe-00002-aa4fe216c48e internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00002-aa4fe216c48e_5e27a839a1604b048425da8b05428eff prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=145 client_request_id=timeout_retry_probe-00002-aa4fe216c48e internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00002-aa4fe216c48e_cd7f308853734aa09cad724406f32f6e prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=146 client_request_id=timeout_retry_probe-00003-cb6ee92ae602 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00003-cb6ee92ae602_5b9e6aab9ae242e4a87ae0bf92d478d1 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=147 client_request_id=timeout_retry_probe-00003-cb6ee92ae602 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00003-cb6ee92ae602_736c7686e6b54d8693f28ea63052d23a prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=148 client_request_id=timeout_retry_probe-00004-fa162a5dfed1 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00004-fa162a5dfed1_f88341a64aa04102b69cb0526637629e prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=149 client_request_id=timeout_retry_probe-00004-fa162a5dfed1 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00004-fa162a5dfed1_1ee1ac00e16f4f29a883b78160569dae prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=150 client_request_id=timeout_retry_probe-00005-17b8d0c4dd32 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00005-17b8d0c4dd32_227ea2dd77f740b0aa7b7401a5d7038b prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=151 client_request_id=timeout_retry_probe-00005-17b8d0c4dd32 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00005-17b8d0c4dd32_2e64443b3b9b498286b734411a7bcafb prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=152 client_request_id=timeout_retry_probe-00006-bac5c69bc2f2 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00006-bac5c69bc2f2_9560fad7e5b14f689e0072d737435dea prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=153 client_request_id=timeout_retry_probe-00006-bac5c69bc2f2 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00006-bac5c69bc2f2_531f88d7f3614247a3e3e0ecfeb995a6 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=154 client_request_id=timeout_retry_probe-00007-34fa25a30b45 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00007-34fa25a30b45_c0123a91bfd94ab1a863e591dbe890bb prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=155 client_request_id=timeout_retry_probe-00007-34fa25a30b45 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00007-34fa25a30b45_52b24bd2ba26405badd10fbbf3a6c9d1 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=156 client_request_id=timeout_retry_probe-00008-a356a47acf52 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00008-a356a47acf52_d13609db049e43fa8ead0ce9807ce867 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=157 client_request_id=timeout_retry_probe-00008-a356a47acf52 internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00008-a356a47acf52_dec3a878f0cf4e1e8dca3377a35fe5bc prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=158 client_request_id=timeout_retry_probe-00009-1b1e6fbf62ee internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00009-1b1e6fbf62ee_1c818ac33fe6413dad5493d46b285896 prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+route count=159 client_request_id=timeout_retry_probe-00009-1b1e6fbf62ee internal_request_id=___prefill_addr_10.1.0.6:34327___decode_addr_10.1.0.3:34327_timeout_retry_probe-00009-1b1e6fbf62ee_03cd0f2d68614db5a6518eca7e224cbc prefill_http=10.1.0.6:32327 decode_http=10.1.0.3:33327
+proxy_error type=ClientConnectionResetError error=Cannot write to closing transport
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260730-002912-luqia-vllm-pd-observability-chjing-workdir-r3/pd_proxy_observability.py", line 339, in handle_request
+    await response.prepare(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 460, in prepare
+    return await self._start(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 468, in _start
+    await self._write_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/web_response.py", line 548, in _write_headers
+    writer.send_headers()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 234, in send_headers
+    self._write(headers_buf)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/http_writer.py", line 95, in _write
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
