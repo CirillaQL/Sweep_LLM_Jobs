@@ -1,0 +1,10 @@
+job_name=20260729-231825-luqia-vllm-pd-observability-request-traces
+batch_host=ganymede
+slurm_job_id=250276
+slurm_nodelist=ganymede,neptune
+model=mistralai/Mistral-7B-v0.1
+max_num_seqs=64
+otlp_traces_endpoint=http://10.1.0.3:35276/v1/traces
+observability_flags=kv_cache_metrics,enable_logging_iteration_details,collect_detailed_traces
+request_id_transport=X-Request-Id
+phase=preflight
