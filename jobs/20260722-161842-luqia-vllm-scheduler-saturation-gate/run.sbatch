@@ -42,6 +42,8 @@ BENCH_WINDOW_SECONDS="${BENCH_WINDOW_SECONDS_OVERRIDE:-10}"
 BENCH_TIMEOUT_SECONDS="${BENCH_TIMEOUT_SECONDS_OVERRIDE:-180}"
 MIN_PROMPTS="${MIN_PROMPTS_OVERRIDE:-12}"
 MAX_PROMPTS="${MAX_PROMPTS_OVERRIDE:-120}"
+MAX_CONCURRENCY="${MAX_CONCURRENCY_OVERRIDE:-16}"
+BENCH_SAVE_DETAILED="${BENCH_SAVE_DETAILED_OVERRIDE:-false}"
 EXPECTED_WORKLOAD_COUNT="${EXPECTED_WORKLOAD_COUNT_OVERRIDE:-3}"
 ALLOW_ZERO_ADMIT="${ALLOW_ZERO_ADMIT_OVERRIDE:-false}"
 SCHEDULER_PLACEMENT="${SCHEDULER_PLACEMENT_OVERRIDE:-l40s-prefill-l4-decode}"
@@ -670,10 +672,19 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   fi
   BENCH_FILE="${OUT_DIR}/bench_${SEQ}_${workload_id}.txt"
   BURSTINESS_ARGS=()
+  DETAIL_ARGS=()
   if [ "$VLLM_BURSTINESS_SUPPORTED" = true ] && [ -n "$burstiness" ]; then
     BURSTINESS_ARGS+=(--burstiness "$burstiness")
   fi
-  echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${window_seconds} timeout_s=${BENCH_TIMEOUT_SECONDS} finite_rate_random_arrivals=true burstiness_applied=${VLLM_BURSTINESS_SUPPORTED} burstiness_value=${burstiness:-none}"
+  if [ "$BENCH_SAVE_DETAILED" = true ]; then
+    DETAIL_ARGS+=(
+      --save-result
+      --save-detailed
+      --result-dir "$OUT_DIR"
+      --result-filename "detailed_${SEQ}_${workload_id}.json"
+    )
+  fi
+  echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${window_seconds} timeout_s=${BENCH_TIMEOUT_SECONDS} max_concurrency=${MAX_CONCURRENCY} finite_rate_random_arrivals=true burstiness_applied=${VLLM_BURSTINESS_SUPPORTED} burstiness_value=${burstiness:-none} save_detailed=${BENCH_SAVE_DETAILED}"
   START_TS=$(date +%s.%N)
   echo "${START_TS},workload_start,${SEQ},${workload_id},${POLICY_LABEL}" >> "${OUT_DIR}/events.csv"
   echo "energy_event unix_ts=${START_TS} event=workload_start seq=${SEQ} workload_id=${workload_id}"
@@ -681,7 +692,8 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
     --backend openai --base-url "http://${PROXY_IP}:${PROXY_HTTP_PORT}" --model "$MODEL" \
     --num-prompts "$NUM_PROMPTS" --request-rate "$rate" --dataset-name random \
     "${BURSTINESS_ARGS[@]}" \
-    --random-input-len "$il" --random-output-len "$ol" --max-concurrency 16 \
+    "${DETAIL_ARGS[@]}" \
+    --random-input-len "$il" --random-output-len "$ol" --max-concurrency "$MAX_CONCURRENCY" \
     --num-warmups 1 --temperature 0 > "$BENCH_FILE" 2>&1
   BENCH_RC=$?
   END_TS=$(date +%s.%N)
