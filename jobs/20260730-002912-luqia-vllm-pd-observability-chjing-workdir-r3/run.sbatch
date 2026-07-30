@@ -25,7 +25,8 @@ PYTHON_BIN="${ENV_DIR}/bin/python"
 VLLM_BIN="${ENV_DIR}/bin/vllm"
 MODEL="mistralai/Mistral-7B-v0.1"
 WORK_ROOT_BASE="/data/users/chjing/vllm_job_work"
-BATCH_WORK_DIR="${WORK_ROOT_BASE}/${SLURM_JOB_ID:-manual}/batch-ganymede"
+JOB_WORK_DIR="${WORK_ROOT_BASE}/${SLURM_JOB_ID:-manual}"
+BATCH_WORK_DIR="${JOB_WORK_DIR}/batch-ganymede"
 
 NODE_SCRIPT="${JOB_DIR}/start_pd_node_chjing_workdir.sh"
 PROXY_SCRIPT="${JOB_DIR}/pd_proxy_observability.py"
@@ -92,8 +93,47 @@ stop_pid() {
   fi
 }
 
+cleanup_job_work_dir() {
+  local job_id="${SLURM_JOB_ID:-}"
+  local expected_job_work_dir=""
+
+  if [[ ! "$job_id" =~ ^[0-9]+$ ]]; then
+    echo "job_work_cleanup_skipped=true reason=invalid_slurm_job_id value=${job_id:-unset}"
+    return 1
+  fi
+
+  expected_job_work_dir="${WORK_ROOT_BASE}/${job_id}"
+  if [ "$JOB_WORK_DIR" != "$expected_job_work_dir" ] \
+    || [ "$JOB_WORK_DIR" = "$WORK_ROOT_BASE" ]; then
+    echo "job_work_cleanup_skipped=true reason=unsafe_path path=${JOB_WORK_DIR}"
+    return 1
+  fi
+
+  if [ ! -d "$JOB_WORK_DIR" ]; then
+    echo "job_work_cleanup_success=true already_absent=true path=${JOB_WORK_DIR}"
+    return 0
+  fi
+
+  # Leave the directory before removing it and delete only this numeric Job ID.
+  if ! cd "$JOB_DIR"; then
+    echo "job_work_cleanup_skipped=true reason=cannot_leave_work_dir path=${JOB_WORK_DIR}"
+    return 1
+  fi
+  if ! rm -rf -- "$JOB_WORK_DIR"; then
+    echo "job_work_cleanup_success=false reason=remove_failed path=${JOB_WORK_DIR}"
+    return 1
+  fi
+  if [ -e "$JOB_WORK_DIR" ]; then
+    echo "job_work_cleanup_success=false path=${JOB_WORK_DIR}"
+    return 1
+  fi
+
+  echo "job_work_cleanup_success=true path=${JOB_WORK_DIR}"
+}
+
 cleanup() {
   local rc=$?
+  local work_cleanup_rc=0
   trap - EXIT INT TERM
   stop_pid "$BENCH_PID"
   stop_pid "$METRICS_PID"
@@ -102,6 +142,11 @@ cleanup() {
   sleep 5
   stop_pid "$PROXY_PID"
   stop_pid "$OTEL_PID"
+  cleanup_job_work_dir || work_cleanup_rc=$?
+  if [ "$rc" -eq 0 ] && [ "$work_cleanup_rc" -ne 0 ]; then
+    rc="$work_cleanup_rc"
+  fi
+  echo "job_work_cleanup_rc=${work_cleanup_rc}"
   echo "job_cleanup_rc=${rc}"
   exit "$rc"
 }

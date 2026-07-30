@@ -30,6 +30,18 @@ It explicitly configures:
 The batch process and both node processes also change their actual current
 working directory to their respective paths under this root.
 
+On every Job exit, after the benchmark, collectors, proxy, and both vLLM
+servers have stopped and pending OTLP spans have been flushed, the batch
+cleanup removes exactly:
+
+```text
+/data/users/chjing/vllm_job_work/<numeric-slurm-job-id>
+```
+
+The cleanup validates the numeric Slurm Job ID and the exact expected path
+before deletion. A successful Job is marked failed if this final workspace
+cleanup cannot be completed, so disk leaks are visible in the exit status.
+
 `HOME` is not modified. The shared Hugging Face model cache remains at
 `/data/users/chjing/.cache/huggingface`.
 
