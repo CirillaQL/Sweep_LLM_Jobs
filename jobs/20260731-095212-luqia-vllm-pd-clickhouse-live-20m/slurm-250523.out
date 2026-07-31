@@ -1,0 +1,17 @@
+job_name=20260731-095212-luqia-vllm-pd-clickhouse-live-20m
+batch_host=ganymede
+slurm_job_id=250523
+slurm_nodelist=ganymede,neptune
+model=mistralai/Mistral-7B-v0.1
+max_num_seqs=64
+otlp_traces_endpoint=http://10.1.0.3:35023/v1/traces
+observability_flags=kv_cache_metrics,enable_logging_iteration_details,collect_detailed_traces
+request_id_transport=X-Request-Id
+gpu_dvfs=automatic_hardware manual_frequency_control=false scheduler_prediction=false
+attention_backend=FLASH_ATTN
+work_root_base=/data/users/chjing/vllm_job_work
+batch_work_dir=/data/users/chjing/vllm_job_work/250523/batch-ganymede batch_cwd=/data/users/chjing/vllm_job_work/250523/batch-ganymede
+vendored_otel_bundle=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-095212-luqia-vllm-pd-clickhouse-live-20m/vendor/otel_bundle.zip
+phase=local_otel_preflight
+local_otel_preflight_ok=true
+phase=node_preflight
