@@ -16,7 +16,7 @@
 
 set -uo pipefail
 
-JOB_NAME="20260731-152501-luqia-vllm-calibration-l4-ganymede-r1"
+JOB_NAME="${JOB_NAME_OVERRIDE:-20260731-152501-luqia-vllm-calibration-l4-ganymede-r1}"
 COMMON_NAME="20260731-144337-luqia-vllm-calibration-common"
 BROKER_ROOT="/data/users/chjing/Sweep_LLM_Jobs_broker"
 JOB_DIR="${BROKER_ROOT}/jobs/${JOB_NAME}"
