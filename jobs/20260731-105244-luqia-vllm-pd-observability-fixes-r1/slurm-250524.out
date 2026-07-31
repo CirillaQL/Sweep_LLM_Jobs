@@ -103,3 +103,81 @@ phase=start_metrics_collector
 phase=start_clickhouse_live_uploader
 clickhouse_live_uploader_started=true interval_s=60
 phase=streaming_benchmark
+stream_bench_rc=0
+phase=drain_observation
+drain_observer_rc=0
+phase=freeze_all_observability_sources
+observability_sources_frozen=true
+phase=queue_state_join
+queue_state_rows=3600 output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-105244-luqia-vllm-pd-observability-fixes-r1/observability_results/queue_state_at_arrival.csv
+phase=kv_transfer_extract
+kv_transfer_events=3600 measurement=proxy_observed_upper_bound output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-105244-luqia-vllm-pd-observability-fixes-r1/observability_results/kv_transfer_events.csv
+phase=vllm_log_csv_export
+vllm_log_events=29651 output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-105244-luqia-vllm-pd-observability-fixes-r1/observability_results/vllm_observability_log_events.csv
+clickhouse_preflight_ok=true version=25.8.28.1 database=vllm_observability
+clickhouse_insert table=experiments rows=1
+clickhouse_insert table=jobs rows=1
+clickhouse_insert table=gpu_samples rows=135
+clickhouse_insert table=gpu_samples rows=126
+clickhouse_insert table=engine_samples rows=241
+clickhouse_insert table=gpu_samples rows=104
+clickhouse_insert table=gpu_samples rows=94
+clickhouse_insert table=engine_samples rows=241
+clickhouse_insert table=gpu_samples rows=103
+clickhouse_insert table=gpu_samples rows=93
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=104
+clickhouse_insert table=gpu_samples rows=94
+clickhouse_insert table=engine_samples rows=242
+clickhouse_insert table=gpu_samples rows=103
+clickhouse_insert table=gpu_samples rows=94
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=104
+clickhouse_insert table=gpu_samples rows=94
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=103
+clickhouse_insert table=gpu_samples rows=94
+clickhouse_insert table=engine_samples rows=242
+clickhouse_insert table=gpu_samples rows=104
+clickhouse_insert table=gpu_samples rows=94
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=103
+clickhouse_insert table=gpu_samples rows=95
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=104
+clickhouse_insert table=gpu_samples rows=94
+clickhouse_insert table=engine_samples rows=242
+clickhouse_insert table=gpu_samples rows=103
+clickhouse_insert table=gpu_samples rows=95
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=104
+clickhouse_insert table=gpu_samples rows=95
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=103
+clickhouse_insert table=gpu_samples rows=96
+clickhouse_insert table=engine_samples rows=242
+clickhouse_insert table=gpu_samples rows=104
+clickhouse_insert table=gpu_samples rows=95
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=103
+clickhouse_insert table=gpu_samples rows=95
+clickhouse_insert table=engine_samples rows=242
+clickhouse_insert table=gpu_samples rows=104
+clickhouse_insert table=gpu_samples rows=94
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=103
+clickhouse_insert table=gpu_samples rows=95
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=103
+clickhouse_insert table=gpu_samples rows=95
+clickhouse_insert table=engine_samples rows=242
+clickhouse_insert table=gpu_samples rows=104
+clickhouse_insert table=gpu_samples rows=94
+clickhouse_insert table=engine_samples rows=240
+clickhouse_insert table=gpu_samples rows=103
+clickhouse_insert table=gpu_samples rows=94
+clickhouse_insert table=engine_samples rows=211
+clickhouse_insert table=gpu_samples rows=92
+clickhouse_insert table=gpu_samples rows=83
+clickhouse_live_uploader_stopped=true
+phase=clickhouse_final_upload
