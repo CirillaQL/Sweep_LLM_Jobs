@@ -33,3 +33,5 @@ segment_finish run_id=phase2-full-grid-rerun-20260731-l40s-l40s-tp1-f2520-i128-o
 server_start tp=1 command=/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm serve mistralai/Mistral-7B-v0.1 --host 127.0.0.1 --port 8000 --tensor-parallel-size 1 --gpu-memory-utilization 0.9 --max-model-len 16384 --dtype float16
 server_ready tp=1
 segment_start run_id=phase2-full-grid-rerun-20260731-l40s-l40s-tp1-f2520-i128-o32-r50-rep2-seg1-attempt1 tp=1 target_mhz=2520 prompts=500 lock_state=[{"index":"0","name":"NVIDIA L40S","uuid":"GPU-35fd1bf9-5849-1263-ccc4-a5ccc837400f","pstate":"P0","clocks.sm":"2520","clocks.mem":"9001","utilization.gpu":"0","utilization.memory":"0","memory.used":"41977","memory.total":"46068","power.draw":"77.75","temperature.gpu":"36"}]
+segment_finish run_id=phase2-full-grid-rerun-20260731-l40s-l40s-tp1-f2520-i128-o32-r50-rep2-seg1-attempt1 status=failed duration_s=27.583 frequency_verified=False samples=56
+server_start tp=1 command=/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm serve mistralai/Mistral-7B-v0.1 --host 127.0.0.1 --port 8000 --tensor-parallel-size 1 --gpu-memory-utilization 0.9 --max-model-len 16384 --dtype float16
