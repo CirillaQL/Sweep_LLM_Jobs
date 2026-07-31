@@ -1,0 +1,179 @@
+diagnostic_time=2026-07-31T20:53:21+02:00
+diagnostic_host=io
+=== squeue target jobs and array children ===
+                 JOBID|       JOBID| ACCOUNT|                                      NAME|      USER|       STATE|        TIME|  TIME_LIMIT|        NODELIST(REASON)|      NODELIST
+              250695_1|      250695| student|20260731-174346-luqia-vllm-calibration-l40|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250695_2|      250695| student|20260731-174346-luqia-vllm-calibration-l40|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250695_3|      250695| student|20260731-174346-luqia-vllm-calibration-l40|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250695_4|      250695| student|20260731-174346-luqia-vllm-calibration-l40|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250695_5|      250695| student|20260731-174346-luqia-vllm-calibration-l40|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250695_6|      250695| student|20260731-174346-luqia-vllm-calibration-l40|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250694_1|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250694_2|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250694_3|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250694_4|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250694_5|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250694_6|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250694_7|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250694_8|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250694_9|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+             250694_10|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+             250694_11|      250694| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     PENDING|        0:00|  1-00:00:00|     (JobArrayTaskLimit)|              
+              250694_0|      250696| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     RUNNING|     3:07:58|  1-00:00:00|                ganymede|      ganymede
+              250695_0|      250697| student|20260731-174346-luqia-vllm-calibration-l40|    chjing|     RUNNING|     3:07:58|  1-00:00:00|                 neptune|       neptune
+=== sacct target jobs and steps ===
+sacct: error: slurm_persist_conn_open_without_init: failed to open persistent connection to host:localhost:6819: Connection refused
+sacct: error: Sending PersistInit msg: Connection refused
+sacct: error: Problem talking to the database: Connection refused
+=== allocations on ganymede and neptune ===
+                 JOBID|       JOBID| ACCOUNT|                                      NAME|      USER|       STATE|        TIME|  TIME_LIMIT|        NODELIST(REASON)|      NODELIST
+              250694_0|      250696| student|20260731-174346-luqia-vllm-calibration-l4-|    chjing|     RUNNING|     3:07:58|  1-00:00:00|                ganymede|      ganymede
+              250695_0|      250697| student|20260731-174346-luqia-vllm-calibration-l40|    chjing|     RUNNING|     3:07:58|  1-00:00:00|                 neptune|       neptune
+=== node state ===
+Fri Jul 31 20:53:21 2026
+NODELIST   NODES PARTITION       STATE CPUS    S:C:T MEMORY TMP_DISK WEIGHT AVAIL_FE REASON              
+ganymede       1    short*   allocated 128    2:32:2 515453        0      1   (null) none                
+ganymede       1      long   allocated 128    2:32:2 515453        0      1   (null) none                
+ganymede       1     debug   allocated 128    2:32:2 515453        0      1   (null) none                
+neptune        1    short*   allocated 128    2:32:2 515453        0      1   (null) none                
+neptune        1      long   allocated 128    2:32:2 515453        0      1   (null) none                
+=== detailed current job records ===
+--- scontrol job 250689 ---
+slurm_load_jobs error: Invalid job id specified
+--- scontrol job 250690 ---
+slurm_load_jobs error: Invalid job id specified
+--- scontrol job 250694 ---
+JobId=250694 ArrayJobId=250694 ArrayTaskId=1-11%1 ArrayTaskThrottle=1 JobName=20260731-174346-luqia-vllm-calibration-l4-ganymede
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=PENDING Reason=JobArrayTaskLimit Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   DerivedExitCode=0:0
+   RunTime=00:00:00 TimeLimit=1-00:00:00 TimeMin=N/A
+   SubmitTime=2026-07-31T17:45:22 EligibleTime=Unknown
+   AccrueTime=Unknown
+   StartTime=Unknown EndTime=Unknown Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-31T17:45:23 Scheduler=Main
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede ExcNodeList=(null)
+   NodeList=
+   NumNodes=1-1 NumCPUs=32 NumTasks=1 CPUs/Task=32 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=32,mem=128G,node=1,billing=32,gres/gpu=8
+   AllocTRES=(null)
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=32 MinMemoryNode=128G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l4-ganymede/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l4-ganymede/slurm-250694.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l4-ganymede/slurm-250694.out
+   Power=
+   TresPerNode=gres/gpu:8
+   TresPerTask=cpu:32
+   
+
+JobId=250696 ArrayJobId=250694 ArrayTaskId=0 ArrayTaskThrottle=1 JobName=20260731-174346-luqia-vllm-calibration-l4-ganymede
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   DerivedExitCode=0:0
+   RunTime=03:07:58 TimeLimit=1-00:00:00 TimeMin=N/A
+   SubmitTime=2026-07-31T17:45:22 EligibleTime=2026-07-31T17:45:23
+   AccrueTime=Unknown
+   StartTime=2026-07-31T17:45:23 EndTime=2026-08-01T17:45:23 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-31T17:45:23 Scheduler=Backfill
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=ganymede ExcNodeList=(null)
+   NodeList=ganymede
+   BatchHost=ganymede
+   NumNodes=1 NumCPUs=128 NumTasks=1 CPUs/Task=32 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=32,mem=128G,node=1,billing=32,gres/gpu=8
+   AllocTRES=cpu=128,mem=128G,node=1,billing=128,gres/gpu=8,gres/gpu:l4=8
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   JOB_GRES=gpu:L4:8,nvgpufreq:1
+     Nodes=ganymede CPU_IDs=0-127 Mem=131072 GRES=gpu:L4:8(IDX:0-7),nvgpufreq(CNT:1)
+   MinCPUsNode=32 MinMemoryNode=128G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l4-ganymede/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l4-ganymede/slurm-250696.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l4-ganymede/slurm-250696.out
+   Power=
+   TresPerNode=gres/gpu:8
+   TresPerTask=cpu:32
+   
+
+--- scontrol job 250695 ---
+JobId=250695 ArrayJobId=250695 ArrayTaskId=1-6%1 ArrayTaskThrottle=1 JobName=20260731-174346-luqia-vllm-calibration-l40s-neptune
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=PENDING Reason=JobArrayTaskLimit Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   DerivedExitCode=0:0
+   RunTime=00:00:00 TimeLimit=1-00:00:00 TimeMin=N/A
+   SubmitTime=2026-07-31T17:45:22 EligibleTime=Unknown
+   AccrueTime=Unknown
+   StartTime=Unknown EndTime=Unknown Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-31T17:45:23 Scheduler=Main
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=neptune ExcNodeList=(null)
+   NodeList=
+   NumNodes=1-1 NumCPUs=32 NumTasks=1 CPUs/Task=32 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=32,mem=128G,node=1,billing=32,gres/gpu=4
+   AllocTRES=(null)
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=32 MinMemoryNode=128G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l40s-neptune/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l40s-neptune/slurm-250695.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l40s-neptune/slurm-250695.out
+   Power=
+   TresPerNode=gres/gpu:4
+   TresPerTask=cpu:32
+   
+
+JobId=250697 ArrayJobId=250695 ArrayTaskId=0 ArrayTaskThrottle=1 JobName=20260731-174346-luqia-vllm-calibration-l40s-neptune
+   UserId=chjing(10271) GroupId=root(0) MCS_label=N/A
+   Priority=1 Nice=0 Account=student QOS=normal
+   JobState=RUNNING Reason=None Dependency=(null)
+   Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   DerivedExitCode=0:0
+   RunTime=03:07:58 TimeLimit=1-00:00:00 TimeMin=N/A
+   SubmitTime=2026-07-31T17:45:22 EligibleTime=2026-07-31T17:45:23
+   AccrueTime=Unknown
+   StartTime=2026-07-31T17:45:23 EndTime=2026-08-01T17:45:23 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-07-31T17:45:23 Scheduler=Backfill
+   Partition=long AllocNode:Sid=minerva:919086
+   ReqNodeList=neptune ExcNodeList=(null)
+   NodeList=neptune
+   BatchHost=neptune
+   NumNodes=1 NumCPUs=128 NumTasks=1 CPUs/Task=32 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=32,mem=128G,node=1,billing=32,gres/gpu=4
+   AllocTRES=cpu=128,mem=128G,node=1,billing=128,gres/gpu=4,gres/gpu:l40s=4
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   JOB_GRES=gpu:L40s:4,nvgpufreq:1
+     Nodes=neptune CPU_IDs=0-127 Mem=131072 GRES=gpu:L40s:4(IDX:0-3),nvgpufreq(CNT:1)
+   MinCPUsNode=32 MinMemoryNode=128G MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null)
+   Command=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l40s-neptune/run.sbatch
+   WorkDir=/data/users/chjing/Sweep_LLM_Jobs_broker
+   StdErr=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l40s-neptune/slurm-250697.err
+   StdIn=/dev/null
+   StdOut=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-174346-luqia-vllm-calibration-l40s-neptune/slurm-250697.out
+   Power=
+   TresPerNode=gres/gpu:4
+   TresPerTask=cpu:32
+   
+
+=== current calibration work directories ===
+=== relevant external Slurm logs ===
+=== upload/error markers from current external logs ===
