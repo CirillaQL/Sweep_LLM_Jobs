@@ -1,399 +1,0 @@
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:56 [utils.py:325] 
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:56 [utils.py:325]        █     █     █▄   ▄█
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:56 [utils.py:325]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.15.1
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:56 [utils.py:325]   █▄█▀ █     █     █     █  model   mistralai/Mistral-7B-v0.1
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:56 [utils.py:325]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:56 [utils.py:325] 
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:56 [utils.py:261] non-default args: {'model_tag': 'mistralai/Mistral-7B-v0.1', 'api_server_count': 1, 'host': '127.0.0.1', 'model': 'mistralai/Mistral-7B-v0.1', 'dtype': 'float16', 'max_model_len': 16384}
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:57 [model.py:541] Resolved architecture: MistralForCausalLM
-[0;36m(APIServer pid=2934032)[0;0m WARNING 07-31 16:26:57 [model.py:1885] Casting torch.bfloat16 to torch.float16.
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:57 [model.py:1561] Using max model len 16384
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:58 [scheduler.py:226] Chunked prefill is enabled with max_num_batched_tokens=2048.
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:26:58 [vllm.py:624] Asynchronous scheduling is enabled.
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:08 [core.py:96] Initializing a V1 LLM engine (v0.15.1) with config: model='mistralai/Mistral-7B-v0.1', speculative_config=None, tokenizer='mistralai/Mistral-7B-v0.1', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=mistralai/Mistral-7B-v0.1, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'splitting_ops': ['vllm::unified_attention', 'vllm::unified_attention_with_output', 'vllm::unified_mla_attention', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::unified_kv_cache_update'], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_split_points': [2048], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': True, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': True}, 'local_cache_dir': None, 'static_all_moe_layers': []}
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:09 [parallel_state.py:1212] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.1.0.3:57737 backend=nccl
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:09 [parallel_state.py:1423] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:10 [gpu_model_runner.py:4033] Starting to load model mistralai/Mistral-7B-v0.1...
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/tvm_ffi/_optional_torch_c_dlpack.py:174: UserWarning: Failed to JIT torch c dlpack extension, EnvTensorAllocator will not be enabled.
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m We recommend installing via `pip install torch-c-dlpack-ext`
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m   warnings.warn(
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:11 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:01<00:01,  1.25s/it]
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:04<00:00,  2.23s/it]
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:04<00:00,  2.08s/it]
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m 
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:17 [default_loader.py:291] Loading weights took 4.30 seconds
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:18 [gpu_model_runner.py:4130] Model loading took 13.5 GiB memory and 6.642347 seconds
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:26 [backends.py:812] Using cache directory: /data/users/chjing/vllm_job_work/250674_0/vllm-cache/torch_compile_cache/e1f1156ff6/rank_0_0/backbone for vLLM's torch.compile
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:26 [backends.py:872] Dynamo bytecode transform time: 8.56 s
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:33 [backends.py:267] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 3.807 s
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:33 [monitor.py:34] torch.compile takes 12.37 s in total
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:34 [gpu_worker.py:356] Available KV cache memory: 5.98 GiB
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:34 [kv_cache_utils.py:1307] GPU KV cache size: 49,008 tokens
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:34 [kv_cache_utils.py:1312] Maximum concurrency for 16,384 tokens per request: 7.96x
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   2%|▏         | 1/51 [00:00<00:07,  6.86it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   4%|▍         | 2/51 [00:00<00:07,  7.00it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   6%|▌         | 3/51 [00:00<00:06,  7.01it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   8%|▊         | 4/51 [00:00<00:06,  7.01it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  10%|▉         | 5/51 [00:00<00:06,  7.06it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  12%|█▏        | 6/51 [00:00<00:06,  7.06it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  14%|█▎        | 7/51 [00:00<00:06,  7.02it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  16%|█▌        | 8/51 [00:01<00:06,  7.02it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  18%|█▊        | 9/51 [00:01<00:05,  7.38it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  20%|█▉        | 10/51 [00:01<00:05,  7.63it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  22%|██▏       | 11/51 [00:01<00:05,  7.85it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  24%|██▎       | 12/51 [00:01<00:04,  8.00it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  25%|██▌       | 13/51 [00:01<00:04,  8.13it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  27%|██▋       | 14/51 [00:01<00:04,  7.83it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  29%|██▉       | 15/51 [00:02<00:04,  7.67it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  31%|███▏      | 16/51 [00:02<00:04,  7.56it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  33%|███▎      | 17/51 [00:02<00:04,  8.13it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  35%|███▌      | 18/51 [00:02<00:03,  8.56it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  37%|███▋      | 19/51 [00:02<00:03,  8.93it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  39%|███▉      | 20/51 [00:02<00:03,  9.18it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  41%|████      | 21/51 [00:02<00:03,  9.35it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  43%|████▎     | 22/51 [00:02<00:03,  9.50it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  45%|████▌     | 23/51 [00:02<00:02,  9.62it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  47%|████▋     | 24/51 [00:02<00:02,  9.70it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  51%|█████     | 26/51 [00:03<00:02,  9.99it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  55%|█████▍    | 28/51 [00:03<00:02, 10.15it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  59%|█████▉    | 30/51 [00:03<00:02, 10.28it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  63%|██████▎   | 32/51 [00:03<00:01, 10.17it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  67%|██████▋   | 34/51 [00:03<00:01, 10.36it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  71%|███████   | 36/51 [00:04<00:01, 10.53it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  75%|███████▍  | 38/51 [00:04<00:01, 10.67it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  78%|███████▊  | 40/51 [00:04<00:01, 10.74it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  82%|████████▏ | 42/51 [00:04<00:00, 10.88it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  86%|████████▋ | 44/51 [00:04<00:00, 10.99it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  90%|█████████ | 46/51 [00:05<00:00, 11.11it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  94%|█████████▍| 48/51 [00:05<00:00, 11.37it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  98%|█████████▊| 50/51 [00:05<00:00, 11.57it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:05<00:00,  9.38it/s]
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/35 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):   3%|▎         | 1/35 [00:00<00:04,  7.35it/s]Capturing CUDA graphs (decode, FULL):   6%|▌         | 2/35 [00:00<00:04,  8.21it/s]Capturing CUDA graphs (decode, FULL):   9%|▊         | 3/35 [00:00<00:03,  8.46it/s]Capturing CUDA graphs (decode, FULL):  11%|█▏        | 4/35 [00:00<00:03,  8.72it/s]Capturing CUDA graphs (decode, FULL):  14%|█▍        | 5/35 [00:00<00:03,  8.86it/s]Capturing CUDA graphs (decode, FULL):  17%|█▋        | 6/35 [00:00<00:03,  9.00it/s]Capturing CUDA graphs (decode, FULL):  20%|██        | 7/35 [00:00<00:03,  9.10it/s]Capturing CUDA graphs (decode, FULL):  23%|██▎       | 8/35 [00:00<00:02,  9.20it/s]Capturing CUDA graphs (decode, FULL):  26%|██▌       | 9/35 [00:01<00:02,  9.36it/s]Capturing CUDA graphs (decode, FULL):  29%|██▊       | 10/35 [00:01<00:02,  9.48it/s]Capturing CUDA graphs (decode, FULL):  31%|███▏      | 11/35 [00:01<00:02,  9.60it/s]Capturing CUDA graphs (decode, FULL):  34%|███▍      | 12/35 [00:01<00:02,  9.70it/s]Capturing CUDA graphs (decode, FULL):  40%|████      | 14/35 [00:01<00:02,  9.88it/s]Capturing CUDA graphs (decode, FULL):  43%|████▎     | 15/35 [00:01<00:02,  9.86it/s]Capturing CUDA graphs (decode, FULL):  46%|████▌     | 16/35 [00:01<00:01,  9.89it/s]Capturing CUDA graphs (decode, FULL):  51%|█████▏    | 18/35 [00:01<00:01, 10.39it/s]Capturing CUDA graphs (decode, FULL):  57%|█████▋    | 20/35 [00:02<00:01, 10.78it/s]Capturing CUDA graphs (decode, FULL):  63%|██████▎   | 22/35 [00:02<00:01, 11.10it/s]Capturing CUDA graphs (decode, FULL):  69%|██████▊   | 24/35 [00:02<00:00, 11.36it/s]Capturing CUDA graphs (decode, FULL):  74%|███████▍  | 26/35 [00:02<00:00, 11.62it/s]Capturing CUDA graphs (decode, FULL):  80%|████████  | 28/35 [00:02<00:00, 11.94it/s]Capturing CUDA graphs (decode, FULL):  86%|████████▌ | 30/35 [00:02<00:00, 12.27it/s]Capturing CUDA graphs (decode, FULL):  91%|█████████▏| 32/35 [00:03<00:00, 12.82it/s]Capturing CUDA graphs (decode, FULL):  97%|█████████▋| 34/35 [00:03<00:00, 13.28it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:03<00:00, 10.87it/s]
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:44 [gpu_model_runner.py:5063] Graph capturing finished in 9 secs, took 0.49 GiB
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:44 [core.py:272] init engine (profile, create kv cache, warmup model) took 25.95 seconds
-[0;36m(EngineCore_DP0 pid=2934274)[0;0m INFO 07-31 16:27:45 [vllm.py:624] Asynchronous scheduling is enabled.
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:45 [api_server.py:665] Supported tasks: ['generate']
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:46 [serving.py:177] Warming up chat template processing...
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [hf.py:310] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216] Chat template warmup failed
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216] Traceback (most recent call last):
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/chat_completion/serving.py", line 195, in warmup
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216]     await self._preprocess_chat(
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/engine/serving.py", line 1207, in _preprocess_chat
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216]     conversation, engine_prompt = await renderer.render_messages_async(
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/renderers/hf.py", line 619, in render_messages_async
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216]     prompt_raw = safe_apply_chat_template(
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/renderers/hf.py", line 451, in safe_apply_chat_template
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216]     raise ChatTemplateResolutionError(
-[0;36m(APIServer pid=2934032)[0;0m ERROR 07-31 16:27:47 [serving.py:216] vllm.entrypoints.chat_utils.ChatTemplateResolutionError: As of transformers v4.44, default chat template is no longer allowed, so you must provide a chat template if the tokenizer does not define one.
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [api_server.py:946] Starting vLLM API server 0 on http://127.0.0.1:8000
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:38] Available routes are:
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /openapi.json, Methods: HEAD, GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /docs, Methods: HEAD, GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /docs/oauth2-redirect, Methods: HEAD, GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /redoc, Methods: HEAD, GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /scale_elastic_ep, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /is_scaling_elastic_ep, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /tokenize, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /detokenize, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /inference/v1/generate, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /pause, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /resume, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /is_paused, Methods: GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /metrics, Methods: GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /health, Methods: GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/chat/completions, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/chat/completions/render, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/responses, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/responses/{response_id}, Methods: GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/responses/{response_id}/cancel, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/audio/transcriptions, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/audio/translations, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/completions, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/completions/render, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/messages, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/models, Methods: GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /load, Methods: GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /version, Methods: GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /ping, Methods: GET
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /ping, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /invocations, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /classify, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/embeddings, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /score, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/score, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /rerank, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v1/rerank, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /v2/rerank, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:27:47 [launcher.py:46] Route: /pooling, Methods: POST
-[0;36m(APIServer pid=2934032)[0;0m INFO:     Started server process [2934032]
-[0;36m(APIServer pid=2934032)[0;0m INFO:     Waiting for application startup.
-[0;36m(APIServer pid=2934032)[0;0m INFO:     Application startup complete.
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:43848 - "GET /v1/models HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45746 - "GET /metrics HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45746 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45760 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45762 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45774 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45786 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45800 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45810 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52494 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:28:18 [loggers.py:257] Engine 000: Avg prompt throughput: 25.6 tokens/s, Avg generation throughput: 57.6 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 1.8%, Prefix cache hit rate: 0.0%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52504 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52508 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52514 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52518 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52532 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54340 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54354 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54358 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54360 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:28:28 [loggers.py:257] Engine 000: Avg prompt throughput: 22.4 tokens/s, Avg generation throughput: 175.2 tokens/s, Running: 16 reqs, Waiting: 0 reqs, GPU KV cache usage: 6.0%, Prefix cache hit rate: 0.0%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54374 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54382 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54390 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55410 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:28:38 [loggers.py:257] Engine 000: Avg prompt throughput: 19.2 tokens/s, Avg generation throughput: 279.9 tokens/s, Running: 21 reqs, Waiting: 0 reqs, GPU KV cache usage: 12.2%, Prefix cache hit rate: 0.0%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55424 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55434 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55450 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55466 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55476 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55480 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37138 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37142 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37146 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37160 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:28:48 [loggers.py:257] Engine 000: Avg prompt throughput: 32.0 tokens/s, Avg generation throughput: 358.5 tokens/s, Running: 31 reqs, Waiting: 0 reqs, GPU KV cache usage: 20.2%, Prefix cache hit rate: 0.0%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37168 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37176 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37180 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37190 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37192 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37208 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37216 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58466 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58470 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:28:58 [loggers.py:257] Engine 000: Avg prompt throughput: 28.8 tokens/s, Avg generation throughput: 474.1 tokens/s, Running: 40 reqs, Waiting: 0 reqs, GPU KV cache usage: 30.8%, Prefix cache hit rate: 0.0%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58480 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58484 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58486 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58494 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58508 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58510 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58524 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58528 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58530 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58538 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58542 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58558 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:29:08 [loggers.py:257] Engine 000: Avg prompt throughput: 38.4 tokens/s, Avg generation throughput: 570.5 tokens/s, Running: 52 reqs, Waiting: 0 reqs, GPU KV cache usage: 43.1%, Prefix cache hit rate: 1.0%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53044 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53046 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53058 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53060 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53066 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53082 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53090 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53096 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53110 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53126 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53132 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53146 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53150 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53156 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50298 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50304 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:29:18 [loggers.py:257] Engine 000: Avg prompt throughput: 51.2 tokens/s, Avg generation throughput: 653.0 tokens/s, Running: 68 reqs, Waiting: 0 reqs, GPU KV cache usage: 57.9%, Prefix cache hit rate: 0.7%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50316 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50318 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50332 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50336 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45746 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:29:28 [loggers.py:257] Engine 000: Avg prompt throughput: 16.0 tokens/s, Avg generation throughput: 697.3 tokens/s, Running: 71 reqs, Waiting: 0 reqs, GPU KV cache usage: 68.1%, Prefix cache hit rate: 0.7%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45760 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45762 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:56980 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:56994 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57006 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57008 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57018 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45774 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57028 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57036 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45786 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45800 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57046 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45810 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57060 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50558 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:29:38 [loggers.py:257] Engine 000: Avg prompt throughput: 51.2 tokens/s, Avg generation throughput: 744.0 tokens/s, Running: 82 reqs, Waiting: 0 reqs, GPU KV cache usage: 73.7%, Prefix cache hit rate: 0.6%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50572 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52494 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50580 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50596 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50612 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50614 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50620 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50630 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50632 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50644 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50656 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52504 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52508 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55140 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:29:48 [loggers.py:257] Engine 000: Avg prompt throughput: 41.6 tokens/s, Avg generation throughput: 795.9 tokens/s, Running: 93 reqs, Waiting: 0 reqs, GPU KV cache usage: 84.8%, Prefix cache hit rate: 0.5%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52514 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52518 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55142 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52532 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55158 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55162 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42832 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:29:58 [loggers.py:257] Engine 000: Avg prompt throughput: 25.6 tokens/s, Avg generation throughput: 806.9 tokens/s, Running: 95 reqs, Waiting: 0 reqs, GPU KV cache usage: 90.6%, Prefix cache hit rate: 0.5%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54340 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54354 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54358 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54360 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54374 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42848 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54382 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42856 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:30:08 [loggers.py:257] Engine 000: Avg prompt throughput: 25.6 tokens/s, Avg generation throughput: 815.1 tokens/s, Running: 98 reqs, Waiting: 0 reqs, GPU KV cache usage: 97.3%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:54390 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42866 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42870 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42878 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55410 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42810 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42826 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:30:18 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 682.8 tokens/s, Running: 73 reqs, Waiting: 31 reqs, GPU KV cache usage: 99.3%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55424 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42834 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42836 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55434 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42846 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42852 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42868 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42872 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55450 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55466 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42874 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55476 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:55480 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58786 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:30:28 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 540.6 tokens/s, Running: 71 reqs, Waiting: 41 reqs, GPU KV cache usage: 99.7%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58802 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58810 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37138 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58812 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37142 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37146 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37160 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37168 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:30:38 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 510.8 tokens/s, Running: 69 reqs, Waiting: 45 reqs, GPU KV cache usage: 99.8%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37176 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37190 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37208 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:30:48 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 531.2 tokens/s, Running: 65 reqs, Waiting: 47 reqs, GPU KV cache usage: 99.7%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:37216 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58466 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:48522 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:48534 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58470 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58480 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58484 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58486 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58494 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45930 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58508 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:30:58 [loggers.py:257] Engine 000: Avg prompt throughput: 41.6 tokens/s, Avg generation throughput: 481.5 tokens/s, Running: 83 reqs, Waiting: 32 reqs, GPU KV cache usage: 100.0%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45938 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58510 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58524 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58530 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58542 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:58558 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:31:08 [loggers.py:257] Engine 000: Avg prompt throughput: 105.6 tokens/s, Avg generation throughput: 783.0 tokens/s, Running: 92 reqs, Waiting: 23 reqs, GPU KV cache usage: 100.0%, Prefix cache hit rate: 0.3%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:43228 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:43236 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:43246 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:43262 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:43274 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53044 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:43276 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53046 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53058 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53060 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53066 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53082 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53090 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53096 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:31:18 [loggers.py:257] Engine 000: Avg prompt throughput: 54.4 tokens/s, Avg generation throughput: 686.5 tokens/s, Running: 119 reqs, Waiting: 0 reqs, GPU KV cache usage: 97.3%, Prefix cache hit rate: 0.3%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53110 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53126 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53132 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53146 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:53150 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50298 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50304 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50316 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50318 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42456 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42462 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42474 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:31:28 [loggers.py:257] Engine 000: Avg prompt throughput: 32.0 tokens/s, Avg generation throughput: 951.9 tokens/s, Running: 118 reqs, Waiting: 4 reqs, GPU KV cache usage: 100.0%, Prefix cache hit rate: 0.3%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50332 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50336 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42488 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42498 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42510 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42514 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42528 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:42530 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45746 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:38320 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45760 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:38324 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:38334 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:38340 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:31:38 [loggers.py:257] Engine 000: Avg prompt throughput: 6.4 tokens/s, Avg generation throughput: 760.3 tokens/s, Running: 92 reqs, Waiting: 40 reqs, GPU KV cache usage: 100.0%, Prefix cache hit rate: 0.3%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45762 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:56980 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:56994 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57028 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57036 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45786 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:31:48 [loggers.py:257] Engine 000: Avg prompt throughput: 60.8 tokens/s, Avg generation throughput: 857.8 tokens/s, Running: 123 reqs, Waiting: 0 reqs, GPU KV cache usage: 93.6%, Prefix cache hit rate: 0.2%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45800 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57046 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:45810 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:57060 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50558 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50572 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52494 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50580 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50596 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50612 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:31:58 [loggers.py:257] Engine 000: Avg prompt throughput: 32.0 tokens/s, Avg generation throughput: 993.5 tokens/s, Running: 117 reqs, Waiting: 11 reqs, GPU KV cache usage: 99.9%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50614 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50620 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:33546 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:33552 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:33562 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50630 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50632 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:32:08 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 784.1 tokens/s, Running: 91 reqs, Waiting: 40 reqs, GPU KV cache usage: 99.7%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52736 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52740 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52754 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52764 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52766 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52780 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52782 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52796 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52812 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52826 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50644 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52830 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52844 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52852 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:50656 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:49078 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:32:18 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 663.2 tokens/s, Running: 76 reqs, Waiting: 70 reqs, GPU KV cache usage: 99.3%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:49094 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:49102 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:49112 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:49118 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:32:28 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 585.1 tokens/s, Running: 67 reqs, Waiting: 81 reqs, GPU KV cache usage: 99.5%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:32:38 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 527.6 tokens/s, Running: 61 reqs, Waiting: 83 reqs, GPU KV cache usage: 99.3%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:32:48 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 475.3 tokens/s, Running: 56 reqs, Waiting: 85 reqs, GPU KV cache usage: 99.7%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:32:58 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 447.2 tokens/s, Running: 50 reqs, Waiting: 87 reqs, GPU KV cache usage: 96.9%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:33:08 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 393.7 tokens/s, Running: 49 reqs, Waiting: 83 reqs, GPU KV cache usage: 100.0%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:33:18 [loggers.py:257] Engine 000: Avg prompt throughput: 89.5 tokens/s, Avg generation throughput: 360.4 tokens/s, Running: 106 reqs, Waiting: 0 reqs, GPU KV cache usage: 83.8%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:33:28 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 900.7 tokens/s, Running: 86 reqs, Waiting: 0 reqs, GPU KV cache usage: 59.4%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:33:38 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 825.6 tokens/s, Running: 86 reqs, Waiting: 0 reqs, GPU KV cache usage: 76.2%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:33:48 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 774.2 tokens/s, Running: 84 reqs, Waiting: 0 reqs, GPU KV cache usage: 87.1%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:33:58 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 720.7 tokens/s, Running: 82 reqs, Waiting: 1 reqs, GPU KV cache usage: 99.5%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:34:08 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 606.3 tokens/s, Running: 73 reqs, Waiting: 7 reqs, GPU KV cache usage: 99.7%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:34:18 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 556.3 tokens/s, Running: 66 reqs, Waiting: 10 reqs, GPU KV cache usage: 99.1%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:34:28 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 495.1 tokens/s, Running: 62 reqs, Waiting: 9 reqs, GPU KV cache usage: 99.0%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:34:38 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 480.0 tokens/s, Running: 58 reqs, Waiting: 8 reqs, GPU KV cache usage: 99.1%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:34:48 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 456.6 tokens/s, Running: 54 reqs, Waiting: 8 reqs, GPU KV cache usage: 99.7%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:34:58 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 411.5 tokens/s, Running: 45 reqs, Waiting: 0 reqs, GPU KV cache usage: 78.6%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:35:08 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 406.4 tokens/s, Running: 33 reqs, Waiting: 0 reqs, GPU KV cache usage: 61.2%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:35:18 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 248.4 tokens/s, Running: 9 reqs, Waiting: 0 reqs, GPU KV cache usage: 14.1%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:35:28 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 135.8 tokens/s, Running: 8 reqs, Waiting: 0 reqs, GPU KV cache usage: 14.7%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:35:38 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 116.3 tokens/s, Running: 5 reqs, Waiting: 0 reqs, GPU KV cache usage: 10.5%, Prefix cache hit rate: 0.4%
-[0;36m(APIServer pid=2934032)[0;0m INFO:     127.0.0.1:52852 - "GET /metrics HTTP/1.1" 200 OK
-[0;36m(APIServer pid=2934032)[0;0m INFO 07-31 16:35:41 [launcher.py:110] Shutting down FastAPI HTTP server.
-[rank0]:[W731 16:35:41.013433875 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
-[0;36m(APIServer pid=2934032)[0;0m INFO:     Shutting down
-[0;36m(APIServer pid=2934032)[0;0m INFO:     Waiting for application shutdown.
-[0;36m(APIServer pid=2934032)[0;0m INFO:     Application shutdown complete.

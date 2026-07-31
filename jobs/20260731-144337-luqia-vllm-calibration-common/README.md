@@ -38,10 +38,17 @@ each benchmark uses one vanilla vLLM instance and one homogeneous GPU pool.
   single-pool tests, not Prefill/Decode-transfer experiments. Combined-engine
   queue samples are labelled `combined_vllm_metrics`; they are never presented
   as measurements from two independent PD endpoints.
-- Segment artifacts are retained in the broker job output for auditing; only
-  the temporary compilation/runtime work directory is removed on exit.
-- Every exit path resets all allocated GPUs with `nvidia-smi -rgc` and removes
-  only `/data/users/chjing/vllm_job_work/<job>_<array-task>`.
+- Segment artifacts are staged only under
+  `/data/users/chjing/vllm_job_work/calibration_<job>_<array-task>/results`;
+  no benchmark CSV, trace, telemetry, or server log is written below the Git
+  broker tree.
+- Once a segment passes integrity checks and its ClickHouse batch insert
+  succeeds, its complete artifact directory is deleted immediately and the
+  live vLLM server log is truncated. Failed uploads remain only until the task
+  exits so their error can be printed, then the task work directory is removed.
+- Every new array task also removes calibration-owned work directories and
+  external Slurm logs older than two days. Every exit path resets all allocated
+  GPUs with `nvidia-smi -rgc` and removes its exact task work directory.
 
 The manifests are generated from the authorized read-only source files with:
 
@@ -52,5 +59,7 @@ python3 build_calibration_manifests.py \
 ```
 
 The accompanying array jobs use `--partition=long` and `--time=24:00:00`.
-This common directory intentionally has no `READY` marker; it is shared by the
-two submitted array-job directories and must not be submitted by itself.
+This common directory intentionally has no `READY` marker; it is shared by
+future array-job directories and must not be submitted by itself.
+New submission directories should copy the matching file from `templates/` as
+`run.sbatch`. Those templates send Slurm stdout/stderr outside Git as well.

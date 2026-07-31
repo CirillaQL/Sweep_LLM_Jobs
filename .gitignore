@@ -3,3 +3,13 @@
 .gsync_broker_state.json
 .gsync_worker.lock
 .gsync_worker_state.json
+
+# Cluster-generated experiment artifacts must never enter Git.  Calibration
+# jobs stage these files under /data/users/chjing/vllm_job_work, and these
+# patterns are a second line of defence for old or misconfigured wrappers.
+jobs/**/calibration_results/
+jobs/**/observability_results/
+jobs/**/full_observability/
+jobs/**/spool/
+jobs/**/slurm-*.out
+jobs/**/slurm-*.err

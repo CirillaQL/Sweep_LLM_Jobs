@@ -1,9 +1,0 @@
-slurmstepd-neptune: error: *** JOB 250612 ON neptune CANCELLED AT 2026-07-31T15:31:24 ***
-Traceback (most recent call last):
-  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-144337-luqia-vllm-calibration-common/calibration_runner.py", line 814, in <module>
-    raise SystemExit(main())
-  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-144337-luqia-vllm-calibration-common/calibration_runner.py", line 715, in main
-    args.vllm_version = check_bench_flags(args.vllm_bin)
-  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-144337-luqia-vllm-calibration-common/calibration_runner.py", line 653, in check_bench_flags
-    raise RuntimeError(f"installed vLLM bench serve lacks required flags: {missing}")
-RuntimeError: installed vLLM bench serve lacks required flags: ['--random-range-ratio', '--request-id-prefix', '--percentile-metrics', '--metric-percentiles', '--save-result', '--result-filename']

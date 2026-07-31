@@ -12,6 +12,7 @@ import math
 import os
 import re
 import shlex
+import shutil
 import signal
 import socket
 import statistics
@@ -488,6 +489,21 @@ class VLLMServer:
             self.log_handle = None
         self.tp = 0
 
+    def truncate_log(self) -> None:
+        """Discard an uploaded segment's server log without restarting vLLM.
+
+        The child inherits the same open file description, so resetting the
+        parent's descriptor also resets the child's next write position.  This
+        keeps iteration/request logging enabled without accumulating a full
+        24-hour server log on local disk.
+        """
+        if not self.log_handle or not self.log_path:
+            return
+        self.log_handle.flush()
+        os.ftruncate(self.log_handle.fileno(), 0)
+        self.log_handle.seek(0)
+        print(f"server_log_truncated path={self.log_path}", flush=True)
+
 
 def append_jsonl(path: Path, row: dict[str, Any]) -> None:
     with path.open("a", encoding="utf-8") as handle:
@@ -890,6 +906,25 @@ def run_segment(
         f"clickhouse_upload_rc={upload_rc}",
         flush=True,
     )
+    if success and not args.retain_uploaded_artifacts:
+        try:
+            shutil.rmtree(segment_dir)
+            server.truncate_log()
+            print(
+                f"artifact_cleanup run_id={run_id} "
+                "policy=after_verified_upload",
+                flush=True,
+            )
+        except OSError as exc:
+            # The ClickHouse insert has already committed. Do not retry it and
+            # create duplicate MergeTree rows; checkpoint the shard before the
+            # next segment so local disk cannot continue growing unchecked.
+            STOP_REQUESTED.set()
+            print(
+                f"artifact_cleanup_error run_id={run_id} "
+                f"error={type(exc).__name__}:{exc} checkpoint=true",
+                flush=True,
+            )
     return row, success
 
 
@@ -922,6 +957,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--minimum-benchmark-timeout-s", type=int, default=1800)
     parser.add_argument("--deadline-seconds", type=int, default=84600)
     parser.add_argument("--max-segments", type=int, default=0)
+    parser.add_argument(
+        "--retain-uploaded-artifacts",
+        action="store_true",
+        help="Keep successfully uploaded segment files for debugging.",
+    )
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
