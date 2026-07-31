@@ -111,38 +111,3 @@ CREATE TABLE IF NOT EXISTS vllm_observability.calibration_shards
 )
 ENGINE = ReplacingMergeTree(updated_at)
 ORDER BY (campaign_id, gpu_type, shard_id, slurm_job_id);
-
-CREATE VIEW IF NOT EXISTS vllm_observability.calibration_logical_runs AS
-SELECT
-    campaign_id,
-    gpu_type,
-    config_id,
-    repeat_no,
-    any(shard_id) AS shard_id,
-    any(tp_degree) AS tp_degree,
-    any(target_gpu_freq_mhz) AS target_gpu_freq_mhz,
-    any(input_len) AS input_len,
-    any(output_len) AS output_len,
-    any(request_rate) AS request_rate,
-    max(segment_count) AS segment_count,
-    countDistinct(segment_no) AS completed_segments,
-    sum(num_prompts) AS num_prompts,
-    sum(completed_requests) AS completed_requests,
-    sum(failed_requests) AS failed_requests,
-    sum(total_input_tokens) AS total_input_tokens,
-    sum(total_output_tokens) AS total_output_tokens,
-    sum(benchmark_duration_s) AS benchmark_duration_s,
-    sum(completed_requests) / nullIf(sum(benchmark_duration_s), 0) AS request_throughput_rps,
-    sum(total_output_tokens) / nullIf(sum(benchmark_duration_s), 0) AS output_token_throughput_tps,
-    (sum(total_input_tokens) + sum(total_output_tokens)) / nullIf(sum(benchmark_duration_s), 0) AS total_token_throughput_tps,
-    sum(mean_ttft_ms * completed_requests) / nullIf(sum(completed_requests), 0) AS weighted_mean_ttft_ms,
-    sum(mean_tpot_ms * completed_requests) / nullIf(sum(completed_requests), 0) AS weighted_mean_tpot_ms,
-    sum(mean_itl_ms * completed_requests) / nullIf(sum(completed_requests), 0) AS weighted_mean_itl_ms,
-    max(p99_ttft_ms) AS max_segment_p99_ttft_ms,
-    max(p99_tpot_ms) AS max_segment_p99_tpot_ms,
-    max(p99_itl_ms) AS max_segment_p99_itl_ms,
-    sum(energy_j) AS energy_j,
-    min(frequency_verified) AS all_segments_frequency_verified
-FROM vllm_observability.calibration_runs
-WHERE status = 'success'
-GROUP BY campaign_id, gpu_type, config_id, repeat_no;
