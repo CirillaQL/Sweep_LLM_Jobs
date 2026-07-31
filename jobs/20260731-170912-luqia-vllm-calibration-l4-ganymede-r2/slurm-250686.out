@@ -12,3 +12,4 @@ collection_mode=full_observability canonical_tables=true calibration_tables=fals
 server_start tp=1 command=/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm serve mistralai/Mistral-7B-v0.1 --host 127.0.0.1 --port 8000 --tensor-parallel-size 1 --gpu-memory-utilization 0.9 --max-model-len 16384 --dtype float16 --max-num-seqs 512 --max-num-batched-tokens 2048 --enable-request-id-headers --enable-prefix-caching --kv-cache-metrics --kv-cache-metrics-sample 1.0 --enable-logging-iteration-details --collect-detailed-traces all --otlp-traces-endpoint http://127.0.0.1:36686/v1/traces --enable-mfu-metrics --enable-log-requests
 server_error config=l4-tp1-f2040-i32-o1024-r50 error=RuntimeError:vLLM server exited rc=1; see /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-170912-luqia-vllm-calibration-l4-ganymede-r2/calibration_results/shard_3/vllm-server-tp1-1785510859.log
 clock_reset_errors=[]
+wrapper_exit_rc=143
