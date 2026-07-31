@@ -637,13 +637,18 @@ def shard_row(manifest: dict, args: argparse.Namespace, state: str, planned: int
 
 
 def check_bench_flags(vllm_bin: str) -> str:
-    version = run_command([vllm_bin, "--version"], timeout=60, check=False).stdout.strip()
+    version_result = run_command([vllm_bin, "--version"], timeout=60, check=False)
+    version = (version_result.stdout + "\n" + version_result.stderr).strip()
     help_result = run_command([vllm_bin, "bench", "serve", "--help"], timeout=120)
+    # vLLM 0.15 uses Rich/Typer and writes help to stderr on this cluster.
+    # Inspect both streams; checking stdout alone falsely reported every flag
+    # as missing before the server or benchmark was started.
+    help_text = help_result.stdout + "\n" + help_result.stderr
     required = (
         "--random-range-ratio", "--request-id-prefix", "--percentile-metrics",
         "--metric-percentiles", "--save-result", "--result-filename",
     )
-    missing = [flag for flag in required if flag not in help_result.stdout]
+    missing = [flag for flag in required if flag not in help_text]
     if missing:
         raise RuntimeError(f"installed vLLM bench serve lacks required flags: {missing}")
     return version or "unknown"
