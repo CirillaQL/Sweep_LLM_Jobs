@@ -746,9 +746,16 @@ def main() -> int:
                 server.ensure(config["tp_degree"])
             except Exception as exc:
                 failed += 1
+                message = f"server startup failed: {type(exc).__name__}: {exc}"
                 print(f"server_error config={config['config_id']} error={type(exc).__name__}:{exc}", flush=True)
                 server.stop()
-                continue
+                if client:
+                    client.insert(
+                        "calibration_shards",
+                        [shard_row(manifest, args, "server_start_failed", planned, completed, failed, skipped, message)],
+                        f"server-start-failed-{completed}-{failed}-{skipped}",
+                    )
+                return 2
             success = False
             for attempt in (1, 2):
                 try:
