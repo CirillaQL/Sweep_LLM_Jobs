@@ -7,11 +7,10 @@ import argparse
 import contextlib
 import csv
 import datetime as dt
-import gzip
-import hashlib
 import json
 import math
 import os
+import re
 import shlex
 import signal
 import socket
@@ -20,8 +19,6 @@ import subprocess
 import sys
 import threading
 import time
-import urllib.error
-import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any
@@ -31,115 +28,8 @@ UTC = dt.timezone.utc
 STOP_REQUESTED = threading.Event()
 
 
-class UploadPending(RuntimeError):
-    """The benchmark completed, but its durable ClickHouse upload is pending."""
-
-
 def utc_now() -> str:
     return dt.datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S.%f000")
-
-
-def json_bytes(rows: list[dict[str, Any]]) -> bytes:
-    return b"".join(
-        (json.dumps(row, separators=(",", ":"), ensure_ascii=False) + "\n").encode()
-        for row in rows
-    )
-
-
-class ClickHouse:
-    def __init__(self) -> None:
-        self.url = os.environ["CLICKHOUSE_URL"].rstrip("/") + "/"
-        self.user = os.environ["CLICKHOUSE_USER"]
-        self.password = os.environ["CLICKHOUSE_PASSWORD"]
-        self.database = os.environ.get("CLICKHOUSE_DATABASE", "vllm_observability")
-
-    def request(
-        self,
-        query: str,
-        body: bytes = b"",
-        *,
-        settings: dict[str, str] | None = None,
-        query_id: str = "",
-        compressed: bool = False,
-        timeout: int = 180,
-    ) -> bytes:
-        params = {"database": self.database, "query": query, "wait_end_of_query": "1"}
-        if settings:
-            params.update(settings)
-        request = urllib.request.Request(
-            self.url + "?" + urllib.parse.urlencode(params), data=body, method="POST"
-        )
-        request.add_header("X-ClickHouse-User", self.user)
-        request.add_header("X-ClickHouse-Key", self.password)
-        request.add_header("User-Agent", "vllm-calibration-uploader/1.0")
-        if query_id:
-            request.add_header("X-ClickHouse-Query-Id", query_id)
-        if compressed:
-            request.add_header("Content-Encoding", "gzip")
-            request.add_header("Content-Type", "application/x-ndjson")
-        try:
-            with urllib.request.urlopen(request, timeout=timeout) as response:
-                return response.read()
-        except urllib.error.HTTPError as exc:
-            detail = exc.read(8192).decode("utf-8", "replace")
-            raise RuntimeError(f"ClickHouse HTTP {exc.code}: {detail}") from exc
-        except urllib.error.URLError as exc:
-            raise RuntimeError(f"ClickHouse connection failed: {exc}") from exc
-
-    def initialize(self, schema_path: Path) -> str:
-        version = self.request("SELECT version() FORMAT TabSeparated", timeout=30).decode().strip()
-        schema = schema_path.read_text(encoding="utf-8")
-        for statement in (part.strip() for part in schema.split(";")):
-            if statement:
-                self.request(statement, timeout=60)
-        return version
-
-    def insert(self, table: str, rows: list[dict[str, Any]], label: str) -> None:
-        if not rows:
-            return
-        payload = json_bytes(rows)
-        digest = hashlib.sha256(table.encode() + b"\0" + label.encode() + b"\0" + payload).hexdigest()
-        body = gzip.compress(payload, compresslevel=6, mtime=0)
-        last_error: Exception | None = None
-        for attempt, delay in enumerate((0, 2, 5, 10, 20, 40), start=1):
-            if delay:
-                time.sleep(delay)
-            try:
-                self.request(
-                    f"INSERT INTO {self.database}.{table} FORMAT JSONEachRow",
-                    body,
-                    settings={"async_insert": "0", "insert_deduplication_token": digest},
-                    query_id=f"cal-{table}-{digest[:24]}",
-                    compressed=True,
-                )
-                return
-            except RuntimeError as exc:
-                last_error = exc
-                retryable = any(
-                    marker in str(exc)
-                    for marker in ("connection failed", "HTTP 408", "HTTP 429", "HTTP 500", "HTTP 502", "HTTP 503", "HTTP 504")
-                )
-                if not retryable or attempt == 6:
-                    break
-                print(f"clickhouse_retry table={table} attempt={attempt}", flush=True)
-        raise RuntimeError(f"ClickHouse insert failed for {table}: {last_error}")
-
-    def completed(self, campaign: str, gpu_type: str, shard: int) -> set[tuple[str, int, int]]:
-        campaign_q = campaign.replace("'", "''")
-        gpu_q = gpu_type.replace("'", "''")
-        query = f"""
-            SELECT config_id, repeat_no, segment_no
-            FROM {self.database}.calibration_runs
-            WHERE campaign_id='{campaign_q}' AND gpu_type='{gpu_q}'
-              AND shard_id={int(shard)} AND status='success'
-            GROUP BY config_id, repeat_no, segment_no
-            FORMAT JSONEachRow
-        """
-        raw = self.request(query).decode("utf-8", "replace")
-        return {
-            (row["config_id"], int(row["repeat_no"]), int(row["segment_no"]))
-            for row in (json.loads(line) for line in raw.splitlines() if line.strip())
-        }
 
 
 def run_command(command: list[str], *, timeout: float = 120, check: bool = True) -> subprocess.CompletedProcess:
@@ -153,7 +43,7 @@ def run_command(command: list[str], *, timeout: float = 120, check: bool = True)
 
 
 def gpu_query() -> list[dict[str, str]]:
-    fields = "index,name,uuid,pstate,clocks.sm,clocks.mem,utilization.gpu,utilization.memory,memory.used,memory.total,power.draw,temperature.gpu"
+    fields = "index,name,uuid,driver_version,pstate,clocks.sm,clocks.mem,utilization.gpu,utilization.memory,memory.used,memory.total,power.draw,power.limit,temperature.gpu"
     result = run_command(
         ["nvidia-smi", f"--query-gpu={fields}", "--format=csv,noheader,nounits"], timeout=30
     )
@@ -198,6 +88,7 @@ class GPUMonitor:
         self.interval_ms = interval_ms
         self.samples: list[dict[str, Any]] = []
         self.error = ""
+        self.network_interface = default_network_interface()
         self.stop_event = threading.Event()
         self.thread = threading.Thread(target=self._run, daemon=True)
 
@@ -216,12 +107,14 @@ class GPUMonitor:
             try:
                 now_ns = time.time_ns()
                 now = dt.datetime.fromtimestamp(now_ns / 1e9, UTC).strftime("%Y-%m-%d %H:%M:%S.%f000")
+                rx_bytes, tx_bytes = network_counters(self.network_interface)
                 rows = gpu_query()
                 for row in rows[: self.gpu_count]:
                     self.samples.append(
                         {
                             "sample_seq": sequence,
                             "gpu_index": int(row["index"]),
+                            "gpu_uuid": row["uuid"],
                             "sampled_at": now,
                             "unix_ns": now_ns,
                             "sm_clock_mhz": value(row, "clocks.sm"),
@@ -231,8 +124,12 @@ class GPUMonitor:
                             "memory_used_mib": value(row, "memory.used"),
                             "memory_total_mib": value(row, "memory.total"),
                             "power_w": value(row, "power.draw"),
+                            "power_limit_w": value(row, "power.limit"),
                             "temperature_c": value(row, "temperature.gpu"),
                             "pstate": row["pstate"],
+                            "network_interface": self.network_interface,
+                            "rx_bytes": rx_bytes,
+                            "tx_bytes": tx_bytes,
                         }
                     )
                 sequence += 1
@@ -240,6 +137,199 @@ class GPUMonitor:
                 self.error = f"{type(exc).__name__}: {exc}"
             elapsed = time.monotonic() - started
             self.stop_event.wait(max(0.05, self.interval_ms / 1000 - elapsed))
+
+
+def default_network_interface() -> str:
+    try:
+        for line in Path("/proc/net/route").read_text().splitlines()[1:]:
+            columns = line.split()
+            if len(columns) >= 4 and columns[1] == "00000000":
+                return columns[0]
+    except OSError:
+        pass
+    return ""
+
+
+def network_counters(interface: str) -> tuple[int, int]:
+    if not interface:
+        return 0, 0
+
+
+def read_int(path: Path) -> int:
+    try:
+        return int(path.read_text().strip())
+    except (OSError, ValueError):
+        return 0
+    base = Path("/sys/class/net") / interface / "statistics"
+    try:
+        return (
+            int((base / "rx_bytes").read_text().strip()),
+            int((base / "tx_bytes").read_text().strip()),
+        )
+    except (OSError, ValueError):
+        return 0, 0
+
+
+def stop_process(process: subprocess.Popen | None, timeout: int = 15) -> None:
+    if process is None or process.poll() is not None:
+        return
+    with contextlib.suppress(ProcessLookupError):
+        os.killpg(process.pid, signal.SIGTERM)
+    try:
+        process.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        with contextlib.suppress(ProcessLookupError):
+            os.killpg(process.pid, signal.SIGKILL)
+        process.wait(timeout=5)
+
+
+def wait_http(url: str, timeout_s: int = 60) -> None:
+    deadline = time.monotonic() + timeout_s
+    error: Exception | None = None
+    while time.monotonic() < deadline:
+        try:
+            with urllib.request.urlopen(url, timeout=3) as response:
+                if response.status == 200:
+                    return
+        except Exception as exc:
+            error = exc
+        time.sleep(1)
+    raise RuntimeError(f"readiness timeout url={url}: {error}")
+
+
+def write_csv(path: Path, fields: list[str], rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def csv_row_count(path: Path) -> int:
+    if not path.exists() or path.stat().st_size == 0:
+        return 0
+    with path.open(newline="", encoding="utf-8", errors="replace") as handle:
+        return sum(1 for _ in csv.DictReader(handle))
+
+
+def write_telemetry_csv(
+    path: Path, samples: list[dict[str, Any]], hostname: str
+) -> None:
+    fields = [
+        "unix_ts", "role", "hostname", "gpu_index", "gpu_uuid",
+        "network_interface", "rx_bytes", "tx_bytes", "rx_bytes_per_s",
+        "tx_bytes_per_s", "gpu_util_pct", "gpu_power_w", "gpu_sm_mhz",
+        "gpu_memory_used_mib", "gpu_mem_util_pct", "gpu_power_limit_w",
+        "gpu_mem_clock_mhz", "gpu_temperature_c", "gpu_memory_total_mib",
+        "gpu_pstate", "dvfs_mode",
+    ]
+    previous: dict[int, dict[str, Any]] = {}
+    rows = []
+    for sample in samples:
+        index = int(sample["gpu_index"])
+        prior = previous.get(index)
+        elapsed = (
+            (sample["unix_ns"] - prior["unix_ns"]) / 1e9 if prior else 0.0
+        )
+        rows.append(
+            {
+                "unix_ts": sample["unix_ns"] / 1e9,
+                "role": "combined",
+                "hostname": hostname,
+                "gpu_index": index,
+                "gpu_uuid": sample["gpu_uuid"],
+                "network_interface": sample["network_interface"],
+                "rx_bytes": sample["rx_bytes"] if index == 0 else 0,
+                "tx_bytes": sample["tx_bytes"] if index == 0 else 0,
+                "rx_bytes_per_s": (
+                    (sample["rx_bytes"] - prior["rx_bytes"]) / elapsed
+                    if index == 0 and prior and elapsed > 0 else 0
+                ),
+                "tx_bytes_per_s": (
+                    (sample["tx_bytes"] - prior["tx_bytes"]) / elapsed
+                    if index == 0 and prior and elapsed > 0 else 0
+                ),
+                "gpu_util_pct": sample["gpu_util_pct"],
+                "gpu_power_w": sample["power_w"],
+                "gpu_sm_mhz": sample["sm_clock_mhz"],
+                "gpu_memory_used_mib": sample["memory_used_mib"],
+                "gpu_mem_util_pct": sample["mem_util_pct"],
+                "gpu_power_limit_w": sample["power_limit_w"],
+                "gpu_mem_clock_mhz": sample["mem_clock_mhz"],
+                "gpu_temperature_c": sample["temperature_c"],
+                "gpu_memory_total_mib": sample["memory_total_mib"],
+                "gpu_pstate": sample["pstate"],
+                "dvfs_mode": "fixed_core_clock",
+            }
+        )
+        previous[index] = sample
+    write_csv(path, fields, rows)
+
+
+PROMETHEUS_SAMPLE_RE = re.compile(
+    r'^([A-Za-z_:][A-Za-z0-9_:]*)(?:\{(.*)\})?\s+([^\s]+)'
+)
+PROMETHEUS_LABEL_RE = re.compile(r'([A-Za-z_][A-Za-z0-9_]*)="((?:\\.|[^"\\])*)"')
+
+
+def capture_histograms(
+    url: str, output: Path, window_id: str, capture_kind: str
+) -> None:
+    with urllib.request.urlopen(url, timeout=10) as response:
+        text_body = response.read().decode("utf-8", "replace")
+    buckets: list[tuple[str, dict[str, str], str, int]] = []
+    counts: dict[tuple[str, str], int] = {}
+    sums: dict[tuple[str, str], float] = {}
+    for line in text_body.splitlines():
+        match = PROMETHEUS_SAMPLE_RE.match(line)
+        if not match or line.startswith("#"):
+            continue
+        metric, raw_labels, raw_value = match.groups()
+        labels = {
+            key: value.replace(r'\"', '"').replace(r"\\", "\\")
+            for key, value in PROMETHEUS_LABEL_RE.findall(raw_labels or "")
+        }
+        try:
+            numeric = float(raw_value)
+        except ValueError:
+            continue
+        if metric.endswith("_bucket") and "le" in labels:
+            le = labels.pop("le")
+            buckets.append((metric[:-7], labels, le, int(numeric)))
+        elif metric.endswith("_count"):
+            key = (metric[:-6], json.dumps(labels, sort_keys=True))
+            counts[key] = int(numeric)
+        elif metric.endswith("_sum"):
+            key = (metric[:-4], json.dumps(labels, sort_keys=True))
+            sums[key] = numeric
+    captured_ns = time.time_ns()
+    rows = []
+    for metric, labels, raw_le, cumulative in buckets:
+        labels_json = json.dumps(labels, sort_keys=True)
+        rows.append(
+            {
+                "window_id": window_id,
+                "captured_unix_ns": captured_ns,
+                "role": "combined",
+                "capture_kind": capture_kind,
+                "metric": metric,
+                "labels_json": labels_json,
+                "bucket_le": 1e308 if raw_le == "+Inf" else float(raw_le),
+                "cumulative_count": cumulative,
+                "histogram_count": counts.get((metric, labels_json), 0),
+                "histogram_sum": sums.get((metric, labels_json), 0.0),
+            }
+        )
+    fields = [
+        "window_id", "captured_unix_ns", "role", "capture_kind",
+        "metric", "labels_json", "bucket_le", "cumulative_count",
+        "histogram_count", "histogram_sum",
+    ]
+    existing = []
+    if output.exists() and output.stat().st_size:
+        with output.open(newline="", encoding="utf-8") as handle:
+            existing = list(csv.DictReader(handle))
+    write_csv(output, fields, existing + rows)
 
 
 def mean(values: list[float]) -> float:
@@ -285,16 +375,6 @@ def summarize_samples(samples: list[dict[str, Any]], target: int, tolerance: int
     }
 
 
-def metric(result: dict[str, Any], *keys: str, default: float = 0.0) -> float:
-    for key in keys:
-        if key in result and result[key] is not None:
-            try:
-                return float(result[key])
-            except (TypeError, ValueError):
-                pass
-    return default
-
-
 class VLLMServer:
     def __init__(self, args: argparse.Namespace, logs_dir: Path, max_freq: int, all_gpus: int) -> None:
         self.args = args
@@ -303,6 +383,7 @@ class VLLMServer:
         self.all_gpus = all_gpus
         self.process: subprocess.Popen | None = None
         self.log_handle = None
+        self.log_path: Path | None = None
         self.tp = 0
 
     def ensure(self, tp: int) -> None:
@@ -315,10 +396,14 @@ class VLLMServer:
         set_clock(range(tp), self.max_freq)
         self.tp = tp
         log_path = self.logs_dir / f"vllm-server-tp{tp}-{int(time.time())}.log"
+        self.log_path = log_path
         self.log_handle = log_path.open("a", encoding="utf-8")
         env = os.environ.copy()
         env["CUDA_VISIBLE_DEVICES"] = ",".join(str(index) for index in range(tp))
         env["VLLM_ATTENTION_BACKEND"] = "FLASH_ATTN"
+        env["PYTHONPATH"] = str(self.args.otel_bundle) + (
+            f":{env['PYTHONPATH']}" if env.get("PYTHONPATH") else ""
+        )
         command = [
             self.args.vllm_bin,
             "serve",
@@ -335,6 +420,22 @@ class VLLMServer:
             str(self.args.max_model_len),
             "--dtype",
             "float16",
+            "--max-num-seqs",
+            str(self.args.max_num_seqs),
+            "--max-num-batched-tokens",
+            str(self.args.max_num_batched_tokens),
+            "--enable-request-id-headers",
+            "--enable-prefix-caching",
+            "--kv-cache-metrics",
+            "--kv-cache-metrics-sample",
+            "1.0",
+            "--enable-logging-iteration-details",
+            "--collect-detailed-traces",
+            "all",
+            "--otlp-traces-endpoint",
+            self.args.otlp_traces_endpoint,
+            "--enable-mfu-metrics",
+            "--enable-log-requests",
         ]
         print(f"server_start tp={tp} command={shlex.join(command)}", flush=True)
         self.process = subprocess.Popen(
@@ -377,107 +478,6 @@ class VLLMServer:
         self.tp = 0
 
 
-def build_run_row(
-    manifest: dict,
-    config: dict,
-    segment: dict,
-    repeat_no: int,
-    attempt: int,
-    run_id: str,
-    args: argparse.Namespace,
-    gpu_names: list[str],
-    started_at: str,
-    finished_at: str,
-    bench_rc: int,
-    duration_s: float,
-    result: dict[str, Any],
-    summary: dict[str, Any],
-    error: str,
-    run_seed: int,
-) -> dict[str, Any]:
-    success = bench_rc == 0 and not error and summary["frequency_verified"]
-    if bench_rc == 0 and not summary["frequency_verified"]:
-        error = "target frequency verification failed: " + json.dumps(
-            summary["per_gpu_frequency_verification"], sort_keys=True
-        )
-    return {
-        "campaign_id": manifest["campaign_id"],
-        "gpu_type": manifest["gpu_type"],
-        "config_id": config["config_id"],
-        "repeat_no": repeat_no,
-        "segment_no": segment["segment_no"],
-        "segment_count": segment["segment_count"],
-        "infra_attempt": attempt,
-        "shard_id": args.shard_id,
-        "run_id": run_id,
-        "slurm_job_id": os.environ.get("SLURM_JOB_ID", "manual"),
-        "slurm_array_task_id": int(os.environ.get("SLURM_ARRAY_TASK_ID", args.shard_id)),
-        "hostname": socket.gethostname().split(".")[0],
-        "model": args.model,
-        "vllm_version": args.vllm_version,
-        "gpu_names": gpu_names,
-        "tp_degree": config["tp_degree"],
-        "target_gpu_freq_mhz": config["gpu_freq_mhz"],
-        "historical_mem_freq_mhz": config["mem_freq_mhz"],
-        "input_len": config["input_len"],
-        "output_len": config["output_len"],
-        "request_rate": config["request_rate"],
-        "num_prompts": segment["num_prompts"],
-        "seed": run_seed,
-        "source_steps": config["source_steps"],
-        "started_at": started_at,
-        "finished_at": finished_at,
-        "status": "success" if success else "failed",
-        "benchmark_rc": bench_rc,
-        "benchmark_duration_s": duration_s,
-        "completed_requests": int(metric(result, "completed", "completed_requests")),
-        "failed_requests": int(metric(result, "failed", "failed_requests")),
-        "total_input_tokens": int(metric(result, "total_input_tokens")),
-        "total_output_tokens": int(metric(result, "total_output_tokens")),
-        "request_throughput_rps": metric(result, "request_throughput", "request_throughput_rps"),
-        "output_token_throughput_tps": metric(result, "output_throughput", "output_token_throughput_tps"),
-        "total_token_throughput_tps": metric(result, "total_token_throughput", "total_token_throughput_tps"),
-        "mean_ttft_ms": metric(result, "mean_ttft_ms"),
-        "median_ttft_ms": metric(result, "median_ttft_ms"),
-        "p99_ttft_ms": metric(result, "p99_ttft_ms"),
-        "mean_tpot_ms": metric(result, "mean_tpot_ms"),
-        "median_tpot_ms": metric(result, "median_tpot_ms"),
-        "p99_tpot_ms": metric(result, "p99_tpot_ms"),
-        "mean_itl_ms": metric(result, "mean_itl_ms"),
-        "median_itl_ms": metric(result, "median_itl_ms"),
-        "p99_itl_ms": metric(result, "p99_itl_ms"),
-        **{key: summary[key] for key in (
-            "avg_total_power_w", "min_total_power_w", "max_total_power_w", "energy_j",
-            "avg_gpu_util_pct", "avg_mem_util_pct", "actual_sm_clock_min_mhz",
-            "actual_sm_clock_mean_mhz", "actual_sm_clock_max_mhz", "active_clock_sample_count",
-            "active_clock_within_tolerance_ratio", "frequency_verified",
-        )},
-        "frequency_tolerance_mhz": args.frequency_tolerance_mhz,
-        "result_json": json.dumps(result, separators=(",", ":"), ensure_ascii=False),
-        "error": error,
-        "updated_at": utc_now(),
-    }
-
-
-def decorate_samples(
-    samples: list[dict[str, Any]], manifest: dict, config: dict, segment: dict,
-    repeat_no: int, run_id: str, shard_id: int
-) -> list[dict[str, Any]]:
-    ingested_at = utc_now()
-    common = {
-        "campaign_id": manifest["campaign_id"],
-        "gpu_type": manifest["gpu_type"],
-        "run_id": run_id,
-        "config_id": config["config_id"],
-        "repeat_no": repeat_no,
-        "segment_no": segment["segment_no"],
-        "shard_id": shard_id,
-        "target_gpu_freq_mhz": config["gpu_freq_mhz"],
-        "ingested_at": ingested_at,
-    }
-    return [{**common, **sample} for sample in samples]
-
-
 def append_jsonl(path: Path, row: dict[str, Any]) -> None:
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(row, separators=(",", ":"), ensure_ascii=False) + "\n")
@@ -485,37 +485,7 @@ def append_jsonl(path: Path, row: dict[str, Any]) -> None:
         os.fsync(handle.fileno())
 
 
-def upload_bundle(client: ClickHouse, bundle_path: Path) -> dict[str, Any]:
-    with gzip.open(bundle_path, "rt", encoding="utf-8") as handle:
-        bundle = json.load(handle)
-    row = bundle["run"]
-    samples = bundle["samples"]
-    run_id = row["run_id"]
-    for index in range(0, len(samples), 5000):
-        client.insert(
-            "calibration_gpu_samples", samples[index:index + 5000],
-            f"{run_id}-samples-{index // 5000}",
-        )
-    client.insert("calibration_runs", [row], f"{run_id}-run")
-    bundle_path.unlink()
-    if row["status"] == "success":
-        for path in bundle_path.parent.iterdir():
-            path.unlink()
-        bundle_path.parent.rmdir()
-    return row
-
-
-def replay_spool(client: ClickHouse, output_dir: Path) -> int:
-    replayed = 0
-    for bundle_path in sorted((output_dir / "spool").glob("*/upload_bundle.json.gz")):
-        row = upload_bundle(client, bundle_path)
-        replayed += 1
-        print(f"spool_replayed run_id={row['run_id']} status={row['status']}", flush=True)
-    return replayed
-
-
 def run_segment(
-    client: ClickHouse | None,
     server: VLLMServer,
     manifest: dict,
     config: dict,
@@ -540,40 +510,124 @@ def run_segment(
         flush=True,
     )
 
-    segment_dir = output_dir / "spool" / run_id
+    segment_dir = output_dir / "full_observability" / run_id
     segment_dir.mkdir(parents=True, exist_ok=True)
-    result_path = segment_dir / "vllm_bench_result.json"
-    bench_log = segment_dir / "vllm_bench.log"
-    request_prefix = f"{run_id}-"
+    workload_path = segment_dir / "workload.csv"
     run_seed = args.seed + (repeat_no - 1) * 1000 + segment["segment_no"] - 1
-    command = [
-        args.vllm_bin, "bench", "serve", "--backend", "vllm", "--model", args.model,
-        "--base-url", f"http://127.0.0.1:{args.port}", "--dataset-name", "random",
-        "--random-input-len", str(config["input_len"]), "--random-output-len", str(config["output_len"]),
-        "--random-range-ratio", "0.0", "--num-prompts", str(segment["num_prompts"]),
-        "--request-rate", str(config["request_rate"]), "--seed", str(run_seed), "--ignore-eos",
-        "--request-id-prefix", request_prefix, "--percentile-metrics", "ttft,tpot,itl,e2el",
-        "--metric-percentiles", "50,99", "--save-result", "--result-dir", str(segment_dir),
-        "--result-filename", result_path.name,
+    duration_s = segment["num_prompts"] / config["request_rate"]
+    workload_fields = [
+        "window_id", "duration_s", "request_rate", "input_tokens",
+        "max_tokens", "max_concurrency", "timeout_s", "retries",
+        "cancel_fraction", "cancel_after_s", "shared_prefix_tokens",
+        "inter_window_pause_s", "tp_degree", "target_gpu_freq_mhz",
+        "config_id", "manual_frequency_control", "scheduler_prediction",
+        "random_seed",
     ]
+    write_csv(
+        workload_path,
+        workload_fields,
+        [{
+            "window_id": run_id,
+            "duration_s": f"{duration_s:.9f}",
+            "request_rate": config["request_rate"],
+            "input_tokens": config["input_len"],
+            "max_tokens": config["output_len"],
+            "max_concurrency": min(2048, max(32, segment["num_prompts"])),
+            "timeout_s": max(
+                args.minimum_benchmark_timeout_s,
+                int(segment["historical_estimated_duration_s"] * 2 + 600),
+            ),
+            "retries": 1,
+            "cancel_fraction": 0,
+            "cancel_after_s": 0,
+            "shared_prefix_tokens": 1,
+            "inter_window_pause_s": 0,
+            "tp_degree": config["tp_degree"],
+            "target_gpu_freq_mhz": config["gpu_freq_mhz"],
+            "config_id": config["config_id"],
+            "manual_frequency_control": "true",
+            "scheduler_prediction": "false",
+            "random_seed": run_seed,
+        }],
+    )
+
+    tools = args.observability_tools_dir
+    python = args.python_bin
+    otel_env = os.environ.copy()
+    otel_env["PYTHONPATH"] = str(args.otel_bundle) + (
+        f":{otel_env['PYTHONPATH']}" if otel_env.get("PYTHONPATH") else ""
+    )
+    otel_log = (segment_dir / "otel_collector.log").open("w", encoding="utf-8")
+    metrics_log = (segment_dir / "metrics_collector.log").open("w", encoding="utf-8")
+    otel_process: subprocess.Popen | None = None
+    metrics_process: subprocess.Popen | None = None
     monitor = GPUMonitor(config["tp_degree"], args.monitor_interval_ms)
+    monitor_started = False
+    started_unix_ns = time.time_ns()
     started_at = utc_now()
     started = time.monotonic()
     bench_rc = 1
+    upload_rc = 1
     error = ""
-    monitor.start()
+    server_log_offset = (
+        server.log_path.stat().st_size
+        if server.log_path and server.log_path.exists() else 0
+    )
     try:
+        otel_process = subprocess.Popen(
+            [
+                python, "-u", str(tools / "otel_collector.py"),
+                "--host", "127.0.0.1", "--port", str(args.otlp_port),
+                "--output-dir", str(segment_dir),
+            ],
+            stdout=otel_log,
+            stderr=subprocess.STDOUT,
+            env=otel_env,
+            start_new_session=True,
+        )
+        wait_http(f"http://127.0.0.1:{args.otlp_port}/health", 60)
+        metrics_process = subprocess.Popen(
+            [
+                python, "-u", str(tools / "metrics_collector.py"),
+                "--endpoint", f"combined=http://127.0.0.1:{args.port}/metrics",
+                "--output-dir", str(segment_dir), "--interval", "0.5",
+            ],
+            stdout=metrics_log,
+            stderr=subprocess.STDOUT,
+            start_new_session=True,
+        )
+        monitor.start()
+        monitor_started = True
+        capture_histograms(
+            f"http://127.0.0.1:{args.port}/metrics",
+            segment_dir / "histogram_buckets.csv",
+            run_id,
+            "start",
+        )
         timeout_s = max(
             args.minimum_benchmark_timeout_s,
             int(segment["historical_estimated_duration_s"] * 2 + 600),
         )
-        with bench_log.open("w", encoding="utf-8") as handle:
+        with (segment_dir / "stream_bench.log").open("w", encoding="utf-8") as handle:
             result_process = subprocess.run(
-                command, stdout=handle, stderr=subprocess.STDOUT, text=True, timeout=timeout_s
+                [
+                    python, "-u", str(tools / "stream_bench.py"),
+                    "--endpoint", f"http://127.0.0.1:{args.port}/v1/completions",
+                    "--model", args.model, "--workloads", str(workload_path),
+                    "--output-dir", str(segment_dir), "--seed", str(run_seed),
+                ],
+                stdout=handle, stderr=subprocess.STDOUT, text=True,
+                timeout=timeout_s,
             )
         bench_rc = result_process.returncode
+        capture_histograms(
+            f"http://127.0.0.1:{args.port}/metrics",
+            segment_dir / "histogram_buckets.csv",
+            run_id,
+            "end",
+        )
         if bench_rc:
-            error = f"vllm bench serve exited with rc={bench_rc}; see {bench_log}"
+            error = f"stream benchmark exited with rc={bench_rc}"
     except subprocess.TimeoutExpired:
         bench_rc = 124
         error = "benchmark timeout"
@@ -581,59 +635,251 @@ def run_segment(
         bench_rc = 1
         error = f"{type(exc).__name__}: {exc}"
     finally:
-        samples = monitor.stop()
-    duration_s = time.monotonic() - started
+        samples = monitor.stop() if monitor_started else []
+        stop_process(metrics_process)
+        with contextlib.suppress(Exception), (
+            segment_dir / "drain_observer.log"
+        ).open("w", encoding="utf-8") as drain_log:
+            subprocess.run(
+                [
+                    python, "-u", str(tools / "drain_observer.py"),
+                    "--endpoint", f"combined=http://127.0.0.1:{args.port}/metrics",
+                    "--output-dir", str(segment_dir), "--interval", "0.5",
+                    "--max-seconds", "180", "--zero-samples", "3",
+                ],
+                stdout=drain_log, stderr=subprocess.STDOUT, timeout=190,
+            )
+        # BatchSpanProcessor commonly exports on a five-second cadence.
+        time.sleep(7)
+        stop_process(otel_process)
+        otel_log.close()
+        metrics_log.close()
+    elapsed_s = time.monotonic() - started
     finished_at = utc_now()
-    result: dict[str, Any] = {}
-    if result_path.exists():
-        try:
-            result = json.loads(result_path.read_text(encoding="utf-8"))
-        except Exception as exc:
-            error = error or f"result parse failed: {exc}"
-    elif not error:
-        error = "benchmark result JSON missing"
     summary = summarize_samples(
         samples, config["gpu_freq_mhz"], args.frequency_tolerance_mhz, config["tp_degree"]
     )
     if monitor.error:
         error = error or f"GPU monitor failed: {monitor.error}"
-    row = build_run_row(
-        manifest, config, segment, repeat_no, attempt, run_id, args, gpu_names,
-        started_at, finished_at, bench_rc, duration_s, result, summary, error, run_seed,
+
+    hostname = socket.gethostname().split(".")[0]
+    write_telemetry_csv(
+        segment_dir / f"combined_{hostname}_telemetry.csv", samples, hostname
     )
-    sample_rows = decorate_samples(
-        samples, manifest, config, segment, repeat_no, run_id, args.shard_id
+    if server.log_handle:
+        server.log_handle.flush()
+    if server.log_path and server.log_path.exists():
+        with server.log_path.open("rb") as source:
+            source.seek(server_log_offset)
+            (segment_dir / "combined_server.log").write_bytes(source.read())
+
+    metadata_fields = [
+        "experiment_id", "dataset_name", "description", "variant_id",
+        "repeat_no", "slurm_job_id", "model", "topology", "hostname",
+        "prefill_node", "decode_node", "attention_backend", "kv_connector",
+        "max_num_seqs", "max_num_batched_tokens", "gpu_memory_utilization",
+        "tensor_parallel_size", "dvfs_mode", "manual_frequency_control",
+        "scheduler_prediction", "policy_variant", "kv_cache_metrics",
+        "kv_cache_metrics_sample", "enable_logging_iteration_details",
+        "collect_detailed_traces", "enable_prefix_caching",
+        "request_id_headers", "config_id", "segment_no",
+        "target_gpu_freq_mhz", "gpu_type", "queue_state_source", "ingestion",
+    ]
+    write_csv(
+        segment_dir / "job_metadata.csv",
+        metadata_fields,
+        [{
+            "experiment_id": manifest["campaign_id"],
+            "dataset_name": "calibration_data_full_observability",
+            "description": "Full single-pool DVFS calibration observability",
+            "variant_id": config["config_id"],
+            "repeat_no": repeat_no,
+            "slurm_job_id": os.environ.get("SLURM_JOB_ID", "manual"),
+            "model": args.model,
+            "topology": "single_pool",
+            "hostname": hostname,
+            "prefill_node": hostname,
+            "decode_node": hostname,
+            "attention_backend": "FLASH_ATTN",
+            "kv_connector": "",
+            "max_num_seqs": args.max_num_seqs,
+            "max_num_batched_tokens": args.max_num_batched_tokens,
+            "gpu_memory_utilization": args.gpu_memory_utilization,
+            "tensor_parallel_size": config["tp_degree"],
+            "dvfs_mode": "fixed_core_clock",
+            "manual_frequency_control": "true",
+            "scheduler_prediction": "false",
+            "policy_variant": "vllm_default_fixed_frequency",
+            "kv_cache_metrics": "true",
+            "kv_cache_metrics_sample": 1.0,
+            "enable_logging_iteration_details": "true",
+            "collect_detailed_traces": "all",
+            "enable_prefix_caching": "true",
+            "request_id_headers": "true",
+            "config_id": config["config_id"],
+            "segment_no": segment["segment_no"],
+            "target_gpu_freq_mhz": config["gpu_freq_mhz"],
+            "gpu_type": manifest["gpu_type"],
+            "queue_state_source": "combined_vllm_metrics",
+            "ingestion": "segment_batch",
+        }],
     )
-    append_jsonl(output_dir / "run_results.jsonl", row)
-    append_jsonl(
-        output_dir / "frequency_verification.jsonl",
-        {"run_id": run_id, **summary, "monitor_error": monitor.error},
+    interface = default_network_interface()
+    environment_fields = [
+        "unix_ns", "hostname", "role", "node_group", "node_ip", "peer_ip",
+        "interface", "link_speed_mbps", "link_mtu", "kernel", "cpu_count",
+        "gpu", "expected_gpu", "model", "max_num_seqs",
+        "max_num_batched_tokens", "gpu_memory_utilization", "kv_connector",
+        "kv_cache_metrics", "kv_cache_metrics_sample",
+        "enable_logging_iteration_details", "collect_detailed_traces",
+        "enable_prefix_caching", "enable_request_id_headers", "otlp_endpoint",
+        "dvfs_mode", "manual_frequency_control", "scheduler_prediction",
+        "attention_backend", "node_work_dir", "runtime_cwd",
+        "flashinfer_workspace_base", "flashinfer_workspace", "xdg_cache_home",
+        "xdg_config_home", "slurm_job_id", "slurm_node_list", "driver_version",
+        "vllm_version", "gpu_memory_total_mib",
+    ]
+    current_gpu_rows = gpu_query()[: config["tp_degree"]]
+    network_base = Path("/sys/class/net") / interface
+    write_csv(
+        segment_dir / f"environment_{hostname}.csv",
+        environment_fields,
+        [{
+            "unix_ns": started_unix_ns,
+            "hostname": hostname,
+            "role": "combined",
+            "node_group": manifest["gpu_type"],
+            "node_ip": "", "peer_ip": "", "interface": interface,
+            "link_speed_mbps": read_int(network_base / "speed"),
+            "link_mtu": read_int(network_base / "mtu"),
+            "kernel": os.uname().release, "cpu_count": os.cpu_count() or 0,
+            "gpu": json.dumps(current_gpu_rows),
+            "expected_gpu": gpu_names[0] if gpu_names else manifest["gpu_type"],
+            "model": args.model, "max_num_seqs": args.max_num_seqs,
+            "max_num_batched_tokens": args.max_num_batched_tokens,
+            "gpu_memory_utilization": args.gpu_memory_utilization,
+            "kv_connector": "", "kv_cache_metrics": "true",
+            "kv_cache_metrics_sample": 1.0,
+            "enable_logging_iteration_details": "true",
+            "collect_detailed_traces": "all", "enable_prefix_caching": "true",
+            "enable_request_id_headers": "true",
+            "otlp_endpoint": args.otlp_traces_endpoint,
+            "dvfs_mode": "fixed_core_clock", "manual_frequency_control": "true",
+            "scheduler_prediction": "false", "attention_backend": "FLASH_ATTN",
+            "node_work_dir": str(Path.cwd()), "runtime_cwd": str(Path.cwd()),
+            "flashinfer_workspace_base": os.environ.get(
+                "FLASHINFER_WORKSPACE_BASE", ""
+            ),
+            "flashinfer_workspace": os.environ.get(
+                "FLASHINFER_WORKSPACE_BASE", ""
+            ),
+            "xdg_cache_home": os.environ.get("XDG_CACHE_HOME", ""),
+            "xdg_config_home": os.environ.get("XDG_CONFIG_HOME", ""),
+            "slurm_job_id": os.environ.get("SLURM_JOB_ID", ""),
+            "slurm_node_list": os.environ.get("SLURM_JOB_NODELIST", ""),
+            "driver_version": (
+                current_gpu_rows[0].get("driver_version", "")
+                if current_gpu_rows else ""
+            ),
+            "vllm_version": args.vllm_version,
+            "gpu_memory_total_mib": (
+                value(current_gpu_rows[0], "memory.total")
+                if current_gpu_rows else 0
+            ),
+        }],
     )
-    if client:
-        bundle_path = segment_dir / "upload_bundle.json.gz"
-        with gzip.open(bundle_path, "wt", encoding="utf-8", compresslevel=6) as handle:
-            json.dump({"run": row, "samples": sample_rows}, handle, separators=(",", ":"))
-        try:
-            upload_bundle(client, bundle_path)
-        except Exception as exc:
-            raise UploadPending(f"durable spool retained at {bundle_path}: {exc}") from exc
+
+    post_commands = [
+        [
+            python, str(tools / "join_queue_state.py"),
+            "--requests", str(segment_dir / "requests.csv"),
+            "--metrics", str(segment_dir / "vllm_metrics_snapshots.csv"),
+            "--output", str(segment_dir / "queue_state_at_arrival.csv"),
+        ],
+        [
+            python, str(tools / "vllm_log_to_csv.py"),
+            "--log", f"combined={segment_dir / 'combined_server.log'}",
+            "--output", str(segment_dir / "vllm_observability_log_events.csv"),
+        ],
+    ]
+    for command in post_commands:
+        result_process = subprocess.run(command, text=True, capture_output=True)
+        if result_process.returncode:
+            error = error or (
+                f"postprocess failed: {shlex.join(command)}: "
+                f"{result_process.stderr[-1000:]}"
+            )
+
+    integrity_counts = {
+        name: csv_row_count(segment_dir / name)
+        for name in (
+            "requests.csv", "token_timestamps.csv", "client_events.csv",
+            "window_summary.csv", "vllm_metrics_snapshots.csv",
+            f"combined_{hostname}_telemetry.csv", "histogram_buckets.csv",
+            "otel_spans.csv", "drain_samples.csv", "queue_state_at_arrival.csv",
+            "vllm_observability_log_events.csv",
+        )
+    }
+    required_nonempty = set(integrity_counts) - {"token_timestamps.csv"}
+    incomplete = [
+        name for name in sorted(required_nonempty)
+        if integrity_counts[name] <= 0
+    ]
+    if integrity_counts["requests.csv"] != segment["num_prompts"]:
+        incomplete.append(
+            f"requests.csv expected={segment['num_prompts']} "
+            f"actual={integrity_counts['requests.csv']}"
+        )
     print(
-        f"segment_finish run_id={run_id} status={row['status']} duration_s={duration_s:.3f} "
-        f"frequency_verified={row['frequency_verified']} samples={len(samples)}",
+        f"observability_integrity run_id={run_id} "
+        f"counts={json.dumps(integrity_counts, sort_keys=True)} "
+        f"incomplete={json.dumps(incomplete)}",
         flush=True,
     )
-    return row, row["status"] == "success"
+    if incomplete:
+        error = error or f"incomplete observability artifacts: {incomplete}"
 
+    if not incomplete:
+        segment_job_id = (
+            f"{os.environ.get('SLURM_JOB_ID', 'manual')}-{run_id}"
+        )
+        uploader_log_path = segment_dir / "clickhouse_final_upload.log"
+        with uploader_log_path.open("w", encoding="utf-8") as uploader_log:
+            uploader_result = subprocess.run(
+                [
+                    python, "-u", str(tools / "clickhouse_batch_uploader.py"),
+                    "--mode", "final", "--output-dir", str(segment_dir),
+                    "--workloads", str(workload_path), "--job-id", segment_job_id,
+                    "--job-name", run_id, "--started-unix-ns", str(started_unix_ns),
+                    "--state-file", str(segment_dir / "clickhouse_upload_state.json"),
+                ],
+                stdout=uploader_log, stderr=subprocess.STDOUT, text=True,
+                env=otel_env,
+            )
+        upload_rc = uploader_result.returncode
+        if upload_rc:
+            error = error or f"ClickHouse full-observability upload rc={upload_rc}"
 
-def shard_row(manifest: dict, args: argparse.Namespace, state: str, planned: int, completed: int,
-              failed: int, skipped: int, message: str = "") -> dict[str, Any]:
-    return {
+    success = bench_rc == 0 and upload_rc == 0 and summary["frequency_verified"]
+    if not summary["frequency_verified"]:
+        error = error or "target frequency verification failed"
+    row = {
         "campaign_id": manifest["campaign_id"], "gpu_type": manifest["gpu_type"],
-        "shard_id": args.shard_id, "slurm_job_id": os.environ.get("SLURM_JOB_ID", "manual"),
-        "hostname": socket.gethostname().split(".")[0], "state": state,
-        "planned_runs": planned, "completed_runs": completed, "failed_runs": failed,
-        "skipped_runs": skipped, "message": message, "updated_at": utc_now(),
+        "run_id": run_id, "config_id": config["config_id"],
+        "repeat_no": repeat_no, "segment_no": segment["segment_no"],
+        "started_at": started_at, "finished_at": finished_at,
+        "status": "success" if success else "failed", "benchmark_rc": bench_rc,
+        "clickhouse_upload_rc": upload_rc, "duration_s": elapsed_s,
+        "error": error, **summary,
     }
+    append_jsonl(output_dir / "run_results.jsonl", row)
+    print(
+        f"segment_finish run_id={run_id} status={row['status']} duration_s={elapsed_s:.3f} "
+        f"frequency_verified={summary['frequency_verified']} samples={len(samples)} "
+        f"clickhouse_upload_rc={upload_rc}",
+        flush=True,
+    )
+    return row, success
 
 
 def detect_vllm_version(vllm_bin: str) -> str:
@@ -645,7 +891,6 @@ def detect_vllm_version(vllm_bin: str) -> str:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--manifest", type=Path, required=True)
-    parser.add_argument("--schema", type=Path, required=True)
     parser.add_argument("--shard-id", type=int, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--vllm-bin", default="/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm")
@@ -653,6 +898,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--max-model-len", type=int, default=16384)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
+    parser.add_argument("--max-num-seqs", type=int, default=512)
+    parser.add_argument("--max-num-batched-tokens", type=int, default=2048)
+    parser.add_argument("--python-bin", default=sys.executable)
+    parser.add_argument("--observability-tools-dir", type=Path, required=True)
+    parser.add_argument("--otel-bundle", type=Path, required=True)
+    parser.add_argument("--otlp-port", type=int, default=0)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--monitor-interval-ms", type=int, default=500)
     parser.add_argument("--frequency-tolerance-mhz", type=int, default=30)
@@ -660,7 +911,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--minimum-benchmark-timeout-s", type=int, default=1800)
     parser.add_argument("--deadline-seconds", type=int, default=84600)
     parser.add_argument("--max-segments", type=int, default=0)
-    parser.add_argument("--skip-clickhouse", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -689,7 +939,28 @@ def main() -> int:
         return 0
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    (args.output_dir / "spool").mkdir(exist_ok=True)
+    (args.output_dir / "full_observability").mkdir(exist_ok=True)
+    required_tools = (
+        "stream_bench.py", "metrics_collector.py", "drain_observer.py",
+        "otel_collector.py", "join_queue_state.py", "vllm_log_to_csv.py",
+        "clickhouse_batch_uploader.py",
+    )
+    missing = [
+        str(args.observability_tools_dir / name)
+        for name in required_tools
+        if not (args.observability_tools_dir / name).is_file()
+    ]
+    if missing or not args.otel_bundle.is_file():
+        raise RuntimeError(
+            f"full observability tools missing: {missing}; "
+            f"otel_bundle={args.otel_bundle}"
+        )
+    if args.otlp_port <= 0:
+        slurm_id = int(os.environ.get("SLURM_JOB_ID", "0") or 0)
+        args.otlp_port = 36000 + slurm_id % 1000
+    args.otlp_traces_endpoint = (
+        f"http://127.0.0.1:{args.otlp_port}/v1/traces"
+    )
     all_gpu_rows = gpu_query()
     if len(all_gpu_rows) < manifest["gpus_per_node"]:
         raise RuntimeError(
@@ -701,15 +972,12 @@ def main() -> int:
         raise RuntimeError(f"wrong GPU pool: expected {expected_name}, found {gpu_names}")
 
     args.vllm_version = detect_vllm_version(args.vllm_bin)
-    client = None if args.skip_clickhouse else ClickHouse()
-    if client:
-        version = client.initialize(args.schema)
-        print(f"clickhouse_preflight_ok version={version}", flush=True)
-        replayed = replay_spool(client, args.output_dir)
-        print(f"spool_replay_count={replayed}", flush=True)
-        completed_keys = client.completed(manifest["campaign_id"], manifest["gpu_type"], args.shard_id)
-    else:
-        completed_keys = set()
+    completed_keys: set[tuple[str, int, int]] = set()
+    print(
+        "collection_mode=full_observability canonical_tables=true "
+        "calibration_tables=false segment_batch_upload=true",
+        flush=True,
+    )
     planned = len(units)
     completed = failed = skipped = 0
     start_monotonic = time.monotonic()
@@ -722,8 +990,6 @@ def main() -> int:
 
     signal.signal(signal.SIGTERM, stop_handler)
     signal.signal(signal.SIGINT, stop_handler)
-    if client:
-        client.insert("calibration_shards", [shard_row(manifest, args, "running", planned, 0, 0, 0)], "start")
     try:
         for config, repeat_no, segment in units:
             key = (config["config_id"], repeat_no, segment["segment_no"])
@@ -735,12 +1001,6 @@ def main() -> int:
             if STOP_REQUESTED.is_set() or remaining < required:
                 message = f"checkpointed before next segment; remaining_s={remaining:.1f} required_s={required:.1f}"
                 print(message, flush=True)
-                if client:
-                    client.insert(
-                        "calibration_shards",
-                        [shard_row(manifest, args, "checkpointed", planned, completed, failed, skipped, message)],
-                        f"checkpoint-{completed}-{failed}-{skipped}",
-                    )
                 return 75
             try:
                 server.ensure(config["tp_degree"])
@@ -749,31 +1009,14 @@ def main() -> int:
                 message = f"server startup failed: {type(exc).__name__}: {exc}"
                 print(f"server_error config={config['config_id']} error={type(exc).__name__}:{exc}", flush=True)
                 server.stop()
-                if client:
-                    client.insert(
-                        "calibration_shards",
-                        [shard_row(manifest, args, "server_start_failed", planned, completed, failed, skipped, message)],
-                        f"server-start-failed-{completed}-{failed}-{skipped}",
-                    )
                 return 2
             success = False
             for attempt in (1, 2):
                 try:
                     _row, success = run_segment(
-                        client, server, manifest, config, segment, repeat_no, attempt,
+                        server, manifest, config, segment, repeat_no, attempt,
                         args, args.output_dir, gpu_names,
                     )
-                except UploadPending as exc:
-                    message = str(exc)
-                    print(f"upload_checkpoint={message}", flush=True)
-                    if client:
-                        with contextlib.suppress(Exception):
-                            client.insert(
-                                "calibration_shards",
-                                [shard_row(manifest, args, "upload_pending", planned, completed, failed, skipped, message)],
-                                f"upload-pending-{completed}-{failed}-{skipped}",
-                            )
-                    return 75
                 except Exception as exc:
                     print(
                         f"segment_exception config={config['config_id']} repeat={repeat_no} "
@@ -789,13 +1032,11 @@ def main() -> int:
                     server.ensure(config["tp_degree"])
             if not success:
                 failed += 1
-        state = "complete" if failed == 0 else "complete_with_failures"
-        if client:
-            client.insert(
-                "calibration_shards",
-                [shard_row(manifest, args, state, planned, completed, failed, skipped)],
-                f"finish-{completed}-{failed}-{skipped}",
-            )
+        print(
+            f"shard_finish planned={planned} completed={completed} "
+            f"failed={failed} skipped={skipped}",
+            flush=True,
+        )
         return 0 if failed == 0 else 2
     finally:
         server.stop()

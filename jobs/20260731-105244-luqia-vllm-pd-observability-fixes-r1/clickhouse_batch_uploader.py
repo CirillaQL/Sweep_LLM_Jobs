@@ -313,60 +313,105 @@ class Uploader:
 
     def static_rows(self, status: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         stamp = now_time()
+        metadata_rows = read_csv(self.output_dir / "job_metadata.csv")
+        metadata = metadata_rows[-1] if metadata_rows else {}
+        experiment_id = metadata.get(
+            "experiment_id", "pd-observability-fixes-r1-20260731"
+        )
+        dataset_name = metadata.get(
+            "dataset_name", "mixed-20m-observability-fixes-r1"
+        )
+        topology = metadata.get("topology", "pd")
+        hostname = metadata.get("hostname", "")
+        prefill_node = metadata.get("prefill_node", "neptune")
+        decode_node = metadata.get("decode_node", "ganymede")
         experiment = {
-            "experiment_id": "pd-observability-fixes-r1-20260731",
-            "pair_group_id": "",
-            "dataset_name": "mixed-20m-observability-fixes-r1",
-            "description": (
+            "experiment_id": experiment_id,
+            "pair_group_id": metadata.get("pair_group_id", ""),
+            "dataset_name": dataset_name,
+            "description": metadata.get("description", (
                 "L40S prefill + L4 decode with token IDs, frozen-source "
                 "final upload, KV upper bounds and parsed iteration state"
-            ),
+            )),
             "created_at": ns_time(self.started_unix_ns)[:23],
             "tags": {
-                "attention_backend": "FLASH_ATTN",
-                "ingestion": "live_batch",
-                "duration_target": "20m",
-                "observability_fix": "r1",
+                "attention_backend": metadata.get(
+                    "attention_backend", "FLASH_ATTN"
+                ),
+                "ingestion": metadata.get("ingestion", "segment_batch"),
+                "topology": topology,
+                "gpu_type": metadata.get("gpu_type", ""),
             },
             "updated_at": stamp,
         }
         job = {
             "job_id": self.job_id,
             "experiment_id": experiment["experiment_id"],
-            "pair_group_id": "",
-            "variant_id": "auto-dvfs-observability-fixes-r1",
-            "repeat_no": 1,
-            "slurm_job_id": self.job_id,
+            "pair_group_id": experiment["pair_group_id"],
+            "variant_id": metadata.get("variant_id", self.job_name),
+            "repeat_no": integer(metadata.get("repeat_no"), 1),
+            "slurm_job_id": metadata.get("slurm_job_id", self.job_id),
             "job_name": self.job_name,
             "status": status,
             "started_at": ns_time(self.started_unix_ns)[:23],
             "ended_at": None if status == "running" else stamp,
-            "model": "mistralai/Mistral-7B-v0.1",
-            "topology": "pd",
-            "prefill_node": "neptune",
-            "decode_node": "ganymede",
-            "attention_backend": "FLASH_ATTN",
-            "kv_connector": "P2pNcclConnector",
-            "max_num_seqs": 64,
-            "max_num_batched_tokens": 4096,
-            "gpu_memory_utilization": 0.82,
-            "tensor_parallel_size": 1,
-            "dvfs_mode": "automatic_hardware",
-            "manual_frequency_control": False,
-            "scheduler_prediction": False,
-            "policy_variant": "vllm_default",
-            "kv_cache_metrics": True,
-            "kv_cache_metrics_sample": 1.0,
-            "logging_iteration_details": True,
-            "collect_detailed_traces": "all",
-            "prefix_caching": True,
-            "request_id_headers": True,
+            "model": metadata.get("model", "mistralai/Mistral-7B-v0.1"),
+            "topology": topology,
+            "prefill_node": prefill_node or hostname,
+            "decode_node": decode_node or hostname,
+            "attention_backend": metadata.get("attention_backend", "FLASH_ATTN"),
+            "kv_connector": metadata.get("kv_connector", ""),
+            "max_num_seqs": integer(metadata.get("max_num_seqs")),
+            "max_num_batched_tokens": integer(
+                metadata.get("max_num_batched_tokens")
+            ),
+            "gpu_memory_utilization": number(
+                metadata.get("gpu_memory_utilization")
+            ),
+            "tensor_parallel_size": integer(
+                metadata.get("tensor_parallel_size"), 1
+            ),
+            "dvfs_mode": metadata.get("dvfs_mode", "fixed_core_clock"),
+            "manual_frequency_control": boolean(
+                metadata.get("manual_frequency_control")
+            ),
+            "scheduler_prediction": boolean(
+                metadata.get("scheduler_prediction")
+            ),
+            "policy_variant": metadata.get(
+                "policy_variant", "vllm_default_fixed_frequency"
+            ),
+            "kv_cache_metrics": boolean(
+                metadata.get("kv_cache_metrics", "true")
+            ),
+            "kv_cache_metrics_sample": number(
+                metadata.get("kv_cache_metrics_sample"), 1.0
+            ),
+            "logging_iteration_details": boolean(
+                metadata.get("enable_logging_iteration_details", "true")
+            ),
+            "collect_detailed_traces": metadata.get(
+                "collect_detailed_traces", "all"
+            ),
+            "prefix_caching": boolean(
+                metadata.get("enable_prefix_caching", "true")
+            ),
+            "request_id_headers": boolean(
+                metadata.get("request_id_headers", "true")
+            ),
             "config": {
-                "clickhouse_live_interval_s": "60",
+                "config_id": metadata.get("config_id", ""),
+                "segment_no": metadata.get("segment_no", ""),
+                "target_gpu_freq_mhz": metadata.get(
+                    "target_gpu_freq_mhz", ""
+                ),
+                "gpu_type": metadata.get("gpu_type", ""),
+                "hostname": hostname,
                 "metrics_long": "disabled",
                 "token_timestamps": "server_token_ids",
-                "kv_transfer_scope": "proxy_observed_upper_bound",
-                "prefill_state_fallback": "proxy_inflight_event",
+                "queue_state_source": metadata.get(
+                    "queue_state_source", "combined_vllm_metrics"
+                ),
             },
             "updated_at": stamp,
         }
@@ -449,19 +494,21 @@ class Uploader:
     ) -> list[dict[str, Any]]:
         result = []
         for row in source:
+            row_role = row.get("role", role) or role
+            row_hostname = row.get("hostname", hostname) or hostname
             result.append(
                 {
                     "job_id": self.job_id,
                     "event_time": unix_float_time(row["unix_ts"], 6),
-                    "role": role,
-                    "hostname": hostname,
-                    "gpu_index": 0,
-                    "gpu_uuid": "",
-                    "network_interface": "",
+                    "role": row_role,
+                    "hostname": row_hostname,
+                    "gpu_index": integer(row.get("gpu_index")),
+                    "gpu_uuid": row.get("gpu_uuid", ""),
+                    "network_interface": row.get("network_interface", ""),
                     "rx_bytes": integer(row["rx_bytes"]),
                     "tx_bytes": integer(row["tx_bytes"]),
-                    "rx_bytes_per_s": 0.0,
-                    "tx_bytes_per_s": 0.0,
+                    "rx_bytes_per_s": number(row.get("rx_bytes_per_s")),
+                    "tx_bytes_per_s": number(row.get("tx_bytes_per_s")),
                     "gpu_util_pct": number(row["gpu_util_pct"]),
                     "gpu_power_w": number(row["gpu_power_w"]),
                     "gpu_sm_mhz": integer(row["gpu_sm_mhz"]),
@@ -505,24 +552,20 @@ class Uploader:
             "engine_samples",
             self.engine_rows,
         )
-        total += self.flush_live_source(
-            "prefill_neptune_telemetry.csv",
-            "gpu_samples",
-            lambda rows: self.gpu_rows(rows, "prefill", "neptune"),
-        )
-        total += self.flush_live_source(
-            "decode_ganymede_telemetry.csv",
-            "gpu_samples",
-            lambda rows: self.gpu_rows(rows, "decode", "ganymede"),
-        )
+        for path in sorted(self.output_dir.glob("*_telemetry.csv")):
+            source_name = path.name
+            total += self.flush_live_source(
+                source_name,
+                "gpu_samples",
+                lambda rows: self.gpu_rows(rows, "combined", ""),
+            )
         return total
 
     def verify_live_sources_complete(self) -> None:
-        for source_name in (
-            "vllm_metrics_snapshots.csv",
-            "prefill_neptune_telemetry.csv",
-            "decode_ganymede_telemetry.csv",
-        ):
+        source_names = ["vllm_metrics_snapshots.csv"] + [
+            path.name for path in sorted(self.output_dir.glob("*_telemetry.csv"))
+        ]
+        for source_name in source_names:
             actual = len(read_csv(self.output_dir / source_name))
             uploaded = integer(self.state["sources"].get(source_name, 0))
             print(
@@ -792,10 +835,23 @@ class Uploader:
                     "job_id": self.job_id,
                     "window_id": row["window_id"],
                     "workload_name": row["window_id"],
-                    "action_id": "vllm_auto_dvfs",
+                    "action_id": (
+                        "fixed_core_clock_calibration"
+                        if boolean(config.get("manual_frequency_control"))
+                        else "vllm_auto_dvfs"
+                    ),
                     "action_config": {
-                        "manual_frequency_control": "false",
-                        "scheduler_prediction": "false",
+                        "manual_frequency_control": config.get(
+                            "manual_frequency_control", "true"
+                        ),
+                        "scheduler_prediction": config.get(
+                            "scheduler_prediction", "false"
+                        ),
+                        "tp_degree": config.get("tp_degree", ""),
+                        "target_gpu_freq_mhz": config.get(
+                            "target_gpu_freq_mhz", ""
+                        ),
+                        "config_id": config.get("config_id", ""),
                     },
                     "window_start": ns_time(row["window_start_unix_ns"]),
                     "sending_stopped": ns_time_nullable(
@@ -810,7 +866,7 @@ class Uploader:
                     "timeout_ms": int(
                         round(number(config.get("timeout_s")) * 1000)
                     ),
-                    "random_seed": 0,
+                    "random_seed": integer(config.get("random_seed")),
                     "planned_requests": integer(row["planned_requests"]),
                     "completed_requests": integer(row["completed_requests"]),
                     "failed_requests": integer(row["failed_requests"]),
@@ -839,8 +895,8 @@ class Uploader:
 
     def node_rows(self) -> list[dict[str, Any]]:
         result = []
-        for name in ("environment_neptune.csv", "environment_ganymede.csv"):
-            for row in read_csv(self.output_dir / name):
+        for path in sorted(self.output_dir.glob("environment_*.csv")):
+            for row in read_csv(path):
                 gpu_blob = row.get("gpu", "")
                 uuid_match = re.search(r"GPU-[0-9a-fA-F-]+", gpu_blob)
                 memory_match = re.search(r"(\d+)\s+MiB", gpu_blob)
@@ -861,13 +917,15 @@ class Uploader:
                         "gpu_name": row.get("expected_gpu", ""),
                         "gpu_uuid": uuid_match.group(0) if uuid_match else "",
                         "gpu_memory_total_mib": (
-                            integer(memory_match.group(1))
-                            if memory_match
-                            else 0
+                            integer(row.get("gpu_memory_total_mib"))
+                            or (
+                                integer(memory_match.group(1))
+                                if memory_match else 0
+                            )
                         ),
-                        "driver_version": "",
+                        "driver_version": row.get("driver_version", ""),
                         "cuda_version": "",
-                        "vllm_version": "",
+                        "vllm_version": row.get("vllm_version", ""),
                         "container_image": "",
                         "node_work_dir": row.get("node_work_dir", ""),
                         "runtime_cwd": row.get("runtime_cwd", ""),
@@ -1020,6 +1078,26 @@ class Uploader:
             )
         return result
 
+    def histogram_rows(self) -> list[dict[str, Any]]:
+        result = []
+        for row in read_csv(self.output_dir / "histogram_buckets.csv"):
+            result.append(
+                {
+                    "job_id": self.job_id,
+                    "window_id": row["window_id"],
+                    "captured_at": ns_time(row["captured_unix_ns"]),
+                    "role": row.get("role", "combined"),
+                    "capture_kind": row["capture_kind"],
+                    "metric": row["metric"],
+                    "labels": string_map(row.get("labels_json", "{}")),
+                    "bucket_le": number(row["bucket_le"]),
+                    "cumulative_count": integer(row["cumulative_count"]),
+                    "histogram_count": integer(row["histogram_count"]),
+                    "histogram_sum": number(row["histogram_sum"]),
+                }
+            )
+        return result
+
     def kv_transfer_rows(self) -> list[dict[str, Any]]:
         result = []
         for row in read_csv(self.output_dir / "kv_transfer_events.csv"):
@@ -1080,6 +1158,49 @@ class Uploader:
             final_elapsed = max(row["elapsed_s"] for row in result)
             for row in result:
                 row["drained"] = row["elapsed_s"] == final_elapsed
+        metric_rows = read_csv(
+            self.output_dir / "vllm_metrics_snapshots.csv"
+        )
+        for window in read_csv(self.output_dir / "window_summary.csv"):
+            stopped_ns = integer(window.get("sending_stopped_unix_ns"))
+            if stopped_ns <= 0:
+                continue
+            relevant = [
+                row for row in metric_rows
+                if integer(row.get("unix_ns")) >= stopped_ns
+                and boolean(row.get("scrape_ok"))
+            ]
+            relevant.sort(key=lambda row: integer(row["unix_ns"]))
+            zero_run = 0
+            drained_index = -1
+            for index, row in enumerate(relevant):
+                zero = integer(row.get("running")) == 0 and integer(
+                    row.get("waiting")
+                ) == 0
+                zero_run = zero_run + 1 if zero else 0
+                if zero_run >= 3:
+                    drained_index = index
+                    break
+            for index, row in enumerate(relevant):
+                event_ns = integer(row["unix_ns"])
+                result.append(
+                    {
+                        "job_id": self.job_id,
+                        "window_id": window["window_id"],
+                        "event_time": ns_time(event_ns),
+                        "monotonic_ns": integer(row["monotonic_ns"]),
+                        "elapsed_s": max(0.0, (event_ns - stopped_ns) / 1e9),
+                        "role": row.get("role", "combined"),
+                        "running": integer(row.get("running")),
+                        "waiting": integer(row.get("waiting")),
+                        "kv_cache_usage": number(row.get("kv_cache_usage")),
+                        "scrape_ok": boolean(row.get("scrape_ok")),
+                        "drained": index == drained_index,
+                        "error": row.get("error", ""),
+                    }
+                )
+                if index >= drained_index >= 0:
+                    break
         return result
 
     def finalize(self) -> None:
@@ -1122,6 +1243,11 @@ class Uploader:
             "otel_spans",
             self.otel_rows(by_trace),
             "final-otel",
+        )
+        self.insert_chunks(
+            "histogram_buckets",
+            self.histogram_rows(),
+            "final-histograms",
         )
         self.insert_chunks(
             "scheduler_iterations",

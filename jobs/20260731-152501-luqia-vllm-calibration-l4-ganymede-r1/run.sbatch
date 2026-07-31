@@ -21,6 +21,7 @@ COMMON_NAME="20260731-144337-luqia-vllm-calibration-common"
 BROKER_ROOT="/data/users/chjing/Sweep_LLM_Jobs_broker"
 JOB_DIR="${BROKER_ROOT}/jobs/${JOB_NAME}"
 COMMON_DIR="${BROKER_ROOT}/jobs/${COMMON_NAME}"
+OBSERVABILITY_DIR="${BROKER_ROOT}/jobs/20260731-105244-luqia-vllm-pd-observability-fixes-r1"
 TASK_ID="${SLURM_ARRAY_TASK_ID:?SLURM_ARRAY_TASK_ID is required}"
 JOB_ID="${SLURM_JOB_ID:?SLURM_JOB_ID is required}"
 OUT_DIR="${JOB_DIR}/calibration_results/shard_${TASK_ID}"
@@ -94,10 +95,12 @@ nvidia-smi -L
 
 "${ENV_DIR}/bin/python" "${COMMON_DIR}/calibration_runner.py" \
   --manifest "${COMMON_DIR}/l4_manifest.json" \
-  --schema "${COMMON_DIR}/calibration_schema.sql" \
   --shard-id "$TASK_ID" \
   --output-dir "$OUT_DIR" \
-  --vllm-bin "${ENV_DIR}/bin/vllm"
+  --vllm-bin "${ENV_DIR}/bin/vllm" \
+  --python-bin "${ENV_DIR}/bin/python" \
+  --observability-tools-dir "$OBSERVABILITY_DIR" \
+  --otel-bundle "${OBSERVABILITY_DIR}/vendor/otel_bundle.zip"
 RUN_RC=$?
 echo "runner_rc=${RUN_RC}"
 exit "$RUN_RC"

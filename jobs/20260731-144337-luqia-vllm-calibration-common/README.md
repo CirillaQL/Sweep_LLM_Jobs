@@ -13,18 +13,33 @@ each benchmark uses one vanilla vLLM instance and one homogeneous GPU pool.
   random prompt prefix in every segment.
 - All active GPUs in a TP group receive the same `nvidia-smi -lgc f,f` target.
 - Memory clocks are observed but not changed.
-- There is no scheduler, online frequency predictor, or automatic DVFS policy.
+- There is no online frequency predictor or manual scheduling policy. vLLM
+  schedules requests normally while the experiment controls only the GPU core
+  clock with `nvidia-smi -lgc`.
 - Runtime `clocks.sm` samples are checked against the target; target frequency
   alone is not treated as proof that the lock held.
-- Results and raw GPU telemetry are inserted into ClickHouse after every run.
-  Successful keys are queried on restart, making an array task resumable.
-- `calibration_logical_runs` combines completed segments into configuration ×
-  repeat totals. Counts, tokens, durations, energy, throughput, and weighted
-  means aggregate exactly from segment summaries. Global median/p99 cannot be
-  reconstructed from summaries, so the view labels those fields explicitly as
-  maximum segment p99 rather than presenting them as exact global percentiles.
-- Local raw telemetry is removed only after ClickHouse acknowledges both the
-  run row and sample batch. Compact JSONL summaries remain in the job output.
+- Each segment uses the streaming request client and records planned/actual
+  send times, first-token and per-token arrivals, completion, TTFT/TPOT/E2E,
+  retries, cancellations, HTTP status and request IDs.
+- vLLM runs with KV-cache metrics, iteration-detail logging, prefix caching,
+  detailed OTLP traces, request-ID response headers, MFU metrics and
+  `FLASH_ATTN`.
+- Every 500 ms the collector records engine queue/cache counters and per-GPU
+  clocks, utilization, power, memory, temperature and host RX/TX. Histogram
+  buckets are captured at both workload-window boundaries. The postprocessor
+  also emits scheduler iterations, queue state at arrival and drain samples.
+- After every segment, the complete batch is inserted into the canonical
+  `experiments`, `jobs`, `job_nodes`, `workload_windows`, `requests`,
+  `request_attempts`, `request_events`, `request_token_series`,
+  `engine_samples`, `histogram_buckets`, `scheduler_iterations`, `gpu_samples`,
+  `otel_spans`, and `drain_samples` tables. The calibration-only ClickHouse
+  tables are not used by the new runner.
+- `kv_transfer_events` is intentionally empty because these are homogeneous
+  single-pool tests, not Prefill/Decode-transfer experiments. Combined-engine
+  queue samples are labelled `combined_vllm_metrics`; they are never presented
+  as measurements from two independent PD endpoints.
+- Segment artifacts are retained in the broker job output for auditing; only
+  the temporary compilation/runtime work directory is removed on exit.
 - Every exit path resets all allocated GPUs with `nvidia-smi -rgc` and removes
   only `/data/users/chjing/vllm_job_work/<job>_<array-task>`.
 

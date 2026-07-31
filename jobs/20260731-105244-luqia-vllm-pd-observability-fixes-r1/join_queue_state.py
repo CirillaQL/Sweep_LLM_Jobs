@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Join each proxy arrival to the most recent Prefill and Decode queue sample."""
+"""Join each request arrival to the most recent vLLM queue sample.
+
+PD jobs provide separate prefill/decode metrics and proxy arrivals.  A
+single-pool calibration job provides a combined vLLM endpoint and no proxy;
+in that case the client send timestamp is the arrival timestamp and the
+combined sample is recorded in both compatibility columns with an explicit
+``combined_vllm_metrics`` source label.
+"""
 
 from __future__ import annotations
 
@@ -46,13 +53,17 @@ def latest_before(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--requests", type=Path, required=True)
-    parser.add_argument("--proxy-events", type=Path, required=True)
+    parser.add_argument("--proxy-events", type=Path)
     parser.add_argument("--metrics", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
     requests = read_csv(args.requests)
-    proxy_events = read_csv(args.proxy_events)
+    proxy_events = (
+        read_csv(args.proxy_events)
+        if args.proxy_events and args.proxy_events.exists()
+        else []
+    )
     metrics = read_csv(args.metrics)
 
     arrivals: dict[str, dict[str, str]] = {}
@@ -62,7 +73,9 @@ def main() -> None:
         request_id = row["client_request_id"]
         arrivals.setdefault(request_id, row)
 
-    by_role: dict[str, list[dict[str, str]]] = {"prefill": [], "decode": []}
+    by_role: dict[str, list[dict[str, str]]] = {
+        "prefill": [], "decode": [], "combined": []
+    }
     for row in metrics:
         if row["role"] in by_role and row.get("scrape_ok") == "True":
             by_role[row["role"]].append(row)
@@ -91,8 +104,9 @@ def main() -> None:
             arrival.get("decode_inflight", "") if arrival else ""
         )
         for role in ("prefill", "decode"):
+            sample_role = role if by_role[role] else "combined"
             sample = latest_before(
-                by_role[role], timestamps[role], arrival_ns
+                by_role[sample_role], timestamps[sample_role], arrival_ns
             )
             if sample is None:
                 for suffix in (
@@ -114,8 +128,11 @@ def main() -> None:
                 "waiting_growth_per_s"
             ]
             output[f"{role}_kv_cache_usage"] = sample["kv_cache_usage"]
-        output["prefill_running_source"] = "vllm_metrics"
-        output["prefill_waiting_source"] = "vllm_metrics"
+        metric_source = (
+            "vllm_metrics" if by_role["prefill"] else "combined_vllm_metrics"
+        )
+        output["prefill_running_source"] = metric_source
+        output["prefill_waiting_source"] = metric_source
         proxy_prefill = output.get("prefill_proxy_inflight", "")
         if proxy_prefill != "":
             metric_prefill = float(output.get("prefill_running") or 0)
