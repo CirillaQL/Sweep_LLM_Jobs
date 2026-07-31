@@ -7,3 +7,7 @@ plan campaign=phase2-full-grid-rerun-20260731 gpu_type=l40s shard=3 configs=73 s
 clickhouse_preflight_ok version=25.8.28.1
 spool_replay_count=0
 server_start tp=1 command=/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm serve mistralai/Mistral-7B-v0.1 --host 127.0.0.1 --port 8000 --tensor-parallel-size 1 --gpu-memory-utilization 0.9 --max-model-len 16384 --dtype float16
+server_error config=l40s-tp1-f2520-i32-o512-r1 error=RuntimeError:vLLM server exited rc=1; see /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-154349-luqia-vllm-calibration-l40s-neptune-r4/calibration_results/shard_3/vllm-server-tp1-1785505800.log
+clock_reset_errors=[]
+runner_rc=2
+wrapper_exit_rc=2
