@@ -404,6 +404,17 @@ class VLLMServer:
         env["PYTHONPATH"] = str(self.args.otel_bundle) + (
             f":{env['PYTHONPATH']}" if env.get("PYTHONPATH") else ""
         )
+        # vLLM 0.15 defaults to the OTLP gRPC exporter.  The cluster's
+        # deliberately self-contained bundle provides the HTTP/protobuf
+        # exporter, matching the local collector's /v1/traces endpoint.
+        # Select it explicitly so vLLM does not try to import the absent
+        # opentelemetry-exporter-otlp-proto-grpc package.
+        env["OTEL_EXPORTER_OTLP_TRACES_PROTOCOL"] = "http/protobuf"
+        env["OTEL_EXPORTER_OTLP_TRACES_ENDPOINT"] = (
+            self.args.otlp_traces_endpoint
+        )
+        env["OTEL_EXPORTER_OTLP_TRACES_INSECURE"] = "true"
+        env["OTEL_SERVICE_NAME"] = "vllm-single-pool"
         command = [
             self.args.vllm_bin,
             "serve",
