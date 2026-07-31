@@ -59,14 +59,24 @@ mkdir -p \
   "$WORK_DIR/xdg-cache" \
   "$WORK_DIR/xdg-config" \
   "$WORK_DIR/flashinfer" \
+  "$WORK_DIR/cuda-cache" \
+  "$WORK_DIR/triton-cache" \
+  "$WORK_DIR/torchinductor-cache" \
   "$WORK_DIR/torch" \
+  "$WORK_DIR/vllm-cache" \
+  "$WORK_DIR/numba-cache" \
   "$WORK_DIR/tmp"
 cd "$WORK_DIR" || exit 3
 export HF_HOME="/data/users/chjing/.cache/huggingface"
 export XDG_CACHE_HOME="$WORK_DIR/xdg-cache"
 export XDG_CONFIG_HOME="$WORK_DIR/xdg-config"
 export FLASHINFER_WORKSPACE_BASE="$WORK_DIR/flashinfer"
+export CUDA_CACHE_PATH="$WORK_DIR/cuda-cache"
+export TRITON_CACHE_DIR="$WORK_DIR/triton-cache"
+export TORCHINDUCTOR_CACHE_DIR="$WORK_DIR/torchinductor-cache"
 export TORCH_HOME="$WORK_DIR/torch"
+export VLLM_CACHE_ROOT="$WORK_DIR/vllm-cache"
+export NUMBA_CACHE_DIR="$WORK_DIR/numba-cache"
 export TMPDIR="$WORK_DIR/tmp"
 export PATH="${ENV_DIR}/bin:${PATH}"
 export VLLM_ATTENTION_BACKEND=FLASH_ATTN
