@@ -46,6 +46,12 @@ each benchmark uses one vanilla vLLM instance and one homogeneous GPU pool.
   succeeds, its complete artifact directory is deleted immediately and the
   live vLLM server log is truncated. Failed uploads remain only until the task
   exits so their error can be printed, then the task work directory is removed.
+- Before a benchmark starts, the GPU/network monitor must produce a complete
+  sample for every participating TP GPU. A startup or runtime telemetry error,
+  an incomplete observability bundle, or a ClickHouse upload error terminates
+  the shard immediately instead of retrying every configuration. Logs report
+  `clickhouse_upload_status=not_attempted_integrity_failed` separately from a
+  real uploader return code.
 - Every new array task also removes calibration-owned work directories and
   external Slurm logs older than two days. Every exit path resets all allocated
   GPUs with `nvidia-smi -rgc` and removes its exact task work directory.
@@ -63,3 +69,9 @@ This common directory intentionally has no `READY` marker; it is shared by
 future array-job directories and must not be submitted by itself.
 New submission directories should copy the matching file from `templates/` as
 `run.sbatch`. Those templates send Slurm stdout/stderr outside Git as well.
+
+Run the local regression suite before creating a submission directory:
+
+```bash
+python3 -m unittest -v test_calibration_runner.py
+```

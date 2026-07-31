@@ -91,6 +91,8 @@ class GPUMonitor:
         self.error = ""
         self.network_interface = default_network_interface()
         self.stop_event = threading.Event()
+        self.first_sample_event = threading.Event()
+        self.failed_event = threading.Event()
         self.thread = threading.Thread(target=self._run, daemon=True)
 
     def start(self) -> None:
@@ -101,6 +103,19 @@ class GPUMonitor:
         self.thread.join(timeout=10)
         return self.samples
 
+    def wait_until_ready(self, timeout_s: float) -> None:
+        deadline = time.monotonic() + timeout_s
+        while time.monotonic() < deadline:
+            if self.first_sample_event.wait(timeout=0.05):
+                return
+            if self.failed_event.is_set():
+                raise RuntimeError(f"GPU monitor startup failed: {self.error}")
+        if self.error:
+            raise RuntimeError(f"GPU monitor startup failed: {self.error}")
+        raise RuntimeError(
+            f"GPU monitor produced no samples within {timeout_s:.1f}s"
+        )
+
     def _run(self) -> None:
         sequence = 0
         while not self.stop_event.is_set():
@@ -108,9 +123,18 @@ class GPUMonitor:
             try:
                 now_ns = time.time_ns()
                 now = dt.datetime.fromtimestamp(now_ns / 1e9, UTC).strftime("%Y-%m-%d %H:%M:%S.%f000")
-                rx_bytes, tx_bytes = network_counters(self.network_interface)
+                rx_bytes, tx_bytes = network_counters(
+                    self.network_interface,
+                    strict=True,
+                )
                 rows = gpu_query()
-                for row in rows[: self.gpu_count]:
+                selected_rows = rows[: self.gpu_count]
+                if len(selected_rows) != self.gpu_count:
+                    raise RuntimeError(
+                        f"expected {self.gpu_count} telemetry GPUs, "
+                        f"received {len(selected_rows)}"
+                    )
+                for row in selected_rows:
                     self.samples.append(
                         {
                             "sample_seq": sequence,
@@ -133,9 +157,12 @@ class GPUMonitor:
                             "tx_bytes": tx_bytes,
                         }
                     )
+                self.first_sample_event.set()
                 sequence += 1
-            except Exception as exc:  # monitoring must not kill the benchmark
+            except Exception as exc:
                 self.error = f"{type(exc).__name__}: {exc}"
+                self.failed_event.set()
+                return
             elapsed = time.monotonic() - started
             self.stop_event.wait(max(0.05, self.interval_ms / 1000 - elapsed))
 
@@ -151,8 +178,26 @@ def default_network_interface() -> str:
     return ""
 
 
-def network_counters(interface: str) -> tuple[int, int]:
+def network_counters(
+    interface: str,
+    sys_class_net: Path = Path("/sys/class/net"),
+    strict: bool = False,
+) -> tuple[int, int]:
     if not interface:
+        if strict:
+            raise RuntimeError("default network interface was not detected")
+        return 0, 0
+    base = sys_class_net / interface / "statistics"
+    try:
+        return (
+            int((base / "rx_bytes").read_text().strip()),
+            int((base / "tx_bytes").read_text().strip()),
+        )
+    except (OSError, ValueError) as exc:
+        if strict:
+            raise RuntimeError(
+                f"cannot read network counters for interface {interface}: {exc}"
+            ) from exc
         return 0, 0
 
 
@@ -161,14 +206,6 @@ def read_int(path: Path) -> int:
         return int(path.read_text().strip())
     except (OSError, ValueError):
         return 0
-    base = Path("/sys/class/net") / interface / "statistics"
-    try:
-        return (
-            int((base / "rx_bytes").read_text().strip()),
-            int((base / "tx_bytes").read_text().strip()),
-        )
-    except (OSError, ValueError):
-        return 0, 0
 
 
 def stop_process(process: subprocess.Popen | None, timeout: int = 15) -> None:
@@ -182,6 +219,38 @@ def stop_process(process: subprocess.Popen | None, timeout: int = 15) -> None:
         with contextlib.suppress(ProcessLookupError):
             os.killpg(process.pid, signal.SIGKILL)
         process.wait(timeout=5)
+
+
+def run_benchmark_with_monitor(
+    command: list[str],
+    output_handle: Any,
+    timeout_s: float,
+    monitor: GPUMonitor,
+) -> int:
+    process = subprocess.Popen(
+        command,
+        stdout=output_handle,
+        stderr=subprocess.STDOUT,
+        text=True,
+        start_new_session=True,
+    )
+    deadline = time.monotonic() + timeout_s
+    while True:
+        returncode = process.poll()
+        if returncode is not None:
+            return returncode
+        if monitor.failed_event.is_set():
+            stop_process(process)
+            raise RuntimeError(
+                f"GPU monitor failed during benchmark: {monitor.error}"
+            )
+        if STOP_REQUESTED.is_set():
+            stop_process(process)
+            return 130
+        if time.monotonic() >= deadline:
+            stop_process(process)
+            raise subprocess.TimeoutExpired(command, timeout_s)
+        time.sleep(0.2)
 
 
 def wait_http(url: str, timeout_s: int = 60) -> None:
@@ -522,7 +591,7 @@ def run_segment(
     args: argparse.Namespace,
     output_dir: Path,
     gpu_names: list[str],
-) -> tuple[dict[str, Any], bool]:
+) -> tuple[dict[str, Any], bool, bool]:
     run_id = (
         f"{manifest['campaign_id']}-{manifest['gpu_type']}-{config['config_id']}-"
         f"rep{repeat_no}-seg{segment['segment_no']}-attempt{attempt}"
@@ -594,7 +663,8 @@ def run_segment(
     started_at = utc_now()
     started = time.monotonic()
     bench_rc = 1
-    upload_rc = 1
+    upload_rc: int | None = None
+    upload_status = "not_attempted"
     error = ""
     server_log_offset = (
         server.log_path.stat().st_size
@@ -625,6 +695,12 @@ def run_segment(
         )
         monitor.start()
         monitor_started = True
+        monitor.wait_until_ready(args.monitor_start_timeout_s)
+        print(
+            f"gpu_monitor_ready interface={monitor.network_interface} "
+            f"samples={len(monitor.samples)}",
+            flush=True,
+        )
         capture_histograms(
             f"http://127.0.0.1:{args.port}/metrics",
             segment_dir / "histogram_buckets.csv",
@@ -636,17 +712,17 @@ def run_segment(
             int(segment["historical_estimated_duration_s"] * 2 + 600),
         )
         with (segment_dir / "stream_bench.log").open("w", encoding="utf-8") as handle:
-            result_process = subprocess.run(
+            bench_rc = run_benchmark_with_monitor(
                 [
                     python, "-u", str(tools / "stream_bench.py"),
                     "--endpoint", f"http://127.0.0.1:{args.port}/v1/completions",
                     "--model", args.model, "--workloads", str(workload_path),
                     "--output-dir", str(segment_dir), "--seed", str(run_seed),
                 ],
-                stdout=handle, stderr=subprocess.STDOUT, text=True,
-                timeout=timeout_s,
+                handle,
+                timeout_s,
+                monitor,
             )
-        bench_rc = result_process.returncode
         capture_histograms(
             f"http://127.0.0.1:{args.port}/metrics",
             segment_dir / "histogram_buckets.csv",
@@ -686,8 +762,10 @@ def run_segment(
     summary = summarize_samples(
         samples, config["gpu_freq_mhz"], args.frequency_tolerance_mhz, config["tp_degree"]
     )
+    infrastructure_failure = False
     if monitor.error:
         error = error or f"GPU monitor failed: {monitor.error}"
+        infrastructure_failure = True
 
     hostname = socket.gethostname().split(".")[0]
     write_telemetry_csv(
@@ -865,8 +943,11 @@ def run_segment(
     )
     if incomplete:
         error = error or f"incomplete observability artifacts: {incomplete}"
+        upload_status = "not_attempted_integrity_failed"
+        infrastructure_failure = True
 
     if not incomplete:
+        upload_status = "attempted"
         segment_job_id = (
             f"{os.environ.get('SLURM_JOB_ID', 'manual')}-{run_id}"
         )
@@ -886,6 +967,10 @@ def run_segment(
         upload_rc = uploader_result.returncode
         if upload_rc:
             error = error or f"ClickHouse full-observability upload rc={upload_rc}"
+            upload_status = "failed"
+            infrastructure_failure = True
+        else:
+            upload_status = "succeeded"
 
     success = bench_rc == 0 and upload_rc == 0 and summary["frequency_verified"]
     if not summary["frequency_verified"]:
@@ -896,14 +981,18 @@ def run_segment(
         "repeat_no": repeat_no, "segment_no": segment["segment_no"],
         "started_at": started_at, "finished_at": finished_at,
         "status": "success" if success else "failed", "benchmark_rc": bench_rc,
+        "clickhouse_upload_status": upload_status,
         "clickhouse_upload_rc": upload_rc, "duration_s": elapsed_s,
+        "infrastructure_failure": infrastructure_failure,
         "error": error, **summary,
     }
     append_jsonl(output_dir / "run_results.jsonl", row)
     print(
         f"segment_finish run_id={run_id} status={row['status']} duration_s={elapsed_s:.3f} "
         f"frequency_verified={summary['frequency_verified']} samples={len(samples)} "
-        f"clickhouse_upload_rc={upload_rc}",
+        f"clickhouse_upload_status={upload_status} "
+        f"clickhouse_upload_rc={upload_rc if upload_rc is not None else 'not_attempted'} "
+        f"infrastructure_failure={infrastructure_failure}",
         flush=True,
     )
     if success and not args.retain_uploaded_artifacts:
@@ -925,7 +1014,7 @@ def run_segment(
                 f"error={type(exc).__name__}:{exc} checkpoint=true",
                 flush=True,
             )
-    return row, success
+    return row, success, infrastructure_failure
 
 
 def detect_vllm_version(vllm_bin: str) -> str:
@@ -952,6 +1041,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--otlp-port", type=int, default=0)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--monitor-interval-ms", type=int, default=500)
+    parser.add_argument("--monitor-start-timeout-s", type=float, default=5.0)
     parser.add_argument("--frequency-tolerance-mhz", type=int, default=30)
     parser.add_argument("--server-ready-timeout-s", type=int, default=900)
     parser.add_argument("--minimum-benchmark-timeout-s", type=int, default=1800)
@@ -1064,7 +1154,7 @@ def main() -> int:
             success = False
             for attempt in (1, 2):
                 try:
-                    _row, success = run_segment(
+                    _row, success, infrastructure_failure = run_segment(
                         server, manifest, config, segment, repeat_no, attempt,
                         args, args.output_dir, gpu_names,
                     )
@@ -1075,10 +1165,20 @@ def main() -> int:
                         flush=True,
                     )
                     success = False
+                    infrastructure_failure = True
                 if success:
                     completed += 1
                     break
                 server.stop()
+                if infrastructure_failure:
+                    failed += 1
+                    print(
+                        f"shard_fatal config={config['config_id']} "
+                        f"repeat={repeat_no} segment={segment['segment_no']} "
+                        "reason=infrastructure_failure",
+                        flush=True,
+                    )
+                    return 3
                 if attempt == 1 and not STOP_REQUESTED.is_set():
                     server.ensure(config["tp_degree"])
             if not success:
