@@ -27,3 +27,4 @@ server_ready tp=1
 segment_start run_id=phase2-full-grid-rerun-20260731-l4-l4-tp1-f2040-i32-o32-r10-rep2-seg1-attempt2 tp=1 target_mhz=2040 prompts=500 lock_state=[{"index":"0","name":"NVIDIA L4","uuid":"GPU-07e36d4f-3eca-a88d-1c31-445fc0d863e8","pstate":"P0","clocks.sm":"2040","clocks.mem":"6251","utilization.gpu":"0","utilization.memory":"0","memory.used":"21081","memory.total":"23034","power.draw":"30.04","temperature.gpu":"57"}]
 segment_finish run_id=phase2-full-grid-rerun-20260731-l4-l4-tp1-f2040-i32-o32-r10-rep2-seg1-attempt2 status=failed duration_s=70.828 frequency_verified=False samples=142
 server_start tp=1 command=/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm serve mistralai/Mistral-7B-v0.1 --host 127.0.0.1 --port 8000 --tensor-parallel-size 1 --gpu-memory-utilization 0.9 --max-model-len 16384 --dtype float16
+server_ready tp=1
