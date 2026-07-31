@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-144337-luqia-vllm-calibration-common/calibration_runner.py", line 81, in request
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/urllib/request.py", line 525, in open
+    response = meth(req, response)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/urllib/request.py", line 634, in http_response
+    response = self.parent.error(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/urllib/request.py", line 563, in error
+    return self._call_chain(*args)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/urllib/request.py", line 643, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-144337-luqia-vllm-calibration-common/calibration_runner.py", line 802, in <module>
+    raise SystemExit(main())
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-144337-luqia-vllm-calibration-common/calibration_runner.py", line 706, in main
+    version = client.initialize(args.schema)
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-144337-luqia-vllm-calibration-common/calibration_runner.py", line 94, in initialize
+    self.request(statement, timeout=60)
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260731-144337-luqia-vllm-calibration-common/calibration_runner.py", line 85, in request
+    raise RuntimeError(f"ClickHouse HTTP {exc.code}: {detail}") from exc
+RuntimeError: ClickHouse HTTP 500: Code: 184. DB::Exception: Aggregate function sum(completed_requests) AS completed_requests is found inside another aggregate function in query. (ILLEGAL_AGGREGATION) (version 25.8.28.1 (official build))
+
