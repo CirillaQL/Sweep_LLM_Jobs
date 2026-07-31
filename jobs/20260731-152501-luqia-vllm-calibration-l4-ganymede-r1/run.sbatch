@@ -54,11 +54,19 @@ trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
-mkdir -p "$OUT_DIR" "$WORK_DIR/xdg-cache" "$WORK_DIR/xdg-config" "$WORK_DIR/tmp"
+mkdir -p \
+  "$OUT_DIR" \
+  "$WORK_DIR/xdg-cache" \
+  "$WORK_DIR/xdg-config" \
+  "$WORK_DIR/flashinfer" \
+  "$WORK_DIR/torch" \
+  "$WORK_DIR/tmp"
 cd "$WORK_DIR" || exit 3
 export HF_HOME="/data/users/chjing/.cache/huggingface"
 export XDG_CACHE_HOME="$WORK_DIR/xdg-cache"
 export XDG_CONFIG_HOME="$WORK_DIR/xdg-config"
+export FLASHINFER_WORKSPACE_BASE="$WORK_DIR/flashinfer"
+export TORCH_HOME="$WORK_DIR/torch"
 export TMPDIR="$WORK_DIR/tmp"
 export PATH="${ENV_DIR}/bin:${PATH}"
 export VLLM_ATTENTION_BACKEND=FLASH_ATTN
