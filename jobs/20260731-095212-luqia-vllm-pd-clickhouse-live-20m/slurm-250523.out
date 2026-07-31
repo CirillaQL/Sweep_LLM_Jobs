@@ -96,3 +96,10 @@ ready label=otlp url=http://127.0.0.1:35023/health
 phase=start_proxy
 ready label=proxy url=http://127.0.0.1:30023/health
 phase=start_pd_servers
+ready label=prefill url=http://10.1.0.6:32023/v1/models
+ready label=decode url=http://10.1.0.3:33023/v1/models
+pd_registry_ready=true
+phase=start_metrics_collector
+phase=start_clickhouse_live_uploader
+clickhouse_live_uploader_started=true interval_s=60
+phase=streaming_benchmark
