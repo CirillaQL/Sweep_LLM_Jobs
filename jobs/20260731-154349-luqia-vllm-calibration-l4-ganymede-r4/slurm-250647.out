@@ -10,3 +10,4 @@ GPU 7: NVIDIA L4 (UUID: GPU-cb732fe5-3b0b-12e6-6aeb-56f751b57a18)
 plan campaign=phase2-full-grid-rerun-20260731 gpu_type=l4 shard=1 configs=46 segments=156
 clickhouse_preflight_ok version=25.8.28.1
 spool_replay_count=0
+server_start tp=1 command=/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm serve mistralai/Mistral-7B-v0.1 --host 127.0.0.1 --port 8000 --tensor-parallel-size 1 --gpu-memory-utilization 0.9 --max-model-len 16384 --dtype float16
