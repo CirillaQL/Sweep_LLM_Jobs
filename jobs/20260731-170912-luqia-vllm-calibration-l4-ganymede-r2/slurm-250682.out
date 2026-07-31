@@ -8,3 +8,5 @@ GPU 5: NVIDIA L4 (UUID: GPU-20dfc31e-37e6-2ba1-cab4-549d23157a36)
 GPU 6: NVIDIA L4 (UUID: GPU-fa65f89d-37e8-dc5c-919d-2b60403f9a44)
 GPU 7: NVIDIA L4 (UUID: GPU-cb732fe5-3b0b-12e6-6aeb-56f751b57a18)
 plan campaign=phase2-full-grid-rerun-20260731 gpu_type=l4 shard=1 configs=46 segments=156
+collection_mode=full_observability canonical_tables=true calibration_tables=false segment_batch_upload=true
+server_start tp=1 command=/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm serve mistralai/Mistral-7B-v0.1 --host 127.0.0.1 --port 8000 --tensor-parallel-size 1 --gpu-memory-utilization 0.9 --max-model-len 16384 --dtype float16 --max-num-seqs 512 --max-num-batched-tokens 2048 --enable-request-id-headers --enable-prefix-caching --kv-cache-metrics --kv-cache-metrics-sample 1.0 --enable-logging-iteration-details --collect-detailed-traces all --otlp-traces-endpoint http://127.0.0.1:36682/v1/traces --enable-mfu-metrics --enable-log-requests
