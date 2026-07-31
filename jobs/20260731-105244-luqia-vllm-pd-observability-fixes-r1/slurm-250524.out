@@ -181,3 +181,44 @@ clickhouse_insert table=gpu_samples rows=92
 clickhouse_insert table=gpu_samples rows=83
 clickhouse_live_uploader_stopped=true
 phase=clickhouse_final_upload
+clickhouse_preflight_ok=true version=25.8.28.1 database=vllm_observability
+clickhouse_source_complete source=vllm_metrics_snapshots.csv csv_rows=4785 uploaded_rows=4785
+clickhouse_source_complete source=prefill_neptune_telemetry.csv csv_rows=2193 uploaded_rows=2193
+clickhouse_source_complete source=decode_ganymede_telemetry.csv csv_rows=2003 uploaded_rows=2003
+clickhouse_insert table=request_token_series rows=3576
+clickhouse_insert table=requests rows=3600
+clickhouse_insert table=request_events rows=68389
+clickhouse_insert table=request_attempts rows=3600
+clickhouse_insert table=workload_windows rows=6
+clickhouse_insert table=job_nodes rows=2
+clickhouse_insert table=otel_spans rows=7176
+clickhouse_insert table=scheduler_iterations rows=29631
+clickhouse_insert table=kv_transfer_events rows=3600
+clickhouse_insert table=drain_samples rows=6
+clickhouse_insert table=jobs rows=1
+clickhouse_finalize_success=true
+clickhouse_final_upload_rc=0
+phase=artifact_check
+artifact=requests.csv bytes=1411477
+artifact=token_timestamps.csv bytes=25605547
+artifact=stream_chunk_events.csv bytes=21816857
+artifact=client_events.csv bytes=2573117
+artifact=window_summary.csv bytes=1959
+artifact=workload_events.csv bytes=4015
+artifact=vllm_metrics_snapshots.csv bytes=1265669
+artifact=drain_samples.csv bytes=583
+artifact=drain_summary.csv bytes=132
+artifact=proxy_events.csv bytes=15078485
+artifact=kv_transfer_events.csv bytes=4132891
+artifact=vllm_observability_log_events.csv bytes=11588708
+artifact=otel_batches.csv bytes=31601
+artifact=otel_spans.csv bytes=7729550
+artifact=job_metadata.csv bytes=640
+artifact=queue_state_at_arrival.csv bytes=2023760
+artifact=clickhouse_upload_state.json bytes=195
+artifact=clickhouse_live_uploader.log bytes=3021
+artifact=clickhouse_final_upload.log bytes=919
+job_exit_rc=0
+job_work_cleanup_success=true path=/data/users/chjing/vllm_job_work/250524
+job_work_cleanup_rc=0
+job_cleanup_rc=0
