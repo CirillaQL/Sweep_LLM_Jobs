@@ -4,3 +4,5 @@ GPU 1: NVIDIA L40S (UUID: GPU-a59fb458-a10d-49e3-c7e2-39daba72a66d)
 GPU 2: NVIDIA L40S (UUID: GPU-ebc2e033-0d59-2451-884a-dfd75a4915e5)
 GPU 3: NVIDIA L40S (UUID: GPU-5dbe54b5-dc6b-9e84-5431-1900a995efdc)
 plan campaign=phase2-full-grid-rerun-20260731 gpu_type=l40s shard=1 configs=73 segments=222
+collection_mode=full_observability canonical_tables=true calibration_tables=false segment_batch_upload=true
+server_start tp=1 command=/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm serve mistralai/Mistral-7B-v0.1 --host 127.0.0.1 --port 8000 --tensor-parallel-size 1 --gpu-memory-utilization 0.9 --max-model-len 16384 --dtype float16 --max-num-seqs 512 --max-num-batched-tokens 2048 --enable-request-id-headers --enable-prefix-caching --kv-cache-metrics --kv-cache-metrics-sample 1.0 --enable-logging-iteration-details --collect-detailed-traces all --otlp-traces-endpoint http://127.0.0.1:36681/v1/traces --enable-mfu-metrics --enable-log-requests
