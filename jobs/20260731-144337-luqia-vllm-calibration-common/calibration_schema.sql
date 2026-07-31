@@ -1,0 +1,148 @@
+CREATE TABLE IF NOT EXISTS vllm_observability.calibration_runs
+(
+    campaign_id LowCardinality(String),
+    gpu_type LowCardinality(String),
+    config_id String,
+    repeat_no UInt8,
+    segment_no UInt8,
+    segment_count UInt8,
+    infra_attempt UInt8,
+    shard_id UInt16,
+    run_id String,
+    slurm_job_id String,
+    slurm_array_task_id Int32,
+    hostname LowCardinality(String),
+    model String,
+    vllm_version String,
+    gpu_names Array(String),
+    tp_degree UInt8,
+    target_gpu_freq_mhz UInt16,
+    historical_mem_freq_mhz UInt16,
+    input_len UInt32,
+    output_len UInt32,
+    request_rate Float64,
+    num_prompts UInt32,
+    seed UInt32,
+    source_steps Array(String),
+    started_at DateTime64(9, 'UTC'),
+    finished_at DateTime64(9, 'UTC'),
+    status LowCardinality(String),
+    benchmark_rc Int32,
+    benchmark_duration_s Float64,
+    completed_requests UInt32,
+    failed_requests UInt32,
+    total_input_tokens UInt64,
+    total_output_tokens UInt64,
+    request_throughput_rps Float64,
+    output_token_throughput_tps Float64,
+    total_token_throughput_tps Float64,
+    mean_ttft_ms Float64,
+    median_ttft_ms Float64,
+    p99_ttft_ms Float64,
+    mean_tpot_ms Float64,
+    median_tpot_ms Float64,
+    p99_tpot_ms Float64,
+    mean_itl_ms Float64,
+    median_itl_ms Float64,
+    p99_itl_ms Float64,
+    avg_total_power_w Float64,
+    min_total_power_w Float64,
+    max_total_power_w Float64,
+    energy_j Float64,
+    avg_gpu_util_pct Float64,
+    avg_mem_util_pct Float64,
+    actual_sm_clock_min_mhz Float64,
+    actual_sm_clock_mean_mhz Float64,
+    actual_sm_clock_max_mhz Float64,
+    active_clock_sample_count UInt64,
+    active_clock_within_tolerance_ratio Float64,
+    frequency_verified Bool,
+    frequency_tolerance_mhz UInt16,
+    result_json String CODEC(ZSTD(3)),
+    error String CODEC(ZSTD(3)),
+    updated_at DateTime64(9, 'UTC')
+)
+ENGINE = ReplacingMergeTree(updated_at)
+ORDER BY (campaign_id, gpu_type, config_id, repeat_no, segment_no, infra_attempt);
+
+CREATE TABLE IF NOT EXISTS vllm_observability.calibration_gpu_samples
+(
+    campaign_id LowCardinality(String),
+    gpu_type LowCardinality(String),
+    run_id String,
+    sample_seq UInt32,
+    gpu_index UInt8,
+    sampled_at DateTime64(9, 'UTC'),
+    unix_ns UInt64,
+    config_id String,
+    repeat_no UInt8,
+    segment_no UInt8,
+    shard_id UInt16,
+    target_gpu_freq_mhz UInt16,
+    sm_clock_mhz Float64,
+    mem_clock_mhz Float64,
+    gpu_util_pct Float64,
+    mem_util_pct Float64,
+    memory_used_mib Float64,
+    memory_total_mib Float64,
+    power_w Float64,
+    temperature_c Float64,
+    pstate LowCardinality(String),
+    ingested_at DateTime64(9, 'UTC')
+)
+ENGINE = ReplacingMergeTree(ingested_at)
+ORDER BY (campaign_id, gpu_type, run_id, sample_seq, gpu_index)
+TTL sampled_at + INTERVAL 180 DAY DELETE;
+
+CREATE TABLE IF NOT EXISTS vllm_observability.calibration_shards
+(
+    campaign_id LowCardinality(String),
+    gpu_type LowCardinality(String),
+    shard_id UInt16,
+    slurm_job_id String,
+    hostname LowCardinality(String),
+    state LowCardinality(String),
+    planned_runs UInt32,
+    completed_runs UInt32,
+    failed_runs UInt32,
+    skipped_runs UInt32,
+    message String,
+    updated_at DateTime64(9, 'UTC')
+)
+ENGINE = ReplacingMergeTree(updated_at)
+ORDER BY (campaign_id, gpu_type, shard_id, slurm_job_id);
+
+CREATE VIEW IF NOT EXISTS vllm_observability.calibration_logical_runs AS
+SELECT
+    campaign_id,
+    gpu_type,
+    config_id,
+    repeat_no,
+    any(shard_id) AS shard_id,
+    any(tp_degree) AS tp_degree,
+    any(target_gpu_freq_mhz) AS target_gpu_freq_mhz,
+    any(input_len) AS input_len,
+    any(output_len) AS output_len,
+    any(request_rate) AS request_rate,
+    max(segment_count) AS segment_count,
+    countDistinct(segment_no) AS completed_segments,
+    sum(num_prompts) AS num_prompts,
+    sum(completed_requests) AS completed_requests,
+    sum(failed_requests) AS failed_requests,
+    sum(total_input_tokens) AS total_input_tokens,
+    sum(total_output_tokens) AS total_output_tokens,
+    sum(benchmark_duration_s) AS benchmark_duration_s,
+    sum(completed_requests) / nullIf(sum(benchmark_duration_s), 0) AS request_throughput_rps,
+    sum(total_output_tokens) / nullIf(sum(benchmark_duration_s), 0) AS output_token_throughput_tps,
+    (sum(total_input_tokens) + sum(total_output_tokens)) / nullIf(sum(benchmark_duration_s), 0) AS total_token_throughput_tps,
+    sum(mean_ttft_ms * completed_requests) / nullIf(sum(completed_requests), 0) AS weighted_mean_ttft_ms,
+    sum(mean_tpot_ms * completed_requests) / nullIf(sum(completed_requests), 0) AS weighted_mean_tpot_ms,
+    sum(mean_itl_ms * completed_requests) / nullIf(sum(completed_requests), 0) AS weighted_mean_itl_ms,
+    max(p99_ttft_ms) AS max_segment_p99_ttft_ms,
+    max(p99_tpot_ms) AS max_segment_p99_tpot_ms,
+    max(p99_itl_ms) AS max_segment_p99_itl_ms,
+    sum(energy_j) AS energy_j,
+    min(frequency_verified) AS all_segments_frequency_verified
+FROM vllm_observability.calibration_runs
+WHERE status = 'success'
+GROUP BY campaign_id, gpu_type, config_id, repeat_no;
