@@ -1,0 +1,190 @@
+{
+  "scope": "8 GPU board-power streams; excludes CPU, RAM, NIC, and fans",
+  "power_source": "allocation_wide_multi_gpu_monitor",
+  "gpu_stream_count": 8,
+  "stream_metadata": {
+    "ganymede_GPU-07e36d4f-3eca-a88d-1c31-445fc0d863e8": {
+      "host": "ganymede",
+      "gpu_uuid": "GPU-07e36d4f-3eca-a88d-1c31-445fc0d863e8",
+      "gpu_index": "0",
+      "source_file": "allocation_ganymede_power.csv"
+    },
+    "ganymede_GPU-1a75a85d-1f07-6519-507b-f1ff9def0ab9": {
+      "host": "ganymede",
+      "gpu_uuid": "GPU-1a75a85d-1f07-6519-507b-f1ff9def0ab9",
+      "gpu_index": "1",
+      "source_file": "allocation_ganymede_power.csv"
+    },
+    "ganymede_GPU-4c457bed-02f9-0e41-a2aa-223bc07a6d30": {
+      "host": "ganymede",
+      "gpu_uuid": "GPU-4c457bed-02f9-0e41-a2aa-223bc07a6d30",
+      "gpu_index": "2",
+      "source_file": "allocation_ganymede_power.csv"
+    },
+    "ganymede_GPU-4fcfdc09-de3b-156a-5d01-453f2b97235f": {
+      "host": "ganymede",
+      "gpu_uuid": "GPU-4fcfdc09-de3b-156a-5d01-453f2b97235f",
+      "gpu_index": "3",
+      "source_file": "allocation_ganymede_power.csv"
+    },
+    "neptune_GPU-35fd1bf9-5849-1263-ccc4-a5ccc837400f": {
+      "host": "neptune",
+      "gpu_uuid": "GPU-35fd1bf9-5849-1263-ccc4-a5ccc837400f",
+      "gpu_index": "0",
+      "source_file": "allocation_neptune_power.csv"
+    },
+    "neptune_GPU-a59fb458-a10d-49e3-c7e2-39daba72a66d": {
+      "host": "neptune",
+      "gpu_uuid": "GPU-a59fb458-a10d-49e3-c7e2-39daba72a66d",
+      "gpu_index": "1",
+      "source_file": "allocation_neptune_power.csv"
+    },
+    "neptune_GPU-ebc2e033-0d59-2451-884a-dfd75a4915e5": {
+      "host": "neptune",
+      "gpu_uuid": "GPU-ebc2e033-0d59-2451-884a-dfd75a4915e5",
+      "gpu_index": "2",
+      "source_file": "allocation_neptune_power.csv"
+    },
+    "neptune_GPU-5dbe54b5-dc6b-9e84-5431-1900a995efdc": {
+      "host": "neptune",
+      "gpu_uuid": "GPU-5dbe54b5-dc6b-9e84-5431-1900a995efdc",
+      "gpu_index": "3",
+      "source_file": "allocation_neptune_power.csv"
+    }
+  },
+  "integration": "piecewise-linear trapezoidal integration",
+  "sample_period_s": 0.5,
+  "workloads": [
+    {
+      "seq": 1,
+      "workload_id": "baseline_short",
+      "start_unix_ts": 1785676892.7487705,
+      "end_unix_ts": 1785676931.6268218,
+      "duration_s": 38.87805128097534,
+      "nodes": {
+        "ganymede_GPU-07e36d4f-3eca-a88d-1c31-445fc0d863e8": {
+          "energy_j": 1226.580755521898,
+          "energy_wh": 0.34071687653386057,
+          "covered_s": 38.87805128097534
+        },
+        "ganymede_GPU-1a75a85d-1f07-6519-507b-f1ff9def0ab9": {
+          "energy_j": 617.9745016610623,
+          "energy_wh": 0.17165958379473953,
+          "covered_s": 38.87805128097534
+        },
+        "ganymede_GPU-4c457bed-02f9-0e41-a2aa-223bc07a6d30": {
+          "energy_j": 620.6122771263119,
+          "energy_wh": 0.1723922992017533,
+          "covered_s": 38.87805128097534
+        },
+        "ganymede_GPU-4fcfdc09-de3b-156a-5d01-453f2b97235f": {
+          "energy_j": 643.6203445935248,
+          "energy_wh": 0.17878342905375688,
+          "covered_s": 38.87805128097534
+        },
+        "neptune_GPU-35fd1bf9-5849-1263-ccc4-a5ccc837400f": {
+          "energy_j": 2377.4971108271375,
+          "energy_wh": 0.6604158641186493,
+          "covered_s": 38.87805128097534
+        },
+        "neptune_GPU-a59fb458-a10d-49e3-c7e2-39daba72a66d": {
+          "energy_j": 1239.9662875986103,
+          "energy_wh": 0.34443507988850286,
+          "covered_s": 38.87805128097534
+        },
+        "neptune_GPU-ebc2e033-0d59-2451-884a-dfd75a4915e5": {
+          "energy_j": 1224.1800730779678,
+          "energy_wh": 0.3400500202994355,
+          "covered_s": 38.87805128097534
+        },
+        "neptune_GPU-5dbe54b5-dc6b-9e84-5431-1900a995efdc": {
+          "energy_j": 1219.178259333372,
+          "energy_wh": 0.3386606275926033,
+          "covered_s": 38.87805128097534
+        }
+      },
+      "gpu_stream_count": 8,
+      "covered_gpu_stream_count": 8,
+      "min_gpu_coverage_ratio": 1.0,
+      "gpu_coverage_ratio": {
+        "ganymede_GPU-07e36d4f-3eca-a88d-1c31-445fc0d863e8": 1.0,
+        "ganymede_GPU-1a75a85d-1f07-6519-507b-f1ff9def0ab9": 1.0,
+        "ganymede_GPU-4c457bed-02f9-0e41-a2aa-223bc07a6d30": 1.0,
+        "ganymede_GPU-4fcfdc09-de3b-156a-5d01-453f2b97235f": 1.0,
+        "neptune_GPU-35fd1bf9-5849-1263-ccc4-a5ccc837400f": 1.0,
+        "neptune_GPU-a59fb458-a10d-49e3-c7e2-39daba72a66d": 1.0,
+        "neptune_GPU-ebc2e033-0d59-2451-884a-dfd75a4915e5": 1.0,
+        "neptune_GPU-5dbe54b5-dc6b-9e84-5431-1900a995efdc": 1.0
+      },
+      "host_energy_j": {
+        "ganymede": 3108.787878902797,
+        "neptune": 6060.821730837088
+      },
+      "combined_energy_j": 9169.609609739884,
+      "combined_energy_wh": 2.547113780483301,
+      "combined_avg_power_w": 235.85568997453734,
+      "successful_requests": 10,
+      "energy_per_request_j": 916.9609609739884
+    }
+  ],
+  "telemetry_total": {
+    "ganymede_GPU-07e36d4f-3eca-a88d-1c31-445fc0d863e8": {
+      "energy_j": 18875.117939176616,
+      "energy_wh": 5.243088316437949,
+      "covered_s": 910.3132169246674,
+      "average_power_w": 20.734751059578013
+    },
+    "ganymede_GPU-1a75a85d-1f07-6519-507b-f1ff9def0ab9": {
+      "energy_j": 14478.77805376053,
+      "energy_wh": 4.021882792711258,
+      "covered_s": 910.3132169246674,
+      "average_power_w": 15.90527060858737
+    },
+    "ganymede_GPU-4c457bed-02f9-0e41-a2aa-223bc07a6d30": {
+      "energy_j": 14527.153634094013,
+      "energy_wh": 4.035320453915004,
+      "covered_s": 910.3132169246674,
+      "average_power_w": 15.958412295903424
+    },
+    "ganymede_GPU-4fcfdc09-de3b-156a-5d01-453f2b97235f": {
+      "energy_j": 15071.206208122963,
+      "energy_wh": 4.186446168923045,
+      "covered_s": 910.3132169246674,
+      "average_power_w": 16.556066558100053
+    },
+    "neptune_GPU-35fd1bf9-5849-1263-ccc4-a5ccc837400f": {
+      "energy_j": 54098.229497292006,
+      "energy_wh": 15.027285971470002,
+      "covered_s": 910.3784909248352,
+      "average_power_w": 59.42388801643886
+    },
+    "neptune_GPU-a59fb458-a10d-49e3-c7e2-39daba72a66d": {
+      "energy_j": 29062.051023391494,
+      "energy_wh": 8.072791950942081,
+      "covered_s": 910.3784909248352,
+      "average_power_w": 31.92304224352658
+    },
+    "neptune_GPU-ebc2e033-0d59-2451-884a-dfd75a4915e5": {
+      "energy_j": 28684.153839931412,
+      "energy_wh": 7.967820511092059,
+      "covered_s": 910.3784909248352,
+      "average_power_w": 31.507943263017733
+    },
+    "neptune_GPU-5dbe54b5-dc6b-9e84-5431-1900a995efdc": {
+      "energy_j": 28519.72550869942,
+      "energy_wh": 7.9221459746387275,
+      "covered_s": 910.3784909248352,
+      "average_power_w": 31.327327911412763
+    }
+  },
+  "host_total_energy_j": {
+    "ganymede": 62952.25583515412,
+    "neptune": 140364.15986931435
+  },
+  "telemetry_total_energy_j": 203316.41570446847,
+  "telemetry_total_energy_wh": 56.47678214013013,
+  "reset_probe_energy_j": 2153.9864435303207,
+  "reset_probe_energy_wh": 0.5983295676473113,
+  "total_recorded_gpu_energy_j": 205470.4021479988,
+  "total_recorded_gpu_energy_wh": 57.075111707777445
+}
