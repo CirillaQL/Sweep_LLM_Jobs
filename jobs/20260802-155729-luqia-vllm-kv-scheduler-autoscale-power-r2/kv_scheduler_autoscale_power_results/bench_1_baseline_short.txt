@@ -9,4 +9,31 @@ Starting main benchmark run...
 Traffic request rate: 1.0
 Burstiness factor: 1.0 (Poisson process)
 Maximum request concurrency: 128
-  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:02<00:25,  2.79s/it] 20%|██        | 2/10 [00:03<00:14,  1.83s/it] 30%|███       | 3/10 [00:04<00:09,  1.35s/it] 40%|████      | 4/10 [00:05<00:06,  1.07s/it] 50%|█████     | 5/10 [00:05<00:04,  1.15it/s] 60%|██████    | 6/10 [00:06<00:03,  1.17it/s] 70%|███████   | 7/10 [00:07<00:02,  1.35it/s] 80%|████████  | 8/10 [00:08<00:02,  1.07s/it]
+  0%|          | 0/10 [00:00<?, ?it/s] 10%|█         | 1/10 [00:02<00:25,  2.79s/it] 20%|██        | 2/10 [00:03<00:14,  1.83s/it] 30%|███       | 3/10 [00:04<00:09,  1.35s/it] 40%|████      | 4/10 [00:05<00:06,  1.07s/it] 50%|█████     | 5/10 [00:05<00:04,  1.15it/s] 60%|██████    | 6/10 [00:06<00:03,  1.17it/s] 70%|███████   | 7/10 [00:07<00:02,  1.35it/s] 80%|████████  | 8/10 [00:08<00:02,  1.07s/it] 90%|█████████ | 9/10 [00:11<00:01,  1.59s/it]100%|██████████| 10/10 [00:12<00:00,  1.25s/it]100%|██████████| 10/10 [00:12<00:00,  1.22s/it]
+tip: install termplotlib and gnuplot to plot the metrics
+============ Serving Benchmark Result ============
+Successful requests:                     10        
+Failed requests:                         0         
+Maximum request concurrency:             128       
+Request rate configured (RPS):           1.00      
+Benchmark duration (s):                  12.23     
+Total input tokens:                      310       
+Total generated tokens:                  320       
+Request throughput (req/s):              0.82      
+Output token throughput (tok/s):         26.16     
+Peak output token throughput (tok/s):    50.00     
+Peak concurrent requests:                5.00      
+Total token throughput (tok/s):          51.50     
+---------------Time to First Token----------------
+Mean TTFT (ms):                          237.68    
+Median TTFT (ms):                        239.47    
+P99 TTFT (ms):                           282.02    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          63.79     
+Median TPOT (ms):                        64.13     
+P99 TPOT (ms):                           64.74     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           63.79     
+Median ITL (ms):                         64.04     
+P99 ITL (ms):                            73.51     
+==================================================
