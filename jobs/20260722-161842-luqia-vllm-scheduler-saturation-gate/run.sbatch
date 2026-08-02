@@ -47,6 +47,7 @@ MAX_PROMPTS="${MAX_PROMPTS_OVERRIDE:-120}"
 MAX_CONCURRENCY="${MAX_CONCURRENCY_OVERRIDE:-16}"
 BENCH_SAVE_DETAILED="${BENCH_SAVE_DETAILED_OVERRIDE:-false}"
 EXPECTED_WORKLOAD_COUNT="${EXPECTED_WORKLOAD_COUNT_OVERRIDE:-3}"
+REQUIRE_ALL_WORKLOADS_EXECUTED="${REQUIRE_ALL_WORKLOADS_EXECUTED_OVERRIDE:-false}"
 ALLOW_ZERO_ADMIT="${ALLOW_ZERO_ADMIT_OVERRIDE:-false}"
 SCHEDULER_PLACEMENT="${SCHEDULER_PLACEMENT_OVERRIDE:-l40s-prefill-l4-decode}"
 OVERLOAD_ACTION="${OVERLOAD_ACTION_OVERRIDE:-min-slo-violation}"
@@ -95,6 +96,13 @@ case "$SCALE_IN_ENABLED" in
   true|false) ;;
   *)
     echo "invalid_scale_in_enabled=${SCALE_IN_ENABLED}"
+    exit 27
+    ;;
+esac
+case "$REQUIRE_ALL_WORKLOADS_EXECUTED" in
+  true|false) ;;
+  *)
+    echo "invalid_require_all_workloads_executed=${REQUIRE_ALL_WORKLOADS_EXECUTED}"
     exit 27
     ;;
 esac
@@ -180,6 +188,7 @@ FINAL_RC=0
 RESET_REQUIRED=false
 RESET_DONE=false
 BENCH_FAILURES=0
+BENCHMARKS_COMPLETED=0
 GATE_ADMITTED=0
 GATE_REJECTED=0
 OVERLOAD_FALLBACKS=0
@@ -483,7 +492,7 @@ launch_scale_instance() {
     srun --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$node" \
       --ntasks=1 --ntasks-per-node=1 --gpus-per-task=1 --cpus-per-task=8 \
       --mem="$VLLM_STEP_MEM" \
-      "$NODE_SCRIPT" serve \
+      "$NODE_SCRIPT" serve </dev/null \
       >> "${OUT_DIR}/scale_${instance_id}_step.log" 2>&1 &
   local scale_pid=$!
   SCALE_STEP_PIDS+=("$scale_pid")
@@ -1163,10 +1172,11 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
     "${BURSTINESS_ARGS[@]}" \
     "${DETAIL_ARGS[@]}" \
     --random-input-len "$il" --random-output-len "$ol" --max-concurrency "$MAX_CONCURRENCY" \
-    --num-warmups 1 --temperature 0 > "$BENCH_FILE" 2>&1
+    --num-warmups 1 --temperature 0 </dev/null > "$BENCH_FILE" 2>&1
   BENCH_RC=$?
   END_TS=$(date +%s.%N)
   echo "${END_TS},workload_end,${SEQ},${workload_id},${POLICY_LABEL}" >> "${OUT_DIR}/events.csv"
+  BENCHMARKS_COMPLETED=$((BENCHMARKS_COMPLETED + 1))
   echo "energy_event unix_ts=${END_TS} event=workload_end seq=${SEQ} workload_id=${workload_id}"
   echo "bench_rc=${BENCH_RC} seq=${SEQ} id=${workload_id}"
   tail -n 80 "$BENCH_FILE" || true
@@ -1195,6 +1205,14 @@ PY
     break
   fi
 done < "$WORKLOAD_FILE"
+
+if [ "$REQUIRE_ALL_WORKLOADS_EXECUTED" = true ] && \
+  [ "$BENCHMARKS_COMPLETED" -ne "$EXPECTED_WORKLOAD_COUNT" ]; then
+  echo "incomplete_benchmark_sweep=true completed=${BENCHMARKS_COMPLETED} expected=${EXPECTED_WORKLOAD_COUNT}"
+  if [ "$FINAL_RC" -eq 0 ]; then
+    FINAL_RC=33
+  fi
+fi
 
 if [ -n "$POWER_MONITOR_PID" ] && ! kill -0 "$POWER_MONITOR_PID" 2>/dev/null; then
   echo "power_monitor_died_during_sweep=true pid=${POWER_MONITOR_PID}"
@@ -1311,6 +1329,7 @@ echo "gate_admitted=${GATE_ADMITTED} gate_rejected=${GATE_REJECTED}"
 echo "overload_fallbacks=${OVERLOAD_FALLBACKS}"
 echo "scale_out_events=${SCALE_OUT_EVENTS} scale_in_events=${SCALE_IN_EVENTS}"
 echo "bench_failures=${BENCH_FAILURES}"
+echo "benchmarks_completed=${BENCHMARKS_COMPLETED} expected_workloads=${EXPECTED_WORKLOAD_COUNT}"
 echo "parent_reset_verified=$([ "$RESET_REQUIRED" = true ] && echo "$RESET_DONE" || echo not_required)"
 echo "scheduler_enabled=${SCHEDULER_ENABLED}"
 echo "active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY}"

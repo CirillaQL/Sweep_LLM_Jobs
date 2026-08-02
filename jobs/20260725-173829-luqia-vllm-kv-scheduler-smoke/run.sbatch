@@ -24,6 +24,7 @@ export JOB_DIR_OVERRIDE="${BROKER_ROOT}/jobs/${JOB_NAME}"
 export OUT_DIR_NAME_OVERRIDE="kv_scheduler_smoke_results"
 export WORKLOAD_FILE_OVERRIDE="${JOB_DIR_OVERRIDE}/request_trace.csv"
 export EXPECTED_WORKLOAD_COUNT_OVERRIDE=14
+export REQUIRE_ALL_WORKLOADS_EXECUTED_OVERRIDE=true
 export JOB_TIME_LIMIT_LABEL_OVERRIDE=00:30:00
 
 # Re-run the scheduler for every test window. The active policy checks both
