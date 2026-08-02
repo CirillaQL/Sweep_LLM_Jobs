@@ -1,0 +1,36 @@
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=neptune node_group=neptune role=prefill instance_id=primary mode=reset
+scheduled_gpu=l40s scheduled_freq_mhz=480 gpu_id=0
+gpu_clock_control_mode=manual
+clock_ack_mode=monitor
+max_num_seqs=32
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+CUDA_VISIBLE_DEVICES=0
+enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+parent_reset_step=true host=neptune gpu_id=0 rec_freq_mhz=480
+reset_command_initial=sudo_nvidia_smi_rgc
+All done.
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 9181,
+  "active_samples": 19,
+  "active_clock_min_mhz": 2220.0,
+  "active_clock_max_mhz": 2265.0,
+  "active_clock_mean_mhz": 2244.4736842105262
+}
+reset_probe_active_min_mhz=2220 reset_probe_active_max_mhz=2265 gpu_max_mhz=2520 previous_rec_freq_mhz=480
+reset_probe_departed_previous_target=true
+reset_command_final=sudo_nvidia_smi_rgc
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=neptune gpu_id=0
