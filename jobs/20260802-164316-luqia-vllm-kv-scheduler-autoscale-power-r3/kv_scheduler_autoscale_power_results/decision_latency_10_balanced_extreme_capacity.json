@@ -1,8 +1,7 @@
 {
-  "status": "OVERLOAD_FALLBACK",
-  "decision_mode": "overload_min_slo_violation",
-  "selection_criterion": "min predicted union of latency-SLO and saturation violation probabilities",
-  "policy": "latency_plus_saturation",
+  "status": "OK",
+  "decision_mode": "safe_min_power",
+  "policy": "latency_only",
   "placement": "l40s-prefill-l4-decode",
   "workload": {
     "il": 128,
@@ -40,16 +39,16 @@
       "gpu_type": "l40s",
       "node_group": "neptune",
       "tp": 1,
-      "freq_mhz": 2265,
-      "rec_freq_mhz": 2265,
+      "freq_mhz": 735,
+      "rec_freq_mhz": 735,
       "is_safe": true,
-      "p_violate": 0.0014,
-      "rho_phase": 0.1566,
-      "rho_total": 0.2036,
-      "latency_ms": 107.9,
-      "power_per_gpu_w": 222.1,
-      "total_power_w": 222.1,
-      "p99_ttft_ms": 113.5,
+      "p_violate": 0.1501,
+      "rho_phase": 0.7049,
+      "rho_total": 0.9164,
+      "latency_ms": 219.6,
+      "power_per_gpu_w": 167.4,
+      "total_power_w": 167.4,
+      "p99_ttft_ms": 225.2,
       "p_saturated": 0.795763,
       "p_saturated_min": 0.766059,
       "p_saturated_max": 0.836816,
@@ -79,14 +78,14 @@
       ],
       "instance_count": 4,
       "effective_request_rate_per_instance": 8.0,
-      "p99_queue_plus_prefill_ms": 107.9,
+      "p99_queue_plus_prefill_ms": 219.6,
       "kv_transfer_ms": 5.574752,
       "dispatch_ms": 0.0,
       "ttft_components_ms": {
-        "queue_plus_prefill": 107.9,
+        "queue_plus_prefill": 219.6,
         "kv_transfer": 5.574752,
         "dispatch": 0.0,
-        "total": 113.5
+        "total": 225.2
       }
     },
     "decode": {
@@ -136,15 +135,15 @@
     },
     "latency_safe": true,
     "saturation_safe": false,
-    "is_safe": false,
-    "predicted_joint_latency_violation_probability": 0.147096,
+    "is_safe": true,
+    "predicted_joint_latency_violation_probability": 0.2741,
     "predicted_joint_saturation_probability": 0.994704,
-    "predicted_overload_violation_probability": 0.995483,
+    "predicted_overload_violation_probability": 0.2741,
     "predicted_ttft_excess_ratio": 0.0,
     "predicted_tpot_excess_ratio": 0.0,
     "predicted_max_slo_excess_ratio": 0.0,
-    "predicted_cluster_power_w": 1164.4,
-    "predicted_energy_per_request_j": 36.388
+    "predicted_cluster_power_w": 945.6,
+    "predicted_energy_per_request_j": 29.55
   },
   "alternatives": [
     {
@@ -153,16 +152,16 @@
         "gpu_type": "l40s",
         "node_group": "neptune",
         "tp": 1,
-        "freq_mhz": 1755,
-        "rec_freq_mhz": 1755,
+        "freq_mhz": 990,
+        "rec_freq_mhz": 990,
         "is_safe": true,
-        "p_violate": 0.0017,
-        "rho_phase": 0.1727,
-        "rho_total": 0.2245,
-        "latency_ms": 102.7,
-        "power_per_gpu_w": 198.7,
-        "total_power_w": 198.7,
-        "p99_ttft_ms": 108.3,
+        "p_violate": 0.0472,
+        "rho_phase": 0.4907,
+        "rho_total": 0.6379,
+        "latency_ms": 165.4,
+        "power_per_gpu_w": 181.8,
+        "total_power_w": 181.8,
+        "p99_ttft_ms": 171.0,
         "p_saturated": 0.795763,
         "p_saturated_min": 0.766059,
         "p_saturated_max": 0.836816,
@@ -192,14 +191,14 @@
         ],
         "instance_count": 4,
         "effective_request_rate_per_instance": 8.0,
-        "p99_queue_plus_prefill_ms": 102.7,
+        "p99_queue_plus_prefill_ms": 165.4,
         "kv_transfer_ms": 5.574752,
         "dispatch_ms": 0.0,
         "ttft_components_ms": {
-          "queue_plus_prefill": 102.7,
+          "queue_plus_prefill": 165.4,
           "kv_transfer": 5.574752,
           "dispatch": 0.0,
-          "total": 108.3
+          "total": 171.0
         }
       },
       "decode": {
@@ -249,127 +248,15 @@
       },
       "latency_safe": true,
       "saturation_safe": false,
-      "is_safe": false,
-      "predicted_joint_latency_violation_probability": 0.147352,
+      "is_safe": true,
+      "predicted_joint_latency_violation_probability": 0.186214,
       "predicted_joint_saturation_probability": 0.994704,
-      "predicted_overload_violation_probability": 0.995485,
+      "predicted_overload_violation_probability": 0.186214,
       "predicted_ttft_excess_ratio": 0.0,
       "predicted_tpot_excess_ratio": 0.0,
       "predicted_max_slo_excess_ratio": 0.0,
-      "predicted_cluster_power_w": 1070.8,
-      "predicted_energy_per_request_j": 33.462
-    },
-    {
-      "prefill": {
-        "phase": "prefill",
-        "gpu_type": "l40s",
-        "node_group": "neptune",
-        "tp": 1,
-        "freq_mhz": 2010,
-        "rec_freq_mhz": 2010,
-        "is_safe": true,
-        "p_violate": 0.0017,
-        "rho_phase": 0.1627,
-        "rho_total": 0.2115,
-        "latency_ms": 104.8,
-        "power_per_gpu_w": 203.4,
-        "total_power_w": 203.4,
-        "p99_ttft_ms": 110.4,
-        "p_saturated": 0.795763,
-        "p_saturated_min": 0.766059,
-        "p_saturated_max": 0.836816,
-        "saturation_threshold": 0.3,
-        "saturation_safe": false,
-        "per_seed": [
-          {
-            "seed": 3,
-            "probability": 0.808307
-          },
-          {
-            "seed": 7,
-            "probability": 0.836816
-          },
-          {
-            "seed": 11,
-            "probability": 0.766059
-          },
-          {
-            "seed": 19,
-            "probability": 0.768969
-          },
-          {
-            "seed": 23,
-            "probability": 0.798666
-          }
-        ],
-        "instance_count": 4,
-        "effective_request_rate_per_instance": 8.0,
-        "p99_queue_plus_prefill_ms": 104.8,
-        "kv_transfer_ms": 5.574752,
-        "dispatch_ms": 0.0,
-        "ttft_components_ms": {
-          "queue_plus_prefill": 104.8,
-          "kv_transfer": 5.574752,
-          "dispatch": 0.0,
-          "total": 110.4
-        }
-      },
-      "decode": {
-        "phase": "decode",
-        "gpu_type": "l4",
-        "node_group": "ganymede",
-        "tp": 1,
-        "freq_mhz": 2040,
-        "rec_freq_mhz": 2040,
-        "is_safe": true,
-        "p_violate": 0.1459,
-        "rho_phase": 0.1685,
-        "rho_total": 0.73,
-        "latency_ms": 69.1,
-        "power_per_gpu_w": 69.0,
-        "total_power_w": 69.0,
-        "p99_tpot_ms": 69.1,
-        "p_saturated": 0.974071,
-        "p_saturated_min": 0.963664,
-        "p_saturated_max": 0.979832,
-        "saturation_threshold": 0.3,
-        "saturation_safe": false,
-        "per_seed": [
-          {
-            "seed": 3,
-            "probability": 0.963664
-          },
-          {
-            "seed": 7,
-            "probability": 0.977497
-          },
-          {
-            "seed": 11,
-            "probability": 0.971937
-          },
-          {
-            "seed": 19,
-            "probability": 0.979832
-          },
-          {
-            "seed": 23,
-            "probability": 0.977424
-          }
-        ],
-        "instance_count": 4,
-        "effective_request_rate_per_instance": 8.0
-      },
-      "latency_safe": true,
-      "saturation_safe": false,
-      "is_safe": false,
-      "predicted_joint_latency_violation_probability": 0.147352,
-      "predicted_joint_saturation_probability": 0.994704,
-      "predicted_overload_violation_probability": 0.995485,
-      "predicted_ttft_excess_ratio": 0.0,
-      "predicted_tpot_excess_ratio": 0.0,
-      "predicted_max_slo_excess_ratio": 0.0,
-      "predicted_cluster_power_w": 1089.6,
-      "predicted_energy_per_request_j": 34.05
+      "predicted_cluster_power_w": 1003.2,
+      "predicted_energy_per_request_j": 31.35
     },
     {
       "prefill": {
@@ -473,19 +360,131 @@
       },
       "latency_safe": true,
       "saturation_safe": false,
-      "is_safe": false,
+      "is_safe": true,
       "predicted_joint_latency_violation_probability": 0.149316,
       "predicted_joint_saturation_probability": 0.994704,
-      "predicted_overload_violation_probability": 0.995495,
+      "predicted_overload_violation_probability": 0.149316,
       "predicted_ttft_excess_ratio": 0.0,
       "predicted_tpot_excess_ratio": 0.0,
       "predicted_max_slo_excess_ratio": 0.0,
       "predicted_cluster_power_w": 1023.2,
       "predicted_energy_per_request_j": 31.975
+    },
+    {
+      "prefill": {
+        "phase": "prefill",
+        "gpu_type": "l40s",
+        "node_group": "neptune",
+        "tp": 1,
+        "freq_mhz": 1500,
+        "rec_freq_mhz": 1500,
+        "is_safe": true,
+        "p_violate": 0.004,
+        "rho_phase": 0.1837,
+        "rho_total": 0.2388,
+        "latency_ms": 101.3,
+        "power_per_gpu_w": 190.0,
+        "total_power_w": 190.0,
+        "p99_ttft_ms": 106.9,
+        "p_saturated": 0.795763,
+        "p_saturated_min": 0.766059,
+        "p_saturated_max": 0.836816,
+        "saturation_threshold": 0.3,
+        "saturation_safe": false,
+        "per_seed": [
+          {
+            "seed": 3,
+            "probability": 0.808307
+          },
+          {
+            "seed": 7,
+            "probability": 0.836816
+          },
+          {
+            "seed": 11,
+            "probability": 0.766059
+          },
+          {
+            "seed": 19,
+            "probability": 0.768969
+          },
+          {
+            "seed": 23,
+            "probability": 0.798666
+          }
+        ],
+        "instance_count": 4,
+        "effective_request_rate_per_instance": 8.0,
+        "p99_queue_plus_prefill_ms": 101.3,
+        "kv_transfer_ms": 5.574752,
+        "dispatch_ms": 0.0,
+        "ttft_components_ms": {
+          "queue_plus_prefill": 101.3,
+          "kv_transfer": 5.574752,
+          "dispatch": 0.0,
+          "total": 106.9
+        }
+      },
+      "decode": {
+        "phase": "decode",
+        "gpu_type": "l4",
+        "node_group": "ganymede",
+        "tp": 1,
+        "freq_mhz": 2040,
+        "rec_freq_mhz": 2040,
+        "is_safe": true,
+        "p_violate": 0.1459,
+        "rho_phase": 0.1685,
+        "rho_total": 0.73,
+        "latency_ms": 69.1,
+        "power_per_gpu_w": 69.0,
+        "total_power_w": 69.0,
+        "p99_tpot_ms": 69.1,
+        "p_saturated": 0.974071,
+        "p_saturated_min": 0.963664,
+        "p_saturated_max": 0.979832,
+        "saturation_threshold": 0.3,
+        "saturation_safe": false,
+        "per_seed": [
+          {
+            "seed": 3,
+            "probability": 0.963664
+          },
+          {
+            "seed": 7,
+            "probability": 0.977497
+          },
+          {
+            "seed": 11,
+            "probability": 0.971937
+          },
+          {
+            "seed": 19,
+            "probability": 0.979832
+          },
+          {
+            "seed": 23,
+            "probability": 0.977424
+          }
+        ],
+        "instance_count": 4,
+        "effective_request_rate_per_instance": 8.0
+      },
+      "latency_safe": true,
+      "saturation_safe": false,
+      "is_safe": true,
+      "predicted_joint_latency_violation_probability": 0.149316,
+      "predicted_joint_saturation_probability": 0.994704,
+      "predicted_overload_violation_probability": 0.149316,
+      "predicted_ttft_excess_ratio": 0.0,
+      "predicted_tpot_excess_ratio": 0.0,
+      "predicted_max_slo_excess_ratio": 0.0,
+      "predicted_cluster_power_w": 1036.0,
+      "predicted_energy_per_request_j": 32.375
     }
   ],
   "num_candidates": 100,
   "num_latency_safe": 8,
   "num_saturation_safe": 0,
-  "num_safe": 0
+  "num_safe": 8
 }
