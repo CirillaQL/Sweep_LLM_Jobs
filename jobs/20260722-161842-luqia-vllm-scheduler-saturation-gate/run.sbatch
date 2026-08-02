@@ -146,6 +146,7 @@ export CLOCK_ACK_TRANSPORT_OVERRIDE="$CLOCK_ACK_TRANSPORT"
 # Minerva may expose an SMT-adjusted value that conflicts with the requested
 # Slurm TRES when this batch script launches nested srun steps.
 unset SLURM_CPUS_PER_TASK
+unset SLURM_TRES_PER_TASK
 
 mkdir -p "$OUT_DIR" "$CLOCK_CONTROL_DIR"
 for lifecycle_path in \

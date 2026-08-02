@@ -16,7 +16,7 @@
 
 set -uo pipefail
 
-JOB_NAME="20260802-151213-luqia-vllm-kv-scheduler-autoscale-power"
+JOB_NAME="${JOB_NAME_OVERRIDE:-20260802-151213-luqia-vllm-kv-scheduler-autoscale-power}"
 BROKER_ROOT="/data/users/chjing/Sweep_LLM_Jobs_broker"
 SOURCE_JOB="${BROKER_ROOT}/jobs/20260722-161842-luqia-vllm-scheduler-saturation-gate"
 WORKLOAD_JOB="${BROKER_ROOT}/jobs/20260725-173829-luqia-vllm-kv-scheduler-smoke"
