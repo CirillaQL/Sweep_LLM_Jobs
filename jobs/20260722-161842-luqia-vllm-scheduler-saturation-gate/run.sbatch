@@ -73,6 +73,7 @@ SCALE_IN_ENABLED="${SCALE_IN_ENABLED_OVERRIDE:-true}"
 MAX_PREFILL_INSTANCES="${MAX_PREFILL_INSTANCES_OVERRIDE:-2}"
 MAX_DECODE_INSTANCES="${MAX_DECODE_INSTANCES_OVERRIDE:-2}"
 POWER_MONITOR_GPUS_PER_NODE="${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}"
+VLLM_STEP_MEM="${VLLM_STEP_MEM_OVERRIDE:-16G}"
 CURRENT_PREFILL_INSTANCES=1
 CURRENT_DECODE_INSTANCES=1
 
@@ -143,10 +144,18 @@ export GPU_CLOCK_CONTROL_MODE_OVERRIDE
 export CLOCK_ACK_MODE_OVERRIDE="$CLOCK_ACK_MODE"
 export CLOCK_ACK_TRANSPORT_OVERRIDE="$CLOCK_ACK_TRANSPORT"
 
-# Minerva may expose an SMT-adjusted value that conflicts with the requested
-# Slurm TRES when this batch script launches nested srun steps.
+# Batch-level defaults must not leak into nested steps. In particular, an
+# inherited --gpus-per-node allocation made each one-GPU vLLM step reserve all
+# GPUs on its node, leaving no GRES for scale-out.
 unset SLURM_CPUS_PER_TASK
 unset SLURM_TRES_PER_TASK
+unset SLURM_GPUS
+unset SLURM_GPUS_PER_NODE
+unset SLURM_GPUS_PER_SOCKET
+unset SLURM_GPUS_PER_TASK
+unset SLURM_MEM_PER_CPU
+unset SLURM_MEM_PER_GPU
+unset SLURM_MEM_PER_NODE
 
 mkdir -p "$OUT_DIR" "$CLOCK_CONTROL_DIR"
 for lifecycle_path in \
@@ -227,12 +236,12 @@ reset_gpu_clocks() {
   srun --kill-on-bad-exit=1 --exact --nodes=1 \
     --nodelist=neptune --ntasks="$CURRENT_PREFILL_INSTANCES" \
     --ntasks-per-node="$CURRENT_PREFILL_INSTANCES" --gpus-per-task=1 \
-    --cpus-per-task=8 "$NODE_SCRIPT" reset \
+    --cpus-per-task=8 --mem=4G "$NODE_SCRIPT" reset \
     >> "${OUT_DIR}/reset_step.log" 2>&1 || reset_rc=$?
   srun --kill-on-bad-exit=1 --exact --nodes=1 \
     --nodelist=ganymede --ntasks="$CURRENT_DECODE_INSTANCES" \
     --ntasks-per-node="$CURRENT_DECODE_INSTANCES" --gpus-per-task=1 \
-    --cpus-per-task=8 "$NODE_SCRIPT" reset \
+    --cpus-per-task=8 --mem=4G "$NODE_SCRIPT" reset \
     >> "${OUT_DIR}/reset_step.log" 2>&1 || reset_rc=$?
   cat "${OUT_DIR}/reset_step.log" 2>/dev/null || true
   echo "parent_reset_rc=${reset_rc}"
@@ -473,6 +482,7 @@ launch_scale_instance() {
   PD_CLOCK_KEY_OVERRIDE="$clock_key" \
     srun --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$node" \
       --ntasks=1 --ntasks-per-node=1 --gpus-per-task=1 --cpus-per-task=8 \
+      --mem="$VLLM_STEP_MEM" \
       "$NODE_SCRIPT" serve \
       >> "${OUT_DIR}/scale_${instance_id}_step.log" 2>&1 &
   local scale_pid=$!
@@ -886,7 +896,7 @@ fi
 
 section "100gbe_and_environment_preflight"
 srun --exact --nodes=2 --ntasks=2 --ntasks-per-node=1 --gpus-per-task=1 \
-  --cpus-per-task=8 "$NODE_SCRIPT" preflight 2>&1 | tee "${OUT_DIR}/preflight.log"
+  --cpus-per-task=8 --mem=4G "$NODE_SCRIPT" preflight 2>&1 | tee "${OUT_DIR}/preflight.log"
 PREFLIGHT_RC=${PIPESTATUS[0]}
 echo "preflight_rc=${PREFLIGHT_RC}"
 if [ "$PREFLIGHT_RC" -ne 0 ]; then
@@ -896,7 +906,7 @@ fi
 section "start_allocation_wide_gpu_power_monitor"
 srun --overlap --kill-on-bad-exit=1 --exact --nodes=2 --ntasks=2 \
   --ntasks-per-node=1 --gpus-per-task="$POWER_MONITOR_GPUS_PER_NODE" \
-  --cpus-per-task=1 \
+  --cpus-per-task=1 --mem=1G \
   "$PYTHON_BIN" -u "$POWER_MONITOR_SCRIPT" --output-dir "$OUT_DIR" \
   --expected-gpus "$POWER_MONITOR_GPUS_PER_NODE" \
   > "${OUT_DIR}/power_monitor.log" 2>&1 &
@@ -958,7 +968,7 @@ else
   RESET_REQUIRED=false
 fi
 srun --kill-on-bad-exit=1 --exact --nodes=2 --ntasks=2 --ntasks-per-node=1 \
-  --gpus-per-task=1 --cpus-per-task=8 \
+  --gpus-per-task=1 --cpus-per-task=8 --mem="$VLLM_STEP_MEM" \
   "$NODE_SCRIPT" serve > "${OUT_DIR}/server_step.log" 2>&1 &
 SERVER_STEP_PID=$!
 echo "server_step_pid=${SERVER_STEP_PID}"

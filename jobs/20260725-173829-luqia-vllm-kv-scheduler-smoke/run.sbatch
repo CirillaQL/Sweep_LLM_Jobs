@@ -8,7 +8,7 @@
 #SBATCH --ntasks-per-node=4
 #SBATCH --gpus-per-node=4
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=64G
+#SBATCH --mem=128G
 #SBATCH --exclusive
 #SBATCH --signal=B:TERM@90
 #SBATCH --output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260725-173829-luqia-vllm-kv-scheduler-smoke/slurm-%j.out
@@ -39,6 +39,7 @@ export SCALE_IN_ENABLED_OVERRIDE=true
 export MAX_PREFILL_INSTANCES_OVERRIDE=4
 export MAX_DECODE_INSTANCES_OVERRIDE=4
 export POWER_MONITOR_GPUS_PER_NODE_OVERRIDE=4
+export VLLM_STEP_MEM_OVERRIDE=24G
 export MAX_L4_FREQ_OVERRIDE=2040
 export MAX_L40S_FREQ_OVERRIDE=2520
 

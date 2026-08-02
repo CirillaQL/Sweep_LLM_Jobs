@@ -5,6 +5,11 @@ set -uo pipefail
 MODE="${1:-serve}"
 HOST=$(hostname -s)
 VISIBLE_GPUS="${CUDA_VISIBLE_DEVICES:-0}"
+IFS=',' read -r -a VISIBLE_GPU_ARRAY <<< "$VISIBLE_GPUS"
+if [ "${#VISIBLE_GPU_ARRAY[@]}" -ne 1 ]; then
+  echo "expected_one_visible_gpu=true mode=${MODE} visible_gpus=${VISIBLE_GPUS}"
+  exit 14
+fi
 GPU_ID="${VISIBLE_GPUS%%,*}"
 CLOCK_ACK_TOLERANCE_MHZ="${CLOCK_ACK_TOLERANCE_MHZ_OVERRIDE:-90}"
 GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
