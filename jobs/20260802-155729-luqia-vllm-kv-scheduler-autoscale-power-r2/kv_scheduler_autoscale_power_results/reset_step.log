@@ -34,3 +34,81 @@ reset_probe_departed_previous_target=true
 reset_command_final=sudo_nvidia_smi_rgc
 All done.
 reset_gpu_clock_verified=true verification=double_rgc_final_operation host=neptune gpu_id=0
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+host=ganymede node_group=ganymede role=decode instance_id=primary mode=reset
+scheduled_gpu=l4 scheduled_freq_mhz=360 gpu_id=0
+gpu_clock_control_mode=manual
+clock_ack_mode=monitor
+max_num_seqs=32
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+CUDA_VISIBLE_DEVICES=0
+host=ganymede node_group=ganymede role=decode instance_id=primary mode=reset
+scheduled_gpu=l4 scheduled_freq_mhz=360 gpu_id=1
+gpu_clock_control_mode=manual
+clock_ack_mode=monitor
+max_num_seqs=32
+node_ip=10.1.0.3 peer_ip=10.1.0.6 interface=eno12399np0
+CUDA_VISIBLE_DEVICES=1
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+eno12399np0      UP             10.1.0.3/16 fe80::632:1ff:fe4d:80/64 
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+10.1.0.6 dev eno12399np0 src 10.1.0.3 uid 10271 
+    cache 
+link_speed_mbps=100000
+link_speed_mbps=100000
+link_mtu=1500
+link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+1, NVIDIA L4, 23034 MiB, 595.71.05
+2, NVIDIA L4, 23034 MiB, 595.71.05
+3, NVIDIA L4, 23034 MiB, 595.71.05
+4, NVIDIA L4, 23034 MiB, 595.71.05
+5, NVIDIA L4, 23034 MiB, 595.71.05
+6, NVIDIA L4, 23034 MiB, 595.71.05
+7, NVIDIA L4, 23034 MiB, 595.71.05
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L4, 23034 MiB, 595.71.05
+1, NVIDIA L4, 23034 MiB, 595.71.05
+2, NVIDIA L4, 23034 MiB, 595.71.05
+3, NVIDIA L4, 23034 MiB, 595.71.05
+4, NVIDIA L4, 23034 MiB, 595.71.05
+5, NVIDIA L4, 23034 MiB, 595.71.05
+6, NVIDIA L4, 23034 MiB, 595.71.05
+7, NVIDIA L4, 23034 MiB, 595.71.05
+parent_reset_step=true host=ganymede gpu_id=0 rec_freq_mhz=360
+reset_command_initial=sudo_nvidia_smi_rgc
+parent_reset_step=true host=ganymede gpu_id=1 rec_freq_mhz=360
+reset_command_initial=sudo_nvidia_smi_rgc
+All done.
+All done.
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 2362,
+  "active_samples": 16,
+  "active_clock_min_mhz": 1200.0,
+  "active_clock_max_mhz": 1260.0,
+  "active_clock_mean_mhz": 1229.0625
+}
+{
+  "physical_gpu_id": 1,
+  "cuda_visible_devices": "1",
+  "iterations": 2378,
+  "active_samples": 16,
+  "active_clock_min_mhz": 1185.0,
+  "active_clock_max_mhz": 1275.0,
+  "active_clock_mean_mhz": 1236.5625
+}
+reset_probe_active_min_mhz=1200 reset_probe_active_max_mhz=1260 gpu_max_mhz=2040 previous_rec_freq_mhz=360
+reset_probe_departed_previous_target=true
+reset_command_final=sudo_nvidia_smi_rgc
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=ganymede gpu_id=0
+reset_probe_active_min_mhz=1185 reset_probe_active_max_mhz=1275 gpu_max_mhz=2040 previous_rec_freq_mhz=360
+reset_probe_departed_previous_target=true
+reset_command_final=sudo_nvidia_smi_rgc
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=ganymede gpu_id=1
