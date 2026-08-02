@@ -342,9 +342,12 @@ class PDPlacementScheduler:
     def recommend(self, il, ol, rate, slo_ttft, slo_tpot, tp=1,
                   policy="latency_plus_saturation", placement="auto",
                   overload_action="min-slo-violation",
-                  max_l4_freq=None, max_l40s_freq=None):
+                  max_l4_freq=None, max_l40s_freq=None,
+                  prefill_instances=1, decode_instances=1):
         if tp != 1:
-            raise ValueError("This job allocates one GPU per node, so TP must be 1")
+            raise ValueError("Each PD instance uses one GPU, so TP must be 1")
+        if prefill_instances < 1 or decode_instances < 1:
+            raise ValueError("PD instance counts must be positive")
         if slo_ttft not in self.common_slos or slo_tpot not in self.common_slos:
             raise ValueError(f"Cross-pool SLO must be one of {self.common_slos}")
 
@@ -358,6 +361,13 @@ class PDPlacementScheduler:
             self.dispatch_ms,
         )
         predictions = {}
+        phase_instances = {
+            "prefill": int(prefill_instances),
+            "decode": int(decode_instances),
+        }
+        phase_rates = {
+            phase: rate / count for phase, count in phase_instances.items()
+        }
         max_frequencies = {"l4": max_l4_freq, "l40s": max_l40s_freq}
         for gpu, pool in self.pools.items():
             frequencies = [
@@ -369,19 +379,27 @@ class PDPlacementScheduler:
                     f"No {gpu} frequencies remain under limit {max_frequencies[gpu]}"
                 )
             predictions[(gpu, "prefill")] = [
-                pool.predict("prefill", il, ol, tp, freq, rate, slo_ttft)
+                pool.predict(
+                    "prefill", il, ol, tp, freq, phase_rates["prefill"], slo_ttft
+                )
                 for freq in frequencies
             ]
             predictions[(gpu, "decode")] = [
-                pool.predict("decode", il, ol, tp, freq, rate, slo_tpot)
+                pool.predict(
+                    "decode", il, ol, tp, freq, phase_rates["decode"], slo_tpot
+                )
                 for freq in frequencies
             ]
             for phase in ("prefill", "decode"):
                 for prediction in predictions[(gpu, phase)]:
                     saturation = self.saturation.predict(
-                        gpu, il, ol, tp, prediction["freq_mhz"], rate
+                        gpu, il, ol, tp, prediction["freq_mhz"], phase_rates[phase]
                     )
                     prediction.update(saturation)
+                    prediction["instance_count"] = phase_instances[phase]
+                    prediction["effective_request_rate_per_instance"] = round(
+                        phase_rates[phase], 6
+                    )
                     if phase == "prefill":
                         queue_plus_prefill_ms = prediction["p99_ttft_ms"]
                         prediction["p99_queue_plus_prefill_ms"] = queue_plus_prefill_ms
@@ -416,7 +434,10 @@ class PDPlacementScheduler:
             for prefill, decode in itertools.product(
                 predictions[(prefill_gpu, "prefill")], predictions[(decode_gpu, "decode")]
             ):
-                cluster_power = prefill["total_power_w"] + decode["total_power_w"]
+                cluster_power = (
+                    prefill["total_power_w"] * prefill_instances
+                    + decode["total_power_w"] * decode_instances
+                )
                 latency_safe = (
                     prefill["is_safe"]
                     and decode["is_safe"]
@@ -494,6 +515,10 @@ class PDPlacementScheduler:
                     "policy": policy,
                     "placement": placement,
                     "workload": {"il": il, "ol": ol, "rate": rate},
+                    "instances": {
+                        "prefill": prefill_instances,
+                        "decode": decode_instances,
+                    },
                     "slos": {"ttft_ms": slo_ttft, "tpot_ms": slo_tpot},
                     "kv_transfer_model": kv_transfer,
                     "saturation_threshold": self.saturation.threshold,
@@ -508,6 +533,10 @@ class PDPlacementScheduler:
                 "policy": policy,
                 "placement": placement,
                 "workload": {"il": il, "ol": ol, "rate": rate},
+                "instances": {
+                    "prefill": prefill_instances,
+                    "decode": decode_instances,
+                },
                 "slos": {"ttft_ms": slo_ttft, "tpot_ms": slo_tpot},
                 "kv_transfer_model": kv_transfer,
                 "saturation_threshold": self.saturation.threshold,
@@ -521,6 +550,10 @@ class PDPlacementScheduler:
             "policy": policy,
             "placement": placement,
             "workload": {"il": il, "ol": ol, "rate": rate},
+            "instances": {
+                "prefill": prefill_instances,
+                "decode": decode_instances,
+            },
             "slos": {"ttft_ms": slo_ttft, "tpot_ms": slo_tpot},
             "kv_transfer_model": kv_transfer,
             "saturation_threshold": self.saturation.threshold,
@@ -556,6 +589,8 @@ def main():
                         default="min-slo-violation")
     parser.add_argument("--max-l4-freq", type=int)
     parser.add_argument("--max-l40s-freq", type=int)
+    parser.add_argument("--prefill-instances", type=int, default=1)
+    parser.add_argument("--decode-instances", type=int, default=1)
     parser.add_argument("--il", type=int, required=True)
     parser.add_argument("--ol", type=int, required=True)
     parser.add_argument("--rate", type=float, required=True)
@@ -580,6 +615,7 @@ def main():
         args.il, args.ol, args.rate, args.slo_ttft, args.slo_tpot, args.tp,
         args.policy, args.placement, args.overload_action,
         args.max_l4_freq, args.max_l40s_freq,
+        args.prefill_instances, args.decode_instances,
     )
     payload = json.dumps(result, indent=2)
     if args.output:

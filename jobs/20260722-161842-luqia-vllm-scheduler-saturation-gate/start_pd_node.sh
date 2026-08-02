@@ -10,6 +10,7 @@ CLOCK_ACK_TOLERANCE_MHZ="${CLOCK_ACK_TOLERANCE_MHZ_OVERRIDE:-90}"
 GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
 CLOCK_ACK_MODE="${CLOCK_ACK_MODE_OVERRIDE:-monitor}"
 MAX_NUM_SEQS="${MAX_NUM_SEQS_OVERRIDE:-32}"
+INSTANCE_ID="${PD_INSTANCE_ID_OVERRIDE:-primary}"
 
 case "$MAX_NUM_SEQS" in
   ''|*[!0-9]*|0)
@@ -43,13 +44,24 @@ case "$HOST" in
     ;;
 esac
 
-PLACEMENT_VALUES=$("$PYTHON_BIN" - "$PLACEMENT_FILE" "$NODE_GROUP" <<'PY'
+PLACEMENT_VALUES=$("$PYTHON_BIN" - "$PLACEMENT_FILE" "$NODE_GROUP" "${PD_ROLE_OVERRIDE:-}" <<'PY'
 import json
 import sys
 
 placement = json.load(open(sys.argv[1], encoding="utf-8"))
 node_group = sys.argv[2]
+role_override = sys.argv[3]
 recommended = placement["recommended"]
+if role_override:
+    if role_override not in {"prefill", "decode"}:
+        raise SystemExit(f"unsupported role override: {role_override}")
+    spec = recommended[role_override]
+    print(
+        role_override,
+        int(spec.get("rec_freq_mhz", spec["freq_mhz"])),
+        spec["gpu_type"],
+    )
+    raise SystemExit(0)
 for role in ("prefill", "decode"):
     spec = recommended[role]
     if spec["node_group"] == node_group:
@@ -64,13 +76,13 @@ read -r ROLE TARGET_FREQ EXPECTED_GPU <<< "$PLACEMENT_VALUES"
 case "$ROLE" in
   prefill)
     PEER_IP="$DECODE_IP"
-    HTTP_PORT="$PREFILL_HTTP_PORT"
+    HTTP_PORT="${PD_HTTP_PORT_OVERRIDE:-$PREFILL_HTTP_PORT}"
     KV_ROLE=kv_producer
     KV_BUFFER_SIZE=1e1
     ;;
   decode)
     PEER_IP="$PREFILL_IP"
-    HTTP_PORT="$DECODE_HTTP_PORT"
+    HTTP_PORT="${PD_HTTP_PORT_OVERRIDE:-$DECODE_HTTP_PORT}"
     KV_ROLE=kv_consumer
     KV_BUFFER_SIZE=8e9
     ;;
@@ -79,8 +91,14 @@ case "$ROLE" in
     exit 12
     ;;
 esac
+INSTANCE_SUFFIX=""
+if [ "$INSTANCE_ID" != primary ]; then
+  INSTANCE_SUFFIX="_${INSTANCE_ID}"
+fi
+CLOCK_KEY="${PD_CLOCK_KEY_OVERRIDE:-$NODE_GROUP}"
+INSTANCE_KV_PORT="${PD_KV_PORT_OVERRIDE:-$KV_PORT}"
 
-echo "host=${HOST} node_group=${NODE_GROUP} role=${ROLE} mode=${MODE}"
+echo "host=${HOST} node_group=${NODE_GROUP} role=${ROLE} instance_id=${INSTANCE_ID} mode=${MODE}"
 echo "scheduled_gpu=${EXPECTED_GPU} scheduled_freq_mhz=${TARGET_FREQ} gpu_id=${GPU_ID}"
 echo "gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
 echo "clock_ack_mode=${CLOCK_ACK_MODE}"
@@ -94,6 +112,7 @@ echo "link_mtu=$(cat "/sys/class/net/${IFACE}/mtu" 2>/dev/null || echo unknown)"
 nvidia-smi --query-gpu=index,name,memory.total,driver_version --format=csv 2>&1 || true
 
 GPU_NAME=$(nvidia-smi -i "$GPU_ID" --query-gpu=name --format=csv,noheader 2>/dev/null || true)
+GPU_UUID=$(nvidia-smi -i "$GPU_ID" --query-gpu=uuid --format=csv,noheader 2>/dev/null | head -n 1 | tr -d ' ' || true)
 case "$EXPECTED_GPU:$GPU_NAME" in
   l4:*L4*|l40s:*L40S*) ;;
   *)
@@ -110,7 +129,7 @@ if [ "$MODE" = reset ]; then
     exit 15
   fi
   MAX_FREQ=$(nvidia-smi -i "$GPU_ID" --query-gpu=clocks.max.graphics --format=csv,noheader,nounits | head -n 1 | tr -d ' ')
-  RESET_PROBE_FILE="${OUT_DIR}/reset_${HOST}_probe.json"
+  RESET_PROBE_FILE="${OUT_DIR}/reset_${HOST}_gpu_${GPU_ID}_probe.json"
   RESET_PROBE_RC=0
   CUDA_VISIBLE_DEVICES="$GPU_ID" "$PYTHON_BIN" "$CLOCK_PROBE" \
     --smi-index "$GPU_ID" --seconds 5 --output "$RESET_PROBE_FILE" || RESET_PROBE_RC=$?
@@ -162,7 +181,7 @@ fi
 export VLLM_HOST_IP="$NODE_IP"
 export NCCL_DEBUG=INFO
 export NCCL_DEBUG_SUBSYS=INIT,NET
-export NCCL_DEBUG_FILE="${OUT_DIR}/nccl-${ROLE}-${HOST}-%p.log"
+export NCCL_DEBUG_FILE="${OUT_DIR}/nccl-${ROLE}-${HOST}${INSTANCE_SUFFIX}-%p.log"
 export NCCL_SOCKET_IFNAME="$IFACE"
 export GLOO_SOCKET_IFNAME="$IFACE"
 export NCCL_SOCKET_FAMILY=AF_INET
@@ -170,9 +189,9 @@ export NCCL_IB_DISABLE=1
 export NCCL_NET=Socket
 export TORCH_DISTRIBUTED_DEBUG=DETAIL
 
-KV_CONFIG="{\"kv_connector\":\"P2pNcclConnector\",\"kv_role\":\"${KV_ROLE}\",\"kv_buffer_size\":\"${KV_BUFFER_SIZE}\",\"kv_port\":\"${KV_PORT}\",\"kv_connector_extra_config\":{\"proxy_ip\":\"${PROXY_IP}\",\"proxy_port\":\"${PROXY_REGISTER_PORT}\",\"http_port\":\"${HTTP_PORT}\",\"send_type\":\"PUT_ASYNC\",\"nccl_num_channels\":\"16\"}}"
-SERVER_LOG="${OUT_DIR}/${ROLE}_server.log"
-TELEMETRY_FILE="${OUT_DIR}/${ROLE}_${HOST}_telemetry.csv"
+KV_CONFIG="{\"kv_connector\":\"P2pNcclConnector\",\"kv_role\":\"${KV_ROLE}\",\"kv_buffer_size\":\"${KV_BUFFER_SIZE}\",\"kv_port\":\"${INSTANCE_KV_PORT}\",\"kv_connector_extra_config\":{\"proxy_ip\":\"${PROXY_IP}\",\"proxy_port\":\"${PROXY_REGISTER_PORT}\",\"http_port\":\"${HTTP_PORT}\",\"send_type\":\"PUT_ASYNC\",\"nccl_num_channels\":\"16\"}}"
+SERVER_LOG="${OUT_DIR}/${ROLE}${INSTANCE_SUFFIX}_server.log"
+TELEMETRY_FILE="${OUT_DIR}/${ROLE}_${HOST}${INSTANCE_SUFFIX}_telemetry.csv"
 SERVER_PID=""
 MONITOR_PID=""
 CLOCK_CONTROLLER_PID=""
@@ -206,25 +225,25 @@ trap 'exit 130' INT
 trap 'exit 143' TERM
 
 monitor() {
-  echo "unix_ts,workload_seq,target_freq_mhz,rx_bytes,tx_bytes,gpu_util_pct,gpu_power_w,gpu_sm_mhz,gpu_memory_used_mib,gpu_mem_util_pct,gpu_power_limit_w,gpu_mem_clock_mhz,gpu_temperature_c,gpu_memory_total_mib,gpu_pstate" > "$TELEMETRY_FILE"
+  echo "unix_ts,host,role,instance_id,gpu_id,gpu_uuid,workload_seq,target_freq_mhz,rx_bytes,tx_bytes,gpu_util_pct,gpu_power_w,gpu_sm_mhz,gpu_memory_used_mib,gpu_mem_util_pct,gpu_power_limit_w,gpu_mem_clock_mhz,gpu_temperature_c,gpu_memory_total_mib,gpu_pstate" >> "$TELEMETRY_FILE"
   while true; do
     unix_ts=$(date +%s.%N)
     workload_seq=0
     target_freq="$TARGET_FREQ"
-    if [ -s "${CLOCK_CONTROL_DIR}/${NODE_GROUP}.request" ]; then
-      read -r workload_seq target_freq < "${CLOCK_CONTROL_DIR}/${NODE_GROUP}.request" || true
+    if [ -s "${CLOCK_CONTROL_DIR}/${CLOCK_KEY}.request" ]; then
+      read -r workload_seq target_freq < "${CLOCK_CONTROL_DIR}/${CLOCK_KEY}.request" || true
     fi
     rx=$(cat "/sys/class/net/${IFACE}/statistics/rx_bytes" 2>/dev/null || echo NA)
     tx=$(cat "/sys/class/net/${IFACE}/statistics/tx_bytes" 2>/dev/null || echo NA)
     gpu=$(nvidia-smi -i "$GPU_ID" --query-gpu=utilization.gpu,power.draw,clocks.sm,memory.used,utilization.memory,power.limit,clocks.mem,temperature.gpu,memory.total,pstate --format=csv,noheader,nounits 2>/dev/null | head -n 1 || true)
-    echo "${unix_ts},${workload_seq},${target_freq},${rx},${tx},${gpu:-NA,NA,NA,NA,NA,NA,NA,NA,NA,NA}" >> "$TELEMETRY_FILE"
+    echo "${unix_ts},${HOST},${ROLE},${INSTANCE_ID},${GPU_ID},${GPU_UUID:-NA},${workload_seq},${target_freq},${rx},${tx},${gpu:-NA,NA,NA,NA,NA,NA,NA,NA,NA,NA}" >> "$TELEMETRY_FILE"
     sleep 0.5
   done
 }
 
 clock_controller() {
-  local request_file="${CLOCK_CONTROL_DIR}/${NODE_GROUP}.request"
-  local ack_file="${CLOCK_CONTROL_DIR}/${NODE_GROUP}.ack"
+  local request_file="${CLOCK_CONTROL_DIR}/${CLOCK_KEY}.request"
+  local ack_file="${CLOCK_CONTROL_DIR}/${CLOCK_KEY}.ack"
   local last_seq=0
   while true; do
     if [ -s "$request_file" ]; then
@@ -283,7 +302,7 @@ PY
         ack_publish_rc=1
         ack_payload=$(
           printf '{"node_group":"%s","seq":%s,"target_mhz":%s,"rc":%s,"observed_mhz":"%s"}' \
-            "$NODE_GROUP" "$seq" "$target" "$rc" "$observed"
+            "$CLOCK_KEY" "$seq" "$target" "$rc" "$observed"
         )
         for ack_publish_attempt in 1 2 3; do
           if curl -fsS --connect-timeout 2 --max-time 5 \
@@ -320,7 +339,7 @@ else
 fi
 nvidia-smi -i "$GPU_ID" --query-gpu=index,name,clocks.current.graphics,clocks.max.graphics --format=csv 2>&1 || true
 
-echo "launch_vllm host=${HOST} role=${ROLE} ip=${NODE_IP} http_port=${HTTP_PORT} kv_port=${KV_PORT}"
+echo "launch_vllm host=${HOST} role=${ROLE} instance_id=${INSTANCE_ID} ip=${NODE_IP} http_port=${HTTP_PORT} kv_port=${INSTANCE_KV_PORT}"
 echo "NCCL_NET=${NCCL_NET} NCCL_IB_DISABLE=${NCCL_IB_DISABLE} NCCL_SOCKET_IFNAME=${NCCL_SOCKET_IFNAME}"
 echo "kv_transfer_config=${KV_CONFIG}"
 
@@ -335,7 +354,7 @@ echo "kv_transfer_config=${KV_CONFIG}"
   --max-num-seqs "$MAX_NUM_SEQS" \
   --gpu-memory-utilization 0.82 \
   --kv-transfer-config "$KV_CONFIG" \
-  > "$SERVER_LOG" 2>&1 &
+  >> "$SERVER_LOG" 2>&1 &
 SERVER_PID=$!
 monitor &
 MONITOR_PID=$!

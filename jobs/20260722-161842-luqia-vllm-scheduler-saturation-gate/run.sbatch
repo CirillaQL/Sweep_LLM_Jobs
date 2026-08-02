@@ -29,12 +29,14 @@ MODEL_BUNDLE="${SOURCE_JOB_DIR}/model_bundle.json"
 SATURATION_BUNDLE="${SOURCE_JOB_DIR}/saturation_bundle.json"
 WORKLOAD_FILE="${WORKLOAD_FILE_OVERRIDE:-${SOURCE_JOB_DIR}/workloads.csv}"
 ENERGY_SUMMARY_SCRIPT="${SOURCE_JOB_DIR}/energy_summary.py"
+POWER_MONITOR_SCRIPT="${SOURCE_JOB_DIR}/monitor_gpu_power.py"
 LIVE_SUMMARY_SCRIPT="${SOURCE_JOB_DIR}/summarize_live_results.py"
 COMPARE_SCRIPT="${SOURCE_JOB_DIR}/compare_gate_results.py"
 REFERENCE_COMPARISON="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-122040-luqia-vllm-pd-baseline-energy-r1/baseline_results/comparison.json"
 PLACEMENT_FILE="${OUT_DIR}/active_placement.json"
 CLOCK_CONTROL_DIR="${OUT_DIR}/clock_control"
 MODEL="mistralai/Mistral-7B-v0.1"
+JOB_TIME_LIMIT_LABEL="${JOB_TIME_LIMIT_LABEL_OVERRIDE:-00:28:00}"
 
 SLO_TTFT_MS=500
 SLO_TPOT_MS=200
@@ -66,6 +68,13 @@ KV_NUM_HEADS="${KV_NUM_HEADS_OVERRIDE:-8}"
 KV_HEAD_DIM="${KV_HEAD_DIM_OVERRIDE:-128}"
 KV_BYTES_PER_ELEMENT="${KV_BYTES_PER_ELEMENT_OVERRIDE:-2}"
 DISPATCH_MS="${DISPATCH_MS_OVERRIDE:-0}"
+SATURATION_ACTION="${SATURATION_ACTION_OVERRIDE:-frequency}"
+SCALE_IN_ENABLED="${SCALE_IN_ENABLED_OVERRIDE:-true}"
+MAX_PREFILL_INSTANCES="${MAX_PREFILL_INSTANCES_OVERRIDE:-2}"
+MAX_DECODE_INSTANCES="${MAX_DECODE_INSTANCES_OVERRIDE:-2}"
+POWER_MONITOR_GPUS_PER_NODE="${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}"
+CURRENT_PREFILL_INSTANCES=1
+CURRENT_DECODE_INSTANCES=1
 
 case "$CLOCK_ACK_TRANSPORT" in
   http|file|http_with_file_fallback) ;;
@@ -74,6 +83,35 @@ case "$CLOCK_ACK_TRANSPORT" in
     exit 26
     ;;
 esac
+case "$SATURATION_ACTION" in
+  frequency|scale_out) ;;
+  *)
+    echo "unsupported_saturation_action=${SATURATION_ACTION}"
+    exit 27
+    ;;
+esac
+case "$SCALE_IN_ENABLED" in
+  true|false) ;;
+  *)
+    echo "invalid_scale_in_enabled=${SCALE_IN_ENABLED}"
+    exit 27
+    ;;
+esac
+for count in "$MAX_PREFILL_INSTANCES" "$MAX_DECODE_INSTANCES" \
+  "$POWER_MONITOR_GPUS_PER_NODE"; do
+  case "$count" in
+    ''|*[!0-9]*|0)
+      echo "invalid_max_instance_count=${count:-unset}"
+      exit 27
+      ;;
+  esac
+done
+if [ "$SATURATION_ACTION" = scale_out ] && \
+  { [ "$POWER_MONITOR_GPUS_PER_NODE" -lt "$MAX_PREFILL_INSTANCES" ] || \
+    [ "$POWER_MONITOR_GPUS_PER_NODE" -lt "$MAX_DECODE_INSTANCES" ]; }; then
+  echo "power_monitor_gpu_count_too_small=${POWER_MONITOR_GPUS_PER_NODE} max_prefill_instances=${MAX_PREFILL_INSTANCES} max_decode_instances=${MAX_DECODE_INSTANCES}"
+  exit 27
+fi
 
 if [ -f "${JOB_DIR}/CANCEL_BEFORE_RUN" ]; then
   echo "cancel_before_run=true job_dir=${JOB_DIR}"
@@ -110,6 +148,15 @@ export CLOCK_ACK_TRANSPORT_OVERRIDE="$CLOCK_ACK_TRANSPORT"
 unset SLURM_CPUS_PER_TASK
 
 mkdir -p "$OUT_DIR" "$CLOCK_CONTROL_DIR"
+for lifecycle_path in \
+  "${OUT_DIR}"/*_telemetry.csv \
+  "${OUT_DIR}"/allocation_*_power.csv \
+  "${OUT_DIR}"/*_server.log \
+  "${OUT_DIR}"/scale_*_step.log; do
+  if [ -e "$lifecycle_path" ]; then
+    : > "$lifecycle_path"
+  fi
+done
 : > "${CLOCK_CONTROL_DIR}/neptune.ack"
 : > "${CLOCK_CONTROL_DIR}/ganymede.ack"
 echo "unix_ts,event,seq,workload_id,policy" > "${OUT_DIR}/events.csv"
@@ -117,6 +164,8 @@ ulimit -n 65536
 
 PROXY_PID=""
 SERVER_STEP_PID=""
+POWER_MONITOR_PID=""
+SCALE_STEP_PIDS=()
 FINAL_RC=0
 RESET_REQUIRED=false
 RESET_DONE=false
@@ -124,19 +173,40 @@ BENCH_FAILURES=0
 GATE_ADMITTED=0
 GATE_REJECTED=0
 OVERLOAD_FALLBACKS=0
+SCALE_OUT_EVENTS=0
+SCALE_IN_EVENTS=0
 
 section() {
   echo
   echo "===== $1 ====="
 }
 
+stop_scale_instances() {
+  local pid
+  for pid in "${SCALE_STEP_PIDS[@]}"; do
+    if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+      echo "stopping_scale_step_pid=${pid}"
+      kill "$pid" 2>/dev/null || true
+      wait "$pid" 2>/dev/null || true
+    fi
+  done
+  SCALE_STEP_PIDS=()
+}
+
 stop_components() {
+  stop_scale_instances
   if [ -n "$SERVER_STEP_PID" ] && kill -0 "$SERVER_STEP_PID" 2>/dev/null; then
     echo "stopping_server_step_pid=${SERVER_STEP_PID}"
     kill "$SERVER_STEP_PID" 2>/dev/null || true
     wait "$SERVER_STEP_PID" 2>/dev/null || true
   fi
   SERVER_STEP_PID=""
+  if [ -n "$POWER_MONITOR_PID" ] && kill -0 "$POWER_MONITOR_PID" 2>/dev/null; then
+    echo "stopping_power_monitor_pid=${POWER_MONITOR_PID}"
+    kill "$POWER_MONITOR_PID" 2>/dev/null || true
+    wait "$POWER_MONITOR_PID" 2>/dev/null || true
+  fi
+  POWER_MONITOR_PID=""
   if [ -n "$PROXY_PID" ] && kill -0 "$PROXY_PID" 2>/dev/null; then
     echo "stopping_proxy_pid=${PROXY_PID}"
     kill "$PROXY_PID" 2>/dev/null || true
@@ -151,9 +221,18 @@ reset_gpu_clocks() {
   fi
   section "parent_gpu_clock_reset"
   echo "reset_strategy=fresh_srun_after_server_step"
-  srun --kill-on-bad-exit=1 --nodes=2 --ntasks=2 --ntasks-per-node=1 \
-    "$NODE_SCRIPT" reset > "${OUT_DIR}/reset_step.log" 2>&1
-  local reset_rc=$?
+  : > "${OUT_DIR}/reset_step.log"
+  local reset_rc=0
+  srun --kill-on-bad-exit=1 --exact --nodes=1 \
+    --nodelist=neptune --ntasks="$CURRENT_PREFILL_INSTANCES" \
+    --ntasks-per-node="$CURRENT_PREFILL_INSTANCES" --gpus-per-task=1 \
+    --cpus-per-task=8 "$NODE_SCRIPT" reset \
+    >> "${OUT_DIR}/reset_step.log" 2>&1 || reset_rc=$?
+  srun --kill-on-bad-exit=1 --exact --nodes=1 \
+    --nodelist=ganymede --ntasks="$CURRENT_DECODE_INSTANCES" \
+    --ntasks-per-node="$CURRENT_DECODE_INSTANCES" --gpus-per-task=1 \
+    --cpus-per-task=8 "$NODE_SCRIPT" reset \
+    >> "${OUT_DIR}/reset_step.log" 2>&1 || reset_rc=$?
   cat "${OUT_DIR}/reset_step.log" 2>/dev/null || true
   echo "parent_reset_rc=${reset_rc}"
   if [ "$reset_rc" -ne 0 ]; then
@@ -243,6 +322,7 @@ schedule_one() {
   local il="$3"
   local ol="$4"
   local rate="$5"
+  local track_counts="${6:-true}"
   local latency_decision="${OUT_DIR}/decision_latency_${seq}_${workload_id}.json"
   local gate_decision="${OUT_DIR}/decision_gate_${seq}_${workload_id}.json"
   local active_decision="${OUT_DIR}/decision_active_${seq}_${workload_id}.json"
@@ -253,6 +333,8 @@ schedule_one() {
     --kv-head-dim "$KV_HEAD_DIM"
     --kv-bytes-per-element "$KV_BYTES_PER_ELEMENT"
     --dispatch-ms "$DISPATCH_MS"
+    --prefill-instances "$CURRENT_PREFILL_INSTANCES"
+    --decode-instances "$CURRENT_DECODE_INSTANCES"
   )
   if [ -n "$KV_EFFECTIVE_BANDWIDTH_GBPS" ]; then
     kv_args+=(--kv-effective-bandwidth-gbps "$KV_EFFECTIVE_BANDWIDTH_GBPS")
@@ -308,16 +390,22 @@ schedule_one() {
   esac
   cp "$active_source" "$active_decision"
   if [ "$active_rc" -eq 2 ]; then
-    GATE_REJECTED=$((GATE_REJECTED + 1))
+    if [ "$track_counts" = true ]; then
+      GATE_REJECTED=$((GATE_REJECTED + 1))
+    fi
     echo "active_policy_no_admit seq=${seq} id=${workload_id} policy=${ACTIVE_SCHEDULER_POLICY}"
     return 2
   fi
 
-  GATE_ADMITTED=$((GATE_ADMITTED + 1))
+  if [ "$track_counts" = true ]; then
+    GATE_ADMITTED=$((GATE_ADMITTED + 1))
+  fi
   local active_status overload_probability values
   read -r active_status overload_probability <<< "$(decision_status "$active_decision")"
   if [ "$active_status" = OVERLOAD_FALLBACK ]; then
-    OVERLOAD_FALLBACKS=$((OVERLOAD_FALLBACKS + 1))
+    if [ "$track_counts" = true ]; then
+      OVERLOAD_FALLBACKS=$((OVERLOAD_FALLBACKS + 1))
+    fi
     echo "overload_fallback_selected seq=${seq} id=${workload_id} policy=${ACTIVE_SCHEDULER_POLICY} predicted_violation_probability=${overload_probability}"
   elif [ "$active_status" != OK ]; then
     echo "unexpected_active_status seq=${seq} id=${workload_id} status=${active_status}"
@@ -339,15 +427,301 @@ schedule_one() {
   return 0
 }
 
+decision_scale_signal() {
+  "$PYTHON_BIN" - "$1" <<'PY'
+import json
+import sys
+
+result = json.load(open(sys.argv[1], encoding="utf-8"))
+recommended = result.get("recommended", {})
+prefill = recommended.get("prefill", {})
+decode = recommended.get("decode", {})
+print(
+    int(prefill.get("saturation_safe") is False),
+    int(decode.get("saturation_safe") is False),
+    prefill.get("p_saturated", "NA"),
+    decode.get("p_saturated", "NA"),
+)
+PY
+}
+
+launch_scale_instance() {
+  local role="$1"
+  local ordinal="$2"
+  local node http_port kv_port clock_key instance_id
+  if [ "$role" = prefill ]; then
+    node=neptune
+    http_port=$((PREFILL_HTTP_PORT + ordinal - 1))
+    kv_port=$((KV_PORT + ordinal - 1))
+  else
+    node=ganymede
+    http_port=$((DECODE_HTTP_PORT + ordinal - 1))
+    kv_port=$((KV_PORT + ordinal - 1))
+  fi
+  instance_id="${role}-${ordinal}"
+  clock_key="${node}-${instance_id}"
+  : > "${CLOCK_CONTROL_DIR}/${clock_key}.ack"
+  echo "scale_out_launch role=${role} ordinal=${ordinal} node=${node} http_port=${http_port} kv_port=${kv_port} clock_key=${clock_key}"
+  printf '\n===== scale_launch time=%s role=%s ordinal=%s =====\n' \
+    "$(date --iso-8601=seconds)" "$role" "$ordinal" \
+    >> "${OUT_DIR}/scale_${instance_id}_step.log"
+  PD_ROLE_OVERRIDE="$role" \
+  PD_INSTANCE_ID_OVERRIDE="$instance_id" \
+  PD_HTTP_PORT_OVERRIDE="$http_port" \
+  PD_KV_PORT_OVERRIDE="$kv_port" \
+  PD_CLOCK_KEY_OVERRIDE="$clock_key" \
+    srun --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$node" \
+      --ntasks=1 --ntasks-per-node=1 --gpus-per-task=1 --cpus-per-task=8 \
+      "$NODE_SCRIPT" serve \
+      >> "${OUT_DIR}/scale_${instance_id}_step.log" 2>&1 &
+  local scale_pid=$!
+  SCALE_STEP_PIDS+=("$scale_pid")
+  echo "scale_out_step_pid role=${role} ordinal=${ordinal} pid=${scale_pid}"
+}
+
+wait_for_registry_counts() {
+  local expected_prefill="$1"
+  local expected_decode="$2"
+  local seq="$3"
+  local registry_file="${OUT_DIR}/registry_scale_${seq}.json"
+  local elapsed=0
+  while [ "$elapsed" -lt 600 ]; do
+    curl -fsS "http://${PROXY_IP}:${PROXY_HTTP_PORT}/registry" \
+      > "$registry_file" 2>/dev/null || true
+    if "$PYTHON_BIN" - "$registry_file" "$expected_prefill" "$expected_decode" <<'PY'
+import json
+import sys
+
+try:
+    data = json.load(open(sys.argv[1], encoding="utf-8"))
+except Exception:
+    raise SystemExit(1)
+ready = (
+    len(data.get("prefill", [])) >= int(sys.argv[2])
+    and len(data.get("decode", [])) >= int(sys.argv[3])
+)
+raise SystemExit(0 if ready else 1)
+PY
+    then
+      echo "scale_out_registry_ready seq=${seq} prefill=${expected_prefill} decode=${expected_decode} elapsed_s=${elapsed}"
+      return 0
+    fi
+    local pid
+    for pid in "${SCALE_STEP_PIDS[@]}"; do
+      if ! kill -0 "$pid" 2>/dev/null; then
+        echo "scale_out_step_died pid=${pid} seq=${seq}"
+        return 1
+      fi
+    done
+    sleep 5
+    elapsed=$((elapsed + 5))
+    echo "waiting_scale_out_registry seq=${seq} elapsed_s=${elapsed} expected_prefill=${expected_prefill} expected_decode=${expected_decode}"
+  done
+  echo "scale_out_registry_timeout seq=${seq}"
+  return 1
+}
+
+decision_is_safe() {
+  "$PYTHON_BIN" - "$1" <<'PY'
+import json
+import sys
+
+result = json.load(open(sys.argv[1], encoding="utf-8"))
+recommended = result.get("recommended", {})
+print(str(
+    result.get("status") == "OK" and recommended.get("is_safe") is True
+).lower())
+PY
+}
+
+wait_for_registry_exact() {
+  local expected_prefill="$1"
+  local expected_decode="$2"
+  local seq="$3"
+  local registry_file="${OUT_DIR}/registry_scale_in_${seq}.json"
+  local elapsed=0
+  while [ "$elapsed" -lt 60 ]; do
+    curl -fsS "http://${PROXY_IP}:${PROXY_HTTP_PORT}/registry" \
+      > "$registry_file" 2>/dev/null || true
+    if "$PYTHON_BIN" - "$registry_file" "$expected_prefill" "$expected_decode" <<'PY'
+import json
+import sys
+
+try:
+    data = json.load(open(sys.argv[1], encoding="utf-8"))
+except Exception:
+    raise SystemExit(1)
+ready = (
+    len(data.get("prefill", [])) == int(sys.argv[2])
+    and len(data.get("decode", [])) == int(sys.argv[3])
+)
+raise SystemExit(0 if ready else 1)
+PY
+    then
+      echo "scale_in_registry_ready seq=${seq} prefill=${expected_prefill} decode=${expected_decode} elapsed_s=${elapsed}"
+      return 0
+    fi
+    sleep 2
+    elapsed=$((elapsed + 2))
+    echo "waiting_scale_in_registry seq=${seq} elapsed_s=${elapsed} expected_prefill=${expected_prefill} expected_decode=${expected_decode}"
+  done
+  echo "scale_in_registry_timeout seq=${seq}"
+  return 1
+}
+
+maybe_scale_in() {
+  local seq="$1"
+  local workload_id="$2"
+  local il="$3"
+  local ol="$4"
+  local rate="$5"
+  if [ "$SCHEDULER_ENABLED" != true ] || \
+    [ "$SATURATION_ACTION" != scale_out ] || \
+    [ "$SCALE_IN_ENABLED" != true ] || \
+    [ "$ACTIVE_SCHEDULER_POLICY" != latency_plus_saturation ] || \
+    { [ "$CURRENT_PREFILL_INSTANCES" -eq 1 ] && \
+      [ "$CURRENT_DECODE_INSTANCES" -eq 1 ]; }; then
+    return 0
+  fi
+
+  local old_prefill="$CURRENT_PREFILL_INSTANCES"
+  local old_decode="$CURRENT_DECODE_INSTANCES"
+  local probe_decision="${OUT_DIR}/decision_scale_in_probe_${seq}_${workload_id}.json"
+  echo "scale_in_probe seq=${seq} id=${workload_id} current_prefill=${old_prefill} current_decode=${old_decode} target_prefill=1 target_decode=1"
+  CURRENT_PREFILL_INSTANCES=1
+  CURRENT_DECODE_INSTANCES=1
+  schedule_one "$seq" "$workload_id" "$il" "$ol" "$rate" false
+  local probe_rc=$?
+  if [ -s "${OUT_DIR}/decision_active_${seq}_${workload_id}.json" ]; then
+    cp "${OUT_DIR}/decision_active_${seq}_${workload_id}.json" "$probe_decision"
+  fi
+  CURRENT_PREFILL_INSTANCES="$old_prefill"
+  CURRENT_DECODE_INSTANCES="$old_decode"
+  if [ "$probe_rc" -ne 0 ]; then
+    echo "scale_in_probe_failed seq=${seq} rc=${probe_rc}"
+    return "$probe_rc"
+  fi
+
+  local probe_safe
+  probe_safe=$(decision_is_safe "$probe_decision")
+  if [ "$probe_safe" != true ]; then
+    echo "scale_in_retain seq=${seq} prefill_instances=${old_prefill} decode_instances=${old_decode} reason=single_instance_not_safe"
+    return 0
+  fi
+
+  echo "scale_in_trigger seq=${seq} id=${workload_id} prefill_instances=${old_prefill}->1 decode_instances=${old_decode}->1 action=stop_extra_vllm_instances"
+  stop_scale_instances
+  CURRENT_PREFILL_INSTANCES=1
+  CURRENT_DECODE_INSTANCES=1
+  if ! wait_for_registry_exact 1 1 "$seq"; then
+    return 32
+  fi
+  SCALE_IN_EVENTS=$((SCALE_IN_EVENTS + 1))
+  echo "scale_in_complete seq=${seq} prefill_instances=1 decode_instances=1"
+  return 0
+}
+
+maybe_scale_out() {
+  local seq="$1"
+  local workload_id="$2"
+  local il="$3"
+  local ol="$4"
+  local rate="$5"
+  local decision="$6"
+  if [ "$SCHEDULER_ENABLED" != true ] || \
+    [ "$SATURATION_ACTION" != scale_out ] || \
+    [ "$ACTIVE_SCHEDULER_POLICY" != latency_plus_saturation ]; then
+    return 0
+  fi
+
+  local scale_prefill scale_decode prefill_probability decode_probability
+  read -r scale_prefill scale_decode prefill_probability decode_probability \
+    <<< "$(decision_scale_signal "$decision")"
+  local old_prefill="$CURRENT_PREFILL_INSTANCES"
+  local old_decode="$CURRENT_DECODE_INSTANCES"
+  if [ "$scale_prefill" -eq 0 ] && [ "$scale_decode" -eq 0 ]; then
+    return 0
+  fi
+
+  echo "scale_out_trigger seq=${seq} id=${workload_id} prefill_p_saturated=${prefill_probability} decode_p_saturated=${decode_probability} prefill_instances=${old_prefill} decode_instances=${old_decode}"
+  cp "$decision" "${OUT_DIR}/decision_pre_scale_${seq}_${workload_id}.json"
+  local changed scaled_schedule_rc
+  while [ "$scale_prefill" -eq 1 ] || [ "$scale_decode" -eq 1 ]; do
+    changed=false
+    if [ "$scale_prefill" -eq 1 ] && \
+      [ "$CURRENT_PREFILL_INSTANCES" -lt "$MAX_PREFILL_INSTANCES" ]; then
+      CURRENT_PREFILL_INSTANCES=$((CURRENT_PREFILL_INSTANCES + 1))
+      changed=true
+    fi
+    if [ "$scale_decode" -eq 1 ] && \
+      [ "$CURRENT_DECODE_INSTANCES" -lt "$MAX_DECODE_INSTANCES" ]; then
+      CURRENT_DECODE_INSTANCES=$((CURRENT_DECODE_INSTANCES + 1))
+      changed=true
+    fi
+    if [ "$changed" != true ]; then
+      break
+    fi
+    echo "scale_out_plan seq=${seq} prefill_instances=${CURRENT_PREFILL_INSTANCES} decode_instances=${CURRENT_DECODE_INSTANCES}"
+    schedule_one "$seq" "$workload_id" "$il" "$ol" "$rate" false
+    scaled_schedule_rc=$?
+    if [ "$scaled_schedule_rc" -ne 0 ]; then
+      CURRENT_PREFILL_INSTANCES="$old_prefill"
+      CURRENT_DECODE_INSTANCES="$old_decode"
+      echo "scale_out_reschedule_failed seq=${seq} rc=${scaled_schedule_rc}"
+      return "$scaled_schedule_rc"
+    fi
+    decision="${OUT_DIR}/decision_active_${seq}_${workload_id}.json"
+    read -r scale_prefill scale_decode prefill_probability decode_probability \
+      <<< "$(decision_scale_signal "$decision")"
+  done
+  if [ "$old_prefill" -eq "$CURRENT_PREFILL_INSTANCES" ] && \
+    [ "$old_decode" -eq "$CURRENT_DECODE_INSTANCES" ]; then
+    echo "scale_out_capacity_exhausted prefill_instances=${CURRENT_PREFILL_INSTANCES} decode_instances=${CURRENT_DECODE_INSTANCES} prefill_p_saturated=${prefill_probability} decode_p_saturated=${decode_probability}"
+    return 0
+  fi
+  if [ "$scale_prefill" -eq 1 ] || [ "$scale_decode" -eq 1 ]; then
+    echo "scale_out_capacity_exhausted prefill_instances=${CURRENT_PREFILL_INSTANCES} decode_instances=${CURRENT_DECODE_INSTANCES} prefill_p_saturated=${prefill_probability} decode_p_saturated=${decode_probability}"
+  fi
+  cp "${OUT_DIR}/decision_active_${seq}_${workload_id}.json" "$PLACEMENT_FILE"
+
+  local ordinal
+  for ((ordinal = old_prefill + 1; ordinal <= CURRENT_PREFILL_INSTANCES; ordinal++)); do
+    launch_scale_instance prefill "$ordinal"
+  done
+  for ((ordinal = old_decode + 1; ordinal <= CURRENT_DECODE_INSTANCES; ordinal++)); do
+    launch_scale_instance decode "$ordinal"
+  done
+  if ! wait_for_registry_counts \
+    "$CURRENT_PREFILL_INSTANCES" "$CURRENT_DECODE_INSTANCES" "$seq"; then
+    return 31
+  fi
+  SCALE_OUT_EVENTS=$((SCALE_OUT_EVENTS + 1))
+  echo "scale_out_complete seq=${seq} prefill_instances=${CURRENT_PREFILL_INSTANCES} decode_instances=${CURRENT_DECODE_INSTANCES}"
+  return 0
+}
+
 write_clock_request() {
   local seq="$1"
   local neptune_freq="$2"
   local ganymede_freq="$3"
-  printf '%s %s\n' "$seq" "$neptune_freq" > "${CLOCK_CONTROL_DIR}/neptune.request.tmp"
-  mv "${CLOCK_CONTROL_DIR}/neptune.request.tmp" "${CLOCK_CONTROL_DIR}/neptune.request"
-  printf '%s %s\n' "$seq" "$ganymede_freq" > "${CLOCK_CONTROL_DIR}/ganymede.request.tmp"
-  mv "${CLOCK_CONTROL_DIR}/ganymede.request.tmp" "${CLOCK_CONTROL_DIR}/ganymede.request"
-  echo "clock_request seq=${seq} neptune_mhz=${neptune_freq} ganymede_mhz=${ganymede_freq}"
+  local ordinal key
+  for ((ordinal = 1; ordinal <= CURRENT_PREFILL_INSTANCES; ordinal++)); do
+    key=neptune
+    if [ "$ordinal" -gt 1 ]; then
+      key="neptune-prefill-${ordinal}"
+    fi
+    printf '%s %s\n' "$seq" "$neptune_freq" > "${CLOCK_CONTROL_DIR}/${key}.request.tmp"
+    mv "${CLOCK_CONTROL_DIR}/${key}.request.tmp" "${CLOCK_CONTROL_DIR}/${key}.request"
+  done
+  for ((ordinal = 1; ordinal <= CURRENT_DECODE_INSTANCES; ordinal++)); do
+    key=ganymede
+    if [ "$ordinal" -gt 1 ]; then
+      key="ganymede-decode-${ordinal}"
+    fi
+    printf '%s %s\n' "$seq" "$ganymede_freq" > "${CLOCK_CONTROL_DIR}/${key}.request.tmp"
+    mv "${CLOCK_CONTROL_DIR}/${key}.request.tmp" "${CLOCK_CONTROL_DIR}/${key}.request"
+  done
+  echo "clock_request seq=${seq} neptune_mhz=${neptune_freq} neptune_instances=${CURRENT_PREFILL_INSTANCES} ganymede_mhz=${ganymede_freq} ganymede_instances=${CURRENT_DECODE_INSTANCES}"
 }
 
 wait_clock_ack() {
@@ -412,6 +786,7 @@ echo "saturation_model=five_seed_mean_local_retrained_75"
 echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
 echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
+echo "saturation_action=${SATURATION_ACTION} scale_in_enabled=${SCALE_IN_ENABLED} max_prefill_instances=${MAX_PREFILL_INSTANCES} max_decode_instances=${MAX_DECODE_INSTANCES}"
 echo "kv_effective_bandwidth_gbps=${KV_EFFECTIVE_BANDWIDTH_GBPS:-disabled} kv_num_layers=${KV_NUM_LAYERS} kv_num_heads=${KV_NUM_HEADS} kv_head_dim=${KV_HEAD_DIM} kv_bytes_per_element=${KV_BYTES_PER_ELEMENT} dispatch_ms=${DISPATCH_MS}"
 echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION} clock_ack_mode=${CLOCK_ACK_MODE} clock_ack_transport=${CLOCK_ACK_TRANSPORT}"
 echo "scheduler_enabled=${SCHEDULER_ENABLED} active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE} policy_label=${POLICY_LABEL}"
@@ -480,7 +855,7 @@ echo "time=$(date --iso-8601=seconds)"
 echo "batch_host=$(hostname -s)"
 echo "SLURM_JOB_ID=${SLURM_JOB_ID:-unset}"
 echo "SLURM_JOB_NODELIST=${SLURM_JOB_NODELIST:-unset}"
-echo "model=${MODEL} workload_count=${WORKLOAD_COUNT} slurm_time_limit=00:28:00"
+echo "model=${MODEL} workload_count=${WORKLOAD_COUNT} slurm_time_limit=${JOB_TIME_LIMIT_LABEL}"
 scontrol show hostnames "${SLURM_JOB_NODELIST:-}" 2>&1 || true
 scontrol show job "${SLURM_JOB_ID:-}" 2>&1 || true
 
@@ -493,7 +868,7 @@ if [ ! -x "$PYTHON_BIN" ] || [ ! -x "$VLLM_BIN" ]; then
   exit 3
 fi
 for required in "$MODEL_BUNDLE" "$SATURATION_BUNDLE" "$ENERGY_SUMMARY_SCRIPT" \
-  "$LIVE_SUMMARY_SCRIPT"; do
+  "$POWER_MONITOR_SCRIPT" "$LIVE_SUMMARY_SCRIPT"; do
   if [ ! -s "$required" ]; then
     echo "required_artifact_missing=${required}"
     exit 3
@@ -509,11 +884,59 @@ if [ "$RUN_REFERENCE_COMPARISON" = true ]; then
 fi
 
 section "100gbe_and_environment_preflight"
-srun --nodes=2 --ntasks=2 --ntasks-per-node=1 "$NODE_SCRIPT" preflight 2>&1 | tee "${OUT_DIR}/preflight.log"
+srun --exact --nodes=2 --ntasks=2 --ntasks-per-node=1 --gpus-per-task=1 \
+  --cpus-per-task=8 "$NODE_SCRIPT" preflight 2>&1 | tee "${OUT_DIR}/preflight.log"
 PREFLIGHT_RC=${PIPESTATUS[0]}
 echo "preflight_rc=${PREFLIGHT_RC}"
 if [ "$PREFLIGHT_RC" -ne 0 ]; then
   exit "$PREFLIGHT_RC"
+fi
+
+section "start_allocation_wide_gpu_power_monitor"
+srun --overlap --kill-on-bad-exit=1 --exact --nodes=2 --ntasks=2 \
+  --ntasks-per-node=1 --gpus-per-task="$POWER_MONITOR_GPUS_PER_NODE" \
+  --cpus-per-task=1 \
+  "$PYTHON_BIN" -u "$POWER_MONITOR_SCRIPT" --output-dir "$OUT_DIR" \
+  --expected-gpus "$POWER_MONITOR_GPUS_PER_NODE" \
+  > "${OUT_DIR}/power_monitor.log" 2>&1 &
+POWER_MONITOR_PID=$!
+echo "power_monitor_pid=${POWER_MONITOR_PID} gpus_per_node=${POWER_MONITOR_GPUS_PER_NODE}"
+POWER_MONITOR_READY=false
+for attempt in $(seq 1 30); do
+  if "$PYTHON_BIN" - "$OUT_DIR" "$POWER_MONITOR_GPUS_PER_NODE" <<'PY'
+import csv
+import glob
+import os
+import sys
+
+out_dir, expected_text = sys.argv[1:]
+expected = int(expected_text)
+paths = glob.glob(os.path.join(out_dir, "allocation_*_power.csv"))
+if len(paths) != 2:
+    raise SystemExit(1)
+for path in paths:
+    counts = {}
+    with open(path, newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            uuid = row.get("gpu_uuid", "")
+            if uuid:
+                counts[uuid] = counts.get(uuid, 0) + 1
+    if len(counts) != expected or min(counts.values(), default=0) < 2:
+        raise SystemExit(1)
+PY
+  then
+    POWER_MONITOR_READY=true
+    break
+  fi
+  if ! kill -0 "$POWER_MONITOR_PID" 2>/dev/null; then
+    break
+  fi
+  sleep 1
+done
+echo "power_monitor_ready=${POWER_MONITOR_READY}"
+if [ "$POWER_MONITOR_READY" != true ]; then
+  cat "${OUT_DIR}/power_monitor.log" 2>/dev/null || true
+  exit 28
 fi
 
 section "start_proxy"
@@ -533,7 +956,8 @@ if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
 else
   RESET_REQUIRED=false
 fi
-srun --kill-on-bad-exit=1 --nodes=2 --ntasks=2 --ntasks-per-node=1 \
+srun --kill-on-bad-exit=1 --exact --nodes=2 --ntasks=2 --ntasks-per-node=1 \
+  --gpus-per-task=1 --cpus-per-task=8 \
   "$NODE_SCRIPT" serve > "${OUT_DIR}/server_step.log" 2>&1 &
 SERVER_STEP_PID=$!
 echo "server_step_pid=${SERVER_STEP_PID}"
@@ -616,6 +1040,16 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
     description="$field5"
   fi
 
+  if [ "$SCHEDULER_ENABLED" = true ] && [ "$ONLINE_SCHEDULING" = true ]; then
+    maybe_scale_in "$SEQ" "$workload_id" "$il" "$ol" "$rate"
+    scale_in_rc=$?
+    if [ "$scale_in_rc" -ne 0 ]; then
+      FINAL_RC="$scale_in_rc"
+      echo "scale_in_failed seq=${SEQ} id=${workload_id} rc=${scale_in_rc}"
+      break
+    fi
+  fi
+
   if [ "$SCHEDULER_ENABLED" = true ] && [ "$ONLINE_SCHEDULING" = true ] && [ "$SEQ" -gt 1 ]; then
     section "online_scheduler_window_${SEQ}_${workload_id}"
     schedule_one "$SEQ" "$workload_id" "$il" "$ol" "$rate"
@@ -635,6 +1069,13 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   else
     placement="$FIXED_PLACEMENT_FILE"
   fi
+  maybe_scale_out "$SEQ" "$workload_id" "$il" "$ol" "$rate" "$placement"
+  scale_rc=$?
+  if [ "$scale_rc" -ne 0 ]; then
+    FINAL_RC="$scale_rc"
+    echo "scale_out_failed seq=${SEQ} id=${workload_id} rc=${scale_rc}"
+    break
+  fi
   if ! values=$(placement_values "$placement" 2>/dev/null); then
     section "workload_${SEQ}_${workload_id}_not_admitted"
     echo "saturation_gate_action=NO_ADMIT seq=${SEQ} id=${workload_id}"
@@ -649,17 +1090,34 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
     echo "recommendation neptune_prefill_mhz=${neptune_freq} ganymede_decode_mhz=${ganymede_freq} predicted_cluster_power_w=${predicted_power}"
     write_clock_request "$SEQ" "$neptune_freq" "$ganymede_freq"
-    if ! wait_clock_ack "$SEQ" neptune "$neptune_freq"; then
-      FINAL_RC=24
+    for ((ordinal = 1; ordinal <= CURRENT_PREFILL_INSTANCES; ordinal++)); do
+      clock_key=neptune
+      if [ "$ordinal" -gt 1 ]; then
+        clock_key="neptune-prefill-${ordinal}"
+      fi
+      if ! wait_clock_ack "$SEQ" "$clock_key" "$neptune_freq"; then
+        FINAL_RC=24
+        break
+      fi
+    done
+    if [ "$FINAL_RC" -ne 0 ]; then
       break
     fi
-    if ! wait_clock_ack "$SEQ" ganymede "$ganymede_freq"; then
-      FINAL_RC=25
+    for ((ordinal = 1; ordinal <= CURRENT_DECODE_INSTANCES; ordinal++)); do
+      clock_key=ganymede
+      if [ "$ordinal" -gt 1 ]; then
+        clock_key="ganymede-decode-${ordinal}"
+      fi
+      if ! wait_clock_ack "$SEQ" "$clock_key" "$ganymede_freq"; then
+        FINAL_RC=25
+        break
+      fi
+    done
+    if [ "$FINAL_RC" -ne 0 ]; then
       break
     fi
   else
-    printf '%s 0\n' "$SEQ" > "${CLOCK_CONTROL_DIR}/neptune.request"
-    printf '%s 0\n' "$SEQ" > "${CLOCK_CONTROL_DIR}/ganymede.request"
+    write_clock_request "$SEQ" 0 0
     echo "automatic_dvfs_window seq=${SEQ} manual_clock_commands=false"
   fi
 
@@ -726,6 +1184,14 @@ PY
     break
   fi
 done < "$WORKLOAD_FILE"
+
+if [ -n "$POWER_MONITOR_PID" ] && ! kill -0 "$POWER_MONITOR_PID" 2>/dev/null; then
+  echo "power_monitor_died_during_sweep=true pid=${POWER_MONITOR_PID}"
+  cat "${OUT_DIR}/power_monitor.log" 2>/dev/null || true
+  if [ "$FINAL_RC" -eq 0 ]; then
+    FINAL_RC=28
+  fi
+fi
 
 section "stop_servers_then_reset"
 stop_components
@@ -832,10 +1298,14 @@ section "result"
 echo "workload_count=${WORKLOAD_COUNT}"
 echo "gate_admitted=${GATE_ADMITTED} gate_rejected=${GATE_REJECTED}"
 echo "overload_fallbacks=${OVERLOAD_FALLBACKS}"
+echo "scale_out_events=${SCALE_OUT_EVENTS} scale_in_events=${SCALE_IN_EVENTS}"
 echo "bench_failures=${BENCH_FAILURES}"
 echo "parent_reset_verified=$([ "$RESET_REQUIRED" = true ] && echo "$RESET_DONE" || echo not_required)"
 echo "scheduler_enabled=${SCHEDULER_ENABLED}"
 echo "active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY}"
+echo "saturation_action=${SATURATION_ACTION}"
+echo "scale_in_enabled=${SCALE_IN_ENABLED}"
+echo "prefill_instances=${CURRENT_PREFILL_INSTANCES} decode_instances=${CURRENT_DECODE_INSTANCES}"
 echo "gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
 echo "job_exit_rc=${FINAL_RC}"
 exit "$FINAL_RC"

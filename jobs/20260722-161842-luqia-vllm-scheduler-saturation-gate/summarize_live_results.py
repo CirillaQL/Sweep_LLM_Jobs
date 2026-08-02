@@ -203,9 +203,17 @@ def main():
             prefill = recommended["prefill"]
             decode = recommended["decode"]
             kv_transfer = decision.get("kv_transfer_model", {})
+            instances = decision.get("instances", {})
             row.update({
                 "recommended_is_safe": recommended["is_safe"],
                 "prefill_gpu": prefill["gpu_type"],
+                "prefill_instances": instances.get(
+                    "prefill", prefill.get("instance_count", 1)
+                ),
+                "prefill_request_rate_per_instance_rps": prefill.get(
+                    "effective_request_rate_per_instance",
+                    row["configured_request_rate_rps"],
+                ),
                 "prefill_target_freq_mhz": prefill["freq_mhz"],
                 "prefill_predicted_p99_ttft_ms": prefill["p99_ttft_ms"],
                 "prefill_predicted_p99_queue_plus_prefill_ms": prefill.get(
@@ -220,6 +228,13 @@ def main():
                 ),
                 "prefill_predicted_p_saturated": prefill["p_saturated"],
                 "decode_gpu": decode["gpu_type"],
+                "decode_instances": instances.get(
+                    "decode", decode.get("instance_count", 1)
+                ),
+                "decode_request_rate_per_instance_rps": decode.get(
+                    "effective_request_rate_per_instance",
+                    row["configured_request_rate_rps"],
+                ),
                 "decode_target_freq_mhz": decode["freq_mhz"],
                 "decode_predicted_p99_tpot_ms": decode["p99_tpot_ms"],
                 "decode_predicted_p_saturated": decode["p_saturated"],
@@ -258,6 +273,11 @@ def main():
 
         energy_item = energy_by_id.get(workload_id, {})
         energy_summary = {
+            "gpu_stream_count": energy_item.get("gpu_stream_count"),
+            "covered_gpu_stream_count": energy_item.get("covered_gpu_stream_count"),
+            "min_gpu_coverage_ratio": energy_item.get("min_gpu_coverage_ratio"),
+            "neptune_energy_j": energy_item.get("host_energy_j", {}).get("neptune"),
+            "ganymede_energy_j": energy_item.get("host_energy_j", {}).get("ganymede"),
             "combined_energy_j": energy_item.get("combined_energy_j"),
             "combined_avg_power_w": energy_item.get("combined_avg_power_w"),
             "energy_per_request_j": energy_item.get("energy_per_request_j"),
@@ -275,6 +295,8 @@ def main():
             "throughput ratio includes arrival spacing and tail drain"
         ),
         "power_scope": energy["scope"],
+        "power_source": energy.get("power_source"),
+        "gpu_stream_count": energy.get("gpu_stream_count"),
         "workloads": results,
     }
     args.output_json.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")

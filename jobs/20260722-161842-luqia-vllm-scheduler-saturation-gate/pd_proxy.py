@@ -2,6 +2,7 @@
 """Minimal vLLM P2P-NCCL xPyD proxy, adapted from vLLM v0.15.1."""
 
 import os
+import re
 import socket
 import threading
 import time
@@ -114,6 +115,8 @@ async def registry(_: web.Request) -> web.Response:
         {
             "prefill": [item[0] for item in prefill],
             "decode": [item[0] for item in decode],
+            "prefill_count": len(prefill),
+            "decode_count": len(decode),
         }
     )
 
@@ -128,7 +131,7 @@ async def publish_clock_ack(request: web.Request) -> web.Response:
         observed_mhz = str(payload["observed_mhz"])
     except (KeyError, TypeError, ValueError):
         return web.json_response({"error": "invalid clock acknowledgement"}, status=400)
-    if node_group not in {"neptune", "ganymede"} or seq < 1:
+    if not re.fullmatch(r"[A-Za-z0-9_.-]{1,64}", node_group) or seq < 1:
         return web.json_response({"error": "invalid clock acknowledgement"}, status=400)
     ack = {
         "node_group": node_group,
