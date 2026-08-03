@@ -33,3 +33,11 @@ index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
 launch_vllm host=ganymede role=decode instance_id=decode-6 ip=10.1.0.3 http_port=33481 kv_port=34481
 NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=eno12399np0
 kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_consumer","kv_buffer_size":"8e9","kv_port":"34481","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31476","http_port":"33481","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
+dynamic_clock_apply host=ganymede seq=5 target_mhz=570
+GPU clocks set to "(gpuClkMin 570, gpuClkMax 570)" for GPU 00000000:B5:00.0
+
+Warning: persistence mode is disabled on device 00000000:B5:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+clock_runtime_verification host=ganymede seq=5 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260803-124215-luqia-vllm-kv-autoscale-warmup-8l4-r2/kv_scheduler_autoscale_warmup_8l4_results/decode_ganymede_decode-6_telemetry.csv
+clock_ack_transport host=ganymede seq=5 transport=http rc=0 attempts=1
+dynamic_clock_ack host=ganymede seq=5 target_mhz=570 rc=0 observed_mhz=570 verification_mode=monitor
