@@ -42,6 +42,7 @@ SLO_TTFT_MS=500
 SLO_TPOT_MS=200
 BENCH_WINDOW_SECONDS="${BENCH_WINDOW_SECONDS_OVERRIDE:-10}"
 BENCH_TIMEOUT_SECONDS="${BENCH_TIMEOUT_SECONDS_OVERRIDE:-180}"
+BENCH_NUM_WARMUPS="${BENCH_NUM_WARMUPS_OVERRIDE:-1}"
 WINDOW_WARMUP_SECONDS="${WINDOW_WARMUP_SECONDS_OVERRIDE:-0}"
 MIN_PROMPTS="${MIN_PROMPTS_OVERRIDE:-12}"
 MAX_PROMPTS="${MAX_PROMPTS_OVERRIDE:-120}"
@@ -70,7 +71,7 @@ KV_NUM_HEADS="${KV_NUM_HEADS_OVERRIDE:-8}"
 KV_HEAD_DIM="${KV_HEAD_DIM_OVERRIDE:-128}"
 KV_BYTES_PER_ELEMENT="${KV_BYTES_PER_ELEMENT_OVERRIDE:-2}"
 DISPATCH_MS="${DISPATCH_MS_OVERRIDE:-0}"
-SATURATION_ACTION="${SATURATION_ACTION_OVERRIDE:-frequency}"
+SATURATION_ACTION="${AUTOSCALE_ACTION_OVERRIDE:-${SATURATION_ACTION_OVERRIDE:-frequency}}"
 SCALE_IN_ENABLED="${SCALE_IN_ENABLED_OVERRIDE:-true}"
 MAX_PREFILL_INSTANCES="${MAX_PREFILL_INSTANCES_OVERRIDE:-2}"
 MAX_DECODE_INSTANCES="${MAX_DECODE_INSTANCES_OVERRIDE:-2}"
@@ -121,6 +122,12 @@ done
 case "$WINDOW_WARMUP_SECONDS" in
   ''|*[!0-9]*)
     echo "invalid_window_warmup_seconds=${WINDOW_WARMUP_SECONDS:-unset}"
+    exit 27
+    ;;
+esac
+case "$BENCH_NUM_WARMUPS" in
+  ''|*[!0-9]*)
+    echo "invalid_bench_num_warmups=${BENCH_NUM_WARMUPS:-unset}"
     exit 27
     ;;
 esac
@@ -416,17 +423,22 @@ schedule_one() {
     return 20
   fi
 
-  "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
-    --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
-    --policy latency_plus_saturation --placement "$SCHEDULER_PLACEMENT" \
-    --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" "${kv_args[@]}" \
-    --il "$il" --ol "$ol" --rate "$rate" \
-    --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
-    --output "$gate_decision" > "${OUT_DIR}/scheduler_gate_${seq}_${workload_id}.json"
-  local gate_rc=$?
-  if [ "$gate_rc" -ne 0 ] && [ "$gate_rc" -ne 2 ]; then
-    echo "saturation_gate_scheduler_failed seq=${seq} rc=${gate_rc}"
-    return 21
+  local gate_rc=0
+  if [ "$ACTIVE_SCHEDULER_POLICY" = latency_plus_saturation ]; then
+    "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
+      --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
+      --policy latency_plus_saturation --placement "$SCHEDULER_PLACEMENT" \
+      --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" "${kv_args[@]}" \
+      --il "$il" --ol "$ol" --rate "$rate" \
+      --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
+      --output "$gate_decision" > "${OUT_DIR}/scheduler_gate_${seq}_${workload_id}.json"
+    gate_rc=$?
+    if [ "$gate_rc" -ne 0 ] && [ "$gate_rc" -ne 2 ]; then
+      echo "saturation_gate_scheduler_failed seq=${seq} rc=${gate_rc}"
+      return 21
+    fi
+  else
+    echo "saturation_gate_skipped seq=${seq} id=${workload_id} active_policy=${ACTIVE_SCHEDULER_POLICY}"
   fi
 
   local active_source active_rc
@@ -484,19 +496,40 @@ schedule_one() {
 }
 
 decision_scale_signal() {
-  "$PYTHON_BIN" - "$1" <<'PY'
+  "$PYTHON_BIN" - "$1" "$ACTIVE_SCHEDULER_POLICY" "$SLO_TTFT_MS" "$SLO_TPOT_MS" <<'PY'
 import json
 import sys
 
 result = json.load(open(sys.argv[1], encoding="utf-8"))
+policy = sys.argv[2]
+slo_ttft_ms = float(sys.argv[3])
+slo_tpot_ms = float(sys.argv[4])
 recommended = result.get("recommended", {})
 prefill = recommended.get("prefill", {})
 decode = recommended.get("decode", {})
+if policy == "latency_only":
+    prefill_unsafe = (
+        prefill.get("is_safe") is not True
+        or float(prefill.get("p99_ttft_ms", float("inf"))) > slo_ttft_ms
+    )
+    decode_unsafe = (
+        decode.get("is_safe") is not True
+        or float(decode.get("p99_tpot_ms", float("inf"))) > slo_tpot_ms
+    )
+    prefill_signal = prefill.get("p_violate", "NA")
+    decode_signal = decode.get("p_violate", "NA")
+elif policy == "latency_plus_saturation":
+    prefill_unsafe = prefill.get("saturation_safe") is False
+    decode_unsafe = decode.get("saturation_safe") is False
+    prefill_signal = prefill.get("p_saturated", "NA")
+    decode_signal = decode.get("p_saturated", "NA")
+else:
+    raise SystemExit(f"unsupported scale signal policy: {policy}")
 print(
-    int(prefill.get("saturation_safe") is False),
-    int(decode.get("saturation_safe") is False),
-    prefill.get("p_saturated", "NA"),
-    decode.get("p_saturated", "NA"),
+    int(prefill_unsafe),
+    int(decode_unsafe),
+    prefill_signal,
+    decode_signal,
 )
 PY
 }
@@ -635,7 +668,6 @@ maybe_scale_in() {
   if [ "$SCHEDULER_ENABLED" != true ] || \
     [ "$SATURATION_ACTION" != scale_out ] || \
     [ "$SCALE_IN_ENABLED" != true ] || \
-    [ "$ACTIVE_SCHEDULER_POLICY" != latency_plus_saturation ] || \
     { [ "$CURRENT_PREFILL_INSTANCES" -eq 1 ] && \
       [ "$CURRENT_DECODE_INSTANCES" -eq 1 ]; }; then
     return 0
@@ -686,13 +718,12 @@ maybe_scale_out() {
   local rate="$5"
   local decision="$6"
   if [ "$SCHEDULER_ENABLED" != true ] || \
-    [ "$SATURATION_ACTION" != scale_out ] || \
-    [ "$ACTIVE_SCHEDULER_POLICY" != latency_plus_saturation ]; then
+    [ "$SATURATION_ACTION" != scale_out ]; then
     return 0
   fi
 
-  local scale_prefill scale_decode prefill_probability decode_probability
-  read -r scale_prefill scale_decode prefill_probability decode_probability \
+  local scale_prefill scale_decode prefill_signal_value decode_signal_value
+  read -r scale_prefill scale_decode prefill_signal_value decode_signal_value \
     <<< "$(decision_scale_signal "$decision")"
   local old_prefill="$CURRENT_PREFILL_INSTANCES"
   local old_decode="$CURRENT_DECODE_INSTANCES"
@@ -700,7 +731,7 @@ maybe_scale_out() {
     return 0
   fi
 
-  echo "scale_out_trigger seq=${seq} id=${workload_id} prefill_p_saturated=${prefill_probability} decode_p_saturated=${decode_probability} prefill_instances=${old_prefill} decode_instances=${old_decode}"
+  echo "scale_out_trigger seq=${seq} id=${workload_id} trigger_policy=${ACTIVE_SCHEDULER_POLICY} prefill_signal_value=${prefill_signal_value} decode_signal_value=${decode_signal_value} prefill_instances=${old_prefill} decode_instances=${old_decode}"
   cp "$decision" "${OUT_DIR}/decision_pre_scale_${seq}_${workload_id}.json"
   local changed scaled_schedule_rc
   while [ "$scale_prefill" -eq 1 ] || [ "$scale_decode" -eq 1 ]; do
@@ -728,16 +759,16 @@ maybe_scale_out() {
       return "$scaled_schedule_rc"
     fi
     decision="${OUT_DIR}/decision_active_${seq}_${workload_id}.json"
-    read -r scale_prefill scale_decode prefill_probability decode_probability \
+    read -r scale_prefill scale_decode prefill_signal_value decode_signal_value \
       <<< "$(decision_scale_signal "$decision")"
   done
   if [ "$old_prefill" -eq "$CURRENT_PREFILL_INSTANCES" ] && \
     [ "$old_decode" -eq "$CURRENT_DECODE_INSTANCES" ]; then
-    echo "scale_out_capacity_exhausted prefill_instances=${CURRENT_PREFILL_INSTANCES} decode_instances=${CURRENT_DECODE_INSTANCES} prefill_p_saturated=${prefill_probability} decode_p_saturated=${decode_probability}"
+    echo "scale_out_capacity_exhausted trigger_policy=${ACTIVE_SCHEDULER_POLICY} prefill_instances=${CURRENT_PREFILL_INSTANCES} decode_instances=${CURRENT_DECODE_INSTANCES} prefill_signal_value=${prefill_signal_value} decode_signal_value=${decode_signal_value}"
     return 0
   fi
   if [ "$scale_prefill" -eq 1 ] || [ "$scale_decode" -eq 1 ]; then
-    echo "scale_out_capacity_exhausted prefill_instances=${CURRENT_PREFILL_INSTANCES} decode_instances=${CURRENT_DECODE_INSTANCES} prefill_p_saturated=${prefill_probability} decode_p_saturated=${decode_probability}"
+    echo "scale_out_capacity_exhausted trigger_policy=${ACTIVE_SCHEDULER_POLICY} prefill_instances=${CURRENT_PREFILL_INSTANCES} decode_instances=${CURRENT_DECODE_INSTANCES} prefill_signal_value=${prefill_signal_value} decode_signal_value=${decode_signal_value}"
   fi
   cp "${OUT_DIR}/decision_active_${seq}_${workload_id}.json" "$PLACEMENT_FILE"
 
@@ -1230,7 +1261,7 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
       --result-filename "detailed_${SEQ}_${workload_id}.json"
     )
   fi
-  echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${window_seconds} timeout_s=${BENCH_TIMEOUT_SECONDS} max_concurrency=${MAX_CONCURRENCY} finite_rate_random_arrivals=true burstiness_applied=${VLLM_BURSTINESS_SUPPORTED} burstiness_value=${burstiness:-none} save_detailed=${BENCH_SAVE_DETAILED}"
+  echo "bench_config num_prompts=${NUM_PROMPTS} nominal_window_s=${window_seconds} timeout_s=${BENCH_TIMEOUT_SECONDS} num_warmups=${BENCH_NUM_WARMUPS} max_concurrency=${MAX_CONCURRENCY} finite_rate_random_arrivals=true burstiness_applied=${VLLM_BURSTINESS_SUPPORTED} burstiness_value=${burstiness:-none} save_detailed=${BENCH_SAVE_DETAILED}"
   START_TS=$(date +%s.%N)
   echo "${START_TS},workload_start,${SEQ},${workload_id},${POLICY_LABEL}" >> "${OUT_DIR}/events.csv"
   echo "energy_event unix_ts=${START_TS} event=workload_start seq=${SEQ} workload_id=${workload_id}"
@@ -1240,7 +1271,7 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
     "${BURSTINESS_ARGS[@]}" \
     "${DETAIL_ARGS[@]}" \
     --random-input-len "$il" --random-output-len "$ol" --max-concurrency "$MAX_CONCURRENCY" \
-    --num-warmups 1 --temperature 0 </dev/null > "$BENCH_FILE" 2>&1
+    --num-warmups "$BENCH_NUM_WARMUPS" --temperature 0 </dev/null > "$BENCH_FILE" 2>&1
   BENCH_RC=$?
   END_TS=$(date +%s.%N)
   echo "${END_TS},workload_end,${SEQ},${workload_id},${POLICY_LABEL}" >> "${OUT_DIR}/events.csv"
