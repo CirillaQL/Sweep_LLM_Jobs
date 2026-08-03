@@ -48,3 +48,91 @@ link_mtu=1500
 link_mtu=1500
 link_mtu=1500
 link_mtu=1500
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+index, name, memory.total [MiB], driver_version
+index, name, memory.total [MiB], driver_version
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+0, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+1, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+2, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+3, NVIDIA L40S, 46068 MiB, 595.71.05
+parent_reset_step=true host=neptune gpu_id=0 rec_freq_mhz=1755
+reset_command_initial=sudo_nvidia_smi_rgc
+parent_reset_step=true host=neptune gpu_id=1 rec_freq_mhz=1755
+reset_command_initial=sudo_nvidia_smi_rgc
+parent_reset_step=true host=neptune gpu_id=2 rec_freq_mhz=1755
+reset_command_initial=sudo_nvidia_smi_rgc
+parent_reset_step=true host=neptune gpu_id=3 rec_freq_mhz=1755
+reset_command_initial=sudo_nvidia_smi_rgc
+All done.
+All done.
+All done.
+All done.
+{
+  "physical_gpu_id": 1,
+  "cuda_visible_devices": "1",
+  "iterations": 8966,
+  "active_samples": 18,
+  "active_clock_min_mhz": 2160.0,
+  "active_clock_max_mhz": 2235.0,
+  "active_clock_mean_mhz": 2175.8333333333335
+}
+{
+  "physical_gpu_id": 0,
+  "cuda_visible_devices": "0",
+  "iterations": 9177,
+  "active_samples": 17,
+  "active_clock_min_mhz": 2205.0,
+  "active_clock_max_mhz": 2250.0,
+  "active_clock_mean_mhz": 2234.1176470588234
+}
+{
+  "physical_gpu_id": 3,
+  "cuda_visible_devices": "3",
+  "iterations": 9092,
+  "active_samples": 18,
+  "active_clock_min_mhz": 2160.0,
+  "active_clock_max_mhz": 2250.0,
+  "active_clock_mean_mhz": 2200.8333333333335
+}
+{
+  "physical_gpu_id": 2,
+  "cuda_visible_devices": "2",
+  "iterations": 9090,
+  "active_samples": 18,
+  "active_clock_min_mhz": 2190.0,
+  "active_clock_max_mhz": 2235.0,
+  "active_clock_mean_mhz": 2209.1666666666665
+}
+reset_probe_active_min_mhz=2160 reset_probe_active_max_mhz=2250 gpu_max_mhz=2520 previous_rec_freq_mhz=1755
+reset_probe_departed_previous_target=true
+reset_command_final=sudo_nvidia_smi_rgc
+reset_probe_active_min_mhz=2160 reset_probe_active_max_mhz=2235 gpu_max_mhz=2520 previous_rec_freq_mhz=1755
+reset_probe_departed_previous_target=true
+reset_command_final=sudo_nvidia_smi_rgc
+reset_probe_active_min_mhz=2205 reset_probe_active_max_mhz=2250 gpu_max_mhz=2520 previous_rec_freq_mhz=1755
+reset_probe_departed_previous_target=true
+reset_command_final=sudo_nvidia_smi_rgc
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=neptune gpu_id=3
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=neptune gpu_id=1
+reset_probe_active_min_mhz=2190 reset_probe_active_max_mhz=2235 gpu_max_mhz=2520 previous_rec_freq_mhz=1755
+reset_probe_departed_previous_target=true
+reset_command_final=sudo_nvidia_smi_rgc
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=neptune gpu_id=0
+All done.
+reset_gpu_clock_verified=true verification=double_rgc_final_operation host=neptune gpu_id=2
