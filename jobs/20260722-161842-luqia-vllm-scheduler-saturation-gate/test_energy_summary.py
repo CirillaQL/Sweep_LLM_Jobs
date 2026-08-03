@@ -2,6 +2,7 @@
 """Regression tests for allocation-wide multi-GPU energy accounting."""
 
 import csv
+import importlib.util
 import json
 import subprocess
 import sys
@@ -11,15 +12,16 @@ from pathlib import Path
 
 
 SCRIPT = Path(__file__).with_name("energy_summary.py")
+MONITOR_SCRIPT = Path(__file__).with_name("monitor_gpu_power.py")
 
 
 class MultiGpuEnergySummaryTest(unittest.TestCase):
-    def test_eight_gpu_streams_are_summed_once(self):
+    def test_twelve_gpu_streams_are_summed_once(self):
         with tempfile.TemporaryDirectory() as directory:
             out_dir = Path(directory)
             powers = {
                 "neptune": [100.0, 110.0, 120.0, 130.0],
-                "ganymede": [40.0, 50.0, 60.0, 70.0],
+                "ganymede": [40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0, 110.0],
             }
             for host, host_powers in powers.items():
                 with (out_dir / f"allocation_{host}_power.csv").open(
@@ -76,13 +78,22 @@ class MultiGpuEnergySummaryTest(unittest.TestCase):
             workload = result["workloads"][0]
 
             self.assertEqual(result["power_source"], "allocation_wide_multi_gpu_monitor")
-            self.assertEqual(result["gpu_stream_count"], 8)
-            self.assertEqual(workload["covered_gpu_stream_count"], 8)
+            self.assertEqual(result["gpu_stream_count"], 12)
+            self.assertEqual(workload["covered_gpu_stream_count"], 12)
             self.assertAlmostEqual(workload["min_gpu_coverage_ratio"], 1.0)
             self.assertAlmostEqual(workload["host_energy_j"]["neptune"], 4600.0)
-            self.assertAlmostEqual(workload["host_energy_j"]["ganymede"], 2200.0)
-            self.assertAlmostEqual(workload["combined_energy_j"], 6800.0)
-            self.assertAlmostEqual(workload["energy_per_request_j"], 680.0)
+            self.assertAlmostEqual(workload["host_energy_j"]["ganymede"], 6000.0)
+            self.assertAlmostEqual(workload["combined_energy_j"], 10600.0)
+            self.assertAlmostEqual(workload["energy_per_request_j"], 1060.0)
+
+    def test_asymmetric_host_gpu_counts_are_parsed(self):
+        spec = importlib.util.spec_from_file_location("monitor_gpu_power", MONITOR_SCRIPT)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(
+            module.parse_expected_host_gpus("ganymede=8,neptune=4"),
+            {"ganymede": 8, "neptune": 4},
+        )
 
 
 if __name__ == "__main__":

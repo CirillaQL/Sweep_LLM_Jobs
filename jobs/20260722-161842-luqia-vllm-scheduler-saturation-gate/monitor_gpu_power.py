@@ -19,6 +19,24 @@ def stop(_signum, _frame):
     RUNNING = False
 
 
+def parse_expected_host_gpus(value):
+    """Parse HOST=COUNT pairs used by asymmetric multi-node allocations."""
+    expected = {}
+    if not value:
+        return expected
+    for item in value.split(","):
+        try:
+            host, count_text = item.split("=", 1)
+            host = host.strip().split(".", 1)[0]
+            count = int(count_text)
+        except (TypeError, ValueError):
+            raise ValueError(f"invalid host GPU count: {item!r}") from None
+        if not host or count <= 0 or host in expected:
+            raise ValueError(f"invalid host GPU count: {item!r}")
+        expected[host] = count
+    return expected
+
+
 def query_gpus(visible_devices, expected_gpus):
     command = ["nvidia-smi"]
     if visible_devices:
@@ -57,17 +75,30 @@ def main():
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--interval", type=float, default=0.5)
     parser.add_argument("--expected-gpus", type=int)
+    parser.add_argument(
+        "--expected-host-gpus",
+        help="comma-separated host-specific counts, for example ganymede=8,neptune=4",
+    )
     args = parser.parse_args()
     if args.interval <= 0:
         parser.error("--interval must be positive")
+    try:
+        expected_by_host = parse_expected_host_gpus(args.expected_host_gpus)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     signal.signal(signal.SIGINT, stop)
     signal.signal(signal.SIGTERM, stop)
     host = socket.gethostname().split(".", 1)[0]
+    expected_gpus = expected_by_host.get(host, args.expected_gpus)
+    if expected_by_host and host not in expected_by_host:
+        parser.error(
+            f"host {host!r} is missing from --expected-host-gpus={args.expected_host_gpus!r}"
+        )
     visible_devices = os.environ.get("CUDA_VISIBLE_DEVICES", "").strip()
     print(
         f"power_monitor_start host={host} "
-        f"visible_devices={visible_devices or 'all'} expected_gpus={args.expected_gpus}",
+        f"visible_devices={visible_devices or 'all'} expected_gpus={expected_gpus}",
         flush=True,
     )
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -83,7 +114,7 @@ def main():
             unix_ts = time.time()
             try:
                 for gpu_index, gpu_uuid, power_w in query_gpus(
-                    visible_devices, args.expected_gpus
+                    visible_devices, expected_gpus
                 ):
                     writer.writerow([f"{unix_ts:.6f}", host, gpu_index, gpu_uuid, power_w])
             except Exception as exc:

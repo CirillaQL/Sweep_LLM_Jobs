@@ -42,6 +42,7 @@ SLO_TTFT_MS=500
 SLO_TPOT_MS=200
 BENCH_WINDOW_SECONDS="${BENCH_WINDOW_SECONDS_OVERRIDE:-10}"
 BENCH_TIMEOUT_SECONDS="${BENCH_TIMEOUT_SECONDS_OVERRIDE:-180}"
+WINDOW_WARMUP_SECONDS="${WINDOW_WARMUP_SECONDS_OVERRIDE:-0}"
 MIN_PROMPTS="${MIN_PROMPTS_OVERRIDE:-12}"
 MAX_PROMPTS="${MAX_PROMPTS_OVERRIDE:-120}"
 MAX_CONCURRENCY="${MAX_CONCURRENCY_OVERRIDE:-16}"
@@ -73,7 +74,9 @@ SATURATION_ACTION="${SATURATION_ACTION_OVERRIDE:-frequency}"
 SCALE_IN_ENABLED="${SCALE_IN_ENABLED_OVERRIDE:-true}"
 MAX_PREFILL_INSTANCES="${MAX_PREFILL_INSTANCES_OVERRIDE:-2}"
 MAX_DECODE_INSTANCES="${MAX_DECODE_INSTANCES_OVERRIDE:-2}"
-POWER_MONITOR_GPUS_PER_NODE="${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}"
+POWER_MONITOR_GANYMEDE_GPUS="${POWER_MONITOR_GANYMEDE_GPUS_OVERRIDE:-${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}}"
+POWER_MONITOR_NEPTUNE_GPUS="${POWER_MONITOR_NEPTUNE_GPUS_OVERRIDE:-${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}}"
+POWER_MONITOR_TOTAL_GPUS=$((POWER_MONITOR_GANYMEDE_GPUS + POWER_MONITOR_NEPTUNE_GPUS))
 VLLM_STEP_MEM="${VLLM_STEP_MEM_OVERRIDE:-16G}"
 CURRENT_PREFILL_INSTANCES=1
 CURRENT_DECODE_INSTANCES=1
@@ -107,7 +110,7 @@ case "$REQUIRE_ALL_WORKLOADS_EXECUTED" in
     ;;
 esac
 for count in "$MAX_PREFILL_INSTANCES" "$MAX_DECODE_INSTANCES" \
-  "$POWER_MONITOR_GPUS_PER_NODE"; do
+  "$POWER_MONITOR_GANYMEDE_GPUS" "$POWER_MONITOR_NEPTUNE_GPUS"; do
   case "$count" in
     ''|*[!0-9]*|0)
       echo "invalid_max_instance_count=${count:-unset}"
@@ -115,10 +118,16 @@ for count in "$MAX_PREFILL_INSTANCES" "$MAX_DECODE_INSTANCES" \
       ;;
   esac
 done
+case "$WINDOW_WARMUP_SECONDS" in
+  ''|*[!0-9]*)
+    echo "invalid_window_warmup_seconds=${WINDOW_WARMUP_SECONDS:-unset}"
+    exit 27
+    ;;
+esac
 if [ "$SATURATION_ACTION" = scale_out ] && \
-  { [ "$POWER_MONITOR_GPUS_PER_NODE" -lt "$MAX_PREFILL_INSTANCES" ] || \
-    [ "$POWER_MONITOR_GPUS_PER_NODE" -lt "$MAX_DECODE_INSTANCES" ]; }; then
-  echo "power_monitor_gpu_count_too_small=${POWER_MONITOR_GPUS_PER_NODE} max_prefill_instances=${MAX_PREFILL_INSTANCES} max_decode_instances=${MAX_DECODE_INSTANCES}"
+  { [ "$POWER_MONITOR_NEPTUNE_GPUS" -lt "$MAX_PREFILL_INSTANCES" ] || \
+    [ "$POWER_MONITOR_GANYMEDE_GPUS" -lt "$MAX_DECODE_INSTANCES" ]; }; then
+  echo "power_monitor_gpu_count_too_small ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} max_prefill_instances=${MAX_PREFILL_INSTANCES} max_decode_instances=${MAX_DECODE_INSTANCES}"
   exit 27
 fi
 
@@ -806,7 +815,8 @@ echo "saturation_model=five_seed_mean_local_retrained_75"
 echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
 echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
-echo "saturation_action=${SATURATION_ACTION} scale_in_enabled=${SCALE_IN_ENABLED} max_prefill_instances=${MAX_PREFILL_INSTANCES} max_decode_instances=${MAX_DECODE_INSTANCES}"
+echo "saturation_action=${SATURATION_ACTION} scale_in_enabled=${SCALE_IN_ENABLED} max_prefill_instances=${MAX_PREFILL_INSTANCES} max_decode_instances=${MAX_DECODE_INSTANCES} window_warmup_seconds=${WINDOW_WARMUP_SECONDS}"
+echo "power_monitor_ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} power_monitor_neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} power_monitor_total_gpus=${POWER_MONITOR_TOTAL_GPUS}"
 echo "kv_effective_bandwidth_gbps=${KV_EFFECTIVE_BANDWIDTH_GBPS:-disabled} kv_num_layers=${KV_NUM_LAYERS} kv_num_heads=${KV_NUM_HEADS} kv_head_dim=${KV_HEAD_DIM} kv_bytes_per_element=${KV_BYTES_PER_ELEMENT} dispatch_ms=${DISPATCH_MS}"
 echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION} clock_ack_mode=${CLOCK_ACK_MODE} clock_ack_transport=${CLOCK_ACK_TRANSPORT}"
 echo "scheduler_enabled=${SCHEDULER_ENABLED} active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE} policy_label=${POLICY_LABEL}"
@@ -914,35 +924,45 @@ fi
 
 section "start_allocation_wide_gpu_power_monitor"
 srun --overlap --kill-on-bad-exit=1 --exact --nodes=2 --ntasks=2 \
-  --ntasks-per-node=1 --gpus-per-task="$POWER_MONITOR_GPUS_PER_NODE" \
+  --ntasks-per-node=1 --gpus="$POWER_MONITOR_TOTAL_GPUS" \
   --cpus-per-task=1 --mem=1G \
   "$PYTHON_BIN" -u "$POWER_MONITOR_SCRIPT" --output-dir "$OUT_DIR" \
-  --expected-gpus "$POWER_MONITOR_GPUS_PER_NODE" \
+  --expected-host-gpus "ganymede=${POWER_MONITOR_GANYMEDE_GPUS},neptune=${POWER_MONITOR_NEPTUNE_GPUS}" \
   > "${OUT_DIR}/power_monitor.log" 2>&1 &
 POWER_MONITOR_PID=$!
-echo "power_monitor_pid=${POWER_MONITOR_PID} gpus_per_node=${POWER_MONITOR_GPUS_PER_NODE}"
+echo "power_monitor_pid=${POWER_MONITOR_PID} ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} total_gpus=${POWER_MONITOR_TOTAL_GPUS}"
 POWER_MONITOR_READY=false
 for attempt in $(seq 1 30); do
-  if "$PYTHON_BIN" - "$OUT_DIR" "$POWER_MONITOR_GPUS_PER_NODE" <<'PY'
+  if "$PYTHON_BIN" - "$OUT_DIR" "$POWER_MONITOR_GANYMEDE_GPUS" "$POWER_MONITOR_NEPTUNE_GPUS" <<'PY'
 import csv
 import glob
 import os
 import sys
 
-out_dir, expected_text = sys.argv[1:]
-expected = int(expected_text)
+out_dir, ganymede_text, neptune_text = sys.argv[1:]
+expected_by_host = {
+    "ganymede": int(ganymede_text),
+    "neptune": int(neptune_text),
+}
 paths = glob.glob(os.path.join(out_dir, "allocation_*_power.csv"))
 if len(paths) != 2:
     raise SystemExit(1)
+seen_hosts = set()
 for path in paths:
     counts = {}
+    host = ""
     with open(path, newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
+            host = row.get("host", "").split(".", 1)[0]
             uuid = row.get("gpu_uuid", "")
             if uuid:
                 counts[uuid] = counts.get(uuid, 0) + 1
-    if len(counts) != expected or min(counts.values(), default=0) < 2:
+    expected = expected_by_host.get(host)
+    if expected is None or len(counts) != expected or min(counts.values(), default=0) < 2:
         raise SystemExit(1)
+    seen_hosts.add(host)
+if seen_hosts != set(expected_by_host):
+    raise SystemExit(1)
 PY
   then
     POWER_MONITOR_READY=true
@@ -1105,7 +1125,7 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   read -r prefill_node neptune_freq decode_node ganymede_freq predicted_power <<< "$values"
 
   section "workload_${SEQ}_${workload_id}"
-  echo "workload_start time=$(date --iso-8601=seconds) seq=${SEQ} id=${workload_id} il=${il} ol=${ol} request_rate=${rate} window_seconds=${window_seconds} burstiness=${burstiness} description=${description}"
+  echo "workload_prepare time=$(date --iso-8601=seconds) seq=${SEQ} id=${workload_id} il=${il} ol=${ol} request_rate=${rate} window_seconds=${window_seconds} burstiness=${burstiness} description=${description}"
   echo "fixed_placement prefill_node=${prefill_node} decode_node=${decode_node} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
   if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
     echo "recommendation neptune_prefill_mhz=${neptune_freq} ganymede_decode_mhz=${ganymede_freq} predicted_cluster_power_w=${predicted_power}"
@@ -1139,6 +1159,16 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
   else
     write_clock_request "$SEQ" 0 0
     echo "automatic_dvfs_window seq=${SEQ} manual_clock_commands=false"
+  fi
+
+  if [ "$WINDOW_WARMUP_SECONDS" -gt 0 ]; then
+    WARMUP_START_TS=$(date +%s.%N)
+    echo "${WARMUP_START_TS},warmup_start,${SEQ},${workload_id},${POLICY_LABEL}" >> "${OUT_DIR}/events.csv"
+    echo "window_warmup_start time=$(date --iso-8601=seconds) seq=${SEQ} id=${workload_id} seconds=${WINDOW_WARMUP_SECONDS}"
+    sleep "$WINDOW_WARMUP_SECONDS"
+    WARMUP_END_TS=$(date +%s.%N)
+    echo "${WARMUP_END_TS},warmup_end,${SEQ},${workload_id},${POLICY_LABEL}" >> "${OUT_DIR}/events.csv"
+    echo "window_warmup_end time=$(date --iso-8601=seconds) seq=${SEQ} id=${workload_id}"
   fi
 
   NUM_PROMPTS=$((rate * window_seconds))
