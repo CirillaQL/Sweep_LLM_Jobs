@@ -191,7 +191,8 @@ ulimit -n 65536
 
 PROXY_PID=""
 SERVER_STEP_PID=""
-POWER_MONITOR_PID=""
+POWER_MONITOR_PIDS=()
+POWER_MONITOR_LOGS=()
 SCALE_STEP_PIDS=()
 FINAL_RC=0
 RESET_REQUIRED=false
@@ -221,6 +222,27 @@ stop_scale_instances() {
   SCALE_STEP_PIDS=()
 }
 
+power_monitors_alive() {
+  local pid
+  if [ "${#POWER_MONITOR_PIDS[@]}" -ne 2 ]; then
+    return 1
+  fi
+  for pid in "${POWER_MONITOR_PIDS[@]}"; do
+    if [ -z "$pid" ] || ! kill -0 "$pid" 2>/dev/null; then
+      return 1
+    fi
+  done
+  return 0
+}
+
+dump_power_monitor_logs() {
+  local log_path
+  for log_path in "${POWER_MONITOR_LOGS[@]}"; do
+    echo "===== power_monitor_log path=${log_path} ====="
+    cat "$log_path" 2>/dev/null || true
+  done
+}
+
 stop_components() {
   stop_scale_instances
   if [ -n "$SERVER_STEP_PID" ] && kill -0 "$SERVER_STEP_PID" 2>/dev/null; then
@@ -229,12 +251,18 @@ stop_components() {
     wait "$SERVER_STEP_PID" 2>/dev/null || true
   fi
   SERVER_STEP_PID=""
-  if [ -n "$POWER_MONITOR_PID" ] && kill -0 "$POWER_MONITOR_PID" 2>/dev/null; then
-    echo "stopping_power_monitor_pid=${POWER_MONITOR_PID}"
-    kill "$POWER_MONITOR_PID" 2>/dev/null || true
-    wait "$POWER_MONITOR_PID" 2>/dev/null || true
-  fi
-  POWER_MONITOR_PID=""
+  local power_pid
+  for power_pid in "${POWER_MONITOR_PIDS[@]}"; do
+    if [ -n "$power_pid" ] && kill -0 "$power_pid" 2>/dev/null; then
+      echo "stopping_power_monitor_pid=${power_pid}"
+      kill "$power_pid" 2>/dev/null || true
+    fi
+    if [ -n "$power_pid" ]; then
+      wait "$power_pid" 2>/dev/null || true
+    fi
+  done
+  POWER_MONITOR_PIDS=()
+  POWER_MONITOR_LOGS=()
   if [ -n "$PROXY_PID" ] && kill -0 "$PROXY_PID" 2>/dev/null; then
     echo "stopping_proxy_pid=${PROXY_PID}"
     kill "$PROXY_PID" 2>/dev/null || true
@@ -923,14 +951,24 @@ if [ "$PREFLIGHT_RC" -ne 0 ]; then
 fi
 
 section "start_allocation_wide_gpu_power_monitor"
-srun --overlap --kill-on-bad-exit=1 --exact --nodes=2 --ntasks=2 \
-  --ntasks-per-node=1 --gpus="$POWER_MONITOR_TOTAL_GPUS" \
+GANYMEDE_POWER_LOG="${OUT_DIR}/power_monitor_ganymede.log"
+NEPTUNE_POWER_LOG="${OUT_DIR}/power_monitor_neptune.log"
+srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist=ganymede \
+  --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$POWER_MONITOR_GANYMEDE_GPUS" \
   --cpus-per-task=1 --mem=1G \
   "$PYTHON_BIN" -u "$POWER_MONITOR_SCRIPT" --output-dir "$OUT_DIR" \
-  --expected-host-gpus "ganymede=${POWER_MONITOR_GANYMEDE_GPUS},neptune=${POWER_MONITOR_NEPTUNE_GPUS}" \
-  > "${OUT_DIR}/power_monitor.log" 2>&1 &
-POWER_MONITOR_PID=$!
-echo "power_monitor_pid=${POWER_MONITOR_PID} ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} total_gpus=${POWER_MONITOR_TOTAL_GPUS}"
+  --expected-gpus "$POWER_MONITOR_GANYMEDE_GPUS" \
+  > "$GANYMEDE_POWER_LOG" 2>&1 &
+POWER_MONITOR_PIDS+=("$!")
+srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist=neptune \
+  --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$POWER_MONITOR_NEPTUNE_GPUS" \
+  --cpus-per-task=1 --mem=1G \
+  "$PYTHON_BIN" -u "$POWER_MONITOR_SCRIPT" --output-dir "$OUT_DIR" \
+  --expected-gpus "$POWER_MONITOR_NEPTUNE_GPUS" \
+  > "$NEPTUNE_POWER_LOG" 2>&1 &
+POWER_MONITOR_PIDS+=("$!")
+POWER_MONITOR_LOGS+=("$GANYMEDE_POWER_LOG" "$NEPTUNE_POWER_LOG")
+echo "power_monitor_pids=${POWER_MONITOR_PIDS[*]} ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} total_gpus=${POWER_MONITOR_TOTAL_GPUS}"
 POWER_MONITOR_READY=false
 for attempt in $(seq 1 30); do
   if "$PYTHON_BIN" - "$OUT_DIR" "$POWER_MONITOR_GANYMEDE_GPUS" "$POWER_MONITOR_NEPTUNE_GPUS" <<'PY'
@@ -968,14 +1006,14 @@ PY
     POWER_MONITOR_READY=true
     break
   fi
-  if ! kill -0 "$POWER_MONITOR_PID" 2>/dev/null; then
+  if ! power_monitors_alive; then
     break
   fi
   sleep 1
 done
 echo "power_monitor_ready=${POWER_MONITOR_READY}"
 if [ "$POWER_MONITOR_READY" != true ]; then
-  cat "${OUT_DIR}/power_monitor.log" 2>/dev/null || true
+  dump_power_monitor_logs
   exit 28
 fi
 
@@ -1244,9 +1282,9 @@ if [ "$REQUIRE_ALL_WORKLOADS_EXECUTED" = true ] && \
   fi
 fi
 
-if [ -n "$POWER_MONITOR_PID" ] && ! kill -0 "$POWER_MONITOR_PID" 2>/dev/null; then
-  echo "power_monitor_died_during_sweep=true pid=${POWER_MONITOR_PID}"
-  cat "${OUT_DIR}/power_monitor.log" 2>/dev/null || true
+if ! power_monitors_alive; then
+  echo "power_monitor_died_during_sweep=true pids=${POWER_MONITOR_PIDS[*]}"
+  dump_power_monitor_logs
   if [ "$FINAL_RC" -eq 0 ]; then
     FINAL_RC=28
   fi

@@ -1,0 +1,15 @@
+workload_id,input_len,output_len,request_rate,window_seconds,burstiness,description
+baseline_short,32,32,1,6,1.0,safe_single_instance_baseline
+decode_scale_to_2,32,32,8,6,1.0,first_decode_saturation_step
+decode_scale_to_3,32,32,16,6,1.0,second_decode_saturation_step
+decode_scale_to_4,32,32,20,6,1.0,third_decode_saturation_step
+short_r32_capacity,32,32,32,6,1.0,requested_short_request_saturation_and_further_scale_out
+balanced_prefill_scale_to_3,128,128,16,6,1.0,balanced_pressure_and_scale_out
+balanced_prefill_scale_to_4,128,128,24,6,1.0,balanced_pressure_and_scale_out
+decode_heavy_capacity,32,512,4,6,1.0,long_decode_saturation_with_eight_l4_capacity
+long_prompt_capacity,1024,128,8,6,1.0,long_prompt_and_decode_pressure
+balanced_extreme_capacity,128,128,32,6,1.0,both_phases_saturated
+extreme_short_rps_capacity,2,64,50,6,1.0,extreme_request_rate_saturation
+long_decode_capacity,512,1024,1,8,1.0,long_generation_capacity_saturation
+very_long_prompt_capacity,2048,128,2,8,1.0,very_long_prompt_capacity_saturation
+recovery_short,32,32,1,8,1.0,post_saturation_recovery_window
