@@ -35,7 +35,7 @@ COMPARE_SCRIPT="${SOURCE_JOB_DIR}/compare_gate_results.py"
 REFERENCE_COMPARISON="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-122040-luqia-vllm-pd-baseline-energy-r1/baseline_results/comparison.json"
 PLACEMENT_FILE="${OUT_DIR}/active_placement.json"
 CLOCK_CONTROL_DIR="${OUT_DIR}/clock_control"
-MODEL="mistralai/Mistral-7B-v0.1"
+MODEL="${MODEL_OVERRIDE:-mistralai/Mistral-7B-v0.1}"
 JOB_TIME_LIMIT_LABEL="${JOB_TIME_LIMIT_LABEL_OVERRIDE:-00:28:00}"
 
 SLO_TTFT_MS=500
@@ -75,12 +75,16 @@ SATURATION_ACTION="${AUTOSCALE_ACTION_OVERRIDE:-${SATURATION_ACTION_OVERRIDE:-fr
 SCALE_IN_ENABLED="${SCALE_IN_ENABLED_OVERRIDE:-true}"
 MAX_PREFILL_INSTANCES="${MAX_PREFILL_INSTANCES_OVERRIDE:-2}"
 MAX_DECODE_INSTANCES="${MAX_DECODE_INSTANCES_OVERRIDE:-2}"
+INITIAL_PREFILL_INSTANCES="${INITIAL_PREFILL_INSTANCES_OVERRIDE:-1}"
+INITIAL_DECODE_INSTANCES="${INITIAL_DECODE_INSTANCES_OVERRIDE:-1}"
+PREFILL_TP_SIZE="${PREFILL_TP_SIZE_OVERRIDE:-1}"
+DECODE_TP_SIZE="${DECODE_TP_SIZE_OVERRIDE:-1}"
 POWER_MONITOR_GANYMEDE_GPUS="${POWER_MONITOR_GANYMEDE_GPUS_OVERRIDE:-${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}}"
 POWER_MONITOR_NEPTUNE_GPUS="${POWER_MONITOR_NEPTUNE_GPUS_OVERRIDE:-${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}}"
 POWER_MONITOR_TOTAL_GPUS=$((POWER_MONITOR_GANYMEDE_GPUS + POWER_MONITOR_NEPTUNE_GPUS))
 VLLM_STEP_MEM="${VLLM_STEP_MEM_OVERRIDE:-16G}"
-CURRENT_PREFILL_INSTANCES=1
-CURRENT_DECODE_INSTANCES=1
+CURRENT_PREFILL_INSTANCES="$INITIAL_PREFILL_INSTANCES"
+CURRENT_DECODE_INSTANCES="$INITIAL_DECODE_INSTANCES"
 
 case "$CLOCK_ACK_TRANSPORT" in
   http|file|http_with_file_fallback) ;;
@@ -111,6 +115,8 @@ case "$REQUIRE_ALL_WORKLOADS_EXECUTED" in
     ;;
 esac
 for count in "$MAX_PREFILL_INSTANCES" "$MAX_DECODE_INSTANCES" \
+  "$INITIAL_PREFILL_INSTANCES" "$INITIAL_DECODE_INSTANCES" \
+  "$PREFILL_TP_SIZE" "$DECODE_TP_SIZE" \
   "$POWER_MONITOR_GANYMEDE_GPUS" "$POWER_MONITOR_NEPTUNE_GPUS"; do
   case "$count" in
     ''|*[!0-9]*|0)
@@ -119,6 +125,32 @@ for count in "$MAX_PREFILL_INSTANCES" "$MAX_DECODE_INSTANCES" \
       ;;
   esac
 done
+if [ "$INITIAL_PREFILL_INSTANCES" -gt "$MAX_PREFILL_INSTANCES" ] || \
+  [ "$INITIAL_DECODE_INSTANCES" -gt "$MAX_DECODE_INSTANCES" ]; then
+  echo "initial_instance_count_exceeds_max initial_prefill=${INITIAL_PREFILL_INSTANCES} max_prefill=${MAX_PREFILL_INSTANCES} initial_decode=${INITIAL_DECODE_INSTANCES} max_decode=${MAX_DECODE_INSTANCES}"
+  exit 27
+fi
+if [ "$POWER_MONITOR_NEPTUNE_GPUS" -lt "$((INITIAL_PREFILL_INSTANCES * PREFILL_TP_SIZE))" ] || \
+  [ "$POWER_MONITOR_GANYMEDE_GPUS" -lt "$((INITIAL_DECODE_INSTANCES * DECODE_TP_SIZE))" ]; then
+  echo "power_monitor_gpu_count_too_small_for_initial_instances ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} initial_prefill_instances=${INITIAL_PREFILL_INSTANCES} prefill_tp=${PREFILL_TP_SIZE} initial_decode_instances=${INITIAL_DECODE_INSTANCES} decode_tp=${DECODE_TP_SIZE}"
+  exit 27
+fi
+if { [ "$PREFILL_TP_SIZE" -gt 1 ] || [ "$DECODE_TP_SIZE" -gt 1 ]; } && \
+  { [ "$MAX_PREFILL_INSTANCES" -ne 1 ] || [ "$MAX_DECODE_INSTANCES" -ne 1 ] || \
+    [ "$INITIAL_PREFILL_INSTANCES" -ne 1 ] || [ "$INITIAL_DECODE_INSTANCES" -ne 1 ]; }; then
+  echo "multi_instance_tensor_parallel_unsupported=true prefill_tp=${PREFILL_TP_SIZE} decode_tp=${DECODE_TP_SIZE}"
+  exit 27
+fi
+if { [ "$PREFILL_TP_SIZE" -gt 1 ] || [ "$DECODE_TP_SIZE" -gt 1 ]; } && \
+  [ "$SCHEDULER_ENABLED" = true ]; then
+  echo "scheduled_tensor_parallel_unsupported=true action=use_fixed_placement"
+  exit 27
+fi
+if { [ "$PREFILL_TP_SIZE" -gt 1 ] || [ "$DECODE_TP_SIZE" -gt 1 ]; } && \
+  [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
+  echo "manual_clock_control_tensor_parallel_unsupported=true action=use_auto_dvfs"
+  exit 27
+fi
 case "$WINDOW_WARMUP_SECONDS" in
   ''|*[!0-9]*)
     echo "invalid_window_warmup_seconds=${WINDOW_WARMUP_SECONDS:-unset}"
@@ -197,7 +229,7 @@ echo "unix_ts,event,seq,workload_id,policy" > "${OUT_DIR}/events.csv"
 ulimit -n 65536
 
 PROXY_PID=""
-SERVER_STEP_PID=""
+SERVER_STEP_PIDS=()
 POWER_MONITOR_PIDS=()
 POWER_MONITOR_LOGS=()
 SCALE_STEP_PIDS=()
@@ -242,6 +274,29 @@ power_monitors_alive() {
   return 0
 }
 
+server_steps_alive() {
+  local pid
+  if [ "${#SERVER_STEP_PIDS[@]}" -ne 2 ]; then
+    return 1
+  fi
+  for pid in "${SERVER_STEP_PIDS[@]}"; do
+    if [ -z "$pid" ] || ! kill -0 "$pid" 2>/dev/null; then
+      return 1
+    fi
+  done
+  return 0
+}
+
+scale_instances_alive() {
+  local pid
+  for pid in "${SCALE_STEP_PIDS[@]}"; do
+    if [ -z "$pid" ] || ! kill -0 "$pid" 2>/dev/null; then
+      return 1
+    fi
+  done
+  return 0
+}
+
 dump_power_monitor_logs() {
   local log_path
   for log_path in "${POWER_MONITOR_LOGS[@]}"; do
@@ -252,12 +307,17 @@ dump_power_monitor_logs() {
 
 stop_components() {
   stop_scale_instances
-  if [ -n "$SERVER_STEP_PID" ] && kill -0 "$SERVER_STEP_PID" 2>/dev/null; then
-    echo "stopping_server_step_pid=${SERVER_STEP_PID}"
-    kill "$SERVER_STEP_PID" 2>/dev/null || true
-    wait "$SERVER_STEP_PID" 2>/dev/null || true
-  fi
-  SERVER_STEP_PID=""
+  local server_pid
+  for server_pid in "${SERVER_STEP_PIDS[@]}"; do
+    if [ -n "$server_pid" ] && kill -0 "$server_pid" 2>/dev/null; then
+      echo "stopping_server_step_pid=${server_pid}"
+      kill "$server_pid" 2>/dev/null || true
+    fi
+    if [ -n "$server_pid" ]; then
+      wait "$server_pid" 2>/dev/null || true
+    fi
+  done
+  SERVER_STEP_PIDS=()
   local power_pid
   for power_pid in "${POWER_MONITOR_PIDS[@]}"; do
     if [ -n "$power_pid" ] && kill -0 "$power_pid" 2>/dev/null; then
@@ -334,7 +394,7 @@ wait_for_url() {
     sleep 5
     elapsed=$((elapsed + 5))
     echo "waiting name=${name} elapsed_s=${elapsed} url=${url}"
-    if [ -n "$SERVER_STEP_PID" ] && ! kill -0 "$SERVER_STEP_PID" 2>/dev/null; then
+    if [ "${#SERVER_STEP_PIDS[@]}" -gt 0 ] && ! server_steps_alive; then
       echo "server_step_died_while_waiting=true"
       return 1
     fi
@@ -874,7 +934,7 @@ echo "saturation_model=five_seed_mean_local_retrained_75"
 echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
 echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
-echo "saturation_action=${SATURATION_ACTION} scale_in_enabled=${SCALE_IN_ENABLED} max_prefill_instances=${MAX_PREFILL_INSTANCES} max_decode_instances=${MAX_DECODE_INSTANCES} window_warmup_seconds=${WINDOW_WARMUP_SECONDS}"
+echo "saturation_action=${SATURATION_ACTION} scale_in_enabled=${SCALE_IN_ENABLED} initial_prefill_instances=${INITIAL_PREFILL_INSTANCES} initial_decode_instances=${INITIAL_DECODE_INSTANCES} prefill_tp=${PREFILL_TP_SIZE} decode_tp=${DECODE_TP_SIZE} max_prefill_instances=${MAX_PREFILL_INSTANCES} max_decode_instances=${MAX_DECODE_INSTANCES} window_warmup_seconds=${WINDOW_WARMUP_SECONDS}"
 echo "power_monitor_ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} power_monitor_neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} power_monitor_total_gpus=${POWER_MONITOR_TOTAL_GPUS}"
 echo "kv_effective_bandwidth_gbps=${KV_EFFECTIVE_BANDWIDTH_GBPS:-disabled} kv_num_layers=${KV_NUM_LAYERS} kv_num_heads=${KV_NUM_HEADS} kv_head_dim=${KV_HEAD_DIM} kv_bytes_per_element=${KV_BYTES_PER_ELEMENT} dispatch_ms=${DISPATCH_MS}"
 echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION} clock_ack_mode=${CLOCK_ACK_MODE} clock_ack_transport=${CLOCK_ACK_TRANSPORT}"
@@ -1065,11 +1125,23 @@ if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
 else
   RESET_REQUIRED=false
 fi
-srun --kill-on-bad-exit=1 --exact --nodes=2 --ntasks=2 --ntasks-per-node=1 \
-  --gpus-per-task=1 --cpus-per-task=8 --mem="$VLLM_STEP_MEM" \
-  "$NODE_SCRIPT" serve > "${OUT_DIR}/server_step.log" 2>&1 &
-SERVER_STEP_PID=$!
-echo "server_step_pid=${SERVER_STEP_PID}"
+: > "${OUT_DIR}/server_step.log"
+: > "${OUT_DIR}/prefill_primary_step.log"
+: > "${OUT_DIR}/decode_primary_step.log"
+PD_TP_SIZE_OVERRIDE="$PREFILL_TP_SIZE" \
+  srun --kill-on-bad-exit=1 --exact --nodes=1 --nodelist=neptune \
+    --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$PREFILL_TP_SIZE" \
+    --cpus-per-task="$((8 * PREFILL_TP_SIZE))" --mem="$VLLM_STEP_MEM" \
+    "$NODE_SCRIPT" serve >> "${OUT_DIR}/prefill_primary_step.log" 2>&1 &
+SERVER_STEP_PIDS+=("$!")
+PD_TP_SIZE_OVERRIDE="$DECODE_TP_SIZE" \
+  srun --kill-on-bad-exit=1 --exact --nodes=1 --nodelist=ganymede \
+    --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$DECODE_TP_SIZE" \
+    --cpus-per-task="$((8 * DECODE_TP_SIZE))" --mem="$VLLM_STEP_MEM" \
+    "$NODE_SCRIPT" serve >> "${OUT_DIR}/decode_primary_step.log" 2>&1 &
+SERVER_STEP_PIDS+=("$!")
+echo "server_step_pids=${SERVER_STEP_PIDS[*]} prefill_tp=${PREFILL_TP_SIZE} decode_tp=${DECODE_TP_SIZE}"
+echo "server_step_pids=${SERVER_STEP_PIDS[*]} prefill_tp=${PREFILL_TP_SIZE} decode_tp=${DECODE_TP_SIZE}" > "${OUT_DIR}/server_step.log"
 
 if ! wait_for_url prefill "http://${PREFILL_IP}:${PREFILL_HTTP_PORT}/v1/models" 600; then
   FINAL_RC=5
@@ -1083,19 +1155,40 @@ if [ "$FINAL_RC" -ne 0 ]; then
   exit "$FINAL_RC"
 fi
 
+section "start_initial_scale_instances"
+for ((ordinal = 2; ordinal <= INITIAL_PREFILL_INSTANCES; ordinal++)); do
+  launch_scale_instance prefill "$ordinal"
+done
+for ((ordinal = 2; ordinal <= INITIAL_DECODE_INSTANCES; ordinal++)); do
+  launch_scale_instance decode "$ordinal"
+done
+if ! wait_for_registry_counts \
+  "$INITIAL_PREFILL_INSTANCES" "$INITIAL_DECODE_INSTANCES" initial; then
+  echo "initial_instances_not_ready=true prefill=${INITIAL_PREFILL_INSTANCES} decode=${INITIAL_DECODE_INSTANCES}"
+  exit 7
+fi
+
 section "wait_for_pd_registry"
 REGISTRY_FILE="${OUT_DIR}/registry.json"
 REGISTRY_READY=false
 for attempt in $(seq 1 60); do
   curl -fsS "http://${PROXY_IP}:${PROXY_HTTP_PORT}/registry" > "$REGISTRY_FILE" 2>/dev/null || true
-  if "$PYTHON_BIN" - "$REGISTRY_FILE" <<'PY'
+  if "$PYTHON_BIN" - "$REGISTRY_FILE" \
+    "$INITIAL_PREFILL_INSTANCES" "$INITIAL_DECODE_INSTANCES" \
+    "$PREFILL_TP_SIZE" "$DECODE_TP_SIZE" <<'PY'
 import json
 import sys
 try:
     data = json.load(open(sys.argv[1], encoding="utf-8"))
 except Exception:
     raise SystemExit(1)
-raise SystemExit(0 if len(data.get("prefill", [])) == 1 and len(data.get("decode", [])) == 1 else 1)
+ready = (
+    len(data.get("prefill", [])) == int(sys.argv[2])
+    and len(data.get("decode", [])) == int(sys.argv[3])
+    and data.get("prefill_tp_sizes") == [int(sys.argv[4])] * int(sys.argv[2])
+    and data.get("decode_tp_sizes") == [int(sys.argv[5])] * int(sys.argv[3])
+)
+raise SystemExit(0 if ready else 1)
 PY
   then
     REGISTRY_READY=true
@@ -1298,8 +1391,13 @@ PY
     BENCH_FAILURES=$((BENCH_FAILURES + 1))
     FINAL_RC=9
   fi
-  if [ -n "$SERVER_STEP_PID" ] && ! kill -0 "$SERVER_STEP_PID" 2>/dev/null; then
+  if ! server_steps_alive; then
     echo "server_step_died_during_sweep=true seq=${SEQ}"
+    FINAL_RC=26
+    break
+  fi
+  if ! scale_instances_alive; then
+    echo "scale_instance_died_during_sweep=true seq=${SEQ} pids=${SCALE_STEP_PIDS[*]}"
     FINAL_RC=26
     break
   fi

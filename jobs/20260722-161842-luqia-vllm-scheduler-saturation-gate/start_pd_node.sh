@@ -6,23 +6,28 @@ MODE="${1:-serve}"
 HOST=$(hostname -s)
 VISIBLE_GPUS="${CUDA_VISIBLE_DEVICES:-0}"
 IFS=',' read -r -a VISIBLE_GPU_ARRAY <<< "$VISIBLE_GPUS"
-if [ "${#VISIBLE_GPU_ARRAY[@]}" -ne 1 ]; then
-  echo "expected_one_visible_gpu=true mode=${MODE} visible_gpus=${VISIBLE_GPUS}"
-  exit 14
-fi
 GPU_ID="${VISIBLE_GPUS%%,*}"
 CLOCK_ACK_TOLERANCE_MHZ="${CLOCK_ACK_TOLERANCE_MHZ_OVERRIDE:-90}"
 GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
 CLOCK_ACK_MODE="${CLOCK_ACK_MODE_OVERRIDE:-monitor}"
 MAX_NUM_SEQS="${MAX_NUM_SEQS_OVERRIDE:-32}"
+MAX_MODEL_LEN="${MAX_MODEL_LEN_OVERRIDE:-4096}"
+MAX_NUM_BATCHED_TOKENS="${MAX_NUM_BATCHED_TOKENS_OVERRIDE:-$MAX_MODEL_LEN}"
 INSTANCE_ID="${PD_INSTANCE_ID_OVERRIDE:-primary}"
 
-case "$MAX_NUM_SEQS" in
-  ''|*[!0-9]*|0)
-    echo "invalid_max_num_seqs=${MAX_NUM_SEQS:-unset}"
-    exit 22
-    ;;
-esac
+for value_name in MAX_NUM_SEQS MAX_MODEL_LEN MAX_NUM_BATCHED_TOKENS; do
+  value="${!value_name}"
+  case "$value" in
+    ''|*[!0-9]*|0)
+      echo "invalid_${value_name,,}=${value:-unset}"
+      exit 22
+      ;;
+  esac
+done
+if [ "$MAX_MODEL_LEN" -lt 2 ]; then
+  echo "max_model_len_too_small=${MAX_MODEL_LEN}"
+  exit 22
+fi
 
 case "$CLOCK_ACK_MODE" in
   monitor|active_probe) ;;
@@ -80,6 +85,29 @@ read -r ROLE TARGET_FREQ EXPECTED_GPU <<< "$PLACEMENT_VALUES"
 
 case "$ROLE" in
   prefill)
+    TP_SIZE="${PD_TP_SIZE_OVERRIDE:-${PREFILL_TP_SIZE_OVERRIDE:-1}}"
+    ;;
+  decode)
+    TP_SIZE="${PD_TP_SIZE_OVERRIDE:-${DECODE_TP_SIZE_OVERRIDE:-1}}"
+    ;;
+esac
+case "$TP_SIZE" in
+  ''|*[!0-9]*|0)
+    echo "invalid_tensor_parallel_size=${TP_SIZE:-unset} role=${ROLE:-unset}"
+    exit 22
+    ;;
+esac
+EXPECTED_VISIBLE_GPU_COUNT="$TP_SIZE"
+if [ "$MODE" = preflight ] || [ "$MODE" = reset ]; then
+  EXPECTED_VISIBLE_GPU_COUNT=1
+fi
+if [ "${#VISIBLE_GPU_ARRAY[@]}" -ne "$EXPECTED_VISIBLE_GPU_COUNT" ]; then
+  echo "visible_gpu_count_mismatch=true mode=${MODE} role=${ROLE} tp_size=${TP_SIZE} expected=${EXPECTED_VISIBLE_GPU_COUNT} actual=${#VISIBLE_GPU_ARRAY[@]} visible_gpus=${VISIBLE_GPUS}"
+  exit 14
+fi
+
+case "$ROLE" in
+  prefill)
     PEER_IP="$DECODE_IP"
     HTTP_PORT="${PD_HTTP_PORT_OVERRIDE:-$PREFILL_HTTP_PORT}"
     KV_ROLE=kv_producer
@@ -107,7 +135,9 @@ echo "host=${HOST} node_group=${NODE_GROUP} role=${ROLE} instance_id=${INSTANCE_
 echo "scheduled_gpu=${EXPECTED_GPU} scheduled_freq_mhz=${TARGET_FREQ} gpu_id=${GPU_ID}"
 echo "gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
 echo "clock_ack_mode=${CLOCK_ACK_MODE}"
+echo "tensor_parallel_size=${TP_SIZE}"
 echo "max_num_seqs=${MAX_NUM_SEQS}"
+echo "max_model_len=${MAX_MODEL_LEN} max_num_batched_tokens=${MAX_NUM_BATCHED_TOKENS}"
 echo "node_ip=${NODE_IP} peer_ip=${PEER_IP} interface=${IFACE}"
 echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-unset}"
 ip -brief address show dev "$IFACE" 2>&1 || true
@@ -351,11 +381,11 @@ echo "kv_transfer_config=${KV_CONFIG}"
 "$VLLM_BIN" serve "$MODEL" \
   --host 0.0.0.0 \
   --port "$HTTP_PORT" \
-  --tensor-parallel-size 1 \
+  --tensor-parallel-size "$TP_SIZE" \
   --dtype float16 \
   --enforce-eager \
-  --max-model-len 4096 \
-  --max-num-batched-tokens 4096 \
+  --max-model-len "$MAX_MODEL_LEN" \
+  --max-num-batched-tokens "$MAX_NUM_BATCHED_TOKENS" \
   --max-num-seqs "$MAX_NUM_SEQS" \
   --gpu-memory-utilization 0.82 \
   --kv-transfer-config "$KV_CONFIG" \

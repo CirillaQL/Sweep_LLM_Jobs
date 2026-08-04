@@ -15,8 +15,8 @@ import zmq
 from aiohttp import web
 
 
-PREFILL_INSTANCES: dict[str, tuple[str, float]] = {}
-DECODE_INSTANCES: dict[str, tuple[str, float]] = {}
+PREFILL_INSTANCES: dict[str, tuple[str, float, int]] = {}
+DECODE_INSTANCES: dict[str, tuple[str, float, int]] = {}
 PREFILL_LOCK = threading.Lock()
 DECODE_LOCK = threading.Lock()
 PING_TTL_SECONDS = 10
@@ -24,7 +24,7 @@ REQUEST_COUNT = 0
 CLOCK_ACKS: dict[tuple[str, int], dict[str, Any]] = {}
 
 
-def remove_expired(instances: dict[str, tuple[str, float]]) -> None:
+def remove_expired(instances: dict[str, tuple[str, float, int]]) -> None:
     now = time.time()
     for key, value in list(instances.items()):
         if value[1] <= now:
@@ -42,7 +42,16 @@ def listen_for_registration(poller: zmq.Poller, router: zmq.Socket) -> None:
         instance_type = data.get("type")
         http_address = data.get("http_address")
         zmq_address = data.get("zmq_address")
-        if not http_address or not zmq_address or instance_type not in {"P", "D"}:
+        try:
+            tp_size = int(data.get("tp_size", 1))
+        except (TypeError, ValueError):
+            tp_size = 0
+        if (
+            not http_address
+            or not zmq_address
+            or instance_type not in {"P", "D"}
+            or tp_size <= 0
+        ):
             print(f"registry_invalid data={data!r}", flush=True)
             continue
 
@@ -50,12 +59,17 @@ def listen_for_registration(poller: zmq.Poller, router: zmq.Socket) -> None:
         lock = PREFILL_LOCK if instance_type == "P" else DECODE_LOCK
         with lock:
             is_new = http_address not in instances
-            instances[http_address] = (zmq_address, time.time() + PING_TTL_SECONDS)
+            instances[http_address] = (
+                zmq_address,
+                time.time() + PING_TTL_SECONDS,
+                tp_size,
+            )
             remove_expired(instances)
         if is_new:
             role = "prefill" if instance_type == "P" else "decode"
             print(
-                f"registry_add role={role} http={http_address} zmq={zmq_address}",
+                f"registry_add role={role} http={http_address} "
+                f"zmq={zmq_address} tp_size={tp_size}",
                 flush=True,
             )
 
@@ -95,7 +109,10 @@ async def forward_request(
                 yield chunk
 
 
-def snapshot_registry() -> tuple[list[tuple[str, tuple[str, float]]], list[tuple[str, tuple[str, float]]]]:
+def snapshot_registry() -> tuple[
+    list[tuple[str, tuple[str, float, int]]],
+    list[tuple[str, tuple[str, float, int]]],
+]:
     with PREFILL_LOCK:
         remove_expired(PREFILL_INSTANCES)
         prefill = list(PREFILL_INSTANCES.items())
@@ -117,6 +134,8 @@ async def registry(_: web.Request) -> web.Response:
             "decode": [item[0] for item in decode],
             "prefill_count": len(prefill),
             "decode_count": len(decode),
+            "prefill_tp_sizes": [item[1][2] for item in prefill],
+            "decode_tp_sizes": [item[1][2] for item in decode],
         }
     )
 
@@ -190,8 +209,10 @@ async def handle_request(request: web.Request) -> web.StreamResponse:
 
         index = REQUEST_COUNT
         REQUEST_COUNT += 1
-        prefill_http, (prefill_zmq, _) = prefill[index % len(prefill)]
-        decode_http, (decode_zmq, _) = decode[index % len(decode)]
+        prefill_http, (prefill_zmq, _, prefill_tp_size) = prefill[
+            index % len(prefill)
+        ]
+        decode_http, (decode_zmq, _, decode_tp_size) = decode[index % len(decode)]
         request_id = (
             f"___prefill_addr_{prefill_zmq}___decode_addr_{decode_zmq}_"
             f"{uuid.uuid4().hex}"
@@ -203,6 +224,9 @@ async def handle_request(request: web.Request) -> web.StreamResponse:
         )
 
         prefill_body = dict(original)
+        prefill_kv_params = dict(prefill_body.get("kv_transfer_params") or {})
+        prefill_kv_params["remote_tp_size"] = decode_tp_size
+        prefill_body["kv_transfer_params"] = prefill_kv_params
         prefill_body["max_tokens"] = 1
         if "max_completion_tokens" in prefill_body:
             prefill_body["max_completion_tokens"] = 1
@@ -217,8 +241,12 @@ async def handle_request(request: web.Request) -> web.StreamResponse:
             headers={"Content-Type": "application/json"},
         )
         await response.prepare(request)
+        decode_body = dict(original)
+        decode_kv_params = dict(decode_body.get("kv_transfer_params") or {})
+        decode_kv_params["remote_tp_size"] = prefill_tp_size
+        decode_body["kv_transfer_params"] = decode_kv_params
         async for chunk in forward_request(
-            f"http://{decode_http}{request.path}", original, request_id
+            f"http://{decode_http}{request.path}", decode_body, request_id
         ):
             await response.write(chunk)
         await response.write_eof()
