@@ -20,6 +20,7 @@ DECODE_INSTANCES: dict[str, tuple[str, float, int]] = {}
 PREFILL_LOCK = threading.Lock()
 DECODE_LOCK = threading.Lock()
 PING_TTL_SECONDS = 10
+DEFAULT_TP_SIZE = 4
 REQUEST_COUNT = 0
 CLOCK_ACKS: dict[tuple[str, int], dict[str, Any]] = {}
 
@@ -43,7 +44,7 @@ def listen_for_registration(poller: zmq.Poller, router: zmq.Socket) -> None:
         http_address = data.get("http_address")
         zmq_address = data.get("zmq_address")
         try:
-            tp_size = int(data.get("tp_size", 1))
+            tp_size = int(data.get("tp_size", DEFAULT_TP_SIZE))
         except (TypeError, ValueError):
             tp_size = 0
         if (
