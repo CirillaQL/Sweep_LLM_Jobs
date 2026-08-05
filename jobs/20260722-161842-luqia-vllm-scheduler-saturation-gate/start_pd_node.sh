@@ -9,6 +9,8 @@ IFS=',' read -r -a VISIBLE_GPU_ARRAY <<< "$VISIBLE_GPUS"
 GPU_ID="${VISIBLE_GPUS%%,*}"
 CLOCK_ACK_TOLERANCE_MHZ="${CLOCK_ACK_TOLERANCE_MHZ_OVERRIDE:-90}"
 GPU_CLOCK_CONTROL_MODE="${GPU_CLOCK_CONTROL_MODE_OVERRIDE:-manual}"
+GPU_STARTUP_CLOCK_MODE="${GPU_STARTUP_CLOCK_MODE_OVERRIDE:-scheduled}"
+DEFER_INSTANCE_TELEMETRY_UNTIL_READY="${DEFER_INSTANCE_TELEMETRY_UNTIL_READY_OVERRIDE:-false}"
 CLOCK_ACK_MODE="${CLOCK_ACK_MODE_OVERRIDE:-monitor}"
 MAX_NUM_SEQS="${MAX_NUM_SEQS_OVERRIDE:-32}"
 MAX_MODEL_LEN="${MAX_MODEL_LEN_OVERRIDE:-4096}"
@@ -33,6 +35,20 @@ case "$CLOCK_ACK_MODE" in
   monitor|active_probe) ;;
   *)
     echo "unsupported_clock_ack_mode=${CLOCK_ACK_MODE}"
+    exit 21
+    ;;
+esac
+case "$GPU_STARTUP_CLOCK_MODE" in
+  scheduled|max) ;;
+  *)
+    echo "unsupported_gpu_startup_clock_mode=${GPU_STARTUP_CLOCK_MODE}"
+    exit 21
+    ;;
+esac
+case "$DEFER_INSTANCE_TELEMETRY_UNTIL_READY" in
+  true|false) ;;
+  *)
+    echo "invalid_defer_instance_telemetry_until_ready=${DEFER_INSTANCE_TELEMETRY_UNTIL_READY}"
     exit 21
     ;;
 esac
@@ -134,6 +150,8 @@ INSTANCE_KV_PORT="${PD_KV_PORT_OVERRIDE:-$KV_PORT}"
 echo "host=${HOST} node_group=${NODE_GROUP} role=${ROLE} instance_id=${INSTANCE_ID} mode=${MODE}"
 echo "scheduled_gpu=${EXPECTED_GPU} scheduled_freq_mhz=${TARGET_FREQ} gpu_id=${GPU_ID}"
 echo "gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
+echo "gpu_startup_clock_mode=${GPU_STARTUP_CLOCK_MODE}"
+echo "defer_instance_telemetry_until_ready=${DEFER_INSTANCE_TELEMETRY_UNTIL_READY}"
 echo "clock_ack_mode=${CLOCK_ACK_MODE}"
 echo "tensor_parallel_size=${TP_SIZE}"
 echo "max_num_seqs=${MAX_NUM_SEQS}"
@@ -371,9 +389,21 @@ PY
 }
 
 if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
-  echo "lock_gpu_clocks gpu_ids=${VISIBLE_GPUS} target_mhz=${TARGET_FREQ}"
+  STARTUP_FREQ="$TARGET_FREQ"
+  if [ "$GPU_STARTUP_CLOCK_MODE" = max ]; then
+    STARTUP_FREQ=$(nvidia-smi -i "$GPU_ID" \
+      --query-gpu=clocks.max.graphics --format=csv,noheader,nounits \
+      | head -n 1 | tr -d ' ')
+    case "$STARTUP_FREQ" in
+      ''|*[!0-9]*)
+        echo "startup_max_clock_query_failed=true gpu_id=${GPU_ID} value=${STARTUP_FREQ:-unset}"
+        exit 14
+        ;;
+    esac
+  fi
+  echo "lock_gpu_clocks gpu_ids=${VISIBLE_GPUS} target_mhz=${STARTUP_FREQ} startup_mode=${GPU_STARTUP_CLOCK_MODE} scheduled_mhz=${TARGET_FREQ}"
   for lock_gpu_id in "${VISIBLE_GPU_ARRAY[@]}"; do
-    if ! sudo nvidia-smi -i "$lock_gpu_id" -lgc "${TARGET_FREQ},${TARGET_FREQ}"; then
+    if ! sudo nvidia-smi -i "$lock_gpu_id" -lgc "${STARTUP_FREQ},${STARTUP_FREQ}"; then
       echo "lock_gpu_clock_failed=true gpu_id=${lock_gpu_id}"
       exit 14
     fi
@@ -406,7 +436,23 @@ echo "kv_transfer_config=${KV_CONFIG}"
   --kv-transfer-config "$KV_CONFIG" \
   >> "$SERVER_LOG" 2>&1 &
 SERVER_PID=$!
-monitor &
+if [ "$DEFER_INSTANCE_TELEMETRY_UNTIL_READY" = true ]; then
+  (
+    echo "instance_telemetry_waiting_for_http=true url=http://127.0.0.1:${HTTP_PORT}/v1/models"
+    while kill -0 "$SERVER_PID" 2>/dev/null; do
+      if curl -fsS --connect-timeout 2 --max-time 5 \
+        "http://127.0.0.1:${HTTP_PORT}/v1/models" >/dev/null 2>&1; then
+        echo "instance_telemetry_http_ready=true"
+        monitor
+        exit $?
+      fi
+      sleep 2
+    done
+    echo "instance_telemetry_not_started=true reason=server_exited_before_http_ready"
+  ) &
+else
+  monitor &
+fi
 MONITOR_PID=$!
 if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
   clock_controller &

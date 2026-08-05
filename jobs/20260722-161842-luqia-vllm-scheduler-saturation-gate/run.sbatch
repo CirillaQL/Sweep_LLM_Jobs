@@ -394,6 +394,10 @@ wait_for_url() {
       echo "server_step_died_while_waiting=true"
       return 1
     fi
+    if [ "${#SCALE_STEP_PIDS[@]}" -gt 0 ] && ! scale_instances_alive; then
+      echo "scale_step_died_while_waiting=true"
+      return 1
+    fi
     if [ "$elapsed" -ge "$max_seconds" ]; then
       echo "wait_timeout name=${name} url=${url}"
       return 1
@@ -720,8 +724,27 @@ ready = (
 raise SystemExit(0 if ready else 1)
 PY
     then
-      echo "scale_out_registry_ready seq=${seq} prefill=${expected_prefill} decode=${expected_decode} elapsed_s=${elapsed}"
-      return 0
+      local endpoints_ready=true
+      local ordinal
+      for ((ordinal = 1; ordinal <= expected_prefill; ordinal++)); do
+        if ! curl -fsS --connect-timeout 2 --max-time 5 \
+          "http://${PREFILL_IP}:$((PREFILL_HTTP_PORT + ordinal - 1))/v1/models" \
+          >/dev/null 2>&1; then
+          endpoints_ready=false
+        fi
+      done
+      for ((ordinal = 1; ordinal <= expected_decode; ordinal++)); do
+        if ! curl -fsS --connect-timeout 2 --max-time 5 \
+          "http://${DECODE_IP}:$((DECODE_HTTP_PORT + ordinal - 1))/v1/models" \
+          >/dev/null 2>&1; then
+          endpoints_ready=false
+        fi
+      done
+      if [ "$endpoints_ready" = true ]; then
+        echo "scale_out_registry_and_http_ready seq=${seq} prefill=${expected_prefill} decode=${expected_decode} elapsed_s=${elapsed}"
+        return 0
+      fi
+      echo "scale_out_registry_ready_http_pending seq=${seq} elapsed_s=${elapsed}"
     fi
     local pid
     for pid in "${SCALE_STEP_PIDS[@]}"; do
@@ -1229,11 +1252,26 @@ if [ "$FINAL_RC" -ne 0 ]; then
 fi
 
 section "start_initial_scale_instances"
-for ((ordinal = 2; ordinal <= INITIAL_PREFILL_INSTANCES; ordinal++)); do
-  launch_scale_instance prefill "$ordinal"
-done
+# Start each additional Decode before its matching Prefill and require the
+# Decode API to be live before bringing up the producer. P2pNcclConnector
+# advertises itself before the API server is ready, so launching every replica
+# concurrently can expose a half-initialized producer to both its peer and the
+# proxy. Sequential startup also avoids four simultaneous model loads.
 for ((ordinal = 2; ordinal <= INITIAL_DECODE_INSTANCES; ordinal++)); do
   launch_scale_instance decode "$ordinal"
+  if ! wait_for_url "decode-${ordinal}" \
+    "http://${DECODE_IP}:$((DECODE_HTTP_PORT + ordinal - 1))/v1/models" 600; then
+    tail -n 240 "${OUT_DIR}/decode_decode-${ordinal}_server.log" 2>/dev/null || true
+    exit 7
+  fi
+done
+for ((ordinal = 2; ordinal <= INITIAL_PREFILL_INSTANCES; ordinal++)); do
+  launch_scale_instance prefill "$ordinal"
+  if ! wait_for_url "prefill-${ordinal}" \
+    "http://${PREFILL_IP}:$((PREFILL_HTTP_PORT + ordinal - 1))/v1/models" 600; then
+    tail -n 240 "${OUT_DIR}/prefill_prefill-${ordinal}_server.log" 2>/dev/null || true
+    exit 7
+  fi
 done
 if ! wait_for_registry_counts \
   "$INITIAL_PREFILL_INSTANCES" "$INITIAL_DECODE_INSTANCES" initial; then
