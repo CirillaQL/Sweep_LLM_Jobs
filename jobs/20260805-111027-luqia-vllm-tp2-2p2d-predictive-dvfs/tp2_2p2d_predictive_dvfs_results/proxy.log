@@ -1,1 +1,3 @@
 proxy_start hostname=ganymede http=0.0.0.0:30307 registry=0.0.0.0:31307
+registry_add role=decode http=10.1.0.3:33307 zmq=10.1.0.3:34307 tp_size=2
+registry_add role=prefill http=10.1.0.6:32307 zmq=10.1.0.6:34307 tp_size=2
