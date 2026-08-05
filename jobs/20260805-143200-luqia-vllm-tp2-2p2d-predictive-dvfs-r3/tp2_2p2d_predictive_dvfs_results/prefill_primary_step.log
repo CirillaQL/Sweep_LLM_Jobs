@@ -51,3 +51,17 @@ All done.
 clock_runtime_verification host=neptune seq=1 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260805-143200-luqia-vllm-tp2-2p2d-predictive-dvfs-r3/tp2_2p2d_predictive_dvfs_results/prefill_neptune_telemetry.csv
 clock_ack_transport host=neptune seq=1 transport=http rc=0 attempts=1
 dynamic_clock_ack host=neptune seq=1 target_mhz=210 rc=0 observed_mhz=2520 verification_mode=monitor
+dynamic_clock_apply host=neptune seq=2 target_mhz=480
+Unable to set GPU locked clocks "(gpuClockMin 480, gpuClockMax 480)" for GPU 00000000:4A:00.0: GPU requires reset
+Terminating early due to previous errors.
+GPU clocks set to "(gpuClkMin 480, gpuClkMax 480)" for GPU 00000000:61:00.0
+
+Warning: persistence mode is disabled on device 00000000:61:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+clock_ack_transport host=neptune seq=2 transport=http rc=0 attempts=1
+dynamic_clock_ack host=neptune seq=2 target_mhz=480 rc=31 observed_mhz=NA verification_mode=monitor
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 251809.4 ON neptune CANCELLED AT 2026-08-05T14:43:56 ***
+srun: error: neptune: task 0: Killed
+srun: Terminating StepId=251809.4
