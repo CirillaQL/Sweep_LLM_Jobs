@@ -332,6 +332,10 @@ class PDPlacementScheduler:
         self.pools = {gpu: PoolScheduler(gpu, bundle) for gpu in ("l4", "l40s")}
         self.saturation = SaturationEnsemble(saturation_bundle_path, saturation_threshold)
         self.common_slos = sorted(set(self.pools["l4"].slos) & set(self.pools["l40s"].slos))
+        self.common_tps = sorted(
+            set(self.pools["l4"].config["TP_DEGREES"])
+            & set(self.pools["l40s"].config["TP_DEGREES"])
+        )
         self.kv_effective_bandwidth_gbps = kv_effective_bandwidth_gbps
         self.kv_num_layers = kv_num_layers
         self.kv_num_heads = kv_num_heads
@@ -344,8 +348,10 @@ class PDPlacementScheduler:
                   overload_action="min-slo-violation",
                   max_l4_freq=None, max_l40s_freq=None,
                   prefill_instances=1, decode_instances=1):
-        if tp != 1:
-            raise ValueError("Each PD instance uses one GPU, so TP must be 1")
+        if tp not in self.common_tps:
+            raise ValueError(
+                f"Cross-pool TP must be one of {self.common_tps}, got {tp}"
+            )
         if prefill_instances < 1 or decode_instances < 1:
             raise ValueError("PD instance counts must be positive")
         if slo_ttft not in self.common_slos or slo_tpot not in self.common_slos:

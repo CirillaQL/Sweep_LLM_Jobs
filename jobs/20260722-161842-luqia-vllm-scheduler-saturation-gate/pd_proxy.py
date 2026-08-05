@@ -20,7 +20,7 @@ DECODE_INSTANCES: dict[str, tuple[str, float, int]] = {}
 PREFILL_LOCK = threading.Lock()
 DECODE_LOCK = threading.Lock()
 PING_TTL_SECONDS = 10
-DEFAULT_TP_SIZE = 4
+DEFAULT_TP_SIZE = int(os.environ.get("PROXY_DEFAULT_TP_SIZE", "4"))
 REQUEST_COUNT = 0
 CLOCK_ACKS: dict[tuple[str, int], dict[str, Any]] = {}
 

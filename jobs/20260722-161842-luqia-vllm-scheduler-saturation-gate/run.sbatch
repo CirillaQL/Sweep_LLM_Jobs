@@ -135,20 +135,9 @@ if [ "$POWER_MONITOR_NEPTUNE_GPUS" -lt "$((INITIAL_PREFILL_INSTANCES * PREFILL_T
   echo "power_monitor_gpu_count_too_small_for_initial_instances ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} initial_prefill_instances=${INITIAL_PREFILL_INSTANCES} prefill_tp=${PREFILL_TP_SIZE} initial_decode_instances=${INITIAL_DECODE_INSTANCES} decode_tp=${DECODE_TP_SIZE}"
   exit 27
 fi
-if { [ "$PREFILL_TP_SIZE" -gt 1 ] || [ "$DECODE_TP_SIZE" -gt 1 ]; } && \
-  { [ "$MAX_PREFILL_INSTANCES" -ne 1 ] || [ "$MAX_DECODE_INSTANCES" -ne 1 ] || \
-    [ "$INITIAL_PREFILL_INSTANCES" -ne 1 ] || [ "$INITIAL_DECODE_INSTANCES" -ne 1 ]; }; then
-  echo "multi_instance_tensor_parallel_unsupported=true prefill_tp=${PREFILL_TP_SIZE} decode_tp=${DECODE_TP_SIZE}"
-  exit 27
-fi
-if { [ "$PREFILL_TP_SIZE" -gt 1 ] || [ "$DECODE_TP_SIZE" -gt 1 ]; } && \
-  [ "$SCHEDULER_ENABLED" = true ]; then
-  echo "scheduled_tensor_parallel_unsupported=true action=use_fixed_placement"
-  exit 27
-fi
-if { [ "$PREFILL_TP_SIZE" -gt 1 ] || [ "$DECODE_TP_SIZE" -gt 1 ]; } && \
-  [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
-  echo "manual_clock_control_tensor_parallel_unsupported=true action=use_auto_dvfs"
+if [ "$SCHEDULER_ENABLED" = true ] && \
+  [ "$PREFILL_TP_SIZE" -ne "$DECODE_TP_SIZE" ]; then
+  echo "scheduled_asymmetric_tensor_parallel_unsupported=true prefill_tp=${PREFILL_TP_SIZE} decode_tp=${DECODE_TP_SIZE}"
   exit 27
 fi
 case "$WINDOW_WARMUP_SECONDS" in
@@ -164,9 +153,9 @@ case "$BENCH_NUM_WARMUPS" in
     ;;
 esac
 if [ "$SATURATION_ACTION" = scale_out ] && \
-  { [ "$POWER_MONITOR_NEPTUNE_GPUS" -lt "$MAX_PREFILL_INSTANCES" ] || \
-    [ "$POWER_MONITOR_GANYMEDE_GPUS" -lt "$MAX_DECODE_INSTANCES" ]; }; then
-  echo "power_monitor_gpu_count_too_small ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} max_prefill_instances=${MAX_PREFILL_INSTANCES} max_decode_instances=${MAX_DECODE_INSTANCES}"
+  { [ "$POWER_MONITOR_NEPTUNE_GPUS" -lt "$((MAX_PREFILL_INSTANCES * PREFILL_TP_SIZE))" ] || \
+    [ "$POWER_MONITOR_GANYMEDE_GPUS" -lt "$((MAX_DECODE_INSTANCES * DECODE_TP_SIZE))" ]; }; then
+  echo "power_monitor_gpu_count_too_small ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} max_prefill_instances=${MAX_PREFILL_INSTANCES} prefill_tp=${PREFILL_TP_SIZE} max_decode_instances=${MAX_DECODE_INSTANCES} decode_tp=${DECODE_TP_SIZE}"
   exit 27
 fi
 
@@ -346,15 +335,21 @@ reset_gpu_clocks() {
   echo "reset_strategy=fresh_srun_after_server_step"
   : > "${OUT_DIR}/reset_step.log"
   local reset_rc=0
+  PD_TP_SIZE_OVERRIDE="$PREFILL_TP_SIZE" \
   srun --kill-on-bad-exit=1 --exact --nodes=1 \
     --nodelist=neptune --ntasks="$CURRENT_PREFILL_INSTANCES" \
-    --ntasks-per-node="$CURRENT_PREFILL_INSTANCES" --gpus-per-task=1 \
-    --cpus-per-task=8 --mem=4G "$NODE_SCRIPT" reset \
+    --ntasks-per-node="$CURRENT_PREFILL_INSTANCES" \
+    --gpus-per-task="$PREFILL_TP_SIZE" \
+    --cpus-per-task="$((8 * PREFILL_TP_SIZE))" --mem=4G \
+    "$NODE_SCRIPT" reset \
     >> "${OUT_DIR}/reset_step.log" 2>&1 || reset_rc=$?
+  PD_TP_SIZE_OVERRIDE="$DECODE_TP_SIZE" \
   srun --kill-on-bad-exit=1 --exact --nodes=1 \
     --nodelist=ganymede --ntasks="$CURRENT_DECODE_INSTANCES" \
-    --ntasks-per-node="$CURRENT_DECODE_INSTANCES" --gpus-per-task=1 \
-    --cpus-per-task=8 --mem=4G "$NODE_SCRIPT" reset \
+    --ntasks-per-node="$CURRENT_DECODE_INSTANCES" \
+    --gpus-per-task="$DECODE_TP_SIZE" \
+    --cpus-per-task="$((8 * DECODE_TP_SIZE))" --mem=4G \
+    "$NODE_SCRIPT" reset \
     >> "${OUT_DIR}/reset_step.log" 2>&1 || reset_rc=$?
   cat "${OUT_DIR}/reset_step.log" 2>/dev/null || true
   echo "parent_reset_rc=${reset_rc}"
@@ -475,7 +470,8 @@ schedule_one() {
     --policy latency_only --placement "$SCHEDULER_PLACEMENT" \
     --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" "${kv_args[@]}" \
     --il "$il" --ol "$ol" --rate "$rate" \
-    --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
+    --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" \
+    --tp "$PREFILL_TP_SIZE" \
     --output "$latency_decision" > "${OUT_DIR}/scheduler_latency_${seq}_${workload_id}.json"
   local latency_rc=$?
   if [ "$latency_rc" -ne 0 ] && [ "$latency_rc" -ne 2 ]; then
@@ -490,7 +486,8 @@ schedule_one() {
       --policy latency_plus_saturation --placement "$SCHEDULER_PLACEMENT" \
       --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" "${kv_args[@]}" \
       --il "$il" --ol "$ol" --rate "$rate" \
-      --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" --tp 1 \
+      --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" \
+      --tp "$PREFILL_TP_SIZE" \
       --output "$gate_decision" > "${OUT_DIR}/scheduler_gate_${seq}_${workload_id}.json"
     gate_rc=$?
     if [ "$gate_rc" -ne 0 ] && [ "$gate_rc" -ne 2 ]; then
@@ -597,15 +594,17 @@ PY
 launch_scale_instance() {
   local role="$1"
   local ordinal="$2"
-  local node http_port kv_port clock_key instance_id
+  local node http_port kv_port clock_key instance_id tp_size
   if [ "$role" = prefill ]; then
     node=neptune
+    tp_size="$PREFILL_TP_SIZE"
     http_port=$((PREFILL_HTTP_PORT + ordinal - 1))
-    kv_port=$((KV_PORT + ordinal - 1))
+    kv_port=$((KV_PORT + (ordinal - 1) * tp_size))
   else
     node=ganymede
+    tp_size="$DECODE_TP_SIZE"
     http_port=$((DECODE_HTTP_PORT + ordinal - 1))
-    kv_port=$((KV_PORT + ordinal - 1))
+    kv_port=$((KV_PORT + (ordinal - 1) * tp_size))
   fi
   instance_id="${role}-${ordinal}"
   clock_key="${node}-${instance_id}"
@@ -619,8 +618,10 @@ launch_scale_instance() {
   PD_HTTP_PORT_OVERRIDE="$http_port" \
   PD_KV_PORT_OVERRIDE="$kv_port" \
   PD_CLOCK_KEY_OVERRIDE="$clock_key" \
+  PD_TP_SIZE_OVERRIDE="$tp_size" \
     srun --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$node" \
-      --ntasks=1 --ntasks-per-node=1 --gpus-per-task=1 --cpus-per-task=8 \
+      --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$tp_size" \
+      --cpus-per-task="$((8 * tp_size))" \
       --mem="$VLLM_STEP_MEM" \
       "$NODE_SCRIPT" serve </dev/null \
       >> "${OUT_DIR}/scale_${instance_id}_step.log" 2>&1 &

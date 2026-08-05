@@ -98,7 +98,7 @@ case "$TP_SIZE" in
     ;;
 esac
 EXPECTED_VISIBLE_GPU_COUNT="$TP_SIZE"
-if [ "$MODE" = preflight ] || [ "$MODE" = reset ]; then
+if [ "$MODE" = preflight ]; then
   EXPECTED_VISIBLE_GPU_COUNT=1
 fi
 if [ "${#VISIBLE_GPU_ARRAY[@]}" -ne "$EXPECTED_VISIBLE_GPU_COUNT" ]; then
@@ -147,7 +147,6 @@ echo "link_mtu=$(cat "/sys/class/net/${IFACE}/mtu" 2>/dev/null || echo unknown)"
 nvidia-smi --query-gpu=index,name,memory.total,driver_version --format=csv 2>&1 || true
 
 GPU_NAME=$(nvidia-smi -i "$GPU_ID" --query-gpu=name --format=csv,noheader 2>/dev/null || true)
-GPU_UUID=$(nvidia-smi -i "$GPU_ID" --query-gpu=uuid --format=csv,noheader 2>/dev/null | head -n 1 | tr -d ' ' || true)
 case "$EXPECTED_GPU:$GPU_NAME" in
   l4:*L4*|l40s:*L40S*) ;;
   *)
@@ -157,12 +156,14 @@ case "$EXPECTED_GPU:$GPU_NAME" in
 esac
 
 if [ "$MODE" = reset ]; then
-  echo "parent_reset_step=true host=${HOST} gpu_id=${GPU_ID} rec_freq_mhz=${TARGET_FREQ}"
+  echo "parent_reset_step=true host=${HOST} gpu_ids=${VISIBLE_GPUS} rec_freq_mhz=${TARGET_FREQ}"
   echo "reset_command_initial=sudo_nvidia_smi_rgc"
-  if ! sudo nvidia-smi -i "$GPU_ID" -rgc; then
-    echo "reset_gpu_clock_failed=true host=${HOST} gpu_id=${GPU_ID}"
-    exit 15
-  fi
+  for reset_gpu_id in "${VISIBLE_GPU_ARRAY[@]}"; do
+    if ! sudo nvidia-smi -i "$reset_gpu_id" -rgc; then
+      echo "reset_gpu_clock_failed=true host=${HOST} gpu_id=${reset_gpu_id}"
+      exit 15
+    fi
+  done
   MAX_FREQ=$(nvidia-smi -i "$GPU_ID" --query-gpu=clocks.max.graphics --format=csv,noheader,nounits | head -n 1 | tr -d ' ')
   RESET_PROBE_FILE="${OUT_DIR}/reset_${HOST}_gpu_${GPU_ID}_probe.json"
   RESET_PROBE_RC=0
@@ -184,10 +185,12 @@ if [ "$MODE" = reset ]; then
   # reset; power and thermal limits may keep L4 near 1.2 GHz. Make a second
   # successful -rgc the final GPU control operation before this node exits.
   echo "reset_command_final=sudo_nvidia_smi_rgc"
-  if ! sudo nvidia-smi -i "$GPU_ID" -rgc; then
-    echo "final_reset_gpu_clock_failed=true host=${HOST} gpu_id=${GPU_ID}"
-    exit 18
-  fi
+  for reset_gpu_id in "${VISIBLE_GPU_ARRAY[@]}"; do
+    if ! sudo nvidia-smi -i "$reset_gpu_id" -rgc; then
+      echo "final_reset_gpu_clock_failed=true host=${HOST} gpu_id=${reset_gpu_id}"
+      exit 18
+    fi
+  done
   if [ "$RESET_PROBE_RC" -ne 0 ]; then
     echo "reset_gpu_clock_verified=false reason=post_reset_probe_failed"
     exit 19
@@ -248,8 +251,10 @@ cleanup() {
     wait "$MONITOR_PID" 2>/dev/null || true
   fi
   if [ "$CLOCK_LOCKED" = true ]; then
-    echo "reset_gpu_clock gpu_id=${GPU_ID}"
-    sudo nvidia-smi -i "$GPU_ID" -rgc 2>&1 || true
+    echo "reset_gpu_clocks gpu_ids=${VISIBLE_GPUS}"
+    for cleanup_gpu_id in "${VISIBLE_GPU_ARRAY[@]}"; do
+      sudo nvidia-smi -i "$cleanup_gpu_id" -rgc 2>&1 || true
+    done
   fi
   echo "node_server_exit host=${HOST} role=${ROLE} rc=${rc}"
   exit "$rc"
@@ -270,8 +275,11 @@ monitor() {
     fi
     rx=$(cat "/sys/class/net/${IFACE}/statistics/rx_bytes" 2>/dev/null || echo NA)
     tx=$(cat "/sys/class/net/${IFACE}/statistics/tx_bytes" 2>/dev/null || echo NA)
-    gpu=$(nvidia-smi -i "$GPU_ID" --query-gpu=utilization.gpu,power.draw,clocks.sm,memory.used,utilization.memory,power.limit,clocks.mem,temperature.gpu,memory.total,pstate --format=csv,noheader,nounits 2>/dev/null | head -n 1 || true)
-    echo "${unix_ts},${HOST},${ROLE},${INSTANCE_ID},${GPU_ID},${GPU_UUID:-NA},${workload_seq},${target_freq},${rx},${tx},${gpu:-NA,NA,NA,NA,NA,NA,NA,NA,NA,NA}" >> "$TELEMETRY_FILE"
+    for monitor_gpu_id in "${VISIBLE_GPU_ARRAY[@]}"; do
+      monitor_gpu_uuid=$(nvidia-smi -i "$monitor_gpu_id" --query-gpu=uuid --format=csv,noheader 2>/dev/null | head -n 1 | tr -d ' ' || true)
+      gpu=$(nvidia-smi -i "$monitor_gpu_id" --query-gpu=utilization.gpu,power.draw,clocks.sm,memory.used,utilization.memory,power.limit,clocks.mem,temperature.gpu,memory.total,pstate --format=csv,noheader,nounits 2>/dev/null | head -n 1 || true)
+      echo "${unix_ts},${HOST},${ROLE},${INSTANCE_ID},${monitor_gpu_id},${monitor_gpu_uuid:-NA},${workload_seq},${target_freq},${rx},${tx},${gpu:-NA,NA,NA,NA,NA,NA,NA,NA,NA,NA}" >> "$TELEMETRY_FILE"
+    done
     sleep 0.5
   done
 }
@@ -289,9 +297,12 @@ clock_controller() {
         observed=NA
         probe_file="${OUT_DIR}/clock_${seq}_${NODE_GROUP}.json"
         echo "dynamic_clock_apply host=${HOST} seq=${seq} target_mhz=${target}"
-        if ! sudo nvidia-smi -i "$GPU_ID" -lgc "${target},${target}"; then
-          rc=31
-        elif [ "$CLOCK_ACK_MODE" = active_probe ]; then
+        for clock_gpu_id in "${VISIBLE_GPU_ARRAY[@]}"; do
+          if ! sudo nvidia-smi -i "$clock_gpu_id" -lgc "${target},${target}"; then
+            rc=31
+          fi
+        done
+        if [ "$rc" -eq 0 ] && [ "$CLOCK_ACK_MODE" = active_probe ]; then
           if ! CUDA_VISIBLE_DEVICES="$GPU_ID" "$PYTHON_BIN" "$CLOCK_PROBE" \
             --smi-index "$GPU_ID" --seconds 2 --output "$probe_file"; then
             rc=32
@@ -316,7 +327,7 @@ raise SystemExit(0 if abs(mean - target) <= tolerance else 1)
 PY
             ) || rc=33
           fi
-        else
+        elif [ "$rc" -eq 0 ]; then
           # Starting a new CUDA process while vLLM owns almost all L4 memory can
           # fail during context creation. Treat successful -lgc as the control
           # acknowledgement and verify sustained clocks from the existing
@@ -360,11 +371,13 @@ PY
 }
 
 if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
-  echo "lock_gpu_clock gpu_id=${GPU_ID} target_mhz=${TARGET_FREQ}"
-  if ! sudo nvidia-smi -i "$GPU_ID" -lgc "${TARGET_FREQ},${TARGET_FREQ}"; then
-    echo "lock_gpu_clock_failed=true"
-    exit 14
-  fi
+  echo "lock_gpu_clocks gpu_ids=${VISIBLE_GPUS} target_mhz=${TARGET_FREQ}"
+  for lock_gpu_id in "${VISIBLE_GPU_ARRAY[@]}"; do
+    if ! sudo nvidia-smi -i "$lock_gpu_id" -lgc "${TARGET_FREQ},${TARGET_FREQ}"; then
+      echo "lock_gpu_clock_failed=true gpu_id=${lock_gpu_id}"
+      exit 14
+    fi
+  done
   CLOCK_LOCKED=true
 elif [ "$GPU_CLOCK_CONTROL_MODE" = auto ]; then
   echo "automatic_dvfs_enabled=true manual_clock_commands=false"
@@ -372,7 +385,9 @@ else
   echo "unsupported_gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
   exit 20
 fi
-nvidia-smi -i "$GPU_ID" --query-gpu=index,name,clocks.current.graphics,clocks.max.graphics --format=csv 2>&1 || true
+for query_gpu_id in "${VISIBLE_GPU_ARRAY[@]}"; do
+  nvidia-smi -i "$query_gpu_id" --query-gpu=index,name,clocks.current.graphics,clocks.max.graphics --format=csv 2>&1 || true
+done
 
 echo "launch_vllm host=${HOST} role=${ROLE} instance_id=${INSTANCE_ID} ip=${NODE_IP} http_port=${HTTP_PORT} kv_port=${INSTANCE_KV_PORT}"
 echo "NCCL_NET=${NCCL_NET} NCCL_IB_DISABLE=${NCCL_IB_DISABLE} NCCL_SOCKET_IFNAME=${NCCL_SOCKET_IFNAME}"
