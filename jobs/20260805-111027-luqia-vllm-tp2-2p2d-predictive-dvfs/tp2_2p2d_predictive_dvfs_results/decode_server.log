@@ -45,3 +45,31 @@ INFO 08-05 11:35:57 [parallel_state.py:1423] rank 1 in world size 2 is assigned 
 [0;36m(Worker_TP0 pid=121681)[0;0m 
 [0;36m(Worker_TP0 pid=121681)[0;0m INFO 08-05 11:36:09 [default_loader.py:291] Loading weights took 8.30 seconds
 [0;36m(Worker_TP0 pid=121681)[0;0m INFO 08-05 11:36:09 [gpu_model_runner.py:4130] Model loading took 6.75 GiB memory and 10.515155 seconds
+[0;36m(Worker_TP0 pid=121681)[0;0m INFO 08-05 11:36:20 [gpu_worker.py:356] Available KV cache memory: 11.02 GiB
+[0;36m(EngineCore_DP0 pid=121289)[0;0m INFO 08-05 11:36:20 [kv_cache_utils.py:1307] GPU KV cache size: 180,480 tokens
+[0;36m(EngineCore_DP0 pid=121289)[0;0m INFO 08-05 11:36:20 [kv_cache_utils.py:1312] Maximum concurrency for 4,096 tokens per request: 43.89x
+[0;36m(Worker_TP0 pid=121681)[0;0m INFO 08-05 11:36:20 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: e37915f7-d379-43e6-8c3b-2caebd72325d
+[0;36m(Worker_TP0 pid=121681)[0;0m WARNING 08-05 11:36:20 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(Worker_TP1 pid=121683)[0;0m INFO 08-05 11:36:20 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: e37915f7-d379-43e6-8c3b-2caebd72325d
+[0;36m(Worker_TP1 pid=121683)[0;0m WARNING 08-05 11:36:20 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852] WorkerProc hit an exception.
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852] Traceback (most recent call last):
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/multiproc_executor.py", line 847, in worker_busy_loop
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]     output = func(*args, **kwargs)
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/worker_base.py", line 320, in initialize_from_config
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]     self.worker.initialize_from_config(kv_cache_config)  # type: ignore
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_worker.py", line 403, in initialize_from_config
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]     ensure_kv_transfer_initialized(self.vllm_config, kv_cache_config)
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_transfer_state.py", line 67, in ensure_kv_transfer_initialized
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]     _KV_CONNECTOR_AGENT = KVConnectorFactory.create_connector(
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/factory.py", line 82, in create_connector
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]     return connector_cls(config, role, kv_cache_config)
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_connector.py", line 97, in __init__
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]     P2pNcclEngine(
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_engine.py", line 127, in __init__
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]     self.router_socket.bind(f"tcp://{self.zmq_address}")
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/zmq/sugar/socket.py", line 320, in bind
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]     super().bind(addr)
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]   File "zmq/backend/cython/_zmq.py", line 1009, in zmq.backend.cython._zmq.Socket.bind
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852]   File "zmq/backend/cython/_zmq.py", line 190, in zmq.backend.cython._zmq._check_rc
+[0;36m(Worker_TP1 pid=121683)[0;0m ERROR 08-05 11:36:20 [multiproc_executor.py:852] zmq.error.ZMQError: Address already in use (addr='tcp://10.1.0.3:34308')
