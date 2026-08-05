@@ -30,6 +30,7 @@ SATURATION_BUNDLE="${SOURCE_JOB_DIR}/saturation_bundle.json"
 WORKLOAD_FILE="${WORKLOAD_FILE_OVERRIDE:-${SOURCE_JOB_DIR}/workloads.csv}"
 ENERGY_SUMMARY_SCRIPT="${SOURCE_JOB_DIR}/energy_summary.py"
 POWER_MONITOR_SCRIPT="${SOURCE_JOB_DIR}/monitor_gpu_power.py"
+PORT_ALLOCATOR_SCRIPT="${SOURCE_JOB_DIR}/port_allocator.py"
 LIVE_SUMMARY_SCRIPT="${SOURCE_JOB_DIR}/summarize_live_results.py"
 COMPARE_SCRIPT="${SOURCE_JOB_DIR}/compare_gate_results.py"
 REFERENCE_COMPARISON="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-122040-luqia-vllm-pd-baseline-energy-r1/baseline_results/comparison.json"
@@ -399,6 +400,71 @@ wait_for_url() {
     fi
   done
   echo "ready name=${name} elapsed_s=${elapsed} url=${url}"
+}
+
+select_runtime_ports() {
+  section "select_runtime_ports"
+  local snapshot_log="${OUT_DIR}/port_snapshot.log"
+  local allocation_file="${OUT_DIR}/port_allocation.json"
+  local ganymede_snapshot="${OUT_DIR}/tcp_ports_ganymede.json"
+  local neptune_snapshot="${OUT_DIR}/tcp_ports_neptune.json"
+  local selection_args=(
+    select
+    --ganymede-snapshot "$ganymede_snapshot"
+    --neptune-snapshot "$neptune_snapshot"
+    --job-id "${SLURM_JOB_ID:-0}"
+    --max-prefill-instances "$MAX_PREFILL_INSTANCES"
+    --max-decode-instances "$MAX_DECODE_INSTANCES"
+    --prefill-tp "$PREFILL_TP_SIZE"
+    --decode-tp "$DECODE_TP_SIZE"
+    --output "$allocation_file"
+  )
+
+  : > "$snapshot_log"
+  if ! srun --overlap --kill-on-bad-exit=1 --exact --nodes=2 \
+    --ntasks=2 --ntasks-per-node=1 --cpus-per-task=1 --mem=128M \
+    "$PYTHON_BIN" "$PORT_ALLOCATOR_SCRIPT" snapshot --output-dir "$OUT_DIR" \
+    > "$snapshot_log" 2>&1; then
+    cat "$snapshot_log" 2>/dev/null || true
+    echo "port_snapshot_failed=true"
+    return 31
+  fi
+  cat "$snapshot_log" 2>/dev/null || true
+
+  if [ -n "${PORT_OFFSET_OVERRIDE:-}" ]; then
+    selection_args+=(--offset "$PORT_OFFSET_OVERRIDE")
+  fi
+  if ! "$PYTHON_BIN" "$PORT_ALLOCATOR_SCRIPT" "${selection_args[@]}"; then
+    echo "port_selection_failed=true offset_override=${PORT_OFFSET_OVERRIDE:-none}"
+    return 31
+  fi
+
+  local port_values
+  if ! port_values=$("$PYTHON_BIN" - "$allocation_file" <<'PY'
+import json
+import sys
+
+data = json.load(open(sys.argv[1], encoding="utf-8"))
+ports = data["ports"]
+print(
+    data["selected_offset"],
+    ports["proxy_http"],
+    ports["proxy_register"],
+    ports["prefill_http_base"],
+    ports["decode_http_base"],
+    ports["kv_base"],
+)
+PY
+  ); then
+    echo "port_allocation_parse_failed=true file=${allocation_file}"
+    return 31
+  fi
+  read -r PORT_OFFSET PROXY_HTTP_PORT PROXY_REGISTER_PORT \
+    PREFILL_HTTP_PORT DECODE_HTTP_PORT KV_PORT <<< "$port_values"
+  export PORT_OFFSET PROXY_HTTP_PORT PROXY_REGISTER_PORT
+  export PREFILL_HTTP_PORT DECODE_HTTP_PORT KV_PORT
+  echo "selected_ports offset=${PORT_OFFSET} proxy_http=${PROXY_HTTP_PORT} proxy_register=${PROXY_REGISTER_PORT} prefill_http_base=${PREFILL_HTTP_PORT} decode_http_base=${DECODE_HTTP_PORT} kv_base=${KV_PORT}"
+  cat "$allocation_file"
 }
 
 placement_values() {
@@ -1018,7 +1084,7 @@ if [ ! -x "$PYTHON_BIN" ] || [ ! -x "$VLLM_BIN" ]; then
   exit 3
 fi
 for required in "$MODEL_BUNDLE" "$SATURATION_BUNDLE" "$ENERGY_SUMMARY_SCRIPT" \
-  "$POWER_MONITOR_SCRIPT" "$LIVE_SUMMARY_SCRIPT"; do
+  "$POWER_MONITOR_SCRIPT" "$PORT_ALLOCATOR_SCRIPT" "$LIVE_SUMMARY_SCRIPT"; do
   if [ ! -s "$required" ]; then
     echo "required_artifact_missing=${required}"
     exit 3
@@ -1107,6 +1173,12 @@ echo "power_monitor_ready=${POWER_MONITOR_READY}"
 if [ "$POWER_MONITOR_READY" != true ]; then
   dump_power_monitor_logs
   exit 28
+fi
+
+select_runtime_ports
+PORT_SELECTION_RC=$?
+if [ "$PORT_SELECTION_RC" -ne 0 ]; then
+  exit "$PORT_SELECTION_RC"
 fi
 
 section "start_proxy"
