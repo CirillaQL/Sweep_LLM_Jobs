@@ -52,3 +52,13 @@ INFO 08-05 14:17:11 [parallel_state.py:1423] rank 1 in world size 2 is assigned 
 [0;36m(Worker_TP1 pid=148235)[0;0m WARNING 08-05 14:17:24 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
 [0;36m(Worker_TP0 pid=148234)[0;0m INFO 08-05 14:17:24 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 7e107c38-9783-459a-bc5b-8c88e01a5cff
 [0;36m(Worker_TP0 pid=148234)[0;0m WARNING 08-05 14:17:24 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(Worker_TP0 pid=148234)[0;0m INFO 08-05 14:17:36 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:0, local_rank:0, http_address:10.1.0.3:33565, zmq_address:10.1.0.3:34566, proxy_address:10.1.0.3:31564, send_type:PUT_ASYNC, buffer_size_threshold:8000000000.00, nccl_num_channels:16
+[0;36m(Worker_TP1 pid=148235)[0;0m INFO 08-05 14:17:36 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:1, local_rank:1, http_address:10.1.0.3:33565, zmq_address:10.1.0.3:34567, proxy_address:10.1.0.3:31564, send_type:PUT_ASYNC, buffer_size_threshold:8000000000.00, nccl_num_channels:16
+[0;36m(Worker_TP0 pid=148234)[0;0m INFO 08-05 14:17:36 [utils.py:38] Connectors do not specify a kv cache layout, defaulting to NHD.
+[0;36m(Worker_TP1 pid=148235)[0;0m INFO 08-05 14:17:36 [utils.py:38] Connectors do not specify a kv cache layout, defaulting to NHD.
+[0;36m(EngineCore_DP0 pid=147769)[0;0m INFO 08-05 14:17:36 [core.py:272] init engine (profile, create kv cache, warmup model) took 16.12 seconds
+[0;36m(EngineCore_DP0 pid=147769)[0;0m INFO 08-05 14:17:37 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 7e107c38-9783-459a-bc5b-8c88e01a5cff
+[0;36m(EngineCore_DP0 pid=147769)[0;0m WARNING 08-05 14:17:37 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=147769)[0;0m INFO 08-05 14:17:38 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(EngineCore_DP0 pid=147769)[0;0m WARNING 08-05 14:17:38 [vllm.py:669] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+[0;36m(EngineCore_DP0 pid=147769)[0;0m INFO 08-05 14:17:38 [vllm.py:762] Cudagraph is disabled under eager mode
