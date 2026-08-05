@@ -1,17 +1,6 @@
 [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
 [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
 host=neptune node_group=neptune role=prefill instance_id=primary mode=reset
-scheduled_gpu=l40s scheduled_freq_mhz=480 gpu_id=0
-gpu_clock_control_mode=manual
-gpu_startup_clock_mode=max
-defer_instance_telemetry_until_ready=true
-clock_ack_mode=monitor
-tensor_parallel_size=2
-max_num_seqs=32
-max_model_len=4096 max_num_batched_tokens=4096
-node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
-CUDA_VISIBLE_DEVICES=0,1
-host=neptune node_group=neptune role=prefill instance_id=primary mode=reset
 scheduled_gpu=l40s scheduled_freq_mhz=480 gpu_id=2
 gpu_clock_control_mode=manual
 gpu_startup_clock_mode=max
@@ -20,8 +9,19 @@ clock_ack_mode=monitor
 tensor_parallel_size=2
 max_num_seqs=32
 max_model_len=4096 max_num_batched_tokens=4096
+host=neptune node_group=neptune role=prefill instance_id=primary mode=reset
+scheduled_gpu=l40s scheduled_freq_mhz=480 gpu_id=0
+gpu_clock_control_mode=manual
+gpu_startup_clock_mode=max
 node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
 CUDA_VISIBLE_DEVICES=2,3
+defer_instance_telemetry_until_ready=true
+clock_ack_mode=monitor
+tensor_parallel_size=2
+max_num_seqs=32
+max_model_len=4096 max_num_batched_tokens=4096
+node_ip=10.1.0.6 peer_ip=10.1.0.3 interface=enp160s0f0np0
+CUDA_VISIBLE_DEVICES=0,1
 enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
 enp160s0f0np0    UP             10.1.0.6/16 fe80::6e92:cfff:fe5e:cc00/64 
 10.1.0.3 dev enp160s0f0np0 src 10.1.0.6 uid 10271 
@@ -51,7 +51,8 @@ Terminating early due to previous errors.
 reset_gpu_clock_failed=true host=neptune gpu_id=0
 All done.
 srun: error: neptune: task 0: Exited with exit code 15
-srun: Terminating StepId=251809.8
-slurmstepd-neptune: error: *** STEP 251809.8 ON neptune CANCELLED AT 2026-08-05T14:44:09 ***
+srun: Terminating StepId=251809.10
+slurmstepd-neptune: error: *** STEP 251809.10 ON neptune CANCELLED AT 2026-08-05T14:44:20 ***
+All done.
 srun: error: neptune: task 1: Terminated
-srun: Force Terminated StepId=251809.8
+srun: Force Terminated StepId=251809.10
