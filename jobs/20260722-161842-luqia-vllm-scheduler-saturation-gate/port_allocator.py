@@ -34,15 +34,23 @@ def occupied_tcp_ports():
     return ports
 
 
-def required_ports(offset, max_prefill, max_decode, prefill_tp, decode_tp):
+def required_ports(
+    offset,
+    max_prefill,
+    max_decode,
+    prefill_tp,
+    decode_tp,
+    prefill_host="neptune",
+    decode_host="ganymede",
+):
     return {
-        "ganymede": {
+        decode_host: {
             PORT_BASES["proxy_http"] + offset,
             PORT_BASES["proxy_register"] + offset,
             *(PORT_BASES["decode_http"] + offset + i for i in range(max_decode)),
             *(PORT_BASES["kv"] + offset + i for i in range(max_decode * decode_tp)),
         },
-        "neptune": {
+        prefill_host: {
             *(PORT_BASES["prefill_http"] + offset + i for i in range(max_prefill)),
             *(PORT_BASES["kv"] + offset + i for i in range(max_prefill * prefill_tp)),
         },
@@ -69,6 +77,8 @@ def select_offset(
     max_decode,
     prefill_tp,
     decode_tp,
+    prefill_host="neptune",
+    decode_host="ganymede",
     offset_override=None,
 ):
     max_span = max(
@@ -102,7 +112,13 @@ def select_offset(
     rejected = []
     for offset in candidates:
         required = required_ports(
-            offset, max_prefill, max_decode, prefill_tp, decode_tp
+            offset,
+            max_prefill,
+            max_decode,
+            prefill_tp,
+            decode_tp,
+            prefill_host,
+            decode_host,
         )
         conflicts = {
             host: sorted(ports & occupied_by_host[host])
@@ -141,8 +157,8 @@ def snapshot_command(args):
 
 def select_command(args):
     occupied_by_host = {
-        "ganymede": load_snapshot(args.ganymede_snapshot, "ganymede"),
-        "neptune": load_snapshot(args.neptune_snapshot, "neptune"),
+        args.decode_host: load_snapshot(args.decode_snapshot, args.decode_host),
+        args.prefill_host: load_snapshot(args.prefill_snapshot, args.prefill_host),
     }
     offset, start_offset, rejected, required = select_offset(
         occupied_by_host=occupied_by_host,
@@ -151,6 +167,8 @@ def select_command(args):
         max_decode=args.max_decode_instances,
         prefill_tp=args.prefill_tp,
         decode_tp=args.decode_tp,
+        prefill_host=args.prefill_host,
+        decode_host=args.decode_host,
         offset_override=args.offset,
     )
     data = {
@@ -185,8 +203,14 @@ def parse_args():
     snapshot.set_defaults(func=snapshot_command)
 
     select = subparsers.add_parser("select")
-    select.add_argument("--ganymede-snapshot", required=True)
-    select.add_argument("--neptune-snapshot", required=True)
+    select.add_argument(
+        "--decode-snapshot", "--ganymede-snapshot", dest="decode_snapshot", required=True
+    )
+    select.add_argument(
+        "--prefill-snapshot", "--neptune-snapshot", dest="prefill_snapshot", required=True
+    )
+    select.add_argument("--decode-host", default="ganymede")
+    select.add_argument("--prefill-host", default="neptune")
     select.add_argument("--job-id", type=int, required=True)
     select.add_argument("--max-prefill-instances", type=int, required=True)
     select.add_argument("--max-decode-instances", type=int, required=True)

@@ -59,6 +59,11 @@ case "$HOST" in
     NODE_IP=10.1.0.6
     IFACE=enp160s0f0np0
     ;;
+  uranus)
+    NODE_GROUP=uranus
+    NODE_IP=10.1.0.5
+    IFACE=enp160s0f0np0
+    ;;
   ganymede)
     NODE_GROUP=ganymede
     NODE_IP=10.1.0.3

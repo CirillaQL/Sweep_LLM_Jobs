@@ -38,6 +38,8 @@ PLACEMENT_FILE="${OUT_DIR}/active_placement.json"
 CLOCK_CONTROL_DIR="${OUT_DIR}/clock_control"
 MODEL="${MODEL_OVERRIDE:-mistralai/Mistral-7B-v0.1}"
 JOB_TIME_LIMIT_LABEL="${JOB_TIME_LIMIT_LABEL_OVERRIDE:-00:28:00}"
+PREFILL_NODE="${PREFILL_NODE_OVERRIDE:-neptune}"
+DECODE_NODE="${DECODE_NODE_OVERRIDE:-ganymede}"
 
 SLO_TTFT_MS=500
 SLO_TPOT_MS=200
@@ -80,9 +82,9 @@ INITIAL_PREFILL_INSTANCES="${INITIAL_PREFILL_INSTANCES_OVERRIDE:-1}"
 INITIAL_DECODE_INSTANCES="${INITIAL_DECODE_INSTANCES_OVERRIDE:-1}"
 PREFILL_TP_SIZE="${PREFILL_TP_SIZE_OVERRIDE:-1}"
 DECODE_TP_SIZE="${DECODE_TP_SIZE_OVERRIDE:-1}"
-POWER_MONITOR_GANYMEDE_GPUS="${POWER_MONITOR_GANYMEDE_GPUS_OVERRIDE:-${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}}"
-POWER_MONITOR_NEPTUNE_GPUS="${POWER_MONITOR_NEPTUNE_GPUS_OVERRIDE:-${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}}"
-POWER_MONITOR_TOTAL_GPUS=$((POWER_MONITOR_GANYMEDE_GPUS + POWER_MONITOR_NEPTUNE_GPUS))
+POWER_MONITOR_DECODE_GPUS="${POWER_MONITOR_DECODE_GPUS_OVERRIDE:-${POWER_MONITOR_GANYMEDE_GPUS_OVERRIDE:-${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}}}"
+POWER_MONITOR_PREFILL_GPUS="${POWER_MONITOR_PREFILL_GPUS_OVERRIDE:-${POWER_MONITOR_NEPTUNE_GPUS_OVERRIDE:-${POWER_MONITOR_GPUS_PER_NODE_OVERRIDE:-${SLURM_GPUS_ON_NODE:-1}}}}"
+POWER_MONITOR_TOTAL_GPUS=$((POWER_MONITOR_DECODE_GPUS + POWER_MONITOR_PREFILL_GPUS))
 VLLM_STEP_MEM="${VLLM_STEP_MEM_OVERRIDE:-16G}"
 CURRENT_PREFILL_INSTANCES="$INITIAL_PREFILL_INSTANCES"
 CURRENT_DECODE_INSTANCES="$INITIAL_DECODE_INSTANCES"
@@ -118,7 +120,7 @@ esac
 for count in "$MAX_PREFILL_INSTANCES" "$MAX_DECODE_INSTANCES" \
   "$INITIAL_PREFILL_INSTANCES" "$INITIAL_DECODE_INSTANCES" \
   "$PREFILL_TP_SIZE" "$DECODE_TP_SIZE" \
-  "$POWER_MONITOR_GANYMEDE_GPUS" "$POWER_MONITOR_NEPTUNE_GPUS"; do
+  "$POWER_MONITOR_DECODE_GPUS" "$POWER_MONITOR_PREFILL_GPUS"; do
   case "$count" in
     ''|*[!0-9]*|0)
       echo "invalid_max_instance_count=${count:-unset}"
@@ -131,9 +133,9 @@ if [ "$INITIAL_PREFILL_INSTANCES" -gt "$MAX_PREFILL_INSTANCES" ] || \
   echo "initial_instance_count_exceeds_max initial_prefill=${INITIAL_PREFILL_INSTANCES} max_prefill=${MAX_PREFILL_INSTANCES} initial_decode=${INITIAL_DECODE_INSTANCES} max_decode=${MAX_DECODE_INSTANCES}"
   exit 27
 fi
-if [ "$POWER_MONITOR_NEPTUNE_GPUS" -lt "$((INITIAL_PREFILL_INSTANCES * PREFILL_TP_SIZE))" ] || \
-  [ "$POWER_MONITOR_GANYMEDE_GPUS" -lt "$((INITIAL_DECODE_INSTANCES * DECODE_TP_SIZE))" ]; then
-  echo "power_monitor_gpu_count_too_small_for_initial_instances ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} initial_prefill_instances=${INITIAL_PREFILL_INSTANCES} prefill_tp=${PREFILL_TP_SIZE} initial_decode_instances=${INITIAL_DECODE_INSTANCES} decode_tp=${DECODE_TP_SIZE}"
+if [ "$POWER_MONITOR_PREFILL_GPUS" -lt "$((INITIAL_PREFILL_INSTANCES * PREFILL_TP_SIZE))" ] || \
+  [ "$POWER_MONITOR_DECODE_GPUS" -lt "$((INITIAL_DECODE_INSTANCES * DECODE_TP_SIZE))" ]; then
+  echo "power_monitor_gpu_count_too_small_for_initial_instances decode_node=${DECODE_NODE} decode_gpus=${POWER_MONITOR_DECODE_GPUS} prefill_node=${PREFILL_NODE} prefill_gpus=${POWER_MONITOR_PREFILL_GPUS} initial_prefill_instances=${INITIAL_PREFILL_INSTANCES} prefill_tp=${PREFILL_TP_SIZE} initial_decode_instances=${INITIAL_DECODE_INSTANCES} decode_tp=${DECODE_TP_SIZE}"
   exit 27
 fi
 if [ "$SCHEDULER_ENABLED" = true ] && \
@@ -154,9 +156,9 @@ case "$BENCH_NUM_WARMUPS" in
     ;;
 esac
 if [ "$SATURATION_ACTION" = scale_out ] && \
-  { [ "$POWER_MONITOR_NEPTUNE_GPUS" -lt "$((MAX_PREFILL_INSTANCES * PREFILL_TP_SIZE))" ] || \
-    [ "$POWER_MONITOR_GANYMEDE_GPUS" -lt "$((MAX_DECODE_INSTANCES * DECODE_TP_SIZE))" ]; }; then
-  echo "power_monitor_gpu_count_too_small ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} max_prefill_instances=${MAX_PREFILL_INSTANCES} prefill_tp=${PREFILL_TP_SIZE} max_decode_instances=${MAX_DECODE_INSTANCES} decode_tp=${DECODE_TP_SIZE}"
+  { [ "$POWER_MONITOR_PREFILL_GPUS" -lt "$((MAX_PREFILL_INSTANCES * PREFILL_TP_SIZE))" ] || \
+    [ "$POWER_MONITOR_DECODE_GPUS" -lt "$((MAX_DECODE_INSTANCES * DECODE_TP_SIZE))" ]; }; then
+  echo "power_monitor_gpu_count_too_small decode_node=${DECODE_NODE} decode_gpus=${POWER_MONITOR_DECODE_GPUS} prefill_node=${PREFILL_NODE} prefill_gpus=${POWER_MONITOR_PREFILL_GPUS} max_prefill_instances=${MAX_PREFILL_INSTANCES} prefill_tp=${PREFILL_TP_SIZE} max_decode_instances=${MAX_DECODE_INSTANCES} decode_tp=${DECODE_TP_SIZE}"
   exit 27
 fi
 
@@ -166,15 +168,15 @@ if [ -f "${JOB_DIR}/CANCEL_BEFORE_RUN" ]; then
   exit 0
 fi
 
-PROXY_IP=10.1.0.3
+PROXY_IP="${PROXY_IP_OVERRIDE:-10.1.0.3}"
 PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
 PROXY_HTTP_PORT=$((30000 + PORT_OFFSET))
 PROXY_REGISTER_PORT=$((31000 + PORT_OFFSET))
 PREFILL_HTTP_PORT=$((32000 + PORT_OFFSET))
 DECODE_HTTP_PORT=$((33000 + PORT_OFFSET))
 KV_PORT=$((34000 + PORT_OFFSET))
-PREFILL_IP=10.1.0.6
-DECODE_IP=10.1.0.3
+PREFILL_IP="${PREFILL_IP_OVERRIDE:-10.1.0.6}"
+DECODE_IP="${DECODE_IP_OVERRIDE:-10.1.0.3}"
 
 export HOME="/data/users/chjing"
 export USER=chjing
@@ -186,6 +188,7 @@ export PATH="${ENV_DIR}/bin:${PATH}"
 export JOB_DIR OUT_DIR ENV_DIR PYTHON_BIN VLLM_BIN MODEL PLACEMENT_FILE CLOCK_PROBE
 export CLOCK_CONTROL_DIR PROXY_IP PROXY_HTTP_PORT PROXY_REGISTER_PORT
 export PREFILL_HTTP_PORT DECODE_HTTP_PORT PREFILL_IP DECODE_IP KV_PORT
+export PREFILL_NODE DECODE_NODE
 export GPU_CLOCK_CONTROL_MODE_OVERRIDE
 export CLOCK_ACK_MODE_OVERRIDE="$CLOCK_ACK_MODE"
 export CLOCK_ACK_TRANSPORT_OVERRIDE="$CLOCK_ACK_TRANSPORT"
@@ -213,8 +216,8 @@ for lifecycle_path in \
     : > "$lifecycle_path"
   fi
 done
-: > "${CLOCK_CONTROL_DIR}/neptune.ack"
-: > "${CLOCK_CONTROL_DIR}/ganymede.ack"
+: > "${CLOCK_CONTROL_DIR}/${PREFILL_NODE}.ack"
+: > "${CLOCK_CONTROL_DIR}/${DECODE_NODE}.ack"
 echo "unix_ts,event,seq,workload_id,policy" > "${OUT_DIR}/events.csv"
 ulimit -n 65536
 
@@ -338,7 +341,7 @@ reset_gpu_clocks() {
   local reset_rc=0
   PD_TP_SIZE_OVERRIDE="$PREFILL_TP_SIZE" \
   srun --kill-on-bad-exit=1 --exact --nodes=1 \
-    --nodelist=neptune --ntasks="$CURRENT_PREFILL_INSTANCES" \
+    --nodelist="$PREFILL_NODE" --ntasks="$CURRENT_PREFILL_INSTANCES" \
     --ntasks-per-node="$CURRENT_PREFILL_INSTANCES" \
     --gpus-per-task="$PREFILL_TP_SIZE" \
     --cpus-per-task="$((8 * PREFILL_TP_SIZE))" --mem=4G \
@@ -346,7 +349,7 @@ reset_gpu_clocks() {
     >> "${OUT_DIR}/reset_step.log" 2>&1 || reset_rc=$?
   PD_TP_SIZE_OVERRIDE="$DECODE_TP_SIZE" \
   srun --kill-on-bad-exit=1 --exact --nodes=1 \
-    --nodelist=ganymede --ntasks="$CURRENT_DECODE_INSTANCES" \
+    --nodelist="$DECODE_NODE" --ntasks="$CURRENT_DECODE_INSTANCES" \
     --ntasks-per-node="$CURRENT_DECODE_INSTANCES" \
     --gpus-per-task="$DECODE_TP_SIZE" \
     --cpus-per-task="$((8 * DECODE_TP_SIZE))" --mem=4G \
@@ -410,12 +413,14 @@ select_runtime_ports() {
   section "select_runtime_ports"
   local snapshot_log="${OUT_DIR}/port_snapshot.log"
   local allocation_file="${OUT_DIR}/port_allocation.json"
-  local ganymede_snapshot="${OUT_DIR}/tcp_ports_ganymede.json"
-  local neptune_snapshot="${OUT_DIR}/tcp_ports_neptune.json"
+  local decode_snapshot="${OUT_DIR}/tcp_ports_${DECODE_NODE}.json"
+  local prefill_snapshot="${OUT_DIR}/tcp_ports_${PREFILL_NODE}.json"
   local selection_args=(
     select
-    --ganymede-snapshot "$ganymede_snapshot"
-    --neptune-snapshot "$neptune_snapshot"
+    --decode-snapshot "$decode_snapshot"
+    --prefill-snapshot "$prefill_snapshot"
+    --decode-host "$DECODE_NODE"
+    --prefill-host "$PREFILL_NODE"
     --job-id "${SLURM_JOB_ID:-0}"
     --max-prefill-instances "$MAX_PREFILL_INSTANCES"
     --max-decode-instances "$MAX_DECODE_INSTANCES"
@@ -612,7 +617,7 @@ schedule_one() {
   read -r prefill_node prefill_freq decode_node decode_freq predicted_power <<< "$values"
   echo "scheduler_selected seq=${seq} policy=${ACTIVE_SCHEDULER_POLICY} status=${active_status} prefill=${prefill_node}:${prefill_freq} decode=${decode_node}:${decode_freq} predicted_cluster_power_w=${predicted_power}"
   if [ "$SCHEDULER_PLACEMENT" = l40s-prefill-l4-decode ] && \
-    { [ "$prefill_node" != neptune ] || [ "$decode_node" != ganymede ]; }; then
+    { [ "$prefill_node" != "$PREFILL_NODE" ] || [ "$decode_node" != "$DECODE_NODE" ]; }; then
     echo "unexpected_role_selection=true seq=${seq}"
     return 23
   fi
@@ -666,12 +671,12 @@ launch_scale_instance() {
   local ordinal="$2"
   local node http_port kv_port clock_key instance_id tp_size
   if [ "$role" = prefill ]; then
-    node=neptune
+    node="$PREFILL_NODE"
     tp_size="$PREFILL_TP_SIZE"
     http_port=$((PREFILL_HTTP_PORT + ordinal - 1))
     kv_port=$((KV_PORT + (ordinal - 1) * tp_size))
   else
-    node=ganymede
+    node="$DECODE_NODE"
     tp_size="$DECODE_TP_SIZE"
     http_port=$((DECODE_HTTP_PORT + ordinal - 1))
     kv_port=$((KV_PORT + (ordinal - 1) * tp_size))
@@ -940,26 +945,26 @@ maybe_scale_out() {
 
 write_clock_request() {
   local seq="$1"
-  local neptune_freq="$2"
-  local ganymede_freq="$3"
+  local prefill_freq="$2"
+  local decode_freq="$3"
   local ordinal key
   for ((ordinal = 1; ordinal <= CURRENT_PREFILL_INSTANCES; ordinal++)); do
-    key=neptune
+    key="$PREFILL_NODE"
     if [ "$ordinal" -gt 1 ]; then
-      key="neptune-prefill-${ordinal}"
+      key="${PREFILL_NODE}-prefill-${ordinal}"
     fi
-    printf '%s %s\n' "$seq" "$neptune_freq" > "${CLOCK_CONTROL_DIR}/${key}.request.tmp"
+    printf '%s %s\n' "$seq" "$prefill_freq" > "${CLOCK_CONTROL_DIR}/${key}.request.tmp"
     mv "${CLOCK_CONTROL_DIR}/${key}.request.tmp" "${CLOCK_CONTROL_DIR}/${key}.request"
   done
   for ((ordinal = 1; ordinal <= CURRENT_DECODE_INSTANCES; ordinal++)); do
-    key=ganymede
+    key="$DECODE_NODE"
     if [ "$ordinal" -gt 1 ]; then
-      key="ganymede-decode-${ordinal}"
+      key="${DECODE_NODE}-decode-${ordinal}"
     fi
-    printf '%s %s\n' "$seq" "$ganymede_freq" > "${CLOCK_CONTROL_DIR}/${key}.request.tmp"
+    printf '%s %s\n' "$seq" "$decode_freq" > "${CLOCK_CONTROL_DIR}/${key}.request.tmp"
     mv "${CLOCK_CONTROL_DIR}/${key}.request.tmp" "${CLOCK_CONTROL_DIR}/${key}.request"
   done
-  echo "clock_request seq=${seq} neptune_mhz=${neptune_freq} neptune_instances=${CURRENT_PREFILL_INSTANCES} ganymede_mhz=${ganymede_freq} ganymede_instances=${CURRENT_DECODE_INSTANCES}"
+  echo "clock_request seq=${seq} prefill_node=${PREFILL_NODE} prefill_mhz=${prefill_freq} prefill_instances=${CURRENT_PREFILL_INSTANCES} decode_node=${DECODE_NODE} decode_mhz=${decode_freq} decode_instances=${CURRENT_DECODE_INSTANCES}"
 }
 
 wait_clock_ack() {
@@ -1025,7 +1030,8 @@ echo "placement=${SCHEDULER_PLACEMENT}"
 echo "overload_action=${OVERLOAD_ACTION}"
 echo "online_scheduling=${ONLINE_SCHEDULING} max_l4_freq=${MAX_L4_FREQ:-none} max_l40s_freq=${MAX_L40S_FREQ:-none}"
 echo "saturation_action=${SATURATION_ACTION} scale_in_enabled=${SCALE_IN_ENABLED} initial_prefill_instances=${INITIAL_PREFILL_INSTANCES} initial_decode_instances=${INITIAL_DECODE_INSTANCES} prefill_tp=${PREFILL_TP_SIZE} decode_tp=${DECODE_TP_SIZE} max_prefill_instances=${MAX_PREFILL_INSTANCES} max_decode_instances=${MAX_DECODE_INSTANCES} window_warmup_seconds=${WINDOW_WARMUP_SECONDS}"
-echo "power_monitor_ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} power_monitor_neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} power_monitor_total_gpus=${POWER_MONITOR_TOTAL_GPUS}"
+echo "prefill_node=${PREFILL_NODE} prefill_ip=${PREFILL_IP} decode_node=${DECODE_NODE} decode_ip=${DECODE_IP} proxy_ip=${PROXY_IP}"
+echo "power_monitor_decode_gpus=${POWER_MONITOR_DECODE_GPUS} power_monitor_prefill_gpus=${POWER_MONITOR_PREFILL_GPUS} power_monitor_total_gpus=${POWER_MONITOR_TOTAL_GPUS}"
 echo "kv_effective_bandwidth_gbps=${KV_EFFECTIVE_BANDWIDTH_GBPS:-disabled} kv_num_layers=${KV_NUM_LAYERS} kv_num_heads=${KV_NUM_HEADS} kv_head_dim=${KV_HEAD_DIM} kv_bytes_per_element=${KV_BYTES_PER_ELEMENT} dispatch_ms=${DISPATCH_MS}"
 echo "clock_mismatch_action=${CLOCK_MISMATCH_ACTION} clock_ack_mode=${CLOCK_ACK_MODE} clock_ack_transport=${CLOCK_ACK_TRANSPORT}"
 echo "scheduler_enabled=${SCHEDULER_ENABLED} active_scheduler_policy=${ACTIVE_SCHEDULER_POLICY} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE} policy_label=${POLICY_LABEL}"
@@ -1098,8 +1104,8 @@ echo "model=${MODEL} workload_count=${WORKLOAD_COUNT} slurm_time_limit=${JOB_TIM
 scontrol show hostnames "${SLURM_JOB_NODELIST:-}" 2>&1 || true
 scontrol show job "${SLURM_JOB_ID:-}" 2>&1 || true
 
-if [ "$(hostname -s)" != ganymede ]; then
-  echo "expected_batch_host_ganymede=true actual=$(hostname -s)"
+if [ "$(hostname -s)" != "$DECODE_NODE" ]; then
+  echo "expected_batch_host=${DECODE_NODE} actual=$(hostname -s)"
   exit 2
 fi
 if [ ! -x "$PYTHON_BIN" ] || [ ! -x "$VLLM_BIN" ]; then
@@ -1132,36 +1138,36 @@ if [ "$PREFLIGHT_RC" -ne 0 ]; then
 fi
 
 section "start_allocation_wide_gpu_power_monitor"
-GANYMEDE_POWER_LOG="${OUT_DIR}/power_monitor_ganymede.log"
-NEPTUNE_POWER_LOG="${OUT_DIR}/power_monitor_neptune.log"
-srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist=ganymede \
-  --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$POWER_MONITOR_GANYMEDE_GPUS" \
+DECODE_POWER_LOG="${OUT_DIR}/power_monitor_${DECODE_NODE}.log"
+PREFILL_POWER_LOG="${OUT_DIR}/power_monitor_${PREFILL_NODE}.log"
+srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$DECODE_NODE" \
+  --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$POWER_MONITOR_DECODE_GPUS" \
   --cpus-per-task=1 --mem=1G \
   "$PYTHON_BIN" -u "$POWER_MONITOR_SCRIPT" --output-dir "$OUT_DIR" \
-  --expected-gpus "$POWER_MONITOR_GANYMEDE_GPUS" \
-  > "$GANYMEDE_POWER_LOG" 2>&1 &
+  --expected-gpus "$POWER_MONITOR_DECODE_GPUS" \
+  > "$DECODE_POWER_LOG" 2>&1 &
 POWER_MONITOR_PIDS+=("$!")
-srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist=neptune \
-  --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$POWER_MONITOR_NEPTUNE_GPUS" \
+srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$PREFILL_NODE" \
+  --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$POWER_MONITOR_PREFILL_GPUS" \
   --cpus-per-task=1 --mem=1G \
   "$PYTHON_BIN" -u "$POWER_MONITOR_SCRIPT" --output-dir "$OUT_DIR" \
-  --expected-gpus "$POWER_MONITOR_NEPTUNE_GPUS" \
-  > "$NEPTUNE_POWER_LOG" 2>&1 &
+  --expected-gpus "$POWER_MONITOR_PREFILL_GPUS" \
+  > "$PREFILL_POWER_LOG" 2>&1 &
 POWER_MONITOR_PIDS+=("$!")
-POWER_MONITOR_LOGS+=("$GANYMEDE_POWER_LOG" "$NEPTUNE_POWER_LOG")
-echo "power_monitor_pids=${POWER_MONITOR_PIDS[*]} ganymede_gpus=${POWER_MONITOR_GANYMEDE_GPUS} neptune_gpus=${POWER_MONITOR_NEPTUNE_GPUS} total_gpus=${POWER_MONITOR_TOTAL_GPUS}"
+POWER_MONITOR_LOGS+=("$DECODE_POWER_LOG" "$PREFILL_POWER_LOG")
+echo "power_monitor_pids=${POWER_MONITOR_PIDS[*]} decode_node=${DECODE_NODE} decode_gpus=${POWER_MONITOR_DECODE_GPUS} prefill_node=${PREFILL_NODE} prefill_gpus=${POWER_MONITOR_PREFILL_GPUS} total_gpus=${POWER_MONITOR_TOTAL_GPUS}"
 POWER_MONITOR_READY=false
 for attempt in $(seq 1 30); do
-  if "$PYTHON_BIN" - "$OUT_DIR" "$POWER_MONITOR_GANYMEDE_GPUS" "$POWER_MONITOR_NEPTUNE_GPUS" <<'PY'
+  if "$PYTHON_BIN" - "$OUT_DIR" "$DECODE_NODE" "$POWER_MONITOR_DECODE_GPUS" "$PREFILL_NODE" "$POWER_MONITOR_PREFILL_GPUS" <<'PY'
 import csv
 import glob
 import os
 import sys
 
-out_dir, ganymede_text, neptune_text = sys.argv[1:]
+out_dir, decode_host, decode_text, prefill_host, prefill_text = sys.argv[1:]
 expected_by_host = {
-    "ganymede": int(ganymede_text),
-    "neptune": int(neptune_text),
+    decode_host: int(decode_text),
+    prefill_host: int(prefill_text),
 }
 paths = glob.glob(os.path.join(out_dir, "allocation_*_power.csv"))
 if len(paths) != 2:
@@ -1225,13 +1231,13 @@ fi
 : > "${OUT_DIR}/prefill_primary_step.log"
 : > "${OUT_DIR}/decode_primary_step.log"
 PD_TP_SIZE_OVERRIDE="$PREFILL_TP_SIZE" \
-  srun --kill-on-bad-exit=1 --exact --nodes=1 --nodelist=neptune \
+  srun --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$PREFILL_NODE" \
     --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$PREFILL_TP_SIZE" \
     --cpus-per-task="$((8 * PREFILL_TP_SIZE))" --mem="$VLLM_STEP_MEM" \
     "$NODE_SCRIPT" serve >> "${OUT_DIR}/prefill_primary_step.log" 2>&1 &
 SERVER_STEP_PIDS+=("$!")
 PD_TP_SIZE_OVERRIDE="$DECODE_TP_SIZE" \
-  srun --kill-on-bad-exit=1 --exact --nodes=1 --nodelist=ganymede \
+  srun --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$DECODE_NODE" \
     --ntasks=1 --ntasks-per-node=1 --gpus-per-task="$DECODE_TP_SIZE" \
     --cpus-per-task="$((8 * DECODE_TP_SIZE))" --mem="$VLLM_STEP_MEM" \
     "$NODE_SCRIPT" serve >> "${OUT_DIR}/decode_primary_step.log" 2>&1 &
@@ -1395,20 +1401,20 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
     continue
   fi
   cp "$placement" "$PLACEMENT_FILE"
-  read -r prefill_node neptune_freq decode_node ganymede_freq predicted_power <<< "$values"
+  read -r prefill_node prefill_freq decode_node decode_freq predicted_power <<< "$values"
 
   section "workload_${SEQ}_${workload_id}"
   echo "workload_prepare time=$(date --iso-8601=seconds) seq=${SEQ} id=${workload_id} il=${il} ol=${ol} request_rate=${rate} window_seconds=${window_seconds} burstiness=${burstiness} description=${description}"
   echo "fixed_placement prefill_node=${prefill_node} decode_node=${decode_node} gpu_clock_control_mode=${GPU_CLOCK_CONTROL_MODE}"
   if [ "$GPU_CLOCK_CONTROL_MODE" = manual ]; then
-    echo "recommendation neptune_prefill_mhz=${neptune_freq} ganymede_decode_mhz=${ganymede_freq} predicted_cluster_power_w=${predicted_power}"
-    write_clock_request "$SEQ" "$neptune_freq" "$ganymede_freq"
+    echo "recommendation prefill_node=${PREFILL_NODE} prefill_mhz=${prefill_freq} decode_node=${DECODE_NODE} decode_mhz=${decode_freq} predicted_cluster_power_w=${predicted_power}"
+    write_clock_request "$SEQ" "$prefill_freq" "$decode_freq"
     for ((ordinal = 1; ordinal <= CURRENT_PREFILL_INSTANCES; ordinal++)); do
-      clock_key=neptune
+      clock_key="$PREFILL_NODE"
       if [ "$ordinal" -gt 1 ]; then
-        clock_key="neptune-prefill-${ordinal}"
+        clock_key="${PREFILL_NODE}-prefill-${ordinal}"
       fi
-      if ! wait_clock_ack "$SEQ" "$clock_key" "$neptune_freq"; then
+      if ! wait_clock_ack "$SEQ" "$clock_key" "$prefill_freq"; then
         FINAL_RC=24
         break
       fi
@@ -1417,11 +1423,11 @@ while IFS=, read -r workload_id il ol rate field5 field6 field7; do
       break
     fi
     for ((ordinal = 1; ordinal <= CURRENT_DECODE_INSTANCES; ordinal++)); do
-      clock_key=ganymede
+      clock_key="$DECODE_NODE"
       if [ "$ordinal" -gt 1 ]; then
-        clock_key="ganymede-decode-${ordinal}"
+        clock_key="${DECODE_NODE}-decode-${ordinal}"
       fi
-      if ! wait_clock_ack "$SEQ" "$clock_key" "$ganymede_freq"; then
+      if ! wait_clock_ack "$SEQ" "$clock_key" "$decode_freq"; then
         FINAL_RC=25
         break
       fi
