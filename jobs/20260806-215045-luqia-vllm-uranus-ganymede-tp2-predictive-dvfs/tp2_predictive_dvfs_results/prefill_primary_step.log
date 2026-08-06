@@ -51,3 +51,15 @@ All done.
 clock_runtime_verification host=uranus seq=1 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260806-215045-luqia-vllm-uranus-ganymede-tp2-predictive-dvfs/tp2_predictive_dvfs_results/prefill_uranus_telemetry.csv
 clock_ack_transport host=uranus seq=1 transport=http rc=0 attempts=1
 dynamic_clock_ack host=uranus seq=1 target_mhz=210 rc=0 observed_mhz=2520 verification_mode=monitor
+dynamic_clock_apply host=uranus seq=2 target_mhz=210
+GPU clocks set to "(gpuClkMin 210, gpuClkMax 210)" for GPU 00000000:4A:00.0
+
+Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+GPU clocks set to "(gpuClkMin 210, gpuClkMax 210)" for GPU 00000000:61:00.0
+
+Warning: persistence mode is disabled on device 00000000:61:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+clock_runtime_verification host=uranus seq=2 source=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260806-215045-luqia-vllm-uranus-ganymede-tp2-predictive-dvfs/tp2_predictive_dvfs_results/prefill_uranus_telemetry.csv
+clock_ack_transport host=uranus seq=2 transport=http rc=0 attempts=1
+dynamic_clock_ack host=uranus seq=2 target_mhz=210 rc=0 observed_mhz=210 verification_mode=monitor
