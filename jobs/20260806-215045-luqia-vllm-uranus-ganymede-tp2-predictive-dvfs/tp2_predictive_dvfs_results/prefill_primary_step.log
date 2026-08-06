@@ -38,3 +38,4 @@ launch_vllm host=uranus role=prefill instance_id=primary ip=10.1.0.5 http_port=3
 NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=enp160s0f0np0
 kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_producer","kv_buffer_size":"1e1","kv_port":"34298","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31298","http_port":"32298","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
 instance_telemetry_waiting_for_http=true url=http://127.0.0.1:32298/v1/models
+instance_telemetry_http_ready=true
