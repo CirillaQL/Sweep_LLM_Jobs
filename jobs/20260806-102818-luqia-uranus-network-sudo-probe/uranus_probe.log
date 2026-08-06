@@ -1,0 +1,96 @@
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+
+===== identity =====
+timestamp=2026-08-06T10:31:00+02:00
+hostname=uranus expected_host=uranus
+peer_label=ganymede peer_ip=10.1.0.3
+user=chjing uid=10271 groups=root admin chjing
+CUDA_VISIBLE_DEVICES=0
+
+===== name_resolution =====
+127.0.1.1       uranus
+10.1.0.5        uranus
+10.1.0.3        ganymede
+
+===== network_inventory =====
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+eno12399np0      DOWN           6c:92:cf:27:97:e0 <BROADCAST,MULTICAST> 
+eno12409np1      DOWN           6c:92:cf:27:97:e1 <BROADCAST,MULTICAST> 
+enp160s0f0np0    UP             6c:92:cf:5e:da:60 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+enp160s0f1np1    DOWN           6c:92:cf:5e:da:61 <BROADCAST,MULTICAST> 
+idrac            DOWN           c4:cb:e1:dd:db:d7 <BROADCAST,MULTICAST> 
+lo               UNKNOWN        127.0.0.1/8 
+enp160s0f0np0    UP             10.1.0.5/16 
+default via 10.1.0.8 dev enp160s0f0np0 proto static 
+10.1.0.0/16 dev enp160s0f0np0 proto kernel scope link src 10.1.0.5 
+
+===== peer_route =====
+10.1.0.3 dev enp160s0f0np0 src 10.1.0.5 uid 10271 
+    cache 
+route_query_rc=0
+route_interface=enp160s0f0np0
+route_source_ip=10.1.0.5
+enp160s0f0np0    UP             10.1.0.5/16 fe80::6e92:cfff:fe5e:da60/64 
+route_link_speed_mbps=100000
+route_link_mtu=1500
+netlink error: Operation not permitted
+Settings for enp160s0f0np0:
+	Supported ports: [ FIBRE ]
+	Supported link modes:   25000baseCR/Full
+	                        50000baseCR2/Full
+	                        100000baseCR4/Full
+	                        50000baseCR/Full
+	                        100000baseCR2/Full
+	                        200000baseCR4/Full
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: RS	 BASER	 LLRS
+	Advertised link modes:  25000baseCR/Full
+	                        50000baseCR2/Full
+	                        100000baseCR4/Full
+	                        50000baseCR/Full
+	                        100000baseCR2/Full
+	                        200000baseCR4/Full
+	Advertised pause frame use: No
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Speed: 100000Mb/s
+	Lanes: 4
+	Duplex: Full
+	Auto-negotiation: on
+	Port: Direct Attach Copper
+	PHYAD: 0
+	Transceiver: internal
+        Current message level: 0x00002081 (8321)
+                               drv tx_err hw
+	Link detected: yes
+
+===== peer_connectivity =====
+check_start=ping_peer
+PING 10.1.0.3 (10.1.0.3) 56(84) bytes of data.
+64 bytes from 10.1.0.3: icmp_seq=1 ttl=64 time=0.383 ms
+64 bytes from 10.1.0.3: icmp_seq=2 ttl=64 time=0.393 ms
+64 bytes from 10.1.0.3: icmp_seq=3 ttl=64 time=0.397 ms
+64 bytes from 10.1.0.3: icmp_seq=4 ttl=64 time=0.415 ms
+64 bytes from 10.1.0.3: icmp_seq=5 ttl=64 time=0.387 ms
+
+--- 10.1.0.3 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4106ms
+rtt min/avg/max/mdev = 0.383/0.395/0.415/0.011 ms
+check_rc=0 check=ping_peer
+10.1.0.3 dev enp160s0f0np0 lladdr 04:32:01:4d:00:80 DELAY 
+
+===== nvidia_smi_unprivileged =====
+check_start=nvidia_smi
+0, NVIDIA L40S, GPU-6755bd3b-01b2-2c3d-ffd4-0bd39bfa5cbf, 00000000:4A:00.0, 46068 MiB, 31.61 W, 210 MHz
+check_rc=0 check=nvidia_smi
+
+===== nvidia_smi_sudo_read_only =====
+sudo_mode=non_interactive read_only=true
+check_start=sudo_nvidia_smi
+0, NVIDIA L40S, GPU-6755bd3b-01b2-2c3d-ffd4-0bd39bfa5cbf, 00000000:4A:00.0, 46068 MiB, 31.61 W, 210 MHz
+check_rc=0 check=sudo_nvidia_smi
+
+===== result =====
+node_probe_rc=0 host=uranus peer=ganymede
