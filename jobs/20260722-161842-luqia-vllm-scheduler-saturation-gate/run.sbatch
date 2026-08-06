@@ -520,6 +520,10 @@ schedule_one() {
   local gate_decision="${OUT_DIR}/decision_gate_${seq}_${workload_id}.json"
   local active_decision="${OUT_DIR}/decision_active_${seq}_${workload_id}.json"
   local limit_args=()
+  local node_group_args=(
+    --l40s-node-group "$PREFILL_NODE"
+    --l4-node-group "$DECODE_NODE"
+  )
   local kv_args=(
     --kv-num-layers "$KV_NUM_LAYERS"
     --kv-num-heads "$KV_NUM_HEADS"
@@ -543,7 +547,8 @@ schedule_one() {
   "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
     --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
     --policy latency_only --placement "$SCHEDULER_PLACEMENT" \
-    --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" "${kv_args[@]}" \
+    --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" \
+    "${node_group_args[@]}" "${kv_args[@]}" \
     --il "$il" --ol "$ol" --rate "$rate" \
     --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" \
     --tp "$PREFILL_TP_SIZE" \
@@ -559,7 +564,8 @@ schedule_one() {
     "$PYTHON_BIN" "$SCHEDULER_SCRIPT" \
       --bundle "$MODEL_BUNDLE" --saturation-bundle "$SATURATION_BUNDLE" \
       --policy latency_plus_saturation --placement "$SCHEDULER_PLACEMENT" \
-      --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" "${kv_args[@]}" \
+      --overload-action "$OVERLOAD_ACTION" "${limit_args[@]}" \
+      "${node_group_args[@]}" "${kv_args[@]}" \
       --il "$il" --ol "$ol" --rate "$rate" \
       --slo-ttft "$SLO_TTFT_MS" --slo-tpot "$SLO_TPOT_MS" \
       --tp "$PREFILL_TP_SIZE" \

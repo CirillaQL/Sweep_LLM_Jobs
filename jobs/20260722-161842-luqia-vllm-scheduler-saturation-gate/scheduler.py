@@ -595,6 +595,8 @@ def main():
                         default="min-slo-violation")
     parser.add_argument("--max-l4-freq", type=int)
     parser.add_argument("--max-l40s-freq", type=int)
+    parser.add_argument("--l4-node-group", default=NODE_GROUPS["l4"])
+    parser.add_argument("--l40s-node-group", default=NODE_GROUPS["l40s"])
     parser.add_argument("--prefill-instances", type=int, default=1)
     parser.add_argument("--decode-instances", type=int, default=1)
     parser.add_argument("--il", type=int, required=True)
@@ -605,6 +607,14 @@ def main():
     parser.add_argument("--tp", type=int, default=1)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
+
+    for gpu_type, node_group in (
+        ("l4", args.l4_node_group),
+        ("l40s", args.l40s_node_group),
+    ):
+        if not node_group or any(character.isspace() for character in node_group):
+            parser.error(f"invalid {gpu_type} node group: {node_group!r}")
+        NODE_GROUPS[gpu_type] = node_group
 
     scheduler = PDPlacementScheduler(
         args.bundle,

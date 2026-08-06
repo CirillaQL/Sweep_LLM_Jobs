@@ -138,6 +138,8 @@ def main() -> None:
     parser.add_argument("--expected-decode-instances", type=int, required=True)
     parser.add_argument("--expected-tp", type=int, required=True)
     parser.add_argument("--expected-gpus-per-role", type=int, required=True)
+    parser.add_argument("--expected-prefill-node", default="neptune")
+    parser.add_argument("--expected-decode-node", default="ganymede")
     parser.add_argument("--slo-ttft-ms", type=float, required=True)
     parser.add_argument("--slo-tpot-ms", type=float, required=True)
     parser.add_argument("--clock-tolerance-mhz", type=float, required=True)
@@ -194,11 +196,20 @@ def main() -> None:
             and actual_tpot <= args.slo_tpot_ms
         )
         expected_instances = decision.get("instances", {})
+        status_mode_ok = (
+            decision.get("status") == "OK"
+            and decision.get("decision_mode") == "safe_min_power"
+        ) or (
+            decision.get("status") == "OVERLOAD_FALLBACK"
+            and decision.get("decision_mode") == "overload_min_slo_violation"
+        )
         decision_ok = (
-            decision.get("decision_mode") == "safe_min_power"
+            status_mode_ok
             and decision.get("tp_per_role") == args.expected_tp
             and expected_instances.get("prefill") == args.expected_prefill_instances
             and expected_instances.get("decode") == args.expected_decode_instances
+            and prefill.get("node_group") == args.expected_prefill_node
+            and decode.get("node_group") == args.expected_decode_node
         )
         decisions_ok = decisions_ok and decision_ok
 
@@ -293,7 +304,7 @@ def main() -> None:
         "requests_ok": requests_ok,
         "metrics_complete": metrics_ok,
         "power_metrics_complete": power_metrics_ok,
-        "decisions_tp2_2p2d_ok": decisions_ok,
+        "scheduler_decisions_and_topology_ok": decisions_ok,
         "registry_topology_ok": topology_ok,
         "all_gpu_power_covered": power_coverage_ok,
         "frequency_locks_verified": clocks_ok,
@@ -326,6 +337,8 @@ def main() -> None:
             "decode_instances": args.expected_decode_instances,
             "tp_per_instance": args.expected_tp,
             "gpus_per_role": args.expected_gpus_per_role,
+            "prefill_node": args.expected_prefill_node,
+            "decode_node": args.expected_decode_node,
         },
         "checks": checks,
         "integrity_ok": integrity_ok,
@@ -346,7 +359,7 @@ def main() -> None:
         writer.writerows(rows)
 
     lines = [
-        "# TP2 2P/2D predictive DVFS validation",
+        f"# TP2 {args.expected_prefill_node}/{args.expected_decode_node} predictive DVFS validation",
         "",
         f"Integrity: **{'PASS' if integrity_ok else 'FAIL'}**; "
         f"SLO prediction mismatches: **{aggregates['slo_prediction_mismatches']}**; "
