@@ -25,3 +25,32 @@ index, name, memory.total [MiB], driver_version
 5, NVIDIA L4, 23034 MiB, 595.71.05
 6, NVIDIA L4, 23034 MiB, 595.71.05
 7, NVIDIA L4, 23034 MiB, 595.71.05
+lock_gpu_clocks gpu_ids=0,1,2,3 target_mhz=2040 startup_mode=max scheduled_mhz=360
+GPU clocks set to "(gpuClkMin 2040, gpuClkMax 2040)" for GPU 00000000:0D:00.0
+
+Warning: persistence mode is disabled on device 00000000:0D:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+GPU clocks set to "(gpuClkMin 2040, gpuClkMax 2040)" for GPU 00000000:37:00.0
+
+Warning: persistence mode is disabled on device 00000000:37:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+GPU clocks set to "(gpuClkMin 2040, gpuClkMax 2040)" for GPU 00000000:4A:00.0
+
+Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+GPU clocks set to "(gpuClkMin 2040, gpuClkMax 2040)" for GPU 00000000:61:00.0
+
+Warning: persistence mode is disabled on device 00000000:61:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+0, NVIDIA L4, 210 MHz, 2040 MHz
+index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+1, NVIDIA L4, 210 MHz, 2040 MHz
+index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+2, NVIDIA L4, 2040 MHz, 2040 MHz
+index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+3, NVIDIA L4, 1605 MHz, 2040 MHz
+launch_vllm host=ganymede role=decode instance_id=primary ip=10.1.0.3 http_port=33860 kv_port=34860
+NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=eno12399np0
+kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_consumer","kv_buffer_size":"8e9","kv_port":"34860","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31860","http_port":"33860","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
+instance_telemetry_waiting_for_http=true url=http://127.0.0.1:33860/v1/models

@@ -21,3 +21,32 @@ index, name, memory.total [MiB], driver_version
 1, NVIDIA L40S, 46068 MiB, 595.71.05
 2, NVIDIA L40S, 46068 MiB, 595.71.05
 3, NVIDIA L40S, 46068 MiB, 595.71.05
+lock_gpu_clocks gpu_ids=0,1,2,3 target_mhz=2520 startup_mode=max scheduled_mhz=210
+GPU clocks set to "(gpuClkMin 2520, gpuClkMax 2520)" for GPU 00000000:4A:00.0
+
+Warning: persistence mode is disabled on device 00000000:4A:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+GPU clocks set to "(gpuClkMin 2520, gpuClkMax 2520)" for GPU 00000000:61:00.0
+
+Warning: persistence mode is disabled on device 00000000:61:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+GPU clocks set to "(gpuClkMin 2520, gpuClkMax 2520)" for GPU 00000000:CA:00.0
+
+Warning: persistence mode is disabled on device 00000000:CA:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+GPU clocks set to "(gpuClkMin 2520, gpuClkMax 2520)" for GPU 00000000:E1:00.0
+
+Warning: persistence mode is disabled on device 00000000:E1:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+0, NVIDIA L40S, 210 MHz, 2520 MHz
+index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+1, NVIDIA L40S, 210 MHz, 2520 MHz
+index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+2, NVIDIA L40S, 210 MHz, 2520 MHz
+index, name, clocks.current.graphics [MHz], clocks.max.graphics [MHz]
+3, NVIDIA L40S, 210 MHz, 2520 MHz
+launch_vllm host=uranus role=prefill instance_id=primary ip=10.1.0.5 http_port=32860 kv_port=34860
+NCCL_NET=Socket NCCL_IB_DISABLE=1 NCCL_SOCKET_IFNAME=enp160s0f0np0
+kv_transfer_config={"kv_connector":"P2pNcclConnector","kv_role":"kv_producer","kv_buffer_size":"1e1","kv_port":"34860","kv_connector_extra_config":{"proxy_ip":"10.1.0.3","proxy_port":"31860","http_port":"32860","send_type":"PUT_ASYNC","nccl_num_channels":"16"}}
+instance_telemetry_waiting_for_http=true url=http://127.0.0.1:32860/v1/models
