@@ -45,6 +45,9 @@ def main() -> None:
     parser.add_argument("--clock-tolerance-mhz", type=float, default=90)
     parser.add_argument("--slo-ttft-ms", type=float, default=500)
     parser.add_argument("--slo-tpot-ms", type=float, default=200)
+    parser.add_argument("--gpu-type", choices=("l4", "l40s"), default="l40s")
+    parser.add_argument("--node", default="uranus")
+    parser.add_argument("--tp", type=int, default=4)
     args = parser.parse_args()
 
     decisions = json.loads((args.out_dir / "decisions.json").read_text(encoding="utf-8"))
@@ -137,9 +140,9 @@ def main() -> None:
     tpot_mae = statistics.mean(abs(row["tpot_signed_error_ms"]) for row in rows)
     report = {
         "topology": "single_pool",
-        "node": "uranus",
-        "gpu_type": "l40s",
-        "tensor_parallel_size": 4,
+        "node": args.node,
+        "gpu_type": args.gpu_type,
+        "tensor_parallel_size": args.tp,
         "integrity_ok": not integrity_errors,
         "integrity_errors": integrity_errors,
         "slo_prediction_mismatches": sum(not row["slo_prediction_match"] for row in rows),
@@ -155,7 +158,7 @@ def main() -> None:
         writer.writeheader()
         writer.writerows({key: row[key] for key in csv_fields} for row in rows)
     lines = [
-        "# TP4 Uranus single-pool predictive DVFS validation",
+        f"# TP{args.tp} {args.node} {args.gpu_type.upper()} single-pool predictive DVFS validation",
         "",
         f"Integrity: **{'PASS' if not integrity_errors else 'FAIL'}**; "
         f"SLO prediction mismatches: **{report['slo_prediction_mismatches']}**.",

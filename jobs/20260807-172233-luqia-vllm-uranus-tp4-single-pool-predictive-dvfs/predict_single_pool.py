@@ -23,6 +23,8 @@ def main() -> None:
     parser.add_argument("--bundle", type=Path, required=True)
     parser.add_argument("--workloads", type=Path, required=True)
     parser.add_argument("--out-dir", type=Path, required=True)
+    parser.add_argument("--gpu-type", choices=("l4", "l40s"), default="l40s")
+    parser.add_argument("--node", default="uranus")
     parser.add_argument("--tp", type=int, default=4)
     parser.add_argument("--slo-ttft-ms", type=int, default=500)
     parser.add_argument("--slo-tpot-ms", type=int, default=200)
@@ -30,7 +32,7 @@ def main() -> None:
 
     module = load_scheduler(args.scheduler)
     bundle = json.loads(args.bundle.read_text(encoding="utf-8"))
-    pool = module.PoolScheduler("l40s", bundle)
+    pool = module.PoolScheduler(args.gpu_type, bundle)
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
     decisions = []
@@ -93,8 +95,8 @@ def main() -> None:
             "seq": seq,
             "workload_id": workload["workload_id"],
             "topology": "single_pool",
-            "gpu_type": "l40s",
-            "node": "uranus",
+            "gpu_type": args.gpu_type,
+            "node": args.node,
             "tensor_parallel_size": args.tp,
             "input_len": il,
             "output_len": ol,

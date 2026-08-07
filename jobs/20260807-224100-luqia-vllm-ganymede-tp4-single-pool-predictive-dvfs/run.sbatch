@@ -1,22 +1,24 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=vllm-uranus-tp4-single-pool-predictive-dvfs
+#SBATCH --job-name=vllm-ganymede-tp4-single-pool-predictive-dvfs
 #SBATCH --partition=long
 #SBATCH --time=00:45:00
 #SBATCH --nodes=1
-#SBATCH --nodelist=uranus
+#SBATCH --nodelist=ganymede
 #SBATCH --ntasks=1
 #SBATCH --gpus-per-node=4
 #SBATCH --cpus-per-gpu=8
 #SBATCH --mem=128G
 #SBATCH --signal=B:TERM@120
-#SBATCH --output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260807-172233-luqia-vllm-uranus-tp4-single-pool-predictive-dvfs/slurm-%j.out
-#SBATCH --error=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260807-172233-luqia-vllm-uranus-tp4-single-pool-predictive-dvfs/slurm-%j.err
+#SBATCH --output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260807-224100-luqia-vllm-ganymede-tp4-single-pool-predictive-dvfs/slurm-%j.out
+#SBATCH --error=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260807-224100-luqia-vllm-ganymede-tp4-single-pool-predictive-dvfs/slurm-%j.err
 
 set -uo pipefail
 
-JOB_NAME="20260807-172233-luqia-vllm-uranus-tp4-single-pool-predictive-dvfs"
+JOB_NAME="20260807-224100-luqia-vllm-ganymede-tp4-single-pool-predictive-dvfs"
+COMMON_NAME="20260807-172233-luqia-vllm-uranus-tp4-single-pool-predictive-dvfs"
 BROKER_ROOT="/data/users/chjing/Sweep_LLM_Jobs_broker"
 JOB_DIR="${BROKER_ROOT}/jobs/${JOB_NAME}"
+COMMON_DIR="${BROKER_ROOT}/jobs/${COMMON_NAME}"
 SOURCE_JOB="${BROKER_ROOT}/jobs/20260722-161842-luqia-vllm-scheduler-saturation-gate"
 OUT_DIR="${JOB_DIR}/tp4_single_pool_results"
 ENV_DIR="/data/users/chjing/miniforge3/envs/cuda-env"
@@ -28,7 +30,7 @@ SERVER_PID=""
 MONITOR_PID=""
 FINAL_RC=0
 PORT=$((22000 + SLURM_JOB_ID % 20000))
-WORK_ROOT="/data/users/chjing/vllm_job_work/single_pool_${SLURM_JOB_ID}"
+WORK_ROOT="/data/users/chjing/vllm_job_work/single_pool_l4_${SLURM_JOB_ID}"
 ALLOCATED_GPU_CSV="${CUDA_VISIBLE_DEVICES:-0,1,2,3}"
 IFS=, read -r -a GPU_IDS <<< "$ALLOCATED_GPU_CSV"
 if [ "${#GPU_IDS[@]}" -ne "$TP_SIZE" ]; then
@@ -91,7 +93,7 @@ export CUDA_VISIBLE_DEVICES="$ALLOCATED_GPU_CSV"
 export VLLM_ATTENTION_BACKEND=FLASH_ATTN
 
 {
-  echo "host=$(hostname -s) job_id=${SLURM_JOB_ID} topology=single_pool tp=${TP_SIZE}"
+  echo "host=$(hostname -s) job_id=${SLURM_JOB_ID} topology=single_pool gpu_type=l4 tp=${TP_SIZE}"
   echo "model=${MODEL} port=${PORT} cuda_visible_devices=${CUDA_VISIBLE_DEVICES}"
   nvidia-smi -L
   nvidia-smi --query-gpu=index,name,memory.total,driver_version --format=csv,noheader
@@ -99,13 +101,14 @@ export VLLM_ATTENTION_BACKEND=FLASH_ATTN
 
 reset_clocks >> "${OUT_DIR}/reset_step.log" 2>&1
 
-"$PYTHON_BIN" "${JOB_DIR}/predict_single_pool.py" \
+"$PYTHON_BIN" "${COMMON_DIR}/predict_single_pool.py" \
   --scheduler "${SOURCE_JOB}/scheduler.py" \
   --bundle "${SOURCE_JOB}/model_bundle.json" \
   --workloads "${JOB_DIR}/request_trace.csv" \
-  --out-dir "$OUT_DIR" --tp "$TP_SIZE" --slo-ttft-ms 500 --slo-tpot-ms 200
+  --out-dir "$OUT_DIR" --gpu-type l4 --node ganymede \
+  --tp "$TP_SIZE" --slo-ttft-ms 500 --slo-tpot-ms 200
 
-"$PYTHON_BIN" -u "${JOB_DIR}/monitor_single_pool.py" \
+"$PYTHON_BIN" -u "${COMMON_DIR}/monitor_single_pool.py" \
   --output "${OUT_DIR}/telemetry.csv" --gpu-ids "$ALLOCATED_GPU_CSV" --interval 0.5 \
   > "${OUT_DIR}/telemetry.log" 2>&1 &
 MONITOR_PID=$!
@@ -160,7 +163,7 @@ while IFS=, read -r workload_id il ol rate window_seconds burstiness description
   sleep 5
   num_prompts="$($PYTHON_BIN -c 'import sys; print(max(12, min(96, int(float(sys.argv[1]) * float(sys.argv[2])))))' "$rate" "$window_seconds")"
   start_ts="$(date +%s.%N)"
-  echo "${start_ts},workload_start,${SEQ},${workload_id},single_pool_tp4_predictive_dvfs" >> "${OUT_DIR}/events.csv"
+  echo "${start_ts},workload_start,${SEQ},${workload_id},single_pool_l4_tp4_predictive_dvfs" >> "${OUT_DIR}/events.csv"
   timeout --signal=INT --kill-after=20s 300s "$VLLM_BIN" bench serve \
     --backend openai --base-url "http://127.0.0.1:${PORT}" --model "$MODEL" \
     --num-prompts "$num_prompts" --request-rate "$rate" --dataset-name random \
@@ -171,7 +174,7 @@ while IFS=, read -r workload_id il ol rate window_seconds burstiness description
     > "${OUT_DIR}/bench_${SEQ}_${workload_id}.txt" 2>&1
   bench_rc=$?
   end_ts="$(date +%s.%N)"
-  echo "${end_ts},workload_end,${SEQ},${workload_id},single_pool_tp4_predictive_dvfs" >> "${OUT_DIR}/events.csv"
+  echo "${end_ts},workload_end,${SEQ},${workload_id},single_pool_l4_tp4_predictive_dvfs" >> "${OUT_DIR}/events.csv"
   if [ "$bench_rc" -ne 0 ]; then
     echo "benchmark_failed seq=${SEQ} id=${workload_id} rc=${bench_rc}" >&2
     FINAL_RC="$bench_rc"
@@ -180,9 +183,10 @@ while IFS=, read -r workload_id il ol rate window_seconds burstiness description
 done < "${JOB_DIR}/request_trace.csv"
 
 if [ "$FINAL_RC" -eq 0 ]; then
-  "$PYTHON_BIN" "${JOB_DIR}/check_single_pool.py" \
+  "$PYTHON_BIN" "${COMMON_DIR}/check_single_pool.py" \
     --out-dir "$OUT_DIR" --expected-gpus 4 --clock-tolerance-mhz 90 \
-    --slo-ttft-ms 500 --slo-tpot-ms 200 || FINAL_RC=$?
+    --slo-ttft-ms 500 --slo-tpot-ms 200 --gpu-type l4 --node ganymede --tp 4 \
+    || FINAL_RC=$?
 fi
 
 echo "final_rc=${FINAL_RC}"
