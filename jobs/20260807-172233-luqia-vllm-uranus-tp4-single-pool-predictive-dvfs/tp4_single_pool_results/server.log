@@ -26,3 +26,355 @@ WARNING 08-07 23:57:16 [custom_all_reduce.py:154] Custom allreduce is disabled b
 WARNING 08-07 23:57:16 [custom_all_reduce.py:154] Custom allreduce is disabled because it's not supported on more than two PCIe-only GPUs. To silence this warning, specify disable_custom_all_reduce=True explicitly.
 WARNING 08-07 23:57:16 [custom_all_reduce.py:154] Custom allreduce is disabled because it's not supported on more than two PCIe-only GPUs. To silence this warning, specify disable_custom_all_reduce=True explicitly.
 INFO 08-07 23:57:16 [parallel_state.py:1423] rank 0 in world size 4 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
+INFO 08-07 23:57:16 [parallel_state.py:1423] rank 2 in world size 4 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 2, EP rank N/A
+INFO 08-07 23:57:16 [parallel_state.py:1423] rank 1 in world size 4 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 1, EP rank N/A
+INFO 08-07 23:57:16 [parallel_state.py:1423] rank 3 in world size 4 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 3, EP rank N/A
+[0;36m(Worker_TP0 pid=602837)[0;0m INFO 08-07 23:57:17 [gpu_model_runner.py:4033] Starting to load model mistralai/Mistral-7B-v0.1...
+[0;36m(Worker_TP3 pid=602840)[0;0m /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/tvm_ffi/_optional_torch_c_dlpack.py:174: UserWarning: Failed to JIT torch c dlpack extension, EnvTensorAllocator will not be enabled.
+[0;36m(Worker_TP0 pid=602837)[0;0m /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/tvm_ffi/_optional_torch_c_dlpack.py:174: UserWarning: Failed to JIT torch c dlpack extension, EnvTensorAllocator will not be enabled.
+[0;36m(Worker_TP2 pid=602839)[0;0m /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/tvm_ffi/_optional_torch_c_dlpack.py:174: UserWarning: Failed to JIT torch c dlpack extension, EnvTensorAllocator will not be enabled.
+[0;36m(Worker_TP3 pid=602840)[0;0m We recommend installing via `pip install torch-c-dlpack-ext`
+[0;36m(Worker_TP0 pid=602837)[0;0m We recommend installing via `pip install torch-c-dlpack-ext`
+[0;36m(Worker_TP2 pid=602839)[0;0m We recommend installing via `pip install torch-c-dlpack-ext`
+[0;36m(Worker_TP3 pid=602840)[0;0m   warnings.warn(
+[0;36m(Worker_TP0 pid=602837)[0;0m   warnings.warn(
+[0;36m(Worker_TP2 pid=602839)[0;0m   warnings.warn(
+[0;36m(Worker_TP1 pid=602838)[0;0m /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/tvm_ffi/_optional_torch_c_dlpack.py:174: UserWarning: Failed to JIT torch c dlpack extension, EnvTensorAllocator will not be enabled.
+[0;36m(Worker_TP1 pid=602838)[0;0m We recommend installing via `pip install torch-c-dlpack-ext`
+[0;36m(Worker_TP1 pid=602838)[0;0m   warnings.warn(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] WorkerProc failed to start.
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] Traceback (most recent call last):
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/multiproc_executor.py", line 743, in worker_main
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     worker = WorkerProc(*args, **kwargs)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/multiproc_executor.py", line 578, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.worker.load_model()
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_worker.py", line 275, in load_model
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model_runner.load_model(eep_scale_up=eep_scale_up)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_model_runner.py", line 4052, in load_model
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model = model_loader.load_model(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/model_loader/base_loader.py", line 50, in load_model
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     model = initialize_model(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/model_loader/utils.py", line 48, in initialize_model
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return model_class(vllm_config=vllm_config, prefix=prefix)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 275, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(vllm_config=vllm_config, prefix=prefix, layer_type=layer_type)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 532, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model = self._init_model(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 283, in _init_model
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return MistralModel(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/compilation/decorators.py", line 306, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     old_init(self, **kwargs)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 223, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(vllm_config=vllm_config, prefix=prefix, layer_type=layer_type)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/compilation/decorators.py", line 306, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     old_init(self, **kwargs)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 382, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.start_layer, self.end_layer, self.layers = make_layers(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 706, in make_layers
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     + [
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 707, in <listcomp>
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     maybe_offload_to_cpu(layer_fn(prefix=f"{prefix}.{idx}"))
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 384, in <lambda>
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     lambda prefix: layer_type(vllm_config=vllm_config, prefix=prefix),
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 151, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 287, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.self_attn = attn_layer_type(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 92, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 210, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.attn = attn_cls(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/attention/layer.py", line 234, in __init__
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.attn_backend = get_attn_backend(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/selector.py", line 83, in get_attn_backend
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return _cached_get_attn_backend(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/selector.py", line 96, in _cached_get_attn_backend
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     attention_cls = current_platform.get_attn_backend_cls(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/platforms/cuda.py", line 333, in get_attn_backend_cls
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     valid_backends_priorities, invalid_reasons = cls.get_valid_backends(
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/platforms/cuda.py", line 288, in get_valid_backends
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     backend_class = backend.get_class()
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/backends/registry.py", line 114, in get_class
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return resolve_obj_by_qualname(self.get_path())
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/utils/import_utils.py", line 111, in resolve_obj_by_qualname
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     module = importlib.import_module(module_name)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/importlib/__init__.py", line 126, in import_module
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return _bootstrap._gcd_import(name[level:], package, level)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/backends/flashinfer.py", line 10, in <module>
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from flashinfer import (
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/__init__.py", line 23, in <module>
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from . import jit as jit
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/__init__.py", line 22, in <module>
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from . import cubin_loader
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/cubin_loader.py", line 27, in <module>
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from .core import logger
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/core.py", line 18, in <module>
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     os.makedirs(jit_env.FLASHINFER_WORKSPACE_DIR, exist_ok=True)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 225, in makedirs
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     mkdir(name, mode)
+[0;36m(Worker_TP2 pid=602839)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] PermissionError: [Errno 13] Permission denied: '/root/.cache'
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] WorkerProc failed to start.
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] Traceback (most recent call last):
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/multiproc_executor.py", line 743, in worker_main
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     worker = WorkerProc(*args, **kwargs)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/multiproc_executor.py", line 578, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.worker.load_model()
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_worker.py", line 275, in load_model
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model_runner.load_model(eep_scale_up=eep_scale_up)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_model_runner.py", line 4052, in load_model
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model = model_loader.load_model(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/model_loader/base_loader.py", line 50, in load_model
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     model = initialize_model(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/model_loader/utils.py", line 48, in initialize_model
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return model_class(vllm_config=vllm_config, prefix=prefix)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 275, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(vllm_config=vllm_config, prefix=prefix, layer_type=layer_type)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 532, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model = self._init_model(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 283, in _init_model
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return MistralModel(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/compilation/decorators.py", line 306, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     old_init(self, **kwargs)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 223, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(vllm_config=vllm_config, prefix=prefix, layer_type=layer_type)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/compilation/decorators.py", line 306, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     old_init(self, **kwargs)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 382, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.start_layer, self.end_layer, self.layers = make_layers(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 706, in make_layers
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     + [
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 707, in <listcomp>
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     maybe_offload_to_cpu(layer_fn(prefix=f"{prefix}.{idx}"))
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 384, in <lambda>
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     lambda prefix: layer_type(vllm_config=vllm_config, prefix=prefix),
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 151, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 287, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.self_attn = attn_layer_type(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 92, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 210, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.attn = attn_cls(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/attention/layer.py", line 234, in __init__
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.attn_backend = get_attn_backend(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/selector.py", line 83, in get_attn_backend
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return _cached_get_attn_backend(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/selector.py", line 96, in _cached_get_attn_backend
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     attention_cls = current_platform.get_attn_backend_cls(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/platforms/cuda.py", line 333, in get_attn_backend_cls
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     valid_backends_priorities, invalid_reasons = cls.get_valid_backends(
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/platforms/cuda.py", line 288, in get_valid_backends
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     backend_class = backend.get_class()
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/backends/registry.py", line 114, in get_class
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return resolve_obj_by_qualname(self.get_path())
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/utils/import_utils.py", line 111, in resolve_obj_by_qualname
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     module = importlib.import_module(module_name)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/importlib/__init__.py", line 126, in import_module
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return _bootstrap._gcd_import(name[level:], package, level)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/backends/flashinfer.py", line 10, in <module>
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from flashinfer import (
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/__init__.py", line 23, in <module>
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from . import jit as jit
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/__init__.py", line 22, in <module>
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from . import cubin_loader
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/cubin_loader.py", line 27, in <module>
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from .core import logger
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/core.py", line 18, in <module>
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     os.makedirs(jit_env.FLASHINFER_WORKSPACE_DIR, exist_ok=True)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 225, in makedirs
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     mkdir(name, mode)
+[0;36m(Worker_TP3 pid=602840)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] PermissionError: [Errno 13] Permission denied: '/root/.cache'
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] WorkerProc failed to start.
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] Traceback (most recent call last):
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/multiproc_executor.py", line 743, in worker_main
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     worker = WorkerProc(*args, **kwargs)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/multiproc_executor.py", line 578, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.worker.load_model()
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_worker.py", line 275, in load_model
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model_runner.load_model(eep_scale_up=eep_scale_up)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_model_runner.py", line 4052, in load_model
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model = model_loader.load_model(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/model_loader/base_loader.py", line 50, in load_model
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     model = initialize_model(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/model_loader/utils.py", line 48, in initialize_model
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return model_class(vllm_config=vllm_config, prefix=prefix)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 275, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(vllm_config=vllm_config, prefix=prefix, layer_type=layer_type)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 532, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model = self._init_model(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 283, in _init_model
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return MistralModel(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/compilation/decorators.py", line 306, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     old_init(self, **kwargs)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 223, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(vllm_config=vllm_config, prefix=prefix, layer_type=layer_type)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/compilation/decorators.py", line 306, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     old_init(self, **kwargs)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 382, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.start_layer, self.end_layer, self.layers = make_layers(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 706, in make_layers
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     + [
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 707, in <listcomp>
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     maybe_offload_to_cpu(layer_fn(prefix=f"{prefix}.{idx}"))
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 384, in <lambda>
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     lambda prefix: layer_type(vllm_config=vllm_config, prefix=prefix),
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 151, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 287, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.self_attn = attn_layer_type(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 92, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 210, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.attn = attn_cls(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/attention/layer.py", line 234, in __init__
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.attn_backend = get_attn_backend(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/selector.py", line 83, in get_attn_backend
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return _cached_get_attn_backend(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/selector.py", line 96, in _cached_get_attn_backend
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     attention_cls = current_platform.get_attn_backend_cls(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/platforms/cuda.py", line 333, in get_attn_backend_cls
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     valid_backends_priorities, invalid_reasons = cls.get_valid_backends(
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/platforms/cuda.py", line 288, in get_valid_backends
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     backend_class = backend.get_class()
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/backends/registry.py", line 114, in get_class
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return resolve_obj_by_qualname(self.get_path())
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/utils/import_utils.py", line 111, in resolve_obj_by_qualname
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     module = importlib.import_module(module_name)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/importlib/__init__.py", line 126, in import_module
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return _bootstrap._gcd_import(name[level:], package, level)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/backends/flashinfer.py", line 10, in <module>
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from flashinfer import (
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/__init__.py", line 23, in <module>
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from . import jit as jit
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/__init__.py", line 22, in <module>
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from . import cubin_loader
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/cubin_loader.py", line 27, in <module>
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from .core import logger
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/core.py", line 18, in <module>
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     os.makedirs(jit_env.FLASHINFER_WORKSPACE_DIR, exist_ok=True)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 225, in makedirs
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     mkdir(name, mode)
+[0;36m(Worker_TP1 pid=602838)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] PermissionError: [Errno 13] Permission denied: '/root/.cache'
+[0;36m(Worker_TP3 pid=602840)[0;0m INFO 08-07 23:57:18 [multiproc_executor.py:730] Parent process exited, terminating worker
+[0;36m(Worker_TP2 pid=602839)[0;0m INFO 08-07 23:57:18 [multiproc_executor.py:730] Parent process exited, terminating worker
+[0;36m(Worker_TP1 pid=602838)[0;0m INFO 08-07 23:57:18 [multiproc_executor.py:730] Parent process exited, terminating worker
+[0;36m(Worker_TP0 pid=602837)[0;0m INFO 08-07 23:57:18 [multiproc_executor.py:730] Parent process exited, terminating worker
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] WorkerProc failed to start.
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] Traceback (most recent call last):
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/multiproc_executor.py", line 743, in worker_main
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     worker = WorkerProc(*args, **kwargs)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/multiproc_executor.py", line 578, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.worker.load_model()
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_worker.py", line 275, in load_model
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model_runner.load_model(eep_scale_up=eep_scale_up)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_model_runner.py", line 4052, in load_model
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model = model_loader.load_model(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/model_loader/base_loader.py", line 50, in load_model
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     model = initialize_model(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/model_loader/utils.py", line 48, in initialize_model
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return model_class(vllm_config=vllm_config, prefix=prefix)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 275, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(vllm_config=vllm_config, prefix=prefix, layer_type=layer_type)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 532, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.model = self._init_model(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 283, in _init_model
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return MistralModel(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/compilation/decorators.py", line 306, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     old_init(self, **kwargs)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 223, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(vllm_config=vllm_config, prefix=prefix, layer_type=layer_type)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/compilation/decorators.py", line 306, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     old_init(self, **kwargs)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 382, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.start_layer, self.end_layer, self.layers = make_layers(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 706, in make_layers
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     + [
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/utils.py", line 707, in <listcomp>
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     maybe_offload_to_cpu(layer_fn(prefix=f"{prefix}.{idx}"))
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 384, in <lambda>
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     lambda prefix: layer_type(vllm_config=vllm_config, prefix=prefix),
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 151, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 287, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.self_attn = attn_layer_type(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/mistral.py", line 92, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     super().__init__(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/model_executor/models/llama.py", line 210, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.attn = attn_cls(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/attention/layer.py", line 234, in __init__
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     self.attn_backend = get_attn_backend(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/selector.py", line 83, in get_attn_backend
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return _cached_get_attn_backend(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/selector.py", line 96, in _cached_get_attn_backend
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     attention_cls = current_platform.get_attn_backend_cls(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/platforms/cuda.py", line 333, in get_attn_backend_cls
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     valid_backends_priorities, invalid_reasons = cls.get_valid_backends(
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/platforms/cuda.py", line 288, in get_valid_backends
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     backend_class = backend.get_class()
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/backends/registry.py", line 114, in get_class
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return resolve_obj_by_qualname(self.get_path())
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/utils/import_utils.py", line 111, in resolve_obj_by_qualname
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     module = importlib.import_module(module_name)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/importlib/__init__.py", line 126, in import_module
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     return _bootstrap._gcd_import(name[level:], package, level)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/attention/backends/flashinfer.py", line 10, in <module>
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from flashinfer import (
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/__init__.py", line 23, in <module>
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from . import jit as jit
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/__init__.py", line 22, in <module>
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from . import cubin_loader
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/cubin_loader.py", line 27, in <module>
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     from .core import logger
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/flashinfer/jit/core.py", line 18, in <module>
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     os.makedirs(jit_env.FLASHINFER_WORKSPACE_DIR, exist_ok=True)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 215, in makedirs
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     makedirs(head, exist_ok=exist_ok)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 225, in makedirs
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772]     mkdir(name, mode)
+[0;36m(Worker_TP0 pid=602837)[0;0m ERROR 08-07 23:57:18 [multiproc_executor.py:772] PermissionError: [Errno 13] Permission denied: '/root/.cache'
