@@ -57,6 +57,8 @@ def display(value, digits=1):
 def active_clock_summary(out_dir: Path, role: str, seq: int) -> dict:
     samples = []
     per_gpu = defaultdict(list)
+    observed_samples = []
+    observed_per_gpu = defaultdict(list)
     for path in sorted(out_dir.glob(f"{role}_*_telemetry.csv")):
         with path.open(newline="", encoding="utf-8") as handle:
             for row in csv.DictReader(handle):
@@ -67,12 +69,17 @@ def active_clock_summary(out_dir: Path, role: str, seq: int) -> dict:
                     clock = float(row["gpu_sm_mhz"])
                 except (KeyError, TypeError, ValueError):
                     continue
+                gpu_uuid = row.get("gpu_uuid") or f"{path.name}:{row.get('gpu_id')}"
+                observed_per_gpu[gpu_uuid].append(clock)
+                observed_samples.append(clock)
                 if utilization < 10:
                     continue
-                gpu_uuid = row.get("gpu_uuid") or f"{path.name}:{row.get('gpu_id')}"
                 per_gpu[gpu_uuid].append(clock)
                 samples.append(clock)
     gpu_means = {gpu: statistics.fmean(values) for gpu, values in per_gpu.items()}
+    gpu_medians = {
+        gpu: statistics.median(values) for gpu, values in observed_per_gpu.items()
+    }
     return {
         "active_samples": len(samples),
         "gpu_count": len(gpu_means),
@@ -80,6 +87,12 @@ def active_clock_summary(out_dir: Path, role: str, seq: int) -> dict:
         "active_clock_min_mhz": min(samples) if samples else None,
         "active_clock_max_mhz": max(samples) if samples else None,
         "per_gpu_active_clock_mean_mhz": gpu_means,
+        "observed_samples": len(observed_samples),
+        "observed_gpu_count": len(gpu_medians),
+        "observed_clock_median_mhz": (
+            statistics.median(observed_samples) if observed_samples else None
+        ),
+        "per_gpu_observed_clock_median_mhz": gpu_medians,
     }
 
 
@@ -222,11 +235,14 @@ def main() -> None:
             (prefill_target, prefill_clock),
             (decode_target, decode_clock),
         ):
-            gpu_means = summary["per_gpu_active_clock_mean_mhz"]
-            if len(gpu_means) != args.expected_gpus_per_role:
+            gpu_medians = summary["per_gpu_observed_clock_median_mhz"]
+            if len(gpu_medians) != args.expected_gpus_per_role:
                 role_clock_ok = False
                 continue
-            if any(abs(mean - target) > args.clock_tolerance_mhz for mean in gpu_means.values()):
+            if any(
+                abs(median - target) > args.clock_tolerance_mhz
+                for median in gpu_medians.values()
+            ):
                 role_clock_ok = False
         clocks_ok = clocks_ok and role_clock_ok
 
@@ -266,11 +282,19 @@ def main() -> None:
                 "active_clock_mean_mhz"
             ],
             "prefill_active_gpu_count": prefill_clock["gpu_count"],
+            "prefill_actual_observed_clock_median_mhz": prefill_clock[
+                "observed_clock_median_mhz"
+            ],
+            "prefill_observed_gpu_count": prefill_clock["observed_gpu_count"],
             "decode_target_freq_mhz": decode_target,
             "decode_actual_active_clock_mean_mhz": decode_clock[
                 "active_clock_mean_mhz"
             ],
             "decode_active_gpu_count": decode_clock["gpu_count"],
+            "decode_actual_observed_clock_median_mhz": decode_clock[
+                "observed_clock_median_mhz"
+            ],
+            "decode_observed_gpu_count": decode_clock["observed_gpu_count"],
             "frequency_lock_ok": role_clock_ok,
             "predicted_cluster_power_w": predicted_power,
             "actual_cluster_avg_power_w": actual_power,
@@ -359,7 +383,7 @@ def main() -> None:
         writer.writerows(rows)
 
     lines = [
-        f"# TP2 {args.expected_prefill_node}/{args.expected_decode_node} predictive DVFS validation",
+        f"# TP{args.expected_tp} {args.expected_prefill_node}/{args.expected_decode_node} predictive DVFS validation",
         "",
         f"Integrity: **{'PASS' if integrity_ok else 'FAIL'}**; "
         f"SLO prediction mismatches: **{aggregates['slo_prediction_mismatches']}**; "
@@ -373,8 +397,8 @@ def main() -> None:
         lines.append(
             f"| {row['workload_id']} | "
             f"{row['prefill_target_freq_mhz']:.0f}/{row['decode_target_freq_mhz']:.0f} | "
-            f"{display(row['prefill_actual_active_clock_mean_mhz'])}/"
-            f"{display(row['decode_actual_active_clock_mean_mhz'])} | "
+            f"{display(row['prefill_actual_observed_clock_median_mhz'])}/"
+            f"{display(row['decode_actual_observed_clock_median_mhz'])} | "
             f"{row['predicted_p99_ttft_ms']:.1f}/{row['actual_p99_ttft_ms']:.1f} ms | "
             f"{row['predicted_p99_tpot_ms']:.1f}/{row['actual_p99_tpot_ms']:.1f} ms | "
             f"{display(row['predicted_cluster_power_w'])}/"
