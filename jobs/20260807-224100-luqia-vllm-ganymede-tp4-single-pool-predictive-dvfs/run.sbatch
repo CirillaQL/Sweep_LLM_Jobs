@@ -14,7 +14,7 @@
 
 set -uo pipefail
 
-JOB_NAME="20260807-224100-luqia-vllm-ganymede-tp4-single-pool-predictive-dvfs"
+JOB_NAME="${JOB_NAME_OVERRIDE:-20260807-224100-luqia-vllm-ganymede-tp4-single-pool-predictive-dvfs}"
 COMMON_NAME="20260807-172233-luqia-vllm-uranus-tp4-single-pool-predictive-dvfs"
 BROKER_ROOT="/data/users/chjing/Sweep_LLM_Jobs_broker"
 JOB_DIR="${BROKER_ROOT}/jobs/${JOB_NAME}"
