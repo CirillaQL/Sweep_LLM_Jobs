@@ -15,3 +15,7 @@ metrics, prediction errors, and cleanup clock reset output are recorded under
 
 The selection intentionally adds no KV-transfer term: Prefill and Decode share
 one vLLM engine and one KV cache on the same four GPUs.
+
+All per-run compiler and framework caches are isolated under
+`/data/users/chjing/vllm_job_work/$SLURM_JOB_ID` and removed by the exit trap
+after the server is stopped and GPU clocks are reset.

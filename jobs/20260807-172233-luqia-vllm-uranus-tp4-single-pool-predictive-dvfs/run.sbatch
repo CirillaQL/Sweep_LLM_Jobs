@@ -28,7 +28,7 @@ SERVER_PID=""
 MONITOR_PID=""
 FINAL_RC=0
 PORT=$((22000 + SLURM_JOB_ID % 20000))
-WORK_ROOT="/data/users/chjing/vllm_job_work/single_pool_${SLURM_JOB_ID}"
+WORK_ROOT="/data/users/chjing/vllm_job_work/${SLURM_JOB_ID}"
 ALLOCATED_GPU_CSV="${CUDA_VISIBLE_DEVICES:-0,1,2,3}"
 IFS=, read -r -a GPU_IDS <<< "$ALLOCATED_GPU_CSV"
 if [ "${#GPU_IDS[@]}" -ne "$TP_SIZE" ]; then
@@ -69,6 +69,18 @@ cleanup() {
     echo "reset_query"
     nvidia-smi -i "$ALLOCATED_GPU_CSV" --query-gpu=index,clocks.sm,clocks.max.sm --format=csv,noheader,nounits
     echo "reset_complete=true"
+    if [[ "$SLURM_JOB_ID" =~ ^[0-9]+$ ]] \
+      && [ "$WORK_ROOT" = "/data/users/chjing/vllm_job_work/${SLURM_JOB_ID}" ]; then
+      if rm -rf -- "$WORK_ROOT"; then
+        echo "cache_cleanup_complete=true path=${WORK_ROOT}"
+      else
+        echo "cache_cleanup_complete=false removal_failed path=${WORK_ROOT}"
+        cleanup_rc=3
+      fi
+    else
+      echo "cache_cleanup_complete=false unsafe_path=${WORK_ROOT}"
+      cleanup_rc=3
+    fi
   } >> "${OUT_DIR}/reset_step.log" 2>&1
   exit "$cleanup_rc"
 }
@@ -76,13 +88,15 @@ trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
-mkdir -p "$OUT_DIR" "$WORK_ROOT"/{xdg-cache,xdg-config,cuda-cache,triton-cache,torchinductor-cache,vllm-cache,numba-cache,tmp}
+mkdir -p "$OUT_DIR" "$WORK_ROOT"/{xdg-cache,xdg-config,flashinfer,cuda-cache,triton-cache,torchinductor-cache,torch,vllm-cache,numba-cache,tmp}
 export HF_HOME="/data/users/chjing/.cache/huggingface"
 export XDG_CACHE_HOME="$WORK_ROOT/xdg-cache"
 export XDG_CONFIG_HOME="$WORK_ROOT/xdg-config"
+export FLASHINFER_WORKSPACE_BASE="$WORK_ROOT/flashinfer"
 export CUDA_CACHE_PATH="$WORK_ROOT/cuda-cache"
 export TRITON_CACHE_DIR="$WORK_ROOT/triton-cache"
 export TORCHINDUCTOR_CACHE_DIR="$WORK_ROOT/torchinductor-cache"
+export TORCH_HOME="$WORK_ROOT/torch"
 export VLLM_CACHE_ROOT="$WORK_ROOT/vllm-cache"
 export NUMBA_CACHE_DIR="$WORK_ROOT/numba-cache"
 export TMPDIR="$WORK_ROOT/tmp"

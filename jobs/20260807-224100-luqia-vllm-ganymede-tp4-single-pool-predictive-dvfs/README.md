@@ -14,3 +14,7 @@ using `sudo nvidia-smi -lgc`.
 The output records decisions, per-GPU clock/power telemetry, benchmark TTFT and
 TPOT, prediction errors, and the final `-rgc` cleanup. There is no proxy, second
 server, cross-node transfer, or PD KV-transfer term.
+
+All per-run compiler and framework caches are isolated under
+`/data/users/chjing/vllm_job_work/$SLURM_JOB_ID` and removed by the exit trap
+after the server is stopped and GPU clocks are reset.
