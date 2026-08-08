@@ -97,7 +97,16 @@ DECODE_KV_PORT_BASE="${DECODE_KV_PORT_BASE:-$((34000 + PORT_OFFSET))}"
 
 PD_OUT_DIR="${PD_OUT_DIR:-$PWD/pd_vllm_${SLURM_JOB_ID}}"
 PD_WORK_DIR="${PD_WORK_DIR:-/data/users/chjing/vllm_job_work/${SLURM_JOB_ID}}"
-mkdir -p "$PD_OUT_DIR" "$PD_WORK_DIR"
+export HF_HOME="${HF_HOME:-${PD_WORK_DIR}/huggingface}"
+export HF_TOKEN_PATH="${HF_TOKEN_PATH:-${HF_HOME}/token}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${PD_WORK_DIR}/xdg-cache}"
+export VLLM_CACHE_ROOT="${VLLM_CACHE_ROOT:-${PD_WORK_DIR}/vllm-cache}"
+export TORCH_HOME="${TORCH_HOME:-${PD_WORK_DIR}/torch-cache}"
+export TRITON_CACHE_DIR="${TRITON_CACHE_DIR:-${PD_WORK_DIR}/triton-cache}"
+export CUDA_CACHE_PATH="${CUDA_CACHE_PATH:-${PD_WORK_DIR}/cuda-cache}"
+mkdir -p \
+  "$PD_OUT_DIR" "$PD_WORK_DIR" "$HF_HOME" "$XDG_CACHE_HOME" \
+  "$VLLM_CACHE_ROOT" "$TORCH_HOME" "$TRITON_CACHE_DIR" "$CUDA_CACHE_PATH"
 RUNTIME_PROXY_SCRIPT="${PD_WORK_DIR}/scheduler_custom_policy.py"
 RUNTIME_INSTANCE_SCRIPT="${PD_WORK_DIR}/start_pd_vllm_instance.sh"
 cp -- "$PROXY_SCRIPT" "$RUNTIME_PROXY_SCRIPT"
@@ -254,6 +263,7 @@ print_instance_mapping() {
 
 echo "pd_topology proxy=${PROXY_NODE}/${PROXY_IP}:${PROXY_HTTP_PORT} prefill=${PREFILL_NODE}/${PREFILL_IP} replicas=${PREFILL_REPLICAS} gpu=${PREFILL_GPU_MODEL} tp=${PREFILL_TP_SIZE} decode=${DECODE_NODE}/${DECODE_IP} replicas=${DECODE_REPLICAS} gpu=${DECODE_GPU_MODEL} tp=${DECODE_TP_SIZE}"
 echo "pd_paths output=${PD_OUT_DIR} work=${PD_WORK_DIR} proxy_script=${RUNTIME_PROXY_SCRIPT}"
+echo "pd_cache_paths hf=${HF_HOME} xdg=${XDG_CACHE_HOME} vllm=${VLLM_CACHE_ROOT} torch=${TORCH_HOME} triton=${TRITON_CACHE_DIR} cuda=${CUDA_CACHE_PATH}"
 print_instance_mapping
 
 srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$PROXY_NODE" \

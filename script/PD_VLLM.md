@@ -57,4 +57,5 @@ curl -H 'X-PD-Route: P1->D0' \
 `"pd_route":"P0-D1"`。JSON 中的调度字段会在转发给 vLLM 前删除。
 
 运行日志保存在 `PD_OUT_DIR`。运行期脚本复制到
-`/data/users/chjing/vllm_job_work/<job_id>`，所有进程退出后自动删除。
+`/data/users/chjing/vllm_job_work/<job_id>`；Hugging Face、vLLM、Torch、
+Triton 和 CUDA 缓存也统一放在该目录下，所有进程退出后自动删除。

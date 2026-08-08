@@ -14,9 +14,11 @@
 
 set -uo pipefail
 
-JOB_NAME="20260808-104810-luqia-vllm-pd-2p2d-round-robin-bench"
+SOURCE_JOB_NAME="20260808-104810-luqia-vllm-pd-2p2d-round-robin-bench"
+JOB_NAME="${JOB_NAME_OVERRIDE:-$SOURCE_JOB_NAME}"
 BROKER_ROOT="/data/users/chjing/Sweep_LLM_Jobs_broker"
 JOB_DIR="${BROKER_ROOT}/jobs/${JOB_NAME}"
+SOURCE_JOB_DIR="${BROKER_ROOT}/jobs/${SOURCE_JOB_NAME}"
 SCRIPT_ROOT="${BROKER_ROOT}/script"
 ENV_DIR="/data/users/chjing/miniforge3/envs/cuda-env"
 PYTHON_BIN="${ENV_DIR}/bin/python"
@@ -41,12 +43,19 @@ export DECODE_KV_PORT_BASE=$((34000 + PORT_OFFSET))
 
 OUT_DIR="${JOB_DIR}/results/${SLURM_JOB_ID:-manual}"
 export PD_OUT_DIR="${OUT_DIR}/pd_runtime"
-export PD_WORK_DIR="/data/users/chjing/vllm_job_work/${SLURM_JOB_ID:-manual}/${JOB_NAME}"
+export PD_WORK_DIR="/data/users/chjing/vllm_job_work/${SLURM_JOB_ID:-manual}"
+export HF_HOME="${PD_WORK_DIR}/huggingface"
+export HF_TOKEN_PATH="${HF_HOME}/token"
+export XDG_CACHE_HOME="${PD_WORK_DIR}/xdg-cache"
+export VLLM_CACHE_ROOT="${PD_WORK_DIR}/vllm-cache"
+export TORCH_HOME="${PD_WORK_DIR}/torch-cache"
+export TRITON_CACHE_DIR="${PD_WORK_DIR}/triton-cache"
+export CUDA_CACHE_PATH="${PD_WORK_DIR}/cuda-cache"
 BENCH_LOG="${OUT_DIR}/vllm_bench.txt"
 BENCH_RESULT="vllm_bench_detailed.json"
 REGISTRY_FILE="${OUT_DIR}/registry.json"
 ROUTE_CHECK_FILE="${OUT_DIR}/round_robin_check.json"
-CHECKER="${JOB_DIR}/check_round_robin.py"
+CHECKER="${SOURCE_JOB_DIR}/check_round_robin.py"
 
 export PATH="${ENV_DIR}/bin:${PATH}"
 export PYTHON_BIN VLLM_BIN MODEL STARTUP_TIMEOUT_SECONDS
@@ -134,6 +143,7 @@ ulimit -n 65536
 echo "job_name=${JOB_NAME}"
 echo "slurm_job_id=${SLURM_JOB_ID:-unset} nodelist=${SLURM_JOB_NODELIST:-unset}"
 echo "model=${MODEL}"
+echo "work_dir=${PD_WORK_DIR} hf_cache=${HF_HOME} vllm_cache=${VLLM_CACHE_ROOT}"
 echo "round_robin_order=P0-D0,P0-D1,P1-D0,P1-D1"
 echo "bench num_prompts=${NUM_PROMPTS} request_rate=${REQUEST_RATE} input_len=${INPUT_LEN} output_len=${OUTPUT_LEN} max_concurrency=${MAX_CONCURRENCY}"
 echo "output_dir=${OUT_DIR}"

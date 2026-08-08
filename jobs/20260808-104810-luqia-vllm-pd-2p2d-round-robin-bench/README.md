@@ -10,6 +10,9 @@
 
 默认执行 32 个 random-dataset 请求，输入长度 512、输出长度 128、请求率
 4 req/s、最大并发 16。可在提交时通过 `--export` 覆盖这些参数。
+默认模型为 `mistralai/Mistral-7B-v0.1`。运行期脚本以及 Hugging Face、
+vLLM、Torch、Triton、CUDA 缓存统一写入
+`/data/users/chjing/vllm_job_work/<job_id>`，不会再读取 `/root/.cache`。
 
 ```bash
 sbatch \
