@@ -107,3 +107,29 @@ pd_instance_model model=mistralai/Mistral-7B-v0.1 max_model_len=8192 max_num_bat
 [0;36m(APIServer pid=693252)[0;0m INFO:     Waiting for application startup.
 [0;36m(APIServer pid=693252)[0;0m INFO:     Application startup complete.
 [0;36m(APIServer pid=693252)[0;0m INFO:     10.1.0.3:51460 - "GET /v1/models HTTP/1.1" 200 OK
+[0;36m(APIServer pid=693252)[0;0m INFO:     10.1.0.3:34400 - "POST /v1/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=693252)[0;0m INFO:     10.1.0.3:34414 - "POST /v1/completions HTTP/1.1" 200 OK
+[0;36m(EngineCore_DP0 pid=693345)[0;0m INFO 08-08 11:32:02 [p2p_nccl_engine.py:52] set_p2p_nccl_context, original_values: {'NCCL_MAX_NCHANNELS': None, 'NCCL_MIN_NCHANNELS': None, 'NCCL_CUMEM_ENABLE': None, 'NCCL_BUFFSIZE': None, 'NCCL_PROTO': None, 'NCCL_ALGO': None}
+[0;36m(EngineCore_DP0 pid=693345)[0;0m Exception in thread Thread-4 (send_async):
+[0;36m(EngineCore_DP0 pid=693345)[0;0m Traceback (most recent call last):
+[0;36m(EngineCore_DP0 pid=693345)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/threading.py", line 1016, in _bootstrap_inner
+[0;36m(EngineCore_DP0 pid=693345)[0;0m     self.run()
+[0;36m(EngineCore_DP0 pid=693345)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/threading.py", line 953, in run
+[0;36m(EngineCore_DP0 pid=693345)[0;0m     self._target(*self._args, **self._kwargs)
+[0;36m(EngineCore_DP0 pid=693345)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_engine.py", line 501, in send_async
+[0;36m(EngineCore_DP0 pid=693345)[0;0m     self.send_sync(item)
+[0;36m(EngineCore_DP0 pid=693345)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_engine.py", line 521, in send_sync
+[0;36m(EngineCore_DP0 pid=693345)[0;0m     self.create_connect(item.remote_address)
+[0;36m(EngineCore_DP0 pid=693345)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_engine.py", line 223, in create_connect
+[0;36m(EngineCore_DP0 pid=693345)[0;0m     with set_p2p_nccl_context(self.nccl_num_channels):
+[0;36m(EngineCore_DP0 pid=693345)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 135, in __enter__
+[0;36m(EngineCore_DP0 pid=693345)[0;0m     return next(self.gen)
+[0;36m(EngineCore_DP0 pid=693345)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_engine.py", line 55, in set_p2p_nccl_context
+[0;36m(EngineCore_DP0 pid=693345)[0;0m     os.environ["NCCL_MAX_NCHANNELS"] = num_channels
+[0;36m(EngineCore_DP0 pid=693345)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 685, in __setitem__
+[0;36m(EngineCore_DP0 pid=693345)[0;0m     value = self.encodevalue(value)
+[0;36m(EngineCore_DP0 pid=693345)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/os.py", line 757, in encode
+[0;36m(EngineCore_DP0 pid=693345)[0;0m     raise TypeError("str expected, not %s" % type(value).__name__)
+[0;36m(EngineCore_DP0 pid=693345)[0;0m TypeError: str expected, not int
+[0;36m(APIServer pid=693252)[0;0m INFO:     10.1.0.3:34416 - "POST /v1/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=693252)[0;0m INFO:     10.1.0.3:34422 - "POST /v1/completions HTTP/1.1" 200 OK

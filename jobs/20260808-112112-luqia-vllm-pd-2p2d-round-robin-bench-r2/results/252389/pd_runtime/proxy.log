@@ -5,3 +5,13 @@ registry_add role=decode http=10.1.0.3:33389 zmq=10.1.0.3:34389 tp_size=1
 registry_add role=decode http=10.1.0.3:33390 zmq=10.1.0.3:34390 tp_size=1
 registry_add role=prefill http=10.1.0.5:32389 zmq=10.1.0.5:34389 tp_size=1
 registry_add role=prefill http=10.1.0.5:32390 zmq=10.1.0.5:34390 tp_size=1
+route count=0 policy_route=P0-D0 request_id=___prefill_addr_10.1.0.5:34389___decode_addr_10.1.0.3:34389_478acb2a85d1433e8916217f432051fe prefill_http=10.1.0.5:32389 decode_http=10.1.0.3:33389
+route count=1 policy_route=P0-D1 request_id=___prefill_addr_10.1.0.5:34389___decode_addr_10.1.0.3:34390_f45a7e8ea003451984fe7da992efd2eb prefill_http=10.1.0.5:32389 decode_http=10.1.0.3:33390
+route count=2 policy_route=P1-D0 request_id=___prefill_addr_10.1.0.5:34390___decode_addr_10.1.0.3:34389_ebb42825fdb149a481e6f0165550bfdc prefill_http=10.1.0.5:32390 decode_http=10.1.0.3:33389
+route count=3 policy_route=P1-D1 request_id=___prefill_addr_10.1.0.5:34390___decode_addr_10.1.0.3:34390_92699c094efd425fa49f69e42efc2bec prefill_http=10.1.0.5:32390 decode_http=10.1.0.3:33390
+route count=4 policy_route=P0-D0 request_id=___prefill_addr_10.1.0.5:34389___decode_addr_10.1.0.3:34389_9425657cc5da441191520bf41d4c9677 prefill_http=10.1.0.5:32389 decode_http=10.1.0.3:33389
+route count=5 policy_route=P0-D1 request_id=___prefill_addr_10.1.0.5:34389___decode_addr_10.1.0.3:34390_9aedd19e1c6e4bc3a78adb77f64471f2 prefill_http=10.1.0.5:32389 decode_http=10.1.0.3:33390
+route count=6 policy_route=P1-D0 request_id=___prefill_addr_10.1.0.5:34390___decode_addr_10.1.0.3:34389_68252d0b4ac74da88339f7a106d06995 prefill_http=10.1.0.5:32390 decode_http=10.1.0.3:33389
+route count=7 policy_route=P1-D1 request_id=___prefill_addr_10.1.0.5:34390___decode_addr_10.1.0.3:34390_e01d155c76de4cad84b2da7c304ddc13 prefill_http=10.1.0.5:32390 decode_http=10.1.0.3:33390
+route count=8 policy_route=P0-D0 request_id=___prefill_addr_10.1.0.5:34389___decode_addr_10.1.0.3:34389_6f38521cceb548e2a650c45a4ba4e4cd prefill_http=10.1.0.5:32389 decode_http=10.1.0.3:33389
+route count=9 policy_route=P0-D1 request_id=___prefill_addr_10.1.0.5:34389___decode_addr_10.1.0.3:34390_ec5bee728d4c4325a814d0eec17db1d4 prefill_http=10.1.0.5:32389 decode_http=10.1.0.3:33390
