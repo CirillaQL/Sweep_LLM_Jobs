@@ -26,3 +26,27 @@ pd_instance_model model=mistralai/Mistral-7B-v0.1 max_model_len=8192 max_num_bat
 [0;36m(EngineCore_DP0 pid=857961)[0;0m We recommend installing via `pip install torch-c-dlpack-ext`
 [0;36m(EngineCore_DP0 pid=857961)[0;0m   warnings.warn(
 [0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:28:38 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:22 [weight_utils.py:527] Time spent downloading weights for mistralai/Mistral-7B-v0.1: 103.709061 seconds
+[0;36m(EngineCore_DP0 pid=857961)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+[0;36m(EngineCore_DP0 pid=857961)[0;0m Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:08<00:08,  8.80s/it]
+[0;36m(EngineCore_DP0 pid=857961)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:13<00:00,  6.21s/it]
+[0;36m(EngineCore_DP0 pid=857961)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:13<00:00,  6.60s/it]
+[0;36m(EngineCore_DP0 pid=857961)[0;0m 
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:35 [default_loader.py:291] Loading weights took 13.39 seconds
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:36 [gpu_model_runner.py:4130] Model loading took 13.5 GiB memory and 118.757727 seconds
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:39 [gpu_worker.py:356] Available KV cache memory: 3.69 GiB
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:39 [kv_cache_utils.py:1307] GPU KV cache size: 30,192 tokens
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:39 [kv_cache_utils.py:1312] Maximum concurrency for 8,192 tokens per request: 3.68x
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:39 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: ab67b63c-e0be-48b0-b0a8-c3d71dff7937
+[0;36m(EngineCore_DP0 pid=857961)[0;0m WARNING 08-08 12:30:39 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:52 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:0, local_rank:0, http_address:10.1.0.3:33394, zmq_address:10.1.0.3:34394, proxy_address:10.1.0.3:31394, send_type:PUT_ASYNC, buffer_size_threshold:8000000000.00, nccl_num_channels:16
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:52 [utils.py:38] Connectors do not specify a kv cache layout, defaulting to NHD.
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:52 [core.py:272] init engine (profile, create kv cache, warmup model) took 16.48 seconds
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:53 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: ab67b63c-e0be-48b0-b0a8-c3d71dff7937
+[0;36m(EngineCore_DP0 pid=857961)[0;0m WARNING 08-08 12:30:53 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:53 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(EngineCore_DP0 pid=857961)[0;0m WARNING 08-08 12:30:53 [vllm.py:669] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+[0;36m(EngineCore_DP0 pid=857961)[0;0m INFO 08-08 12:30:53 [vllm.py:762] Cudagraph is disabled under eager mode
+[0;36m(APIServer pid=857770)[0;0m /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/tvm_ffi/_optional_torch_c_dlpack.py:174: UserWarning: Failed to JIT torch c dlpack extension, EnvTensorAllocator will not be enabled.
+[0;36m(APIServer pid=857770)[0;0m We recommend installing via `pip install torch-c-dlpack-ext`
+[0;36m(APIServer pid=857770)[0;0m   warnings.warn(
