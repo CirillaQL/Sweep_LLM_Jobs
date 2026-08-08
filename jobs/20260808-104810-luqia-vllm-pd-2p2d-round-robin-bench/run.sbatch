@@ -32,6 +32,7 @@ OUTPUT_LEN="${OUTPUT_LEN_OVERRIDE:-128}"
 MAX_CONCURRENCY="${MAX_CONCURRENCY_OVERRIDE:-16}"
 BENCH_TIMEOUT_SECONDS="${BENCH_TIMEOUT_SECONDS_OVERRIDE:-300}"
 STARTUP_TIMEOUT_SECONDS="${STARTUP_TIMEOUT_SECONDS_OVERRIDE:-900}"
+REQUIRE_ALL_RANDOM_ROUTES="${REQUIRE_ALL_RANDOM_ROUTES_OVERRIDE:-false}"
 
 PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
 export PROXY_HTTP_PORT=$((30000 + PORT_OFFSET))
@@ -76,14 +77,16 @@ export INSTANCE_SCRIPT="${SCRIPT_ROOT}/start_pd_vllm_instance.sh"
 export PREFILL_NODE=uranus
 export PREFILL_IP=10.1.0.5
 export PREFILL_NET_IFACE=enp160s0f0np0
-export PREFILL_REPLICAS=2
-export PREFILL_TP_SIZE=1
+export PREFILL_REPLICAS="${PREFILL_REPLICAS_OVERRIDE:-2}"
+export PREFILL_TP_SIZE="${PREFILL_TP_SIZE_OVERRIDE:-1}"
+export PREFILL_TP_SIZES="${PREFILL_TP_SIZES_OVERRIDE:-1,1}"
 export PREFILL_GPU_MODEL=L40S
 export DECODE_NODE=ganymede
 export DECODE_IP=10.1.0.3
 export DECODE_NET_IFACE=eno12399np0
-export DECODE_REPLICAS=2
-export DECODE_TP_SIZE=1
+export DECODE_REPLICAS="${DECODE_REPLICAS_OVERRIDE:-2}"
+export DECODE_TP_SIZE="${DECODE_TP_SIZE_OVERRIDE:-1}"
+export DECODE_TP_SIZES="${DECODE_TP_SIZES_OVERRIDE:-1,1}"
 export DECODE_GPU_MODEL=L4
 export PROXY_NODE=ganymede
 export PROXY_IP=10.1.0.3
@@ -144,14 +147,18 @@ wait_for_registry() {
 import json
 import sys
 
-data = json.load(open(sys.argv[1], encoding="utf-8"))
+path, expected_p, expected_d, expected_p_tp, expected_d_tp = sys.argv[1:]
+data = json.load(open(path, encoding="utf-8"))
 ready = (
-    data.get("prefill_count") == 2
-    and data.get("decode_count") == 2
+    data.get("prefill_count") == int(expected_p)
+    and data.get("decode_count") == int(expected_d)
+    and data.get("prefill_tp_sizes") == [int(value) for value in expected_p_tp.split(",")]
+    and data.get("decode_tp_sizes") == [int(value) for value in expected_d_tp.split(",")]
     and data.get("default_route") == "random"
 )
 raise SystemExit(0 if ready else 1)
-' "$REGISTRY_FILE"; then
+' "$REGISTRY_FILE" "$PREFILL_REPLICAS" "$DECODE_REPLICAS" \
+      "$PREFILL_TP_SIZES" "$DECODE_TP_SIZES"; then
       echo "pd_registry_ready=true registry=${REGISTRY_FILE}"
       return 0
     fi
@@ -169,7 +176,8 @@ echo "slurm_job_id=${SLURM_JOB_ID:-unset} nodelist=${SLURM_JOB_NODELIST:-unset}"
 echo "model=${MODEL}"
 echo "work_dir=${PD_WORK_DIR}"
 echo "cache_paths hf=${HF_HOME} hf_hub=${HF_HUB_CACHE} hf_assets=${HF_ASSETS_CACHE} hf_xet=${HF_XET_CACHE} xdg=${XDG_CACHE_HOME} xdg_config=${XDG_CONFIG_HOME} flashinfer=${FLASHINFER_WORKSPACE_BASE} vllm=${VLLM_CACHE_ROOT} torch=${TORCH_HOME} torch_extensions=${TORCH_EXTENSIONS_DIR} triton=${TRITON_CACHE_DIR} torchinductor=${TORCHINDUCTOR_CACHE_DIR} cuda=${CUDA_CACHE_PATH} numba=${NUMBA_CACHE_DIR} ray_tmp=${RAY_TMPDIR} tmp=${TMPDIR}"
-echo "random_route_policy=prefill_bit_0_or_1,decode_bit_0_or_1"
+echo "random_route_policy=prefill_index_0_to_$((PREFILL_REPLICAS - 1)),decode_index_0_to_$((DECODE_REPLICAS - 1))"
+echo "mixed_tp prefill=${PREFILL_TP_SIZES} decode=${DECODE_TP_SIZES} require_all_routes=${REQUIRE_ALL_RANDOM_ROUTES}"
 echo "bench num_prompts=${NUM_PROMPTS} request_rate=${REQUEST_RATE} input_len=${INPUT_LEN} output_len=${OUTPUT_LEN} max_concurrency=${MAX_CONCURRENCY}"
 echo "output_dir=${OUT_DIR}"
 
@@ -233,10 +241,17 @@ echo "bench_rc=${BENCH_RC} successful_requests=${SUCCESSFUL_REQUESTS} failed_req
 
 echo "phase=verify_random_routes"
 ROUTE_CHECK_RC=0
-"$PYTHON_BIN" "$CHECKER" \
+ROUTE_CHECK_ARGS=(
   --proxy-log "${PD_OUT_DIR}/proxy.log" \
   --expected-requests "$NUM_PROMPTS" \
-  --output "$ROUTE_CHECK_FILE" || ROUTE_CHECK_RC=$?
+  --expected-prefill-count "$PREFILL_REPLICAS" \
+  --expected-decode-count "$DECODE_REPLICAS" \
+  --output "$ROUTE_CHECK_FILE"
+)
+if [ "$REQUIRE_ALL_RANDOM_ROUTES" = true ]; then
+  ROUTE_CHECK_ARGS+=(--require-all-routes)
+fi
+"$PYTHON_BIN" "$CHECKER" "${ROUTE_CHECK_ARGS[@]}" || ROUTE_CHECK_RC=$?
 cat "$ROUTE_CHECK_FILE" 2>/dev/null || true
 echo "random_route_check_rc=${ROUTE_CHECK_RC}"
 

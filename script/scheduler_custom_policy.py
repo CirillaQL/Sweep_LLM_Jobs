@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Custom instance-pair scheduler for a two-prefill/two-decode PD proxy.
+"""Custom instance-pair scheduler for a multi-prefill/multi-decode PD proxy.
 
 This follows the two-stage forwarding pattern in vLLM's
 ``examples/disaggregated/disaggregated_serving/disagg_proxy_demo.py`` while
 retaining this repository's P2pNcclConnector service-discovery protocol.
 
-For two TP=1 Prefill instances and two TP=1 Decode instances, callers can
-select any of these pairs independently for every request::
+Callers can select any registered pair independently for every request, for
+example with three Prefill and three Decode instances::
 
-    P0-D0, P0-D1, P1-D0, P1-D1
+    P0-D0, P0-D1, ... P1-D2, ... P2-D2
 
 Selection priority is:
 
@@ -18,16 +18,14 @@ Selection priority is:
 3. ``pd_route`` or ``_pd_route`` JSON field (removed before forwarding).
 4. The configured default policy.
 
-By default, one random bit selects P0/P1 and another random bit selects D0/D1
-for every request. ``POST /control/default-route`` can switch the default to
-a fixed pair, ``random``, or ``round_robin``. P0/P1 and D0/D1 are assigned by
-increasing HTTP port, making the aliases stable when the primary instance uses
-the base port and the second instance uses base_port + 1.
+By default, Prefill and Decode indices are sampled independently from the live
+registries for every request. ``POST /control/default-route`` can switch the
+default to a fixed pair, ``random``, or ``round_robin``. Aliases are assigned
+by increasing HTTP port, making them stable across requests.
 """
 
 from __future__ import annotations
 
-import itertools
 import os
 import random
 import re
@@ -44,8 +42,7 @@ import zmq
 from aiohttp import web
 
 
-ROUTE_ORDER = ("P0-D0", "P0-D1", "P1-D0", "P1-D1")
-ROUTE_PATTERN = re.compile(r"^P([01])-D([01])$")
+ROUTE_PATTERN = re.compile(r"^P([0-9]+)-D([0-9]+)$")
 ROUND_ROBIN = "round_robin"
 RANDOM_ROUTE = "random"
 PING_TTL_SECONDS = int(os.environ.get("CUSTOM_PD_PING_TTL_SECONDS", "10"))
@@ -80,9 +77,19 @@ def normalize_route(value: Any, *, allow_policy: bool = False) -> str:
         if normalized in {"ROUND_ROBIN", "RR"}:
             return ROUND_ROBIN
     if not ROUTE_PATTERN.fullmatch(normalized):
-        choices = ", ".join(ROUTE_ORDER)
-        raise ValueError(f"unsupported route {value!r}; expected one of {choices}")
+        raise ValueError(
+            f"unsupported route {value!r}; expected P<index>-D<index>"
+        )
     return normalized
+
+
+def route_choices(prefill_count: int, decode_count: int) -> tuple[str, ...]:
+    """Return every P-D combination in stable Prefill-major order."""
+    return tuple(
+        f"P{prefill_index}-D{decode_index}"
+        for prefill_index in range(prefill_count)
+        for decode_index in range(decode_count)
+    )
 
 
 def http_sort_key(address: str) -> tuple[int, str, str]:
@@ -174,7 +181,7 @@ def snapshot_registry() -> tuple[list[Instance], list[Instance]]:
 
 
 class CustomPairSchedulingPolicy:
-    """Select one of the four P0/P1 x D0/D1 instance pairs."""
+    """Select one pair from the currently registered P and D instances."""
 
     def __init__(
         self,
@@ -183,7 +190,7 @@ class CustomPairSchedulingPolicy:
         random_seed: Any = None,
     ) -> None:
         self._lock = threading.Lock()
-        self._cycler = itertools.cycle(ROUTE_ORDER)
+        self._round_robin_index = 0
         self._rng = random.Random(random_seed)
         self._default_route = normalize_route(default_route, allow_policy=True)
 
@@ -197,20 +204,28 @@ class CustomPairSchedulingPolicy:
         with self._lock:
             self._default_route = normalized
             if normalized == ROUND_ROBIN:
-                self._cycler = itertools.cycle(ROUTE_ORDER)
+                self._round_robin_index = 0
         return normalized
 
-    def choose_route(self, requested_route: str | None) -> str:
+    def choose_route(
+        self,
+        requested_route: str | None,
+        prefill_count: int,
+        decode_count: int,
+    ) -> str:
         if requested_route is not None:
             return normalize_route(requested_route)
         with self._lock:
             if self._default_route == RANDOM_ROUTE:
-                prefill_index = self._rng.getrandbits(1)
-                decode_index = self._rng.getrandbits(1)
+                prefill_index = self._rng.randrange(prefill_count)
+                decode_index = self._rng.randrange(decode_count)
                 return f"P{prefill_index}-D{decode_index}"
             if self._default_route != ROUND_ROBIN:
                 return self._default_route
-            return next(self._cycler)
+            choices = route_choices(prefill_count, decode_count)
+            route = choices[self._round_robin_index % len(choices)]
+            self._round_robin_index += 1
+            return route
 
     def schedule(
         self,
@@ -218,15 +233,20 @@ class CustomPairSchedulingPolicy:
         decode: list[Instance],
         requested_route: str | None,
     ) -> tuple[str, Instance, Instance]:
-        if len(prefill) < 2 or len(decode) < 2:
+        if not prefill or not decode:
             raise RuntimeError(
-                "custom pair scheduling requires at least two live Prefill and "
-                f"two live Decode instances; got P={len(prefill)} D={len(decode)}"
+                "custom pair scheduling requires live Prefill and Decode "
+                f"instances; got P={len(prefill)} D={len(decode)}"
             )
-        route = self.choose_route(requested_route)
+        route = self.choose_route(requested_route, len(prefill), len(decode))
         match = ROUTE_PATTERN.fullmatch(route)
         assert match is not None
         prefill_index, decode_index = (int(value) for value in match.groups())
+        if prefill_index >= len(prefill) or decode_index >= len(decode):
+            raise RuntimeError(
+                f"route {route} is unavailable with P={len(prefill)} "
+                f"D={len(decode)}"
+            )
         return route, prefill[prefill_index], decode[decode_index]
 
 
@@ -316,7 +336,7 @@ async def registry(_: web.Request) -> web.Response:
                 }
                 for index, instance in enumerate(decode)
             },
-            "supported_routes": ROUTE_ORDER,
+            "supported_routes": route_choices(len(prefill), len(decode)),
             "default_route": POLICY.default_route,
         }
     )
@@ -477,7 +497,7 @@ if __name__ == "__main__":
     print(
         f"custom_proxy_start hostname={socket.gethostname()} "
         f"http={http_host}:{http_port} registry={register_host}:{register_port} "
-        f"default_route={POLICY.default_route} routes={','.join(ROUTE_ORDER)}",
+        f"default_route={POLICY.default_route} routes=dynamic_registry_cartesian_product",
         flush=True,
     )
     start_service_discovery(register_host, register_port)

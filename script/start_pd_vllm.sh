@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Launch four independent TP=1 vLLM instances in an existing Slurm allocation:
-# Prefill_0/Prefill_1 on L40S and Decode_0/Decode_1 on L4.
+# Launch independent mixed-TP Prefill and Decode vLLM instances in an existing
+# Slurm allocation.
 
 set -euo pipefail
 
@@ -53,6 +53,8 @@ PREFILL_REPLICAS="${PREFILL_REPLICAS:-2}"
 DECODE_REPLICAS="${DECODE_REPLICAS:-2}"
 PREFILL_TP_SIZE="${PREFILL_TP_SIZE:-1}"
 DECODE_TP_SIZE="${DECODE_TP_SIZE:-1}"
+PREFILL_TP_SIZES="${PREFILL_TP_SIZES:-}"
+DECODE_TP_SIZES="${DECODE_TP_SIZES:-}"
 PREFILL_GPU_MODEL="${PREFILL_GPU_MODEL:-L40S}"
 DECODE_GPU_MODEL="${DECODE_GPU_MODEL:-L4}"
 CPUS_PER_GPU="${CPUS_PER_GPU:-8}"
@@ -65,10 +67,36 @@ for pair in \
   CPUS_PER_GPU:$CPUS_PER_GPU STARTUP_TIMEOUT_SECONDS:$STARTUP_TIMEOUT_SECONDS; do
   positive_integer "${pair%%:*}" "${pair#*:}"
 done
-[ "$PREFILL_REPLICAS" -eq 2 ] && [ "$DECODE_REPLICAS" -eq 2 ] || \
-  die "custom_scheduler_requires_exactly_two_prefill_and_two_decode_instances"
-[ "$PREFILL_TP_SIZE" -eq 1 ] && [ "$DECODE_TP_SIZE" -eq 1 ] || \
-  die "four_instance_topology_requires_tp_size_one"
+
+PREFILL_TP_SIZE_ARRAY=()
+DECODE_TP_SIZE_ARRAY=()
+if [ -n "$PREFILL_TP_SIZES" ]; then
+  IFS=',' read -r -a PREFILL_TP_SIZE_ARRAY <<< "$PREFILL_TP_SIZES"
+else
+  for ((ordinal = 0; ordinal < PREFILL_REPLICAS; ordinal++)); do
+    PREFILL_TP_SIZE_ARRAY+=("$PREFILL_TP_SIZE")
+  done
+fi
+if [ -n "$DECODE_TP_SIZES" ]; then
+  IFS=',' read -r -a DECODE_TP_SIZE_ARRAY <<< "$DECODE_TP_SIZES"
+else
+  for ((ordinal = 0; ordinal < DECODE_REPLICAS; ordinal++)); do
+    DECODE_TP_SIZE_ARRAY+=("$DECODE_TP_SIZE")
+  done
+fi
+[ "${#PREFILL_TP_SIZE_ARRAY[@]}" -eq "$PREFILL_REPLICAS" ] || \
+  die "prefill_tp_size_count_mismatch replicas=${PREFILL_REPLICAS} sizes=${PREFILL_TP_SIZES}"
+[ "${#DECODE_TP_SIZE_ARRAY[@]}" -eq "$DECODE_REPLICAS" ] || \
+  die "decode_tp_size_count_mismatch replicas=${DECODE_REPLICAS} sizes=${DECODE_TP_SIZES}"
+for ordinal in "${!PREFILL_TP_SIZE_ARRAY[@]}"; do
+  positive_integer "PREFILL_TP_SIZES[$ordinal]" "${PREFILL_TP_SIZE_ARRAY[$ordinal]}"
+done
+for ordinal in "${!DECODE_TP_SIZE_ARRAY[@]}"; do
+  positive_integer "DECODE_TP_SIZES[$ordinal]" "${DECODE_TP_SIZE_ARRAY[$ordinal]}"
+done
+PREFILL_TP_SIZES=$(IFS=,; echo "${PREFILL_TP_SIZE_ARRAY[*]}")
+DECODE_TP_SIZES=$(IFS=,; echo "${DECODE_TP_SIZE_ARRAY[*]}")
+export PREFILL_TP_SIZES DECODE_TP_SIZES
 
 [ -x "$PYTHON_BIN" ] || die "python_binary_not_executable path=${PYTHON_BIN}"
 [ -x "$VLLM_BIN" ] || die "vllm_binary_not_executable path=${VLLM_BIN}"
@@ -223,24 +251,32 @@ launch_instance() {
   local role="$1"
   local ordinal="$2"
   local node node_ip net_iface tp_size http_port kv_port instance_name gpu_model
+  local kv_offset=0
+  local index
   if [ "$role" = prefill ]; then
     node="$PREFILL_NODE"
     node_ip="$PREFILL_IP"
     net_iface="$PREFILL_NET_IFACE"
-    tp_size="$PREFILL_TP_SIZE"
+    tp_size="${PREFILL_TP_SIZE_ARRAY[$ordinal]}"
     instance_name="Prefill_${ordinal}"
     gpu_model="$PREFILL_GPU_MODEL"
     http_port=$((PREFILL_HTTP_PORT_BASE + ordinal))
-    kv_port=$((PREFILL_KV_PORT_BASE + ordinal * tp_size))
+    for ((index = 0; index < ordinal; index++)); do
+      kv_offset=$((kv_offset + PREFILL_TP_SIZE_ARRAY[index]))
+    done
+    kv_port=$((PREFILL_KV_PORT_BASE + kv_offset))
   else
     node="$DECODE_NODE"
     node_ip="$DECODE_IP"
     net_iface="$DECODE_NET_IFACE"
-    tp_size="$DECODE_TP_SIZE"
+    tp_size="${DECODE_TP_SIZE_ARRAY[$ordinal]}"
     instance_name="Decode_${ordinal}"
     gpu_model="$DECODE_GPU_MODEL"
     http_port=$((DECODE_HTTP_PORT_BASE + ordinal))
-    kv_port=$((DECODE_KV_PORT_BASE + ordinal * tp_size))
+    for ((index = 0; index < ordinal; index++)); do
+      kv_offset=$((kv_offset + DECODE_TP_SIZE_ARRAY[index]))
+    done
+    kv_port=$((DECODE_KV_PORT_BASE + kv_offset))
   fi
   local log_file="${PD_OUT_DIR}/${instance_name}.log"
   echo "pd_launch instance=${instance_name} role=${role} node=${node} gpu_model=${gpu_model} http_port=${http_port} kv_port=${kv_port} tp=${tp_size}"
@@ -268,16 +304,26 @@ launch_instance() {
 }
 
 print_instance_mapping() {
-  local ordinal
+  local ordinal index kv_offset tp_size
   for ((ordinal = 0; ordinal < PREFILL_REPLICAS; ordinal++)); do
-    echo "pd_instance_map instance=Prefill_${ordinal} alias=P${ordinal} role=prefill node=${PREFILL_NODE} node_ip=${PREFILL_IP} http_endpoint=${PREFILL_IP}:$((PREFILL_HTTP_PORT_BASE + ordinal)) kv_endpoint=${PREFILL_IP}:$((PREFILL_KV_PORT_BASE + ordinal * PREFILL_TP_SIZE)) gpu=${PREFILL_GPU_MODEL} tp=${PREFILL_TP_SIZE}"
+    kv_offset=0
+    for ((index = 0; index < ordinal; index++)); do
+      kv_offset=$((kv_offset + PREFILL_TP_SIZE_ARRAY[index]))
+    done
+    tp_size="${PREFILL_TP_SIZE_ARRAY[$ordinal]}"
+    echo "pd_instance_map instance=Prefill_${ordinal} alias=P${ordinal} role=prefill node=${PREFILL_NODE} node_ip=${PREFILL_IP} http_endpoint=${PREFILL_IP}:$((PREFILL_HTTP_PORT_BASE + ordinal)) kv_endpoint=${PREFILL_IP}:$((PREFILL_KV_PORT_BASE + kv_offset)) gpu=${PREFILL_GPU_MODEL} tp=${tp_size}"
   done
   for ((ordinal = 0; ordinal < DECODE_REPLICAS; ordinal++)); do
-    echo "pd_instance_map instance=Decode_${ordinal} alias=D${ordinal} role=decode node=${DECODE_NODE} node_ip=${DECODE_IP} http_endpoint=${DECODE_IP}:$((DECODE_HTTP_PORT_BASE + ordinal)) kv_endpoint=${DECODE_IP}:$((DECODE_KV_PORT_BASE + ordinal * DECODE_TP_SIZE)) gpu=${DECODE_GPU_MODEL} tp=${DECODE_TP_SIZE}"
+    kv_offset=0
+    for ((index = 0; index < ordinal; index++)); do
+      kv_offset=$((kv_offset + DECODE_TP_SIZE_ARRAY[index]))
+    done
+    tp_size="${DECODE_TP_SIZE_ARRAY[$ordinal]}"
+    echo "pd_instance_map instance=Decode_${ordinal} alias=D${ordinal} role=decode node=${DECODE_NODE} node_ip=${DECODE_IP} http_endpoint=${DECODE_IP}:$((DECODE_HTTP_PORT_BASE + ordinal)) kv_endpoint=${DECODE_IP}:$((DECODE_KV_PORT_BASE + kv_offset)) gpu=${DECODE_GPU_MODEL} tp=${tp_size}"
   done
 }
 
-echo "pd_topology proxy=${PROXY_NODE}/${PROXY_IP}:${PROXY_HTTP_PORT} prefill=${PREFILL_NODE}/${PREFILL_IP} replicas=${PREFILL_REPLICAS} gpu=${PREFILL_GPU_MODEL} tp=${PREFILL_TP_SIZE} decode=${DECODE_NODE}/${DECODE_IP} replicas=${DECODE_REPLICAS} gpu=${DECODE_GPU_MODEL} tp=${DECODE_TP_SIZE}"
+echo "pd_topology proxy=${PROXY_NODE}/${PROXY_IP}:${PROXY_HTTP_PORT} prefill=${PREFILL_NODE}/${PREFILL_IP} replicas=${PREFILL_REPLICAS} gpu=${PREFILL_GPU_MODEL} tp_sizes=${PREFILL_TP_SIZES} decode=${DECODE_NODE}/${DECODE_IP} replicas=${DECODE_REPLICAS} gpu=${DECODE_GPU_MODEL} tp_sizes=${DECODE_TP_SIZES}"
 echo "pd_paths output=${PD_OUT_DIR} work=${PD_WORK_DIR} proxy_script=${RUNTIME_PROXY_SCRIPT}"
 echo "pd_cache_paths hf=${HF_HOME} hf_hub=${HF_HUB_CACHE} hf_assets=${HF_ASSETS_CACHE} hf_xet=${HF_XET_CACHE} xdg=${XDG_CACHE_HOME} xdg_config=${XDG_CONFIG_HOME} flashinfer=${FLASHINFER_WORKSPACE_BASE} vllm=${VLLM_CACHE_ROOT} torch=${TORCH_HOME} torch_extensions=${TORCH_EXTENSIONS_DIR} triton=${TRITON_CACHE_DIR} torchinductor=${TORCHINDUCTOR_CACHE_DIR} cuda=${CUDA_CACHE_PATH} numba=${NUMBA_CACHE_DIR} ray_tmp=${RAY_TMPDIR} tmp=${TMPDIR}"
 print_instance_mapping
@@ -312,7 +358,7 @@ data = json.load(open(sys.argv[1], encoding="utf-8"))
 print(json.dumps(data, indent=2))
 ' "$REGISTRY_FILE"
 
-echo "pd_cluster_ready endpoint=http://${PROXY_IP}:${PROXY_HTTP_PORT}/v1 instances=Prefill_0,Prefill_1,Decode_0,Decode_1 default_route=${CUSTOM_PD_DEFAULT_ROUTE:-random} random_selection=P[bit0]-D[bit1]"
+echo "pd_cluster_ready endpoint=http://${PROXY_IP}:${PROXY_HTTP_PORT}/v1 prefill_replicas=${PREFILL_REPLICAS} decode_replicas=${DECODE_REPLICAS} default_route=${CUSTOM_PD_DEFAULT_ROUTE:-random} random_selection=independent_live_registry_indices"
 echo "pd_cluster_waiting_for_steps=true"
 wait -n "${STEP_PIDS[@]}"
 echo "pd_step_exited=true"

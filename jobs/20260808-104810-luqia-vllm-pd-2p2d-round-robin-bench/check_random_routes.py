@@ -10,7 +10,6 @@ from collections import Counter
 from pathlib import Path
 
 
-ROUTES = ("P0-D0", "P0-D1", "P1-D0", "P1-D1")
 ROUTE_LINE = re.compile(r"^route count=(\d+) policy_route=(\S+)")
 
 
@@ -18,12 +17,20 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--proxy-log", type=Path, required=True)
     parser.add_argument("--expected-requests", type=int, required=True)
+    parser.add_argument("--expected-prefill-count", type=int, default=2)
+    parser.add_argument("--expected-decode-count", type=int, default=2)
+    parser.add_argument("--require-all-routes", action="store_true")
     parser.add_argument("--output", type=Path, required=True)
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    supported_routes = tuple(
+        f"P{prefill_index}-D{decode_index}"
+        for prefill_index in range(args.expected_prefill_count)
+        for decode_index in range(args.expected_decode_count)
+    )
     observations: dict[int, str] = {}
     duplicate_counts: list[int] = []
 
@@ -45,18 +52,24 @@ def main() -> int:
     invalid_routes = [
         {"count": count, "route": observations[count]}
         for count in ordered_counts
-        if observations[count] not in ROUTES
+        if observations[count] not in supported_routes
     ]
     route_counts = Counter(observations.values())
     prefill_counts = Counter(route[:2] for route in observations.values())
     decode_counts = Counter(route[3:] for route in observations.values())
+    unobserved_routes = sorted(set(supported_routes) - set(observations.values()))
     passed = not (
-        duplicate_counts or missing_counts or unexpected_counts or invalid_routes
+        duplicate_counts
+        or missing_counts
+        or unexpected_counts
+        or invalid_routes
+        or (args.require_all_routes and unobserved_routes)
     )
     report = {
         "passed": passed,
         "policy": "independent_random_bits",
-        "supported_routes": ROUTES,
+        "supported_routes": supported_routes,
+        "require_all_routes": args.require_all_routes,
         "expected_requests": args.expected_requests,
         "observed_requests": len(observations),
         "route_counts": dict(sorted(route_counts.items())),
@@ -66,6 +79,7 @@ def main() -> int:
         "missing_counts": missing_counts,
         "unexpected_counts": unexpected_counts,
         "invalid_routes": invalid_routes,
+        "unobserved_routes": unobserved_routes,
         "proxy_log": str(args.proxy_log),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

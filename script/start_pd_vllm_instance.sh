@@ -48,7 +48,6 @@ VISIBLE_GPUS="${CUDA_VISIBLE_DEVICES:-}"
 IFS=',' read -r -a VISIBLE_GPU_ARRAY <<< "$VISIBLE_GPUS"
 [ "${#VISIBLE_GPU_ARRAY[@]}" -eq "$PD_TP_SIZE" ] || \
   die "visible_gpu_count_mismatch expected=${PD_TP_SIZE} actual=${#VISIBLE_GPU_ARRAY[@]} visible=${VISIBLE_GPUS}"
-[ "$PD_TP_SIZE" -eq 1 ] || die "instance_tp_size_must_be_one value=${PD_TP_SIZE}"
 
 [ -x "$VLLM_BIN" ] || die "vllm_binary_not_executable path=${VLLM_BIN}"
 [ -x "$PYTHON_BIN" ] || die "python_binary_not_executable path=${PYTHON_BIN}"
@@ -56,15 +55,20 @@ command -v nvidia-smi >/dev/null 2>&1 || die "nvidia_smi_not_found"
 ip link show dev "$PD_NET_IFACE" >/dev/null 2>&1 || \
   die "network_interface_not_found interface=${PD_NET_IFACE}"
 
-GPU_NAME=$(nvidia-smi --id="${VISIBLE_GPU_ARRAY[0]}" \
-  --query-gpu=name --format=csv,noheader | head -n 1)
-[ -n "$GPU_NAME" ] || die "gpu_name_query_failed visible=${VISIBLE_GPUS}"
-case "${GPU_NAME,,}" in
-  *"${PD_EXPECTED_GPU_MODEL,,}"*) ;;
-  *)
-    die "gpu_model_mismatch instance=${PD_INSTANCE_NAME} expected=${PD_EXPECTED_GPU_MODEL} actual=${GPU_NAME}"
-    ;;
-esac
+GPU_NAMES=()
+for gpu_id in "${VISIBLE_GPU_ARRAY[@]}"; do
+  gpu_name=$(nvidia-smi --id="$gpu_id" \
+    --query-gpu=name --format=csv,noheader | head -n 1)
+  [ -n "$gpu_name" ] || die "gpu_name_query_failed gpu_id=${gpu_id} visible=${VISIBLE_GPUS}"
+  case "${gpu_name,,}" in
+    *"${PD_EXPECTED_GPU_MODEL,,}"*) ;;
+    *)
+      die "gpu_model_mismatch instance=${PD_INSTANCE_NAME} gpu_id=${gpu_id} expected=${PD_EXPECTED_GPU_MODEL} actual=${gpu_name}"
+      ;;
+  esac
+  GPU_NAMES+=("$gpu_name")
+done
+GPU_NAME=$(IFS='|'; echo "${GPU_NAMES[*]}")
 
 if [ -n "${REQUIRE_LINK_SPEED_MBPS:-}" ]; then
   actual_link_speed=$(<"/sys/class/net/${PD_NET_IFACE}/speed")
