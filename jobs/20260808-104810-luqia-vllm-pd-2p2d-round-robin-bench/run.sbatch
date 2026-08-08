@@ -66,8 +66,8 @@ export TEMP="$TMPDIR"
 BENCH_LOG="${OUT_DIR}/vllm_bench.txt"
 BENCH_RESULT="vllm_bench_detailed.json"
 REGISTRY_FILE="${OUT_DIR}/registry.json"
-ROUTE_CHECK_FILE="${OUT_DIR}/round_robin_check.json"
-CHECKER="${SOURCE_JOB_DIR}/check_round_robin.py"
+ROUTE_CHECK_FILE="${OUT_DIR}/random_route_check.json"
+CHECKER="${SOURCE_JOB_DIR}/check_random_routes.py"
 
 export PATH="${ENV_DIR}/bin:${PATH}"
 export PYTHON_BIN VLLM_BIN MODEL STARTUP_TIMEOUT_SECONDS
@@ -87,7 +87,7 @@ export DECODE_TP_SIZE=1
 export DECODE_GPU_MODEL=L4
 export PROXY_NODE=ganymede
 export PROXY_IP=10.1.0.3
-export CUSTOM_PD_DEFAULT_ROUTE=round_robin
+export CUSTOM_PD_DEFAULT_ROUTE=random
 export MAX_MODEL_LEN=8192
 export MAX_NUM_BATCHED_TOKENS=8192
 export MAX_NUM_SEQS=32
@@ -148,7 +148,7 @@ data = json.load(open(sys.argv[1], encoding="utf-8"))
 ready = (
     data.get("prefill_count") == 2
     and data.get("decode_count") == 2
-    and data.get("default_route") == "round_robin"
+    and data.get("default_route") == "random"
 )
 raise SystemExit(0 if ready else 1)
 ' "$REGISTRY_FILE"; then
@@ -169,7 +169,7 @@ echo "slurm_job_id=${SLURM_JOB_ID:-unset} nodelist=${SLURM_JOB_NODELIST:-unset}"
 echo "model=${MODEL}"
 echo "work_dir=${PD_WORK_DIR}"
 echo "cache_paths hf=${HF_HOME} hf_hub=${HF_HUB_CACHE} hf_assets=${HF_ASSETS_CACHE} hf_xet=${HF_XET_CACHE} xdg=${XDG_CACHE_HOME} xdg_config=${XDG_CONFIG_HOME} flashinfer=${FLASHINFER_WORKSPACE_BASE} vllm=${VLLM_CACHE_ROOT} torch=${TORCH_HOME} torch_extensions=${TORCH_EXTENSIONS_DIR} triton=${TRITON_CACHE_DIR} torchinductor=${TORCHINDUCTOR_CACHE_DIR} cuda=${CUDA_CACHE_PATH} numba=${NUMBA_CACHE_DIR} ray_tmp=${RAY_TMPDIR} tmp=${TMPDIR}"
-echo "round_robin_order=P0-D0,P0-D1,P1-D0,P1-D1"
+echo "random_route_policy=prefill_bit_0_or_1,decode_bit_0_or_1"
 echo "bench num_prompts=${NUM_PROMPTS} request_rate=${REQUEST_RATE} input_len=${INPUT_LEN} output_len=${OUTPUT_LEN} max_concurrency=${MAX_CONCURRENCY}"
 echo "output_dir=${OUT_DIR}"
 
@@ -231,14 +231,14 @@ print(successful.group(1) if successful else -1, failed.group(1) if failed else 
 ' "$BENCH_LOG")"
 echo "bench_rc=${BENCH_RC} successful_requests=${SUCCESSFUL_REQUESTS} failed_requests=${FAILED_REQUESTS}"
 
-echo "phase=verify_round_robin"
+echo "phase=verify_random_routes"
 ROUTE_CHECK_RC=0
 "$PYTHON_BIN" "$CHECKER" \
   --proxy-log "${PD_OUT_DIR}/proxy.log" \
   --expected-requests "$NUM_PROMPTS" \
   --output "$ROUTE_CHECK_FILE" || ROUTE_CHECK_RC=$?
 cat "$ROUTE_CHECK_FILE" 2>/dev/null || true
-echo "round_robin_check_rc=${ROUTE_CHECK_RC}"
+echo "random_route_check_rc=${ROUTE_CHECK_RC}"
 
 FINAL_RC=0
 if [ "$BENCH_RC" -ne 0 ] || \

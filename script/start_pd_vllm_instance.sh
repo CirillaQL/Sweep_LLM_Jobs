@@ -97,7 +97,9 @@ print(json.dumps({
         "proxy_port": os.environ["PROXY_REGISTER_PORT"],
         "http_port": os.environ["PD_HTTP_PORT"],
         "send_type": os.environ.get("PD_SEND_TYPE", "PUT_ASYNC"),
-        "nccl_num_channels": int(os.environ.get("PD_NCCL_NUM_CHANNELS", "16")),
+        # vLLM 0.15.1 writes this value directly to os.environ while creating
+        # the P2P NCCL context, so it must remain a string.
+        "nccl_num_channels": os.environ.get("PD_NCCL_NUM_CHANNELS", "16"),
     },
 }))
 '

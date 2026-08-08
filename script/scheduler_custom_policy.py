@@ -18,17 +18,18 @@ Selection priority is:
 3. ``pd_route`` or ``_pd_route`` JSON field (removed before forwarding).
 4. The configured default policy.
 
-By default the four pairs are used round-robin in the order shown above.
-``POST /control/default-route`` can switch the default to a fixed pair or
-back to ``round_robin``.  P0/P1 and D0/D1 are assigned by increasing HTTP
-port, making the aliases stable when the primary instance uses the base port
-and the second instance uses base_port + 1.
+By default, one random bit selects P0/P1 and another random bit selects D0/D1
+for every request. ``POST /control/default-route`` can switch the default to
+a fixed pair, ``random``, or ``round_robin``. P0/P1 and D0/D1 are assigned by
+increasing HTTP port, making the aliases stable when the primary instance uses
+the base port and the second instance uses base_port + 1.
 """
 
 from __future__ import annotations
 
 import itertools
 import os
+import random
 import re
 import socket
 import threading
@@ -46,6 +47,7 @@ from aiohttp import web
 ROUTE_ORDER = ("P0-D0", "P0-D1", "P1-D0", "P1-D1")
 ROUTE_PATTERN = re.compile(r"^P([01])-D([01])$")
 ROUND_ROBIN = "round_robin"
+RANDOM_ROUTE = "random"
 PING_TTL_SECONDS = int(os.environ.get("CUSTOM_PD_PING_TTL_SECONDS", "10"))
 DEFAULT_TP_SIZE = int(os.environ.get("PROXY_DEFAULT_TP_SIZE", "1"))
 HTTP_TIMEOUT = aiohttp.ClientTimeout(total=30 * 60)
@@ -66,14 +68,17 @@ DECODE_LOCK = threading.Lock()
 CLOCK_ACKS: dict[tuple[str, int], dict[str, Any]] = {}
 
 
-def normalize_route(value: Any, *, allow_round_robin: bool = False) -> str:
+def normalize_route(value: Any, *, allow_policy: bool = False) -> str:
     """Return a canonical route such as P0-D1 or raise ValueError."""
     if not isinstance(value, str):
         raise ValueError("route must be a string")
     normalized = value.strip().upper().replace(" ", "")
     normalized = normalized.replace("->", "-").replace(":", "-")
-    if allow_round_robin and normalized in {"ROUND_ROBIN", "RR", "AUTO"}:
-        return ROUND_ROBIN
+    if allow_policy:
+        if normalized in {"RANDOM", "RAND", "AUTO"}:
+            return RANDOM_ROUTE
+        if normalized in {"ROUND_ROBIN", "RR"}:
+            return ROUND_ROBIN
     if not ROUTE_PATTERN.fullmatch(normalized):
         choices = ", ".join(ROUTE_ORDER)
         raise ValueError(f"unsupported route {value!r}; expected one of {choices}")
@@ -171,10 +176,16 @@ def snapshot_registry() -> tuple[list[Instance], list[Instance]]:
 class CustomPairSchedulingPolicy:
     """Select one of the four P0/P1 x D0/D1 instance pairs."""
 
-    def __init__(self, default_route: str = ROUND_ROBIN) -> None:
+    def __init__(
+        self,
+        default_route: str = RANDOM_ROUTE,
+        *,
+        random_seed: Any = None,
+    ) -> None:
         self._lock = threading.Lock()
         self._cycler = itertools.cycle(ROUTE_ORDER)
-        self._default_route = normalize_route(default_route, allow_round_robin=True)
+        self._rng = random.Random(random_seed)
+        self._default_route = normalize_route(default_route, allow_policy=True)
 
     @property
     def default_route(self) -> str:
@@ -182,7 +193,7 @@ class CustomPairSchedulingPolicy:
             return self._default_route
 
     def set_default_route(self, route: str) -> str:
-        normalized = normalize_route(route, allow_round_robin=True)
+        normalized = normalize_route(route, allow_policy=True)
         with self._lock:
             self._default_route = normalized
             if normalized == ROUND_ROBIN:
@@ -193,6 +204,10 @@ class CustomPairSchedulingPolicy:
         if requested_route is not None:
             return normalize_route(requested_route)
         with self._lock:
+            if self._default_route == RANDOM_ROUTE:
+                prefill_index = self._rng.getrandbits(1)
+                decode_index = self._rng.getrandbits(1)
+                return f"P{prefill_index}-D{decode_index}"
             if self._default_route != ROUND_ROBIN:
                 return self._default_route
             return next(self._cycler)
@@ -216,7 +231,8 @@ class CustomPairSchedulingPolicy:
 
 
 POLICY = CustomPairSchedulingPolicy(
-    os.environ.get("CUSTOM_PD_DEFAULT_ROUTE", ROUND_ROBIN)
+    os.environ.get("CUSTOM_PD_DEFAULT_ROUTE", RANDOM_ROUTE),
+    random_seed=os.environ.get("CUSTOM_PD_RANDOM_SEED") or None,
 )
 REQUEST_COUNT = 0
 app = web.Application()

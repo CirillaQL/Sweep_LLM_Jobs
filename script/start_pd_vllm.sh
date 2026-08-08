@@ -286,7 +286,8 @@ srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$PROXY_NODE" \
   --ntasks=1 --ntasks-per-node=1 --cpus-per-task=2 --mem=4G --gres=none \
   env PROXY_REGISTER_HOST=0.0.0.0 PROXY_REGISTER_PORT="$PROXY_REGISTER_PORT" \
     PROXY_HTTP_HOST=0.0.0.0 PROXY_HTTP_PORT="$PROXY_HTTP_PORT" \
-    CUSTOM_PD_DEFAULT_ROUTE="${CUSTOM_PD_DEFAULT_ROUTE:-round_robin}" \
+    CUSTOM_PD_DEFAULT_ROUTE="${CUSTOM_PD_DEFAULT_ROUTE:-random}" \
+    CUSTOM_PD_RANDOM_SEED="${CUSTOM_PD_RANDOM_SEED:-}" \
     CUSTOM_POLICY_ADMIN_TOKEN="${CUSTOM_POLICY_ADMIN_TOKEN:-}" \
     "$PYTHON_BIN" -u "$RUNTIME_PROXY_SCRIPT" >"${PD_OUT_DIR}/proxy.log" 2>&1 &
 STEP_PIDS+=("$!")
@@ -311,7 +312,7 @@ data = json.load(open(sys.argv[1], encoding="utf-8"))
 print(json.dumps(data, indent=2))
 ' "$REGISTRY_FILE"
 
-echo "pd_cluster_ready endpoint=http://${PROXY_IP}:${PROXY_HTTP_PORT}/v1 instances=Prefill_0,Prefill_1,Decode_0,Decode_1 round_robin=P0-D0,P0-D1,P1-D0,P1-D1"
+echo "pd_cluster_ready endpoint=http://${PROXY_IP}:${PROXY_HTTP_PORT}/v1 instances=Prefill_0,Prefill_1,Decode_0,Decode_1 default_route=${CUSTOM_PD_DEFAULT_ROUTE:-random} random_selection=P[bit0]-D[bit1]"
 echo "pd_cluster_waiting_for_steps=true"
 wait -n "${STEP_PIDS[@]}"
 echo "pd_step_exited=true"
