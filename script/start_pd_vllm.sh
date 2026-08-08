@@ -99,14 +99,30 @@ PD_OUT_DIR="${PD_OUT_DIR:-$PWD/pd_vllm_${SLURM_JOB_ID}}"
 PD_WORK_DIR="${PD_WORK_DIR:-/data/users/chjing/vllm_job_work/${SLURM_JOB_ID}}"
 export HF_HOME="${HF_HOME:-${PD_WORK_DIR}/huggingface}"
 export HF_TOKEN_PATH="${HF_TOKEN_PATH:-${HF_HOME}/token}"
+export HF_HUB_CACHE="${HF_HUB_CACHE:-${HF_HOME}/hub}"
+export HF_ASSETS_CACHE="${HF_ASSETS_CACHE:-${HF_HOME}/assets}"
+export HF_XET_CACHE="${HF_XET_CACHE:-${HF_HOME}/xet}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${PD_WORK_DIR}/xdg-cache}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${PD_WORK_DIR}/xdg-config}"
+export FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE:-${PD_WORK_DIR}/flashinfer}"
 export VLLM_CACHE_ROOT="${VLLM_CACHE_ROOT:-${PD_WORK_DIR}/vllm-cache}"
 export TORCH_HOME="${TORCH_HOME:-${PD_WORK_DIR}/torch-cache}"
+export TORCH_EXTENSIONS_DIR="${TORCH_EXTENSIONS_DIR:-${PD_WORK_DIR}/torch-extensions}"
 export TRITON_CACHE_DIR="${TRITON_CACHE_DIR:-${PD_WORK_DIR}/triton-cache}"
+export TORCHINDUCTOR_CACHE_DIR="${TORCHINDUCTOR_CACHE_DIR:-${PD_WORK_DIR}/torchinductor-cache}"
 export CUDA_CACHE_PATH="${CUDA_CACHE_PATH:-${PD_WORK_DIR}/cuda-cache}"
+export NUMBA_CACHE_DIR="${NUMBA_CACHE_DIR:-${PD_WORK_DIR}/numba-cache}"
+export RAY_TMPDIR="${RAY_TMPDIR:-${PD_WORK_DIR}/ray-tmp}"
+export TMPDIR="${TMPDIR:-${PD_WORK_DIR}/tmp}"
+export TMP="${TMP:-$TMPDIR}"
+export TEMP="${TEMP:-$TMPDIR}"
 mkdir -p \
-  "$PD_OUT_DIR" "$PD_WORK_DIR" "$HF_HOME" "$XDG_CACHE_HOME" \
-  "$VLLM_CACHE_ROOT" "$TORCH_HOME" "$TRITON_CACHE_DIR" "$CUDA_CACHE_PATH"
+  "$PD_OUT_DIR" "$PD_WORK_DIR" "$HF_HOME" "$HF_HUB_CACHE" \
+  "$HF_ASSETS_CACHE" "$HF_XET_CACHE" "$XDG_CACHE_HOME" \
+  "$XDG_CONFIG_HOME" "$FLASHINFER_WORKSPACE_BASE" "$VLLM_CACHE_ROOT" \
+  "$TORCH_HOME" "$TORCH_EXTENSIONS_DIR" "$TRITON_CACHE_DIR" \
+  "$TORCHINDUCTOR_CACHE_DIR" "$CUDA_CACHE_PATH" "$NUMBA_CACHE_DIR" \
+  "$RAY_TMPDIR" "$TMPDIR"
 RUNTIME_PROXY_SCRIPT="${PD_WORK_DIR}/scheduler_custom_policy.py"
 RUNTIME_INSTANCE_SCRIPT="${PD_WORK_DIR}/start_pd_vllm_instance.sh"
 cp -- "$PROXY_SCRIPT" "$RUNTIME_PROXY_SCRIPT"
@@ -263,7 +279,7 @@ print_instance_mapping() {
 
 echo "pd_topology proxy=${PROXY_NODE}/${PROXY_IP}:${PROXY_HTTP_PORT} prefill=${PREFILL_NODE}/${PREFILL_IP} replicas=${PREFILL_REPLICAS} gpu=${PREFILL_GPU_MODEL} tp=${PREFILL_TP_SIZE} decode=${DECODE_NODE}/${DECODE_IP} replicas=${DECODE_REPLICAS} gpu=${DECODE_GPU_MODEL} tp=${DECODE_TP_SIZE}"
 echo "pd_paths output=${PD_OUT_DIR} work=${PD_WORK_DIR} proxy_script=${RUNTIME_PROXY_SCRIPT}"
-echo "pd_cache_paths hf=${HF_HOME} xdg=${XDG_CACHE_HOME} vllm=${VLLM_CACHE_ROOT} torch=${TORCH_HOME} triton=${TRITON_CACHE_DIR} cuda=${CUDA_CACHE_PATH}"
+echo "pd_cache_paths hf=${HF_HOME} hf_hub=${HF_HUB_CACHE} hf_assets=${HF_ASSETS_CACHE} hf_xet=${HF_XET_CACHE} xdg=${XDG_CACHE_HOME} xdg_config=${XDG_CONFIG_HOME} flashinfer=${FLASHINFER_WORKSPACE_BASE} vllm=${VLLM_CACHE_ROOT} torch=${TORCH_HOME} torch_extensions=${TORCH_EXTENSIONS_DIR} triton=${TRITON_CACHE_DIR} torchinductor=${TORCHINDUCTOR_CACHE_DIR} cuda=${CUDA_CACHE_PATH} numba=${NUMBA_CACHE_DIR} ray_tmp=${RAY_TMPDIR} tmp=${TMPDIR}"
 print_instance_mapping
 
 srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$PROXY_NODE" \

@@ -46,11 +46,23 @@ export PD_OUT_DIR="${OUT_DIR}/pd_runtime"
 export PD_WORK_DIR="/data/users/chjing/vllm_job_work/${SLURM_JOB_ID:-manual}"
 export HF_HOME="${PD_WORK_DIR}/huggingface"
 export HF_TOKEN_PATH="${HF_HOME}/token"
+export HF_HUB_CACHE="${HF_HOME}/hub"
+export HF_ASSETS_CACHE="${HF_HOME}/assets"
+export HF_XET_CACHE="${HF_HOME}/xet"
 export XDG_CACHE_HOME="${PD_WORK_DIR}/xdg-cache"
+export XDG_CONFIG_HOME="${PD_WORK_DIR}/xdg-config"
+export FLASHINFER_WORKSPACE_BASE="${PD_WORK_DIR}/flashinfer"
 export VLLM_CACHE_ROOT="${PD_WORK_DIR}/vllm-cache"
 export TORCH_HOME="${PD_WORK_DIR}/torch-cache"
+export TORCH_EXTENSIONS_DIR="${PD_WORK_DIR}/torch-extensions"
 export TRITON_CACHE_DIR="${PD_WORK_DIR}/triton-cache"
+export TORCHINDUCTOR_CACHE_DIR="${PD_WORK_DIR}/torchinductor-cache"
 export CUDA_CACHE_PATH="${PD_WORK_DIR}/cuda-cache"
+export NUMBA_CACHE_DIR="${PD_WORK_DIR}/numba-cache"
+export RAY_TMPDIR="${PD_WORK_DIR}/ray-tmp"
+export TMPDIR="${PD_WORK_DIR}/tmp"
+export TMP="$TMPDIR"
+export TEMP="$TMPDIR"
 BENCH_LOG="${OUT_DIR}/vllm_bench.txt"
 BENCH_RESULT="vllm_bench_detailed.json"
 REGISTRY_FILE="${OUT_DIR}/registry.json"
@@ -96,11 +108,23 @@ stop_launcher() {
 }
 
 cleanup() {
-  local rc=$?
+  local cleanup_rc=$?
   trap - EXIT INT TERM
   stop_launcher
-  echo "job_cleanup_rc=${rc}"
-  exit "$rc"
+  if [[ "${SLURM_JOB_ID:-}" =~ ^[0-9]+$ ]] && \
+    [ "$PD_WORK_DIR" = "/data/users/chjing/vllm_job_work/${SLURM_JOB_ID}" ]; then
+    if rm -rf -- "$PD_WORK_DIR"; then
+      echo "cache_cleanup_complete=true path=${PD_WORK_DIR}"
+    else
+      echo "cache_cleanup_complete=false removal_failed path=${PD_WORK_DIR}" >&2
+      cleanup_rc=3
+    fi
+  else
+    echo "cache_cleanup_complete=false unsafe_path=${PD_WORK_DIR}" >&2
+    cleanup_rc=3
+  fi
+  echo "job_cleanup_rc=${cleanup_rc}"
+  exit "$cleanup_rc"
 }
 
 trap cleanup EXIT
@@ -143,7 +167,8 @@ ulimit -n 65536
 echo "job_name=${JOB_NAME}"
 echo "slurm_job_id=${SLURM_JOB_ID:-unset} nodelist=${SLURM_JOB_NODELIST:-unset}"
 echo "model=${MODEL}"
-echo "work_dir=${PD_WORK_DIR} hf_cache=${HF_HOME} vllm_cache=${VLLM_CACHE_ROOT}"
+echo "work_dir=${PD_WORK_DIR}"
+echo "cache_paths hf=${HF_HOME} hf_hub=${HF_HUB_CACHE} hf_assets=${HF_ASSETS_CACHE} hf_xet=${HF_XET_CACHE} xdg=${XDG_CACHE_HOME} xdg_config=${XDG_CONFIG_HOME} flashinfer=${FLASHINFER_WORKSPACE_BASE} vllm=${VLLM_CACHE_ROOT} torch=${TORCH_HOME} torch_extensions=${TORCH_EXTENSIONS_DIR} triton=${TRITON_CACHE_DIR} torchinductor=${TORCHINDUCTOR_CACHE_DIR} cuda=${CUDA_CACHE_PATH} numba=${NUMBA_CACHE_DIR} ray_tmp=${RAY_TMPDIR} tmp=${TMPDIR}"
 echo "round_robin_order=P0-D0,P0-D1,P1-D0,P1-D1"
 echo "bench num_prompts=${NUM_PROMPTS} request_rate=${REQUEST_RATE} input_len=${INPUT_LEN} output_len=${OUTPUT_LEN} max_concurrency=${MAX_CONCURRENCY}"
 echo "output_dir=${OUT_DIR}"
