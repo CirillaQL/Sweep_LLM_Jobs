@@ -7,3 +7,10 @@ registry_add role=decode http=10.1.0.3:33096 zmq=10.1.0.3:34096 tp_size=2 report
 registry_add role=prefill http=10.1.0.5:32094 zmq=10.1.0.5:34094 tp_size=1 reported_tp_size=1
 registry_add role=prefill http=10.1.0.5:32095 zmq=10.1.0.5:34095 tp_size=1 reported_tp_size=1
 registry_add role=prefill http=10.1.0.5:32096 zmq=10.1.0.5:34096 tp_size=2 reported_tp_size=1
+route count=0 policy_route=P2-D1 request_id=___prefill_addr_10.1.0.5:34096___decode_addr_10.1.0.3:34095_232ec5ac0c3a418e810b77104911dcfc prefill_http=10.1.0.5:32096 decode_http=10.1.0.3:33095
+route count=1 policy_route=P1-D1 request_id=___prefill_addr_10.1.0.5:34095___decode_addr_10.1.0.3:34095_6b359254683f451c9a89131a8daaa95c prefill_http=10.1.0.5:32095 decode_http=10.1.0.3:33095
+route count=2 policy_route=P1-D2 request_id=___prefill_addr_10.1.0.5:34095___decode_addr_10.1.0.3:34096_dc1454fc9f88443fa02eacb5b2096ab3 prefill_http=10.1.0.5:32095 decode_http=10.1.0.3:33096
+route count=3 policy_route=P1-D1 request_id=___prefill_addr_10.1.0.5:34095___decode_addr_10.1.0.3:34095_1c33f9be26a04f11902d61c0cf31d2d6 prefill_http=10.1.0.5:32095 decode_http=10.1.0.3:33095
+route count=4 policy_route=P2-D1 request_id=___prefill_addr_10.1.0.5:34096___decode_addr_10.1.0.3:34095_3dc77bac7b324101af052c6376e98ccf prefill_http=10.1.0.5:32096 decode_http=10.1.0.3:33095
+route count=5 policy_route=P2-D0 request_id=___prefill_addr_10.1.0.5:34096___decode_addr_10.1.0.3:34094_9a3443763ba84e5587c92bb2c7a86058 prefill_http=10.1.0.5:32096 decode_http=10.1.0.3:33094
+route count=6 policy_route=P2-D1 request_id=___prefill_addr_10.1.0.5:34096___decode_addr_10.1.0.3:34095_17266a8fa05841a6ae94ddcab5c7157c prefill_http=10.1.0.5:32096 decode_http=10.1.0.3:33095
