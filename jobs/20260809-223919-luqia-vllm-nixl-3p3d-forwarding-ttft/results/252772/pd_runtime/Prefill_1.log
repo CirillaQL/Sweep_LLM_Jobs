@@ -27,3 +27,33 @@ pd_clock_agent_started instance=Prefill_1 pid=978561 visible_gpus=1
 [0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:03 [gpu_model_runner.py:4033] Starting to load model mistralai/Mistral-7B-v0.1...
 [0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:04 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
 [0;36m(EngineCore_DP0 pid=978764)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+[0;36m(EngineCore_DP0 pid=978764)[0;0m Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:03<00:03,  3.63s/it]
+[0;36m(EngineCore_DP0 pid=978764)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:05<00:00,  2.60s/it]
+[0;36m(EngineCore_DP0 pid=978764)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:05<00:00,  2.75s/it]
+[0;36m(EngineCore_DP0 pid=978764)[0;0m 
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:11 [default_loader.py:291] Loading weights took 5.59 seconds
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:11 [gpu_model_runner.py:4130] Model loading took 13.5 GiB memory and 7.247524 seconds
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:13 [gpu_worker.py:356] Available KV cache memory: 22.02 GiB
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:13 [kv_cache_utils.py:1307] GPU KV cache size: 180,384 tokens
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:13 [kv_cache_utils.py:1312] Maximum concurrency for 8,192 tokens per request: 21.98x
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:13 [nixl_connector.py:101] Setting UCX_RCACHE_MAX_UNRELEASED to '1024' to avoid a rare memory leak in UCX when using NIXL.
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:13 [nixl_connector.py:114] NIXL is available
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:13 [factory.py:64] Creating v1 connector with name: NixlConnector and engine_id: 90e66ea7-1c30-4d6b-a03e-064df1c8b5e9
+[0;36m(EngineCore_DP0 pid=978764)[0;0m WARNING 08-09 22:48:13 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:13 [nixl_connector.py:830] Initializing NIXL wrapper
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:13 [nixl_connector.py:831] Initializing NIXL worker 90e66ea7-1c30-4d6b-a03e-064df1c8b5e9
+[0;36m(EngineCore_DP0 pid=978764)[0;0m 2026-08-09 22:48:14 NIXL INFO    _api.py:390 Backend UCX was instantiated
+[0;36m(EngineCore_DP0 pid=978764)[0;0m 2026-08-09 22:48:14 NIXL INFO    _api.py:268 Initialized NIXL agent: 80b79240-a2aa-4e80-b3f8-6438ea761a05
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:14 [nixl_connector.py:339] NixlConnector setting KV cache layout to HND for better xfer performance.
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:14 [nixl_connector.py:1284] Registering KV_Caches. use_mla: False, kv_buffer_device: cuda, use_host_buffer: False
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:14 [core.py:272] init engine (profile, create kv cache, warmup model) took 2.88 seconds
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:15 [factory.py:64] Creating v1 connector with name: NixlConnector and engine_id: 90e66ea7-1c30-4d6b-a03e-064df1c8b5e9
+[0;36m(EngineCore_DP0 pid=978764)[0;0m WARNING 08-09 22:48:15 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:15 [nixl_connector.py:504] Initializing NIXL Scheduler 90e66ea7-1c30-4d6b-a03e-064df1c8b5e9
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:15 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(EngineCore_DP0 pid=978764)[0;0m WARNING 08-09 22:48:15 [vllm.py:669] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+[0;36m(EngineCore_DP0 pid=978764)[0;0m INFO 08-09 22:48:15 [vllm.py:762] Cudagraph is disabled under eager mode
+[0;36m(APIServer pid=978562)[0;0m INFO 08-09 22:48:15 [nixl_connector.py:101] Setting UCX_RCACHE_MAX_UNRELEASED to '1024' to avoid a rare memory leak in UCX when using NIXL.
+[0;36m(APIServer pid=978562)[0;0m INFO 08-09 22:48:15 [nixl_connector.py:114] NIXL is available
+[0;36m(APIServer pid=978562)[0;0m INFO 08-09 22:48:15 [api_server.py:665] Supported tasks: ['generate']
+[0;36m(APIServer pid=978562)[0;0m INFO 08-09 22:48:16 [serving.py:177] Warming up chat template processing...
