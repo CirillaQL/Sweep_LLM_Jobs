@@ -5,3 +5,4 @@ pd_instance_map instance=Prefill_0 alias=P0 role=prefill node=uranus node_ip=10.
 pd_instance_map instance=Decode_0 alias=D0 role=decode node=ganymede node_ip=10.1.0.3 http_endpoint=10.1.0.3:33736 kv_endpoint=10.1.0.3:34736 gpu=L4 tp=1
 pd_ready label=proxy elapsed_s=4 url=http://10.1.0.3:30736/health
 pd_launch instance=Decode_0 role=decode node=ganymede gpu_model=L4 http_port=33736 kv_port=34736 tp=1
+pd_ready label=Decode_0 elapsed_s=272 url=http://10.1.0.3:33736/v1/models
