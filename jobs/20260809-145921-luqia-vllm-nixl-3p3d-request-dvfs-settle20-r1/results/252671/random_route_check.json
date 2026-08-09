@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "policy": "independent_prefill_decode_random",
+  "allow_asymmetric_tp": true,
+  "prefill_tp_sizes": [
+    1,
+    1,
+    2
+  ],
+  "decode_tp_sizes": [
+    1,
+    1,
+    2
+  ],
+  "supported_routes": [
+    "P0-D0",
+    "P0-D1",
+    "P0-D2",
+    "P1-D0",
+    "P1-D1",
+    "P1-D2",
+    "P2-D0",
+    "P2-D1",
+    "P2-D2"
+  ],
+  "require_all_routes": false,
+  "expected_requests": 36,
+  "observed_requests": 36,
+  "route_counts": {
+    "P0-D0": 6,
+    "P0-D1": 4,
+    "P0-D2": 2,
+    "P1-D0": 2,
+    "P1-D1": 4,
+    "P1-D2": 3,
+    "P2-D0": 5,
+    "P2-D1": 4,
+    "P2-D2": 6
+  },
+  "prefill_counts": {
+    "P0": 12,
+    "P1": 9,
+    "P2": 15
+  },
+  "decode_counts": {
+    "D0": 13,
+    "D1": 12,
+    "D2": 11
+  },
+  "duplicate_counts": [],
+  "missing_counts": [],
+  "unexpected_counts": [],
+  "invalid_routes": [],
+  "unobserved_routes": [],
+  "proxy_log": "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260809-145921-luqia-vllm-nixl-3p3d-request-dvfs-settle20-r1/results/252671/pd_runtime/proxy.log"
+}
