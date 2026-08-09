@@ -3,3 +3,31 @@
 pd_instance_start instance=Decode_1 role=decode ordinal=1 host=ganymede gpu_model=NVIDIA L4 node_ip=10.1.0.3 http_port=33096 kv_port=34096 tp=1 visible_gpus=1
 pd_instance_network interface=eno12399np0 proxy=10.1.0.3:31095 nccl_net=Socket
 pd_instance_model model=mistralai/Mistral-7B-v0.1 max_model_len=8192 max_num_batched_tokens=8192 max_num_seqs=32
+[0;36m(APIServer pid=1028955)[0;0m INFO 08-09 10:30:21 [utils.py:325] 
+[0;36m(APIServer pid=1028955)[0;0m INFO 08-09 10:30:21 [utils.py:325]        █     █     █▄   ▄█
+[0;36m(APIServer pid=1028955)[0;0m INFO 08-09 10:30:21 [utils.py:325]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.15.1
+[0;36m(APIServer pid=1028955)[0;0m INFO 08-09 10:30:21 [utils.py:325]   █▄█▀ █     █     █     █  model   mistralai/Mistral-7B-v0.1
+[0;36m(APIServer pid=1028955)[0;0m INFO 08-09 10:30:21 [utils.py:325]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+[0;36m(APIServer pid=1028955)[0;0m INFO 08-09 10:30:21 [utils.py:325] 
+[0;36m(APIServer pid=1028955)[0;0m INFO 08-09 10:30:21 [utils.py:261] non-default args: {'model_tag': 'mistralai/Mistral-7B-v0.1', 'api_server_count': 1, 'host': '0.0.0.0', 'port': 33096, 'model': 'mistralai/Mistral-7B-v0.1', 'dtype': 'float16', 'max_model_len': 8192, 'enforce_eager': True, 'gpu_memory_utilization': 0.82, 'max_num_batched_tokens': 8192, 'max_num_seqs': 32, 'kv_transfer_config': KVTransferConfig(kv_connector='P2pNcclConnector', engine_id='0f02e66e-a47b-4230-a627-0efb9231e825', kv_buffer_device='cuda', kv_buffer_size=8000000000.0, kv_role='kv_consumer', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=34096, kv_connector_extra_config={'proxy_ip': '10.1.0.3', 'proxy_port': '31095', 'http_port': '33096', 'send_type': 'PUT_ASYNC', 'nccl_num_channels': '16'}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='recompute')}
+[0;36m(APIServer pid=1028955)[0;0m Traceback (most recent call last):
+[0;36m(APIServer pid=1028955)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm", line 8, in <module>
+[0;36m(APIServer pid=1028955)[0;0m     sys.exit(main())
+[0;36m(APIServer pid=1028955)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/cli/main.py", line 73, in main
+[0;36m(APIServer pid=1028955)[0;0m     args.dispatch_function(args)
+[0;36m(APIServer pid=1028955)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/cli/serve.py", line 111, in cmd
+[0;36m(APIServer pid=1028955)[0;0m     uvloop.run(run_server(args))
+[0;36m(APIServer pid=1028955)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvloop/__init__.py", line 69, in run
+[0;36m(APIServer pid=1028955)[0;0m     return loop.run_until_complete(wrapper())
+[0;36m(APIServer pid=1028955)[0;0m   File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+[0;36m(APIServer pid=1028955)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvloop/__init__.py", line 48, in wrapper
+[0;36m(APIServer pid=1028955)[0;0m     return await main
+[0;36m(APIServer pid=1028955)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 918, in run_server
+[0;36m(APIServer pid=1028955)[0;0m     listen_address, sock = setup_server(args)
+[0;36m(APIServer pid=1028955)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 890, in setup_server
+[0;36m(APIServer pid=1028955)[0;0m     sock = create_server_socket(sock_addr)
+[0;36m(APIServer pid=1028955)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 839, in create_server_socket
+[0;36m(APIServer pid=1028955)[0;0m     sock.bind(addr)
+[0;36m(APIServer pid=1028955)[0;0m OSError: [Errno 98] Address already in use
+srun: error: ganymede: task 0: Exited with exit code 1
+srun: Terminating StepId=252595.2
