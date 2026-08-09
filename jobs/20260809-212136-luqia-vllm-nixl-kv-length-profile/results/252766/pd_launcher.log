@@ -8,3 +8,53 @@ pd_launch instance=Decode_0 role=decode node=ganymede gpu_model=L4 http_port=337
 pd_ready label=Decode_0 elapsed_s=272 url=http://10.1.0.3:33736/v1/models
 pd_instance_registered instance=Decode_0 alias=D0 connector=NixlConnector
 pd_launch instance=Prefill_0 role=prefill node=uranus gpu_model=L40S http_port=32736 kv_port=34736 tp=1
+pd_ready label=Prefill_0 elapsed_s=66 url=http://10.1.0.5:32736/v1/models
+pd_instance_registered instance=Prefill_0 alias=P0 connector=NixlConnector
+pd_registry_ready prefill=1 decode=1 elapsed_s=0
+{
+  "prefill": [
+    "10.1.0.5:32736"
+  ],
+  "decode": [
+    "10.1.0.3:33736"
+  ],
+  "prefill_count": 1,
+  "decode_count": 1,
+  "prefill_tp_sizes": [
+    1
+  ],
+  "decode_tp_sizes": [
+    1
+  ],
+  "prefill_aliases": {
+    "P0": {
+      "http_address": "10.1.0.5:32736",
+      "zmq_address": "10.1.0.5:34736",
+      "kv_address": "10.1.0.5:34736",
+      "tp_size": 1,
+      "instance_name": "Prefill_0",
+      "node_name": "uranus",
+      "gpu_type": "l40s"
+    }
+  },
+  "decode_aliases": {
+    "D0": {
+      "http_address": "10.1.0.3:33736",
+      "zmq_address": "10.1.0.3:34736",
+      "kv_address": "10.1.0.3:34736",
+      "tp_size": 1,
+      "instance_name": "Decode_0",
+      "node_name": "ganymede",
+      "gpu_type": "l4"
+    }
+  },
+  "supported_routes": [
+    "P0-D0"
+  ],
+  "allow_asymmetric_tp": false,
+  "default_route": "P0-D0",
+  "kv_connector": "NixlConnector",
+  "predictive_dvfs": false
+}
+pd_cluster_ready endpoint=http://10.1.0.3:30736/v1 prefill_replicas=1 decode_replicas=1 connector=NixlConnector default_route=P0-D0 allow_asymmetric_tp=false
+pd_cluster_waiting_for_steps=true
