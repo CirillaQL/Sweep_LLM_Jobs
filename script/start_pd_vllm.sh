@@ -115,7 +115,9 @@ unset SLURM_MEM_PER_CPU
 unset SLURM_MEM_PER_GPU
 unset SLURM_MEM_PER_NODE
 
-PORT_OFFSET="${PD_PORT_OFFSET:-$((SLURM_JOB_ID % 500))}"
+PORT_SLOT_COUNT="${PD_PORT_SLOT_COUNT:-60}"
+PORT_SLOT_STRIDE="${PD_PORT_SLOT_STRIDE:-16}"
+PORT_OFFSET="${PD_PORT_OFFSET:-$(((SLURM_JOB_ID % PORT_SLOT_COUNT) * PORT_SLOT_STRIDE))}"
 PROXY_HTTP_PORT="${PROXY_HTTP_PORT:-$((30000 + PORT_OFFSET))}"
 PROXY_REGISTER_PORT="${PROXY_REGISTER_PORT:-$((31000 + PORT_OFFSET))}"
 PREFILL_HTTP_PORT_BASE="${PREFILL_HTTP_PORT_BASE:-$((32000 + PORT_OFFSET))}"
@@ -290,6 +292,8 @@ launch_instance() {
       PD_NODE_IP="$node_ip" PD_NET_IFACE="$net_iface" \
       PD_HTTP_PORT="$http_port" PD_KV_PORT="$kv_port" PD_TP_SIZE="$tp_size" \
       PROXY_IP="$PROXY_IP" PROXY_REGISTER_PORT="$PROXY_REGISTER_PORT" \
+      PD_KV_CONNECTOR="${PD_KV_CONNECTOR:-NixlConnector}" \
+      PD_KV_LOAD_FAILURE_POLICY="${PD_KV_LOAD_FAILURE_POLICY:-fail}" \
       PD_OUT_DIR="$PD_OUT_DIR" PD_WORK_DIR="$PD_WORK_DIR" \
       MAX_MODEL_LEN="$MAX_MODEL_LEN" \
       MAX_NUM_BATCHED_TOKENS="$MAX_NUM_BATCHED_TOKENS" \
@@ -301,6 +305,36 @@ launch_instance() {
       >"$log_file" 2>&1 &
   STEP_PIDS+=("$!")
   wait_for_url "$instance_name" "http://${node_ip}:${http_port}/v1/models"
+  local instance_type
+  if [ "$role" = prefill ]; then
+    instance_type=P
+  else
+    instance_type=D
+  fi
+  local registration
+  registration=$("$PYTHON_BIN" -c '
+import json
+import sys
+
+instance_type, http_address, kv_address, tp_size = sys.argv[1:]
+print(json.dumps({
+    "type": instance_type,
+    "http_address": http_address,
+    "kv_address": kv_address,
+    "tp_size": int(tp_size),
+}))
+' "$instance_type" "${node_ip}:${http_port}" "${node_ip}:${kv_port}" "$tp_size")
+  local register_auth_args=()
+  if [ -n "${CUSTOM_POLICY_ADMIN_TOKEN:-}" ]; then
+    register_auth_args=(-H "X-Admin-Token: ${CUSTOM_POLICY_ADMIN_TOKEN}")
+  fi
+  curl -fsS --connect-timeout 2 --max-time 5 \
+    "${register_auth_args[@]}" \
+    -H 'Content-Type: application/json' \
+    --data "$registration" \
+    "http://${PROXY_IP}:${PROXY_HTTP_PORT}/control/register-instance" \
+    >/dev/null
+  echo "pd_instance_registered instance=${instance_name} alias=${instance_type}${ordinal} connector=${PD_KV_CONNECTOR:-NixlConnector}"
 }
 
 print_instance_mapping() {
@@ -323,7 +357,7 @@ print_instance_mapping() {
   done
 }
 
-echo "pd_topology proxy=${PROXY_NODE}/${PROXY_IP}:${PROXY_HTTP_PORT} prefill=${PREFILL_NODE}/${PREFILL_IP} replicas=${PREFILL_REPLICAS} gpu=${PREFILL_GPU_MODEL} tp_sizes=${PREFILL_TP_SIZES} decode=${DECODE_NODE}/${DECODE_IP} replicas=${DECODE_REPLICAS} gpu=${DECODE_GPU_MODEL} tp_sizes=${DECODE_TP_SIZES}"
+echo "pd_topology connector=${PD_KV_CONNECTOR:-NixlConnector} proxy=${PROXY_NODE}/${PROXY_IP}:${PROXY_HTTP_PORT} prefill=${PREFILL_NODE}/${PREFILL_IP} replicas=${PREFILL_REPLICAS} gpu=${PREFILL_GPU_MODEL} tp_sizes=${PREFILL_TP_SIZES} decode=${DECODE_NODE}/${DECODE_IP} replicas=${DECODE_REPLICAS} gpu=${DECODE_GPU_MODEL} tp_sizes=${DECODE_TP_SIZES}"
 echo "pd_paths output=${PD_OUT_DIR} work=${PD_WORK_DIR} proxy_script=${RUNTIME_PROXY_SCRIPT}"
 echo "pd_cache_paths hf=${HF_HOME} hf_hub=${HF_HUB_CACHE} hf_assets=${HF_ASSETS_CACHE} hf_xet=${HF_XET_CACHE} xdg=${XDG_CACHE_HOME} xdg_config=${XDG_CONFIG_HOME} flashinfer=${FLASHINFER_WORKSPACE_BASE} vllm=${VLLM_CACHE_ROOT} torch=${TORCH_HOME} torch_extensions=${TORCH_EXTENSIONS_DIR} triton=${TRITON_CACHE_DIR} torchinductor=${TORCHINDUCTOR_CACHE_DIR} cuda=${CUDA_CACHE_PATH} numba=${NUMBA_CACHE_DIR} ray_tmp=${RAY_TMPDIR} tmp=${TMPDIR}"
 print_instance_mapping
@@ -336,6 +370,7 @@ srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$PROXY_NODE" \
     DECODE_HTTP_PORT_BASE="$DECODE_HTTP_PORT_BASE" \
     PREFILL_TP_SIZES="$PREFILL_TP_SIZES" \
     DECODE_TP_SIZES="$DECODE_TP_SIZES" \
+    PD_KV_CONNECTOR="${PD_KV_CONNECTOR:-NixlConnector}" \
     CUSTOM_PD_DEFAULT_ROUTE="${CUSTOM_PD_DEFAULT_ROUTE:-random}" \
     CUSTOM_PD_RANDOM_SEED="${CUSTOM_PD_RANDOM_SEED:-}" \
     CUSTOM_POLICY_ADMIN_TOKEN="${CUSTOM_POLICY_ADMIN_TOKEN:-}" \
@@ -362,7 +397,7 @@ data = json.load(open(sys.argv[1], encoding="utf-8"))
 print(json.dumps(data, indent=2))
 ' "$REGISTRY_FILE"
 
-echo "pd_cluster_ready endpoint=http://${PROXY_IP}:${PROXY_HTTP_PORT}/v1 prefill_replicas=${PREFILL_REPLICAS} decode_replicas=${DECODE_REPLICAS} default_route=${CUSTOM_PD_DEFAULT_ROUTE:-random} random_selection=independent_live_registry_indices"
+echo "pd_cluster_ready endpoint=http://${PROXY_IP}:${PROXY_HTTP_PORT}/v1 prefill_replicas=${PREFILL_REPLICAS} decode_replicas=${DECODE_REPLICAS} connector=${PD_KV_CONNECTOR:-NixlConnector} default_route=${CUSTOM_PD_DEFAULT_ROUTE:-random} random_selection=prefill_first_symmetric_tp"
 echo "pd_cluster_waiting_for_steps=true"
 wait -n "${STEP_PIDS[@]}"
 echo "pd_step_exited=true"

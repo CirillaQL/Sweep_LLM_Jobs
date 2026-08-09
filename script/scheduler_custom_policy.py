@@ -3,8 +3,8 @@
 """Custom instance-pair scheduler for a multi-prefill/multi-decode PD proxy.
 
 This follows the two-stage forwarding pattern in vLLM's
-``examples/disaggregated/disaggregated_serving/disagg_proxy_demo.py`` while
-retaining this repository's P2pNcclConnector service-discovery protocol.
+``tests/v1/kv_connector/nixl_integration/toy_proxy_server.py`` while adding
+request-level TP-compatible instance-pair scheduling.
 
 Callers can select any registered pair whose Prefill and Decode tensor
 parallel sizes match, for example with TP layouts ``P=[1, 1, 2]`` and
@@ -51,6 +51,7 @@ RANDOM_ROUTE = "random"
 PING_TTL_SECONDS = int(os.environ.get("CUSTOM_PD_PING_TTL_SECONDS", "10"))
 DEFAULT_TP_SIZE = int(os.environ.get("PROXY_DEFAULT_TP_SIZE", "1"))
 HTTP_TIMEOUT = aiohttp.ClientTimeout(total=30 * 60)
+KV_CONNECTOR = os.environ.get("PD_KV_CONNECTOR", "NixlConnector")
 
 
 def parse_tp_sizes(name: str) -> tuple[int, ...]:
@@ -354,6 +355,28 @@ async def forward_request(
                 yield chunk
 
 
+async def post_json(
+    url: str, data: dict[str, Any], request_id: str
+) -> dict[str, Any]:
+    headers = {"X-Request-Id": request_id}
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+    async with aiohttp.ClientSession(timeout=HTTP_TIMEOUT) as session:
+        async with session.post(url=url, json=data, headers=headers) as response:
+            if response.status != 200:
+                body = await response.text()
+                raise RuntimeError(
+                    f"upstream status={response.status} url={url} body={body}"
+                )
+            payload = await response.json(content_type=None)
+            if not isinstance(payload, dict):
+                raise RuntimeError(
+                    f"upstream returned non-object JSON url={url}"
+                )
+            return payload
+
+
 def route_from_request(request: web.Request, body: dict[str, Any]) -> str | None:
     header_route = request.headers.get("X-PD-Route")
     query_route = request.query.get("pd_route")
@@ -402,6 +425,7 @@ async def registry(_: web.Request) -> web.Response:
                 f"P{index}": {
                     "http_address": instance.http_address,
                     "zmq_address": instance.zmq_address,
+                    "kv_address": instance.zmq_address,
                     "tp_size": instance.tp_size,
                 }
                 for index, instance in enumerate(prefill)
@@ -410,12 +434,14 @@ async def registry(_: web.Request) -> web.Response:
                 f"D{index}": {
                     "http_address": instance.http_address,
                     "zmq_address": instance.zmq_address,
+                    "kv_address": instance.zmq_address,
                     "tp_size": instance.tp_size,
                 }
                 for index, instance in enumerate(decode)
             },
             "supported_routes": compatible_route_choices(prefill, decode),
             "default_route": POLICY.default_route,
+            "kv_connector": KV_CONNECTOR,
         }
     )
 
@@ -424,6 +450,45 @@ def require_admin_token(request: web.Request) -> None:
     expected = os.environ.get("CUSTOM_POLICY_ADMIN_TOKEN")
     if expected and request.headers.get("X-Admin-Token") != expected:
         raise web.HTTPForbidden(text="invalid or missing X-Admin-Token")
+
+
+async def register_instance(request: web.Request) -> web.Response:
+    require_admin_token(request)
+    try:
+        payload = await request.json()
+        instance_type = str(payload["type"]).upper()
+        http_address = str(payload["http_address"])
+        kv_address = str(payload["kv_address"])
+        reported_tp_size = int(payload["tp_size"])
+        tp_size = configured_tp_size(
+            instance_type, http_address, reported_tp_size
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        return web.json_response({"error": str(exc)}, status=400)
+    if (
+        instance_type not in {"P", "D"}
+        or not http_address
+        or not kv_address
+        or tp_size <= 0
+    ):
+        return web.json_response({"error": "invalid instance"}, status=400)
+    instances = PREFILL_INSTANCES if instance_type == "P" else DECODE_INSTANCES
+    lock = PREFILL_LOCK if instance_type == "P" else DECODE_LOCK
+    with lock:
+        instances[http_address] = Instance(
+            http_address=http_address,
+            zmq_address=kv_address,
+            expires_at=float("inf"),
+            tp_size=tp_size,
+        )
+    role = "prefill" if instance_type == "P" else "decode"
+    print(
+        f"registry_add source=http role={role} http={http_address} "
+        f"kv={kv_address} tp_size={tp_size} "
+        f"reported_tp_size={reported_tp_size}",
+        flush=True,
+    )
+    return web.json_response({"ok": True})
 
 
 async def set_default_route(request: web.Request) -> web.Response:
@@ -497,10 +562,14 @@ async def handle_request(request: web.Request) -> web.StreamResponse:
         decode_alias = f"D{match.group(2)}"
         index = REQUEST_COUNT
         REQUEST_COUNT += 1
-        request_id = (
-            f"___prefill_addr_{prefill_instance.zmq_address}"
-            f"___decode_addr_{decode_instance.zmq_address}_{uuid.uuid4().hex}"
-        )
+        if KV_CONNECTOR == "NixlConnector":
+            request_id = uuid.uuid4().hex
+        else:
+            request_id = (
+                f"___prefill_addr_{prefill_instance.zmq_address}"
+                f"___decode_addr_{decode_instance.zmq_address}_"
+                f"{uuid.uuid4().hex}"
+            )
         print(
             f"route count={index} policy_route={route} request_id={request_id} "
             f"prefill_http={prefill_instance.http_address} "
@@ -511,18 +580,44 @@ async def handle_request(request: web.Request) -> web.StreamResponse:
         )
 
         prefill_body = dict(original)
-        prefill_kv_params = dict(prefill_body.get("kv_transfer_params") or {})
-        prefill_kv_params["remote_tp_size"] = decode_instance.tp_size
-        prefill_body["kv_transfer_params"] = prefill_kv_params
         prefill_body["max_tokens"] = 1
         if "max_completion_tokens" in prefill_body:
             prefill_body["max_completion_tokens"] = 1
-        async for _ in forward_request(
-            f"http://{prefill_instance.http_address}{request.path}",
-            prefill_body,
-            request_id,
-        ):
-            pass
+        if KV_CONNECTOR == "NixlConnector":
+            prefill_body["stream"] = False
+            prefill_body.pop("stream_options", None)
+            prefill_body.pop("min_tokens", None)
+            prefill_body.pop("min_completion_tokens", None)
+            prefill_body["kv_transfer_params"] = {
+                "do_remote_decode": True,
+                "do_remote_prefill": False,
+                "remote_engine_id": None,
+                "remote_block_ids": None,
+                "remote_host": None,
+                "remote_port": None,
+            }
+            prefill_result = await post_json(
+                f"http://{prefill_instance.http_address}{request.path}",
+                prefill_body,
+                request_id,
+            )
+            kv_transfer_params = prefill_result.get("kv_transfer_params")
+            if not isinstance(kv_transfer_params, dict) or not kv_transfer_params:
+                raise RuntimeError(
+                    f"Prefill {prefill_alias} returned no kv_transfer_params"
+                )
+        else:
+            prefill_kv_params = dict(
+                prefill_body.get("kv_transfer_params") or {}
+            )
+            prefill_kv_params["remote_tp_size"] = decode_instance.tp_size
+            prefill_body["kv_transfer_params"] = prefill_kv_params
+            async for _ in forward_request(
+                f"http://{prefill_instance.http_address}{request.path}",
+                prefill_body,
+                request_id,
+            ):
+                pass
 
         response = web.StreamResponse(
             status=200,
@@ -535,9 +630,14 @@ async def handle_request(request: web.Request) -> web.StreamResponse:
         )
         await response.prepare(request)
         decode_body = dict(original)
-        decode_kv_params = dict(decode_body.get("kv_transfer_params") or {})
-        decode_kv_params["remote_tp_size"] = prefill_instance.tp_size
-        decode_body["kv_transfer_params"] = decode_kv_params
+        if KV_CONNECTOR == "NixlConnector":
+            decode_body["kv_transfer_params"] = kv_transfer_params
+        else:
+            decode_kv_params = dict(
+                decode_body.get("kv_transfer_params") or {}
+            )
+            decode_kv_params["remote_tp_size"] = prefill_instance.tp_size
+            decode_body["kv_transfer_params"] = decode_kv_params
         async for chunk in forward_request(
             f"http://{decode_instance.http_address}{request.path}",
             decode_body,
@@ -562,6 +662,7 @@ async def handle_request(request: web.Request) -> web.StreamResponse:
 
 app.router.add_get("/health", health)
 app.router.add_get("/registry", registry)
+app.router.add_post("/control/register-instance", register_instance)
 app.router.add_post("/control/default-route", set_default_route)
 app.router.add_post("/control/clock-ack", publish_clock_ack)
 app.router.add_get("/control/clock-ack/{node_group}/{seq}", read_clock_ack)
@@ -577,8 +678,10 @@ if __name__ == "__main__":
     print(
         f"custom_proxy_start hostname={socket.gethostname()} "
         f"http={http_host}:{http_port} registry={register_host}:{register_port} "
+        f"kv_connector={KV_CONNECTOR} "
         f"default_route={POLICY.default_route} routes=dynamic_symmetric_tp_pairs",
         flush=True,
     )
-    start_service_discovery(register_host, register_port)
+    if KV_CONNECTOR == "P2pNcclConnector":
+        start_service_discovery(register_host, register_port)
     web.run_app(app, host=http_host, port=http_port, print=None)

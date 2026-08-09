@@ -34,7 +34,9 @@ BENCH_TIMEOUT_SECONDS="${BENCH_TIMEOUT_SECONDS_OVERRIDE:-300}"
 STARTUP_TIMEOUT_SECONDS="${STARTUP_TIMEOUT_SECONDS_OVERRIDE:-900}"
 REQUIRE_ALL_RANDOM_ROUTES="${REQUIRE_ALL_RANDOM_ROUTES_OVERRIDE:-false}"
 
-PORT_OFFSET=$((${SLURM_JOB_ID:-0} % 500))
+PORT_SLOT_COUNT=60
+PORT_SLOT_STRIDE=16
+PORT_OFFSET=$(((${SLURM_JOB_ID:-0} % PORT_SLOT_COUNT) * PORT_SLOT_STRIDE))
 export PROXY_HTTP_PORT=$((30000 + PORT_OFFSET))
 export PROXY_REGISTER_PORT=$((31000 + PORT_OFFSET))
 export PREFILL_HTTP_PORT_BASE=$((32000 + PORT_OFFSET))
@@ -91,6 +93,8 @@ export DECODE_GPU_MODEL=L4
 export PROXY_NODE=ganymede
 export PROXY_IP=10.1.0.3
 export CUSTOM_PD_DEFAULT_ROUTE=random
+export PD_KV_CONNECTOR=NixlConnector
+export PD_KV_LOAD_FAILURE_POLICY=fail
 export MAX_MODEL_LEN=8192
 export MAX_NUM_BATCHED_TOKENS=8192
 export MAX_NUM_SEQS=32
@@ -155,6 +159,7 @@ ready = (
     and data.get("prefill_tp_sizes") == [int(value) for value in expected_p_tp.split(",")]
     and data.get("decode_tp_sizes") == [int(value) for value in expected_d_tp.split(",")]
     and data.get("default_route") == "random"
+    and data.get("kv_connector") == "NixlConnector"
 )
 raise SystemExit(0 if ready else 1)
 ' "$REGISTRY_FILE" "$PREFILL_REPLICAS" "$DECODE_REPLICAS" \

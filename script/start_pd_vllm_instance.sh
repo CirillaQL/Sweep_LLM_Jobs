@@ -91,23 +91,45 @@ KV_CONFIG=$(
 import json
 import os
 
-print(json.dumps({
-    "kv_connector": "P2pNcclConnector",
+connector = os.environ.get("PD_KV_CONNECTOR", "NixlConnector")
+config = {
+    "kv_connector": connector,
     "kv_role": os.environ["KV_ROLE"],
-    "kv_buffer_size": os.environ["KV_BUFFER_SIZE"],
-    "kv_port": os.environ["PD_KV_PORT"],
-    "kv_connector_extra_config": {
-        "proxy_ip": os.environ["PROXY_IP"],
-        "proxy_port": os.environ["PROXY_REGISTER_PORT"],
-        "http_port": os.environ["PD_HTTP_PORT"],
-        "send_type": os.environ.get("PD_SEND_TYPE", "PUT_ASYNC"),
-        # vLLM 0.15.1 writes this value directly to os.environ while creating
-        # the P2P NCCL context, so it must remain a string.
-        "nccl_num_channels": os.environ.get("PD_NCCL_NUM_CHANNELS", "16"),
-    },
-}))
+}
+if connector == "NixlConnector":
+    config["kv_load_failure_policy"] = os.environ.get(
+        "PD_KV_LOAD_FAILURE_POLICY", "fail"
+    )
+elif connector == "P2pNcclConnector":
+    config.update({
+        "kv_buffer_size": os.environ["KV_BUFFER_SIZE"],
+        "kv_port": os.environ["PD_KV_PORT"],
+        "kv_connector_extra_config": {
+            "proxy_ip": os.environ["PROXY_IP"],
+            "proxy_port": os.environ["PROXY_REGISTER_PORT"],
+            "http_port": os.environ["PD_HTTP_PORT"],
+            "send_type": os.environ.get("PD_SEND_TYPE", "PUT_ASYNC"),
+            # vLLM 0.15.1 writes this directly to os.environ.
+            "nccl_num_channels": os.environ.get(
+                "PD_NCCL_NUM_CHANNELS", "16"
+            ),
+        },
+    })
+else:
+    raise ValueError(f"unsupported PD_KV_CONNECTOR={connector!r}")
+print(json.dumps(config))
 '
 )
+
+PD_KV_CONNECTOR="${PD_KV_CONNECTOR:-NixlConnector}"
+if [ "$PD_KV_CONNECTOR" = NixlConnector ]; then
+  "$PYTHON_BIN" -c 'import nixl' >/dev/null 2>&1 || \
+    die "nixl_python_package_unavailable python=${PYTHON_BIN}"
+  export VLLM_NIXL_SIDE_CHANNEL_HOST="${VLLM_NIXL_SIDE_CHANNEL_HOST:-$PD_NODE_IP}"
+  export VLLM_NIXL_SIDE_CHANNEL_PORT="${VLLM_NIXL_SIDE_CHANNEL_PORT:-$PD_KV_PORT}"
+  export UCX_TLS="${UCX_TLS:-all}"
+  export UCX_NET_DEVICES="${UCX_NET_DEVICES:-$PD_NET_IFACE}"
+fi
 
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-8192}"
 MAX_NUM_BATCHED_TOKENS="${MAX_NUM_BATCHED_TOKENS:-$MAX_MODEL_LEN}"
@@ -137,6 +159,7 @@ fi
 
 echo "pd_instance_start instance=${PD_INSTANCE_NAME} role=${ROLE} ordinal=${ORDINAL} host=$(hostname -s) gpu_model=${GPU_NAME} node_ip=${PD_NODE_IP} http_port=${PD_HTTP_PORT} kv_port=${PD_KV_PORT} tp=${PD_TP_SIZE} visible_gpus=${VISIBLE_GPUS}"
 echo "pd_instance_network interface=${PD_NET_IFACE} proxy=${PROXY_IP}:${PROXY_REGISTER_PORT} nccl_net=${NCCL_NET}"
+echo "pd_instance_connector connector=${PD_KV_CONNECTOR} nixl_side_channel=${VLLM_NIXL_SIDE_CHANNEL_HOST:-unset}:${VLLM_NIXL_SIDE_CHANNEL_PORT:-unset} ucx_tls=${UCX_TLS:-unset} ucx_net_devices=${UCX_NET_DEVICES:-unset}"
 echo "pd_instance_model model=${MODEL} max_model_len=${MAX_MODEL_LEN} max_num_batched_tokens=${MAX_NUM_BATCHED_TOKENS} max_num_seqs=${MAX_NUM_SEQS}"
 
 exec "$VLLM_BIN" "${VLLM_ARGS[@]}"

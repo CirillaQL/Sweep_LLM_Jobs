@@ -6,8 +6,13 @@
 - Uranus：`Prefill_0`、`Prefill_1`，每个实例使用一张 L40S，TP=1；
 - Ganymede：`Decode_0`、`Decode_1`，每个实例使用一张 L4，TP=1；
 - Proxy：Ganymede；
+- KV Connector：`NixlConnector`，通过 UCX 和每实例独立 side-channel 传输；
 - 请求默认随机选择链路：分别生成 Prefill 和 Decode 的 `0/1` 随机位，组合为
   `P0/P1 -> D0/D1`；仍可通过请求参数显式指定固定链路。
+
+Proxy 在 Prefill 完成后读取响应中的 `kv_transfer_params`，并将其传给选中的
+Decode。启动器会在实例通过 `/v1/models` 健康检查后将 HTTP、side-channel 和
+TP 信息注册到 Proxy。
 
 默认执行 32 个 random-dataset 请求，输入长度 512、输出长度 128、请求率
 4 req/s、最大并发 16。可在提交时通过 `--export` 覆盖这些参数。

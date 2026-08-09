@@ -11,7 +11,7 @@
 
 - `pd_vllm_job.sbatch`：申请节点和 GPU，并进入总启动器；
 - `start_pd_vllm.sh`：分配端口，并用互斥 Slurm GPU step 分别启动四个 vLLM；
-- `start_pd_vllm_instance.sh`：校验 GPU 型号、构造 P2pNcclConnector 配置并启动单个 vLLM；
+- `start_pd_vllm_instance.sh`：校验 GPU 型号、构造 NixlConnector 配置并启动单个 vLLM；
 - `scheduler_custom_policy.py`：执行请求级 P/D 实例对调度；
 - `pd_vllm.env.example`：集中管理节点、TP、模型和 vLLM 参数。
 
