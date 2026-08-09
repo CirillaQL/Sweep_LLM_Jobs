@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "policy": "independent_prefill_decode_random",
+  "allow_asymmetric_tp": true,
+  "prefill_tp_sizes": [
+    1,
+    1,
+    2
+  ],
+  "decode_tp_sizes": [
+    1,
+    1,
+    2
+  ],
+  "supported_routes": [
+    "P0-D0",
+    "P0-D1",
+    "P0-D2",
+    "P1-D0",
+    "P1-D1",
+    "P1-D2",
+    "P2-D0",
+    "P2-D1",
+    "P2-D2"
+  ],
+  "require_all_routes": true,
+  "expected_requests": 96,
+  "observed_requests": 96,
+  "route_counts": {
+    "P0-D0": 8,
+    "P0-D1": 8,
+    "P0-D2": 12,
+    "P1-D0": 8,
+    "P1-D1": 7,
+    "P1-D2": 17,
+    "P2-D0": 8,
+    "P2-D1": 15,
+    "P2-D2": 13
+  },
+  "prefill_counts": {
+    "P0": 28,
+    "P1": 32,
+    "P2": 36
+  },
+  "decode_counts": {
+    "D0": 24,
+    "D1": 30,
+    "D2": 42
+  },
+  "duplicate_counts": [],
+  "missing_counts": [],
+  "unexpected_counts": [],
+  "invalid_routes": [],
+  "unobserved_routes": [],
+  "proxy_log": "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260809-134302-luqia-vllm-nixl-3p3d-asymmetric-tp-random/results/252634/pd_runtime/proxy.log"
+}
