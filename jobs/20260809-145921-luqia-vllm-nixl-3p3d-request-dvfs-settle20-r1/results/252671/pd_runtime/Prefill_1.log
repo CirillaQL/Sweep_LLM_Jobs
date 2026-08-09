@@ -24,3 +24,91 @@ pd_clock_agent_started instance=Prefill_1 pid=929871 visible_gpus=1
 [0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:16 [core.py:96] Initializing a V1 LLM engine (v0.15.1) with config: model='mistralai/Mistral-7B-v0.1', speculative_config=None, tokenizer='mistralai/Mistral-7B-v0.1', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=mistralai/Mistral-7B-v0.1, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'splitting_ops': [], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_split_points': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': True}, 'local_cache_dir': None, 'static_all_moe_layers': []}
 [0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:17 [parallel_state.py:1212] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.1.0.5:38843 backend=nccl
 [0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:17 [parallel_state.py:1423] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:17 [gpu_model_runner.py:4033] Starting to load model mistralai/Mistral-7B-v0.1...
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:18 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
+[0;36m(EngineCore_DP0 pid=930075)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+[0;36m(EngineCore_DP0 pid=930075)[0;0m Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:01<00:01,  1.67s/it]
+[0;36m(EngineCore_DP0 pid=930075)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:05<00:00,  2.92s/it]
+[0;36m(EngineCore_DP0 pid=930075)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:05<00:00,  2.73s/it]
+[0;36m(EngineCore_DP0 pid=930075)[0;0m 
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:25 [default_loader.py:291] Loading weights took 5.64 seconds
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:25 [gpu_model_runner.py:4130] Model loading took 13.5 GiB memory and 7.132686 seconds
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:27 [gpu_worker.py:356] Available KV cache memory: 22.02 GiB
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:27 [kv_cache_utils.py:1307] GPU KV cache size: 180,384 tokens
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:27 [kv_cache_utils.py:1312] Maximum concurrency for 8,192 tokens per request: 21.98x
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:27 [nixl_connector.py:101] Setting UCX_RCACHE_MAX_UNRELEASED to '1024' to avoid a rare memory leak in UCX when using NIXL.
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:27 [nixl_connector.py:114] NIXL is available
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:27 [factory.py:64] Creating v1 connector with name: NixlConnector and engine_id: 9cf10915-2b62-483b-89d7-666b50c5f145
+[0;36m(EngineCore_DP0 pid=930075)[0;0m WARNING 08-09 18:25:27 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:27 [nixl_connector.py:830] Initializing NIXL wrapper
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:27 [nixl_connector.py:831] Initializing NIXL worker 9cf10915-2b62-483b-89d7-666b50c5f145
+[0;36m(EngineCore_DP0 pid=930075)[0;0m 2026-08-09 18:25:28 NIXL INFO    _api.py:390 Backend UCX was instantiated
+[0;36m(EngineCore_DP0 pid=930075)[0;0m 2026-08-09 18:25:28 NIXL INFO    _api.py:268 Initialized NIXL agent: 7128313c-64d0-4e12-abcc-76b9f1acdb36
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:28 [nixl_connector.py:339] NixlConnector setting KV cache layout to HND for better xfer performance.
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:28 [nixl_connector.py:1284] Registering KV_Caches. use_mla: False, kv_buffer_device: cuda, use_host_buffer: False
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:28 [core.py:272] init engine (profile, create kv cache, warmup model) took 2.89 seconds
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:29 [factory.py:64] Creating v1 connector with name: NixlConnector and engine_id: 9cf10915-2b62-483b-89d7-666b50c5f145
+[0;36m(EngineCore_DP0 pid=930075)[0;0m WARNING 08-09 18:25:29 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:29 [nixl_connector.py:504] Initializing NIXL Scheduler 9cf10915-2b62-483b-89d7-666b50c5f145
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:29 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(EngineCore_DP0 pid=930075)[0;0m WARNING 08-09 18:25:29 [vllm.py:669] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+[0;36m(EngineCore_DP0 pid=930075)[0;0m INFO 08-09 18:25:29 [vllm.py:762] Cudagraph is disabled under eager mode
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:29 [nixl_connector.py:101] Setting UCX_RCACHE_MAX_UNRELEASED to '1024' to avoid a rare memory leak in UCX when using NIXL.
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:29 [nixl_connector.py:114] NIXL is available
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:30 [api_server.py:665] Supported tasks: ['generate']
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:30 [serving.py:177] Warming up chat template processing...
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [hf.py:310] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216] Chat template warmup failed
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216] Traceback (most recent call last):
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/chat_completion/serving.py", line 195, in warmup
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216]     await self._preprocess_chat(
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/engine/serving.py", line 1207, in _preprocess_chat
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216]     conversation, engine_prompt = await renderer.render_messages_async(
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/renderers/hf.py", line 619, in render_messages_async
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216]     prompt_raw = safe_apply_chat_template(
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/renderers/hf.py", line 451, in safe_apply_chat_template
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216]     raise ChatTemplateResolutionError(
+[0;36m(APIServer pid=929872)[0;0m ERROR 08-09 18:25:31 [serving.py:216] vllm.entrypoints.chat_utils.ChatTemplateResolutionError: As of transformers v4.44, default chat template is no longer allowed, so you must provide a chat template if the tokenizer does not define one.
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [api_server.py:946] Starting vLLM API server 0 on http://0.0.0.0:32177
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:38] Available routes are:
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /openapi.json, Methods: GET, HEAD
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /docs, Methods: GET, HEAD
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /docs/oauth2-redirect, Methods: GET, HEAD
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /redoc, Methods: GET, HEAD
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /scale_elastic_ep, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /is_scaling_elastic_ep, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /tokenize, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /detokenize, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /inference/v1/generate, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /pause, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /resume, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /is_paused, Methods: GET
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /metrics, Methods: GET
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /health, Methods: GET
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/chat/completions, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/chat/completions/render, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/responses, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/responses/{response_id}, Methods: GET
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/responses/{response_id}/cancel, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/audio/transcriptions, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/audio/translations, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/completions, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/completions/render, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/messages, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/models, Methods: GET
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /load, Methods: GET
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /version, Methods: GET
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /ping, Methods: GET
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /ping, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /invocations, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /classify, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/embeddings, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /score, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/score, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /rerank, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v1/rerank, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /v2/rerank, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO 08-09 18:25:31 [launcher.py:46] Route: /pooling, Methods: POST
+[0;36m(APIServer pid=929872)[0;0m INFO:     Started server process [929872]
+[0;36m(APIServer pid=929872)[0;0m INFO:     Waiting for application startup.
+[0;36m(APIServer pid=929872)[0;0m INFO:     Application startup complete.
