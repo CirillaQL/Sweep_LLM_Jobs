@@ -21,6 +21,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-decode-count", type=int, default=2)
     parser.add_argument("--expected-prefill-tp-sizes", default="1,1")
     parser.add_argument("--expected-decode-tp-sizes", default="1,1")
+    parser.add_argument("--allow-asymmetric-tp", action="store_true")
     parser.add_argument("--require-all-routes", action="store_true")
     parser.add_argument("--output", type=Path, required=True)
     return parser.parse_args()
@@ -46,7 +47,7 @@ def main() -> int:
         f"P{prefill_index}-D{decode_index}"
         for prefill_index, prefill_tp_size in enumerate(prefill_tp_sizes)
         for decode_index, decode_tp_size in enumerate(decode_tp_sizes)
-        if prefill_tp_size == decode_tp_size
+        if args.allow_asymmetric_tp or prefill_tp_size == decode_tp_size
     )
     observations: dict[int, str] = {}
     duplicate_counts: list[int] = []
@@ -88,7 +89,12 @@ def main() -> int:
     )
     report = {
         "passed": passed,
-        "policy": "prefill_first_symmetric_tp_random",
+        "policy": (
+            "independent_prefill_decode_random"
+            if args.allow_asymmetric_tp
+            else "prefill_first_symmetric_tp_random"
+        ),
+        "allow_asymmetric_tp": args.allow_asymmetric_tp,
         "prefill_tp_sizes": prefill_tp_sizes,
         "decode_tp_sizes": decode_tp_sizes,
         "supported_routes": supported_routes,

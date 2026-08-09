@@ -33,6 +33,7 @@ MAX_CONCURRENCY="${MAX_CONCURRENCY_OVERRIDE:-16}"
 BENCH_TIMEOUT_SECONDS="${BENCH_TIMEOUT_SECONDS_OVERRIDE:-300}"
 STARTUP_TIMEOUT_SECONDS="${STARTUP_TIMEOUT_SECONDS_OVERRIDE:-900}"
 REQUIRE_ALL_RANDOM_ROUTES="${REQUIRE_ALL_RANDOM_ROUTES_OVERRIDE:-false}"
+export CUSTOM_PD_ALLOW_ASYMMETRIC_TP="${CUSTOM_PD_ALLOW_ASYMMETRIC_TP_OVERRIDE:-false}"
 
 PORT_SLOT_COUNT=60
 PORT_SLOT_STRIDE=16
@@ -165,19 +166,31 @@ wait_for_registry() {
 import json
 import sys
 
-path, expected_p, expected_d, expected_p_tp, expected_d_tp = sys.argv[1:]
+path, expected_p, expected_d, expected_p_tp, expected_d_tp, allow_raw = sys.argv[1:]
 data = json.load(open(path, encoding="utf-8"))
+prefill_tp = [int(value) for value in expected_p_tp.split(",")]
+decode_tp = [int(value) for value in expected_d_tp.split(",")]
+allow_asymmetric = allow_raw.lower() == "true"
+expected_routes = [
+    f"P{p_index}-D{d_index}"
+    for p_index, p_tp in enumerate(prefill_tp)
+    for d_index, d_tp in enumerate(decode_tp)
+    if allow_asymmetric or p_tp == d_tp
+]
 ready = (
     data.get("prefill_count") == int(expected_p)
     and data.get("decode_count") == int(expected_d)
-    and data.get("prefill_tp_sizes") == [int(value) for value in expected_p_tp.split(",")]
-    and data.get("decode_tp_sizes") == [int(value) for value in expected_d_tp.split(",")]
+    and data.get("prefill_tp_sizes") == prefill_tp
+    and data.get("decode_tp_sizes") == decode_tp
+    and data.get("supported_routes") == expected_routes
+    and data.get("allow_asymmetric_tp") == allow_asymmetric
     and data.get("default_route") == "random"
     and data.get("kv_connector") == "NixlConnector"
 )
 raise SystemExit(0 if ready else 1)
 ' "$REGISTRY_FILE" "$PREFILL_REPLICAS" "$DECODE_REPLICAS" \
-      "$PREFILL_TP_SIZES" "$DECODE_TP_SIZES"; then
+      "$PREFILL_TP_SIZES" "$DECODE_TP_SIZES" \
+      "$CUSTOM_PD_ALLOW_ASYMMETRIC_TP"; then
       echo "pd_registry_ready=true registry=${REGISTRY_FILE}"
       return 0
     fi
@@ -195,7 +208,7 @@ echo "slurm_job_id=${SLURM_JOB_ID:-unset} nodelist=${SLURM_JOB_NODELIST:-unset}"
 echo "model=${MODEL}"
 echo "work_dir=${PD_WORK_DIR}"
 echo "cache_paths home=${HOME} nixl_config=${NIXL_CONFIG_FILE} hf=${HF_HOME} hf_hub=${HF_HUB_CACHE} hf_assets=${HF_ASSETS_CACHE} hf_xet=${HF_XET_CACHE} xdg=${XDG_CACHE_HOME} xdg_config=${XDG_CONFIG_HOME} xdg_data=${XDG_DATA_HOME} xdg_state=${XDG_STATE_HOME} xdg_runtime=${XDG_RUNTIME_DIR} flashinfer=${FLASHINFER_WORKSPACE_BASE} vllm=${VLLM_CACHE_ROOT} vllm_config=${VLLM_CONFIG_ROOT} torch=${TORCH_HOME} torch_extensions=${TORCH_EXTENSIONS_DIR} triton=${TRITON_CACHE_DIR} torchinductor=${TORCHINDUCTOR_CACHE_DIR} cuda=${CUDA_CACHE_PATH} numba=${NUMBA_CACHE_DIR} ray_tmp=${RAY_TMPDIR} pip=${PIP_CACHE_DIR} uv=${UV_CACHE_DIR} pycache=${PYTHONPYCACHEPREFIX} tiktoken=${TIKTOKEN_CACHE_DIR} matplotlib=${MPLCONFIGDIR} cupy=${CUPY_CACHE_DIR} tmp=${TMPDIR}"
-echo "random_route_policy=prefill_first,decode_same_tp_only"
+echo "random_route_policy=prefill_first,allow_asymmetric_tp=${CUSTOM_PD_ALLOW_ASYMMETRIC_TP}"
 echo "mixed_tp prefill=${PREFILL_TP_SIZES} decode=${DECODE_TP_SIZES} require_all_routes=${REQUIRE_ALL_RANDOM_ROUTES}"
 echo "bench num_prompts=${NUM_PROMPTS} request_rate=${REQUEST_RATE} input_len=${INPUT_LEN} output_len=${OUTPUT_LEN} max_concurrency=${MAX_CONCURRENCY}"
 echo "output_dir=${OUT_DIR}"
@@ -271,6 +284,9 @@ ROUTE_CHECK_ARGS=(
 )
 if [ "$REQUIRE_ALL_RANDOM_ROUTES" = true ]; then
   ROUTE_CHECK_ARGS+=(--require-all-routes)
+fi
+if [ "$CUSTOM_PD_ALLOW_ASYMMETRIC_TP" = true ]; then
+  ROUTE_CHECK_ARGS+=(--allow-asymmetric-tp)
 fi
 "$PYTHON_BIN" "$CHECKER" "${ROUTE_CHECK_ARGS[@]}" || ROUTE_CHECK_RC=$?
 cat "$ROUTE_CHECK_FILE" 2>/dev/null || true

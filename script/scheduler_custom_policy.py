@@ -4,13 +4,14 @@
 
 This follows the two-stage forwarding pattern in vLLM's
 ``tests/v1/kv_connector/nixl_integration/toy_proxy_server.py`` while adding
-request-level TP-compatible instance-pair scheduling.
+request-level instance-pair scheduling, including an opt-in asymmetric-TP mode.
 
-Callers can select any registered pair whose Prefill and Decode tensor
-parallel sizes match, for example with TP layouts ``P=[1, 1, 2]`` and
-``D=[1, 1, 2]``::
+With ``CUSTOM_PD_ALLOW_ASYMMETRIC_TP=true``, callers can select every
+registered pair. For TP layouts ``P=[1, 1, 2]`` and ``D=[1, 1, 2]`` this is
+the full 3x3 Cartesian product::
 
-    P0-D0, P0-D1, P1-D0, P1-D1, P2-D2
+    P0-D0, P0-D1, P0-D2, P1-D0, P1-D1, P1-D2,
+    P2-D0, P2-D1, P2-D2
 
 Selection priority is:
 
@@ -19,10 +20,9 @@ Selection priority is:
 3. ``pd_route`` or ``_pd_route`` JSON field (removed before forwarding).
 4. The configured default policy.
 
-By default, a Prefill index is sampled first from the live registry and its
-Decode index is then sampled from instances with the same TP size.
+In asymmetric mode, Prefill and Decode indices are sampled independently.
 ``POST /control/default-route`` can switch the default to a fixed pair,
-``random``, or ``round_robin``. Fixed routes with asymmetric TP are rejected.
+``random``, or ``round_robin``.
 Aliases are assigned by increasing HTTP port, making them stable across
 requests.
 """
@@ -52,6 +52,9 @@ PING_TTL_SECONDS = int(os.environ.get("CUSTOM_PD_PING_TTL_SECONDS", "10"))
 DEFAULT_TP_SIZE = int(os.environ.get("PROXY_DEFAULT_TP_SIZE", "1"))
 HTTP_TIMEOUT = aiohttp.ClientTimeout(total=30 * 60)
 KV_CONNECTOR = os.environ.get("PD_KV_CONNECTOR", "NixlConnector")
+ALLOW_ASYMMETRIC_TP = os.environ.get(
+    "CUSTOM_PD_ALLOW_ASYMMETRIC_TP", "false"
+).strip().lower() in {"1", "true", "yes", "on"}
 
 
 def parse_tp_sizes(name: str) -> tuple[int, ...]:
@@ -108,15 +111,16 @@ def normalize_route(value: Any, *, allow_policy: bool = False) -> str:
     return normalized
 
 
-def compatible_route_choices(
+def supported_route_choices(
     prefill: list[Instance], decode: list[Instance]
 ) -> tuple[str, ...]:
-    """Return symmetric-TP P-D pairs in stable Prefill-major order."""
+    """Return enabled P-D pairs in stable Prefill-major order."""
     return tuple(
         f"P{prefill_index}-D{decode_index}"
         for prefill_index, prefill_instance in enumerate(prefill)
         for decode_index, decode_instance in enumerate(decode)
-        if prefill_instance.tp_size == decode_instance.tp_size
+        if ALLOW_ASYMMETRIC_TP
+        or prefill_instance.tp_size == decode_instance.tp_size
     )
 
 
@@ -278,7 +282,8 @@ class CustomPairSchedulingPolicy:
                 compatible_decode_indices = [
                     decode_index
                     for decode_index, decode_instance in enumerate(decode)
-                    if decode_instance.tp_size == prefill_tp_size
+                    if ALLOW_ASYMMETRIC_TP
+                    or decode_instance.tp_size == prefill_tp_size
                 ]
                 if not compatible_decode_indices:
                     raise RuntimeError(
@@ -289,11 +294,9 @@ class CustomPairSchedulingPolicy:
                 return f"P{prefill_index}-D{decode_index}"
             if self._default_route != ROUND_ROBIN:
                 return self._default_route
-            choices = compatible_route_choices(prefill, decode)
+            choices = supported_route_choices(prefill, decode)
             if not choices:
-                raise RuntimeError(
-                    "no symmetric-TP Prefill-Decode route is available"
-                )
+                raise RuntimeError("no Prefill-Decode route is available")
             route = choices[self._round_robin_index % len(choices)]
             self._round_robin_index += 1
             return route
@@ -320,7 +323,10 @@ class CustomPairSchedulingPolicy:
             )
         prefill_instance = prefill[prefill_index]
         decode_instance = decode[decode_index]
-        if prefill_instance.tp_size != decode_instance.tp_size:
+        if (
+            not ALLOW_ASYMMETRIC_TP
+            and prefill_instance.tp_size != decode_instance.tp_size
+        ):
             raise RuntimeError(
                 f"asymmetric TP route {route} is unsupported: "
                 f"prefill_tp={prefill_instance.tp_size} "
@@ -439,7 +445,8 @@ async def registry(_: web.Request) -> web.Response:
                 }
                 for index, instance in enumerate(decode)
             },
-            "supported_routes": compatible_route_choices(prefill, decode),
+            "supported_routes": supported_route_choices(prefill, decode),
+            "allow_asymmetric_tp": ALLOW_ASYMMETRIC_TP,
             "default_route": POLICY.default_route,
             "kv_connector": KV_CONNECTOR,
         }
@@ -679,7 +686,9 @@ if __name__ == "__main__":
         f"custom_proxy_start hostname={socket.gethostname()} "
         f"http={http_host}:{http_port} registry={register_host}:{register_port} "
         f"kv_connector={KV_CONNECTOR} "
-        f"default_route={POLICY.default_route} routes=dynamic_symmetric_tp_pairs",
+        f"default_route={POLICY.default_route} "
+        f"allow_asymmetric_tp={str(ALLOW_ASYMMETRIC_TP).lower()} "
+        f"routes={'all_pairs' if ALLOW_ASYMMETRIC_TP else 'symmetric_tp_pairs'}",
         flush=True,
     )
     if KV_CONNECTOR == "P2pNcclConnector":

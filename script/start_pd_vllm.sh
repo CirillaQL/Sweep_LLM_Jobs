@@ -412,6 +412,7 @@ srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$PROXY_NODE" \
     PD_KV_CONNECTOR="${PD_KV_CONNECTOR:-NixlConnector}" \
     CUSTOM_PD_DEFAULT_ROUTE="${CUSTOM_PD_DEFAULT_ROUTE:-random}" \
     CUSTOM_PD_RANDOM_SEED="${CUSTOM_PD_RANDOM_SEED:-}" \
+    CUSTOM_PD_ALLOW_ASYMMETRIC_TP="${CUSTOM_PD_ALLOW_ASYMMETRIC_TP:-false}" \
     CUSTOM_POLICY_ADMIN_TOKEN="${CUSTOM_POLICY_ADMIN_TOKEN:-}" \
     "$PYTHON_BIN" -u "$RUNTIME_PROXY_SCRIPT" >"${PD_OUT_DIR}/proxy.log" 2>&1 &
 STEP_PIDS+=("$!")
@@ -436,7 +437,7 @@ data = json.load(open(sys.argv[1], encoding="utf-8"))
 print(json.dumps(data, indent=2))
 ' "$REGISTRY_FILE"
 
-echo "pd_cluster_ready endpoint=http://${PROXY_IP}:${PROXY_HTTP_PORT}/v1 prefill_replicas=${PREFILL_REPLICAS} decode_replicas=${DECODE_REPLICAS} connector=${PD_KV_CONNECTOR:-NixlConnector} default_route=${CUSTOM_PD_DEFAULT_ROUTE:-random} random_selection=prefill_first_symmetric_tp"
+echo "pd_cluster_ready endpoint=http://${PROXY_IP}:${PROXY_HTTP_PORT}/v1 prefill_replicas=${PREFILL_REPLICAS} decode_replicas=${DECODE_REPLICAS} connector=${PD_KV_CONNECTOR:-NixlConnector} default_route=${CUSTOM_PD_DEFAULT_ROUTE:-random} allow_asymmetric_tp=${CUSTOM_PD_ALLOW_ASYMMETRIC_TP:-false}"
 echo "pd_cluster_waiting_for_steps=true"
 wait -n "${STEP_PIDS[@]}"
 echo "pd_step_exited=true"
