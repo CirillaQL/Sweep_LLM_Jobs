@@ -495,6 +495,7 @@ srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$PROXY_NODE" \
     PD_DVFS_KV_EFFECTIVE_BANDWIDTH_GBPS="${PD_DVFS_KV_EFFECTIVE_BANDWIDTH_GBPS:-}" \
     PD_DVFS_DISPATCH_MS="${PD_DVFS_DISPATCH_MS:-0}" \
     PD_DVFS_DECISIONS_FILE="${PD_OUT_DIR}/request_dvfs_decisions.jsonl" \
+    PD_REQUEST_TRACE_FILE="${PD_REQUEST_TRACE_FILE:-}" \
     PD_OUT_DIR="$PD_OUT_DIR" \
     "$PYTHON_BIN" -u "$RUNTIME_PROXY_SCRIPT" >"${PD_OUT_DIR}/proxy.log" 2>&1 &
 STEP_PIDS+=("$!")

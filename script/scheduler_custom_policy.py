@@ -86,6 +86,8 @@ DVFS_DECISIONS_FILE = Path(
         str(Path(os.environ.get("PD_OUT_DIR", ".")) / "request_dvfs_decisions.jsonl"),
     )
 )
+REQUEST_TRACE_RAW = os.environ.get("PD_REQUEST_TRACE_FILE", "")
+REQUEST_TRACE_FILE = Path(REQUEST_TRACE_RAW) if REQUEST_TRACE_RAW else None
 
 
 def parse_tp_sizes(name: str) -> tuple[int, ...]:
@@ -753,13 +755,19 @@ async def apply_clock(instance: Instance, target_mhz: int, request_id: str) -> d
 
 
 async def append_decision(record: dict[str, Any]) -> None:
-    if not ENABLE_PREDICTIVE_DVFS:
+    targets: list[Path] = []
+    if ENABLE_PREDICTIVE_DVFS:
+        targets.append(DVFS_DECISIONS_FILE)
+    if REQUEST_TRACE_FILE is not None and REQUEST_TRACE_FILE not in targets:
+        targets.append(REQUEST_TRACE_FILE)
+    if not targets:
         return
     line = json.dumps(record, sort_keys=True, ensure_ascii=False)
     async with DECISION_LOG_LOCK:
-        DVFS_DECISIONS_FILE.parent.mkdir(parents=True, exist_ok=True)
-        with DVFS_DECISIONS_FILE.open("a", encoding="utf-8") as handle:
-            handle.write(line + "\n")
+        for target in targets:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with target.open("a", encoding="utf-8") as handle:
+                handle.write(line + "\n")
 
 
 async def execute_scheduled_request(
@@ -781,6 +789,9 @@ async def execute_scheduled_request(
     started = time.monotonic()
     first_decode_chunk_at: float | None = None
     forwarding_started: float | None = None
+    forwarding_detail: dict[str, Any] = {}
+    experiment_tag = request.headers.get("X-Experiment-Tag")
+    traced_input_tokens = request.headers.get("X-Input-Tokens")
     record: dict[str, Any] = {
         "request_index": index,
         "request_id": request_id,
@@ -795,6 +806,13 @@ async def execute_scheduled_request(
         "prefill_gpu": prefill_instance.gpu_type,
         "decode_gpu": decode_instance.gpu_type,
         "queue_snapshot": queue_snapshot,
+        "experiment_tag": experiment_tag,
+        "traced_input_tokens": (
+            int(traced_input_tokens) if traced_input_tokens is not None else None
+        ),
+        "output_tokens_requested": int(
+            original.get("max_tokens") or original.get("max_completion_tokens") or 1
+        ),
     }
     success = False
     error: str | None = None
@@ -868,14 +886,14 @@ async def execute_scheduled_request(
                     flush=True,
                 )
                 forwarding_started = time.monotonic()
-                response, first_decode_chunk_at = await run_pd_forwarding(
+                response, first_decode_chunk_at, forwarding_detail = await run_pd_forwarding(
                     request, original, route, prefill_alias, decode_alias,
                     prefill_instance, decode_instance, request_id,
                     p_freq=p_freq, d_freq=d_freq,
                 )
         else:
             forwarding_started = time.monotonic()
-            response, first_decode_chunk_at = await run_pd_forwarding(
+            response, first_decode_chunk_at, forwarding_detail = await run_pd_forwarding(
                 request, original, route, prefill_alias, decode_alias,
                 prefill_instance, decode_instance, request_id,
             )
@@ -936,6 +954,7 @@ async def execute_scheduled_request(
                 if proxy_tpot_ms is not None and "slo_tpot_ms" in record else None
             ),
             "finished_unix_ts": time.time(),
+            **forwarding_detail,
         }
         await append_decision(record)
 
@@ -952,7 +971,8 @@ async def run_pd_forwarding(
     *,
     p_freq: int | None = None,
     d_freq: int | None = None,
-) -> tuple[web.StreamResponse, float | None]:
+) -> tuple[web.StreamResponse, float | None, dict[str, Any]]:
+    prefill_started = time.monotonic()
     prefill_body = dict(original)
     prefill_body["max_tokens"] = 1
     if "max_completion_tokens" in prefill_body:
@@ -990,6 +1010,7 @@ async def run_pd_forwarding(
             request_id,
         ):
             pass
+    prefill_finished = time.monotonic()
 
     headers = {
         "Content-Type": "application/json",
@@ -1010,6 +1031,7 @@ async def run_pd_forwarding(
         decode_kv_params["remote_tp_size"] = prefill_instance.tp_size
         decode_body["kv_transfer_params"] = decode_kv_params
     first_chunk_at = None
+    decode_started = time.monotonic()
     async for chunk in forward_request(
         f"http://{decode_instance.http_address}{request.path}",
         decode_body,
@@ -1019,7 +1041,17 @@ async def run_pd_forwarding(
             first_chunk_at = time.monotonic()
         await response.write(chunk)
     await response.write_eof()
-    return response, first_chunk_at
+    detail = {
+        "prefill_http_ms": round((prefill_finished - prefill_started) * 1000.0, 3),
+        "decode_to_first_chunk_ms": (
+            round((first_chunk_at - decode_started) * 1000.0, 3)
+            if first_chunk_at is not None else None
+        ),
+        "prefill_to_decode_dispatch_ms": round(
+            (decode_started - prefill_finished) * 1000.0, 3
+        ),
+    }
+    return response, first_chunk_at, detail
 
 
 async def handle_request(request: web.Request) -> web.StreamResponse:
