@@ -34,6 +34,7 @@ BENCH_TIMEOUT_SECONDS="${BENCH_TIMEOUT_SECONDS_OVERRIDE:-300}"
 STARTUP_TIMEOUT_SECONDS="${STARTUP_TIMEOUT_SECONDS_OVERRIDE:-900}"
 REQUIRE_ALL_RANDOM_ROUTES="${REQUIRE_ALL_RANDOM_ROUTES_OVERRIDE:-false}"
 export CUSTOM_PD_ALLOW_ASYMMETRIC_TP="${CUSTOM_PD_ALLOW_ASYMMETRIC_TP_OVERRIDE:-false}"
+export PD_ENABLE_PREDICTIVE_DVFS="${PD_ENABLE_PREDICTIVE_DVFS_OVERRIDE:-false}"
 
 PORT_SLOT_COUNT=60
 PORT_SLOT_STRIDE=16
@@ -86,6 +87,8 @@ BENCH_RESULT="vllm_bench_detailed.json"
 REGISTRY_FILE="${OUT_DIR}/registry.json"
 ROUTE_CHECK_FILE="${OUT_DIR}/random_route_check.json"
 CHECKER="${SOURCE_JOB_DIR}/check_random_routes.py"
+DVFS_CHECKER="${SCRIPT_ROOT}/check_request_dvfs.py"
+DVFS_CHECK_FILE="${OUT_DIR}/request_dvfs_check.json"
 
 export PATH="${ENV_DIR}/bin:${PATH}"
 export PYTHON_BIN VLLM_BIN MODEL STARTUP_TIMEOUT_SECONDS
@@ -110,6 +113,14 @@ export PROXY_IP=10.1.0.3
 export CUSTOM_PD_DEFAULT_ROUTE=random
 export PD_KV_CONNECTOR=NixlConnector
 export PD_KV_LOAD_FAILURE_POLICY=fail
+export PD_DVFS_SLO_TTFT_MS="${PD_DVFS_SLO_TTFT_MS_OVERRIDE:-500}"
+export PD_DVFS_SLO_TPOT_MS="${PD_DVFS_SLO_TPOT_MS_OVERRIDE:-200}"
+export PD_DVFS_EXPECTED_REQUEST_RATE="${PD_DVFS_EXPECTED_REQUEST_RATE_OVERRIDE:-$REQUEST_RATE}"
+export PD_DVFS_INPUT_TOKENS_OVERRIDE="${PD_DVFS_INPUT_TOKENS_OVERRIDE:-$INPUT_LEN}"
+export PD_DVFS_OVERLOAD_ACTION="${PD_DVFS_OVERLOAD_ACTION_OVERRIDE:-reject}"
+export PD_DVFS_CLOCK_TOLERANCE_MHZ="${PD_DVFS_CLOCK_TOLERANCE_MHZ_OVERRIDE:-30}"
+export PD_DVFS_KV_EFFECTIVE_BANDWIDTH_GBPS="${PD_DVFS_KV_EFFECTIVE_BANDWIDTH_GBPS_OVERRIDE:-}"
+export PD_DVFS_DISPATCH_MS="${PD_DVFS_DISPATCH_MS_OVERRIDE:-0}"
 export MAX_MODEL_LEN=8192
 export MAX_NUM_BATCHED_TOKENS=8192
 export MAX_NUM_SEQS=32
@@ -211,6 +222,7 @@ echo "cache_paths home=${HOME} nixl_config=${NIXL_CONFIG_FILE} hf=${HF_HOME} hf_
 echo "random_route_policy=prefill_first,allow_asymmetric_tp=${CUSTOM_PD_ALLOW_ASYMMETRIC_TP}"
 echo "mixed_tp prefill=${PREFILL_TP_SIZES} decode=${DECODE_TP_SIZES} require_all_routes=${REQUIRE_ALL_RANDOM_ROUTES}"
 echo "bench num_prompts=${NUM_PROMPTS} request_rate=${REQUEST_RATE} input_len=${INPUT_LEN} output_len=${OUTPUT_LEN} max_concurrency=${MAX_CONCURRENCY}"
+echo "predictive_dvfs enabled=${PD_ENABLE_PREDICTIVE_DVFS} slo_ttft_ms=${PD_DVFS_SLO_TTFT_MS} slo_tpot_ms=${PD_DVFS_SLO_TPOT_MS} expected_rate=${PD_DVFS_EXPECTED_REQUEST_RATE} overload_action=${PD_DVFS_OVERLOAD_ACTION}"
 echo "output_dir=${OUT_DIR}"
 
 for required in \
@@ -223,6 +235,10 @@ for required in \
     exit 2
   fi
 done
+if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ] && [ ! -s "$DVFS_CHECKER" ]; then
+  echo "required_artifact_missing=${DVFS_CHECKER}"
+  exit 2
+fi
 if [ ! -x "$PYTHON_BIN" ] || [ ! -x "$VLLM_BIN" ]; then
   echo "vllm_environment_missing=true python=${PYTHON_BIN} vllm=${VLLM_BIN}"
   exit 3
@@ -292,6 +308,18 @@ fi
 cat "$ROUTE_CHECK_FILE" 2>/dev/null || true
 echo "random_route_check_rc=${ROUTE_CHECK_RC}"
 
+DVFS_CHECK_RC=0
+if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
+  echo "phase=verify_request_dvfs"
+  "$PYTHON_BIN" "$DVFS_CHECKER" \
+    --decisions "${PD_OUT_DIR}/request_dvfs_decisions.jsonl" \
+    --telemetry-dir "$PD_OUT_DIR" \
+    --expected-requests "$NUM_PROMPTS" \
+    --clock-tolerance-mhz "$PD_DVFS_CLOCK_TOLERANCE_MHZ" \
+    --output "$DVFS_CHECK_FILE" || DVFS_CHECK_RC=$?
+  echo "request_dvfs_check_rc=${DVFS_CHECK_RC}"
+fi
+
 FINAL_RC=0
 if [ "$BENCH_RC" -ne 0 ] || \
   [ "$SUCCESSFUL_REQUESTS" -ne "$NUM_PROMPTS" ] || \
@@ -300,6 +328,9 @@ if [ "$BENCH_RC" -ne 0 ] || \
 fi
 if [ "$ROUTE_CHECK_RC" -ne 0 ]; then
   FINAL_RC=11
+fi
+if [ "$DVFS_CHECK_RC" -ne 0 ]; then
+  FINAL_RC=13
 fi
 if ! kill -0 "$PD_LAUNCHER_PID" 2>/dev/null; then
   echo "pd_launcher_alive_after_bench=false"

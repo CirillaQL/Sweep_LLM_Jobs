@@ -31,6 +31,13 @@ VLLM_BIN="${VLLM_BIN:-/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm}"
 MODEL="${MODEL:-mistralai/Mistral-7B-v0.1}"
 PROXY_SCRIPT="${PROXY_SCRIPT:-${SCRIPT_DIR}/scheduler_custom_policy.py}"
 INSTANCE_SCRIPT="${INSTANCE_SCRIPT:-${SCRIPT_DIR}/start_pd_vllm_instance.sh}"
+CLOCK_AGENT_SCRIPT="${CLOCK_AGENT_SCRIPT:-${SCRIPT_DIR}/pd_clock_agent.py}"
+DVFS_PREDICTOR_SCRIPT="${DVFS_PREDICTOR_SCRIPT:-${SCRIPT_DIR}/request_dvfs_predictor.py}"
+PD_ENABLE_PREDICTIVE_DVFS="${PD_ENABLE_PREDICTIVE_DVFS:-false}"
+PD_DVFS_SOURCE_JOB_DIR="${PD_DVFS_SOURCE_JOB_DIR:-/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260722-161842-luqia-vllm-scheduler-saturation-gate}"
+PD_DVFS_SCHEDULER_SCRIPT="${PD_DVFS_SCHEDULER_SCRIPT:-${PD_DVFS_SOURCE_JOB_DIR}/scheduler.py}"
+PD_DVFS_MODEL_BUNDLE="${PD_DVFS_MODEL_BUNDLE:-${PD_DVFS_SOURCE_JOB_DIR}/model_bundle.json}"
+PD_DVFS_SATURATION_BUNDLE="${PD_DVFS_SATURATION_BUNDLE:-${PD_DVFS_SOURCE_JOB_DIR}/saturation_bundle.json}"
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-8192}"
 MAX_NUM_BATCHED_TOKENS="${MAX_NUM_BATCHED_TOKENS:-$MAX_MODEL_LEN}"
 MAX_NUM_SEQS="${MAX_NUM_SEQS:-32}"
@@ -97,11 +104,26 @@ done
 PREFILL_TP_SIZES=$(IFS=,; echo "${PREFILL_TP_SIZE_ARRAY[*]}")
 DECODE_TP_SIZES=$(IFS=,; echo "${DECODE_TP_SIZE_ARRAY[*]}")
 export PREFILL_TP_SIZES DECODE_TP_SIZES
+PREFILL_GPU_COUNT=0
+DECODE_GPU_COUNT=0
+for tp_size in "${PREFILL_TP_SIZE_ARRAY[@]}"; do
+  PREFILL_GPU_COUNT=$((PREFILL_GPU_COUNT + tp_size))
+done
+for tp_size in "${DECODE_TP_SIZE_ARRAY[@]}"; do
+  DECODE_GPU_COUNT=$((DECODE_GPU_COUNT + tp_size))
+done
 
 [ -x "$PYTHON_BIN" ] || die "python_binary_not_executable path=${PYTHON_BIN}"
 [ -x "$VLLM_BIN" ] || die "vllm_binary_not_executable path=${VLLM_BIN}"
 [ -r "$PROXY_SCRIPT" ] || die "proxy_script_not_readable path=${PROXY_SCRIPT}"
 [ -x "$INSTANCE_SCRIPT" ] || die "instance_script_not_executable path=${INSTANCE_SCRIPT}"
+if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
+  for artifact in "$CLOCK_AGENT_SCRIPT" "$DVFS_PREDICTOR_SCRIPT" \
+    "$PD_DVFS_SCHEDULER_SCRIPT" "$PD_DVFS_MODEL_BUNDLE" \
+    "$PD_DVFS_SATURATION_BUNDLE"; do
+    [ -r "$artifact" ] || die "dvfs_artifact_not_readable path=${artifact}"
+  done
+fi
 
 # Batch-level resource variables must not leak into nested steps. Every GPU
 # step below declares its own exact CPU, memory, and GPU requirements.
@@ -189,9 +211,38 @@ RUNTIME_INSTANCE_SCRIPT="${PD_WORK_DIR}/start_pd_vllm_instance.sh"
 cp -- "$PROXY_SCRIPT" "$RUNTIME_PROXY_SCRIPT"
 cp -- "$INSTANCE_SCRIPT" "$RUNTIME_INSTANCE_SCRIPT"
 chmod +x "$RUNTIME_PROXY_SCRIPT" "$RUNTIME_INSTANCE_SCRIPT"
+RUNTIME_CLOCK_AGENT_SCRIPT="${PD_WORK_DIR}/pd_clock_agent.py"
+RUNTIME_DVFS_PREDICTOR_SCRIPT="${PD_WORK_DIR}/request_dvfs_predictor.py"
+RUNTIME_DVFS_SCHEDULER_SCRIPT="${PD_WORK_DIR}/portable_sweep_scheduler.py"
+RUNTIME_DVFS_MODEL_BUNDLE="${PD_WORK_DIR}/model_bundle.json"
+RUNTIME_DVFS_SATURATION_BUNDLE="${PD_WORK_DIR}/saturation_bundle.json"
+if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
+  cp -- "$CLOCK_AGENT_SCRIPT" "$RUNTIME_CLOCK_AGENT_SCRIPT"
+  cp -- "$DVFS_PREDICTOR_SCRIPT" "$RUNTIME_DVFS_PREDICTOR_SCRIPT"
+  cp -- "$PD_DVFS_SCHEDULER_SCRIPT" "$RUNTIME_DVFS_SCHEDULER_SCRIPT"
+  cp -- "$PD_DVFS_MODEL_BUNDLE" "$RUNTIME_DVFS_MODEL_BUNDLE"
+  cp -- "$PD_DVFS_SATURATION_BUNDLE" "$RUNTIME_DVFS_SATURATION_BUNDLE"
+  chmod +x "$RUNTIME_CLOCK_AGENT_SCRIPT" "$RUNTIME_DVFS_PREDICTOR_SCRIPT" \
+    "$RUNTIME_DVFS_SCHEDULER_SCRIPT"
+fi
 
 STEP_PIDS=()
 cleanup_done=false
+reset_node_clocks() {
+  local node="$1"
+  local gpu_count="$2"
+  [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ] || return 0
+  echo "pd_clock_reset_start node=${node} gpu_count=${gpu_count}"
+  srun --overlap --exact --nodes=1 --nodelist="$node" --ntasks=1 \
+    --cpus-per-task=1 --mem=1G --gres=none \
+    env PD_RESET_GPU_COUNT="$gpu_count" bash -c '
+      rc=0
+      for ((gpu_id = 0; gpu_id < PD_RESET_GPU_COUNT; gpu_id++)); do
+        sudo -n nvidia-smi -i "$gpu_id" -rgc || rc=1
+      done
+      exit "$rc"
+    ' </dev/null || echo "pd_clock_reset_failed node=${node}" >&2
+}
 cleanup() {
   local rc=$?
   trap - EXIT INT TERM
@@ -203,6 +254,8 @@ cleanup() {
     for pid in "${STEP_PIDS[@]}"; do
       wait "$pid" 2>/dev/null || true
     done
+    reset_node_clocks "$PREFILL_NODE" "$PREFILL_GPU_COUNT"
+    reset_node_clocks "$DECODE_NODE" "$DECODE_GPU_COUNT"
     case "$PD_WORK_DIR" in
       /data/users/chjing/vllm_job_work/"${SLURM_JOB_ID}"|/data/users/chjing/vllm_job_work/"${SLURM_JOB_ID}"/*)
         rm -rf -- "$PD_WORK_DIR"
@@ -321,11 +374,17 @@ launch_instance() {
       MODEL="$MODEL" VLLM_BIN="$VLLM_BIN" PYTHON_BIN="$PYTHON_BIN" \
       PD_INSTANCE_NAME="$instance_name" PD_EXPECTED_GPU_MODEL="$gpu_model" \
       PD_NODE_IP="$node_ip" PD_NET_IFACE="$net_iface" \
+      PD_NODE_NAME="$node" \
       PD_HTTP_PORT="$http_port" PD_KV_PORT="$kv_port" PD_TP_SIZE="$tp_size" \
-      PROXY_IP="$PROXY_IP" PROXY_REGISTER_PORT="$PROXY_REGISTER_PORT" \
+      PROXY_IP="$PROXY_IP" PROXY_HTTP_PORT="$PROXY_HTTP_PORT" \
+      PROXY_REGISTER_PORT="$PROXY_REGISTER_PORT" \
       PD_KV_CONNECTOR="${PD_KV_CONNECTOR:-NixlConnector}" \
       PD_KV_LOAD_FAILURE_POLICY="${PD_KV_LOAD_FAILURE_POLICY:-fail}" \
       PD_OUT_DIR="$PD_OUT_DIR" PD_WORK_DIR="$PD_WORK_DIR" \
+      PD_ENABLE_PREDICTIVE_DVFS="$PD_ENABLE_PREDICTIVE_DVFS" \
+      PD_CLOCK_AGENT_SCRIPT="$RUNTIME_CLOCK_AGENT_SCRIPT" \
+      PD_DVFS_TELEMETRY_INTERVAL_SECONDS="${PD_DVFS_TELEMETRY_INTERVAL_SECONDS:-0.5}" \
+      CUSTOM_POLICY_ADMIN_TOKEN="${CUSTOM_POLICY_ADMIN_TOKEN:-}" \
       HOME="$HOME" NIXL_CONFIG_FILE="$NIXL_CONFIG_FILE" \
       XDG_CACHE_HOME="$XDG_CACHE_HOME" XDG_CONFIG_HOME="$XDG_CONFIG_HOME" \
       XDG_DATA_HOME="$XDG_DATA_HOME" XDG_STATE_HOME="$XDG_STATE_HOME" \
@@ -351,14 +410,18 @@ launch_instance() {
 import json
 import sys
 
-instance_type, http_address, kv_address, tp_size = sys.argv[1:]
+instance_type, http_address, kv_address, tp_size, instance_name, node_name, gpu_type = sys.argv[1:]
 print(json.dumps({
     "type": instance_type,
     "http_address": http_address,
     "kv_address": kv_address,
     "tp_size": int(tp_size),
+    "instance_name": instance_name,
+    "node_name": node_name,
+    "gpu_type": gpu_type.lower(),
 }))
-' "$instance_type" "${node_ip}:${http_port}" "${node_ip}:${kv_port}" "$tp_size")
+' "$instance_type" "${node_ip}:${http_port}" "${node_ip}:${kv_port}" "$tp_size" \
+    "$instance_name" "$node" "$gpu_model")
   local register_auth_args=()
   if [ -n "${CUSTOM_POLICY_ADMIN_TOKEN:-}" ]; then
     register_auth_args=(-H "X-Admin-Token: ${CUSTOM_POLICY_ADMIN_TOKEN}")
@@ -414,6 +477,23 @@ srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$PROXY_NODE" \
     CUSTOM_PD_RANDOM_SEED="${CUSTOM_PD_RANDOM_SEED:-}" \
     CUSTOM_PD_ALLOW_ASYMMETRIC_TP="${CUSTOM_PD_ALLOW_ASYMMETRIC_TP:-false}" \
     CUSTOM_POLICY_ADMIN_TOKEN="${CUSTOM_POLICY_ADMIN_TOKEN:-}" \
+    PD_ENABLE_PREDICTIVE_DVFS="$PD_ENABLE_PREDICTIVE_DVFS" \
+    PD_DVFS_SCHEDULER_SCRIPT="$RUNTIME_DVFS_SCHEDULER_SCRIPT" \
+    PD_DVFS_MODEL_BUNDLE="$RUNTIME_DVFS_MODEL_BUNDLE" \
+    PD_DVFS_SATURATION_BUNDLE="$RUNTIME_DVFS_SATURATION_BUNDLE" \
+    PD_DVFS_SLO_TTFT_MS="${PD_DVFS_SLO_TTFT_MS:-500}" \
+    PD_DVFS_SLO_TPOT_MS="${PD_DVFS_SLO_TPOT_MS:-200}" \
+    PD_DVFS_EXPECTED_REQUEST_RATE="${PD_DVFS_EXPECTED_REQUEST_RATE:-0}" \
+    PD_DVFS_MIN_REQUEST_RATE="${PD_DVFS_MIN_REQUEST_RATE:-0.25}" \
+    PD_DVFS_RATE_WINDOW_SECONDS="${PD_DVFS_RATE_WINDOW_SECONDS:-10}" \
+    PD_DVFS_CLOCK_TIMEOUT_SECONDS="${PD_DVFS_CLOCK_TIMEOUT_SECONDS:-30}" \
+    PD_DVFS_CLOCK_TOLERANCE_MHZ="${PD_DVFS_CLOCK_TOLERANCE_MHZ:-30}" \
+    PD_DVFS_OVERLOAD_ACTION="${PD_DVFS_OVERLOAD_ACTION:-reject}" \
+    PD_DVFS_INPUT_TOKENS_OVERRIDE="${PD_DVFS_INPUT_TOKENS_OVERRIDE:-}" \
+    PD_DVFS_KV_EFFECTIVE_BANDWIDTH_GBPS="${PD_DVFS_KV_EFFECTIVE_BANDWIDTH_GBPS:-}" \
+    PD_DVFS_DISPATCH_MS="${PD_DVFS_DISPATCH_MS:-0}" \
+    PD_DVFS_DECISIONS_FILE="${PD_OUT_DIR}/request_dvfs_decisions.jsonl" \
+    PD_OUT_DIR="$PD_OUT_DIR" \
     "$PYTHON_BIN" -u "$RUNTIME_PROXY_SCRIPT" >"${PD_OUT_DIR}/proxy.log" 2>&1 &
 STEP_PIDS+=("$!")
 wait_for_url proxy "http://${PROXY_IP}:${PROXY_HTTP_PORT}/health"

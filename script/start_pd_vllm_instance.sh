@@ -220,4 +220,28 @@ echo "pd_instance_connector connector=${PD_KV_CONNECTOR} nixl_side_channel=${VLL
 echo "pd_instance_paths work=${PD_WORK_DIR} home=${HOME} nixl_config=${NIXL_CONFIG_FILE} xdg_cache=${XDG_CACHE_HOME} tmp=${TMPDIR} cwd=${PWD}"
 echo "pd_instance_model model=${MODEL} max_model_len=${MAX_MODEL_LEN} max_num_batched_tokens=${MAX_NUM_BATCHED_TOKENS} max_num_seqs=${MAX_NUM_SEQS}"
 
-exec "$VLLM_BIN" "${VLLM_ARGS[@]}"
+CLOCK_AGENT_PID=""
+cleanup_instance() {
+  local rc=$?
+  trap - EXIT INT TERM
+  if [ -n "$CLOCK_AGENT_PID" ]; then
+    kill "$CLOCK_AGENT_PID" 2>/dev/null || true
+    wait "$CLOCK_AGENT_PID" 2>/dev/null || true
+  fi
+  exit "$rc"
+}
+trap cleanup_instance EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+if [ "${PD_ENABLE_PREDICTIVE_DVFS:-false}" = true ]; then
+  [ -r "${PD_CLOCK_AGENT_SCRIPT:-}" ] || \
+    die "clock_agent_not_readable path=${PD_CLOCK_AGENT_SCRIPT:-unset}"
+  require_env PROXY_HTTP_PORT
+  "$PYTHON_BIN" -u "$PD_CLOCK_AGENT_SCRIPT" \
+    >> "${PD_OUT_DIR}/${PD_INSTANCE_NAME}_clock_agent.log" 2>&1 &
+  CLOCK_AGENT_PID=$!
+  echo "pd_clock_agent_started instance=${PD_INSTANCE_NAME} pid=${CLOCK_AGENT_PID} visible_gpus=${VISIBLE_GPUS}"
+fi
+
+"$VLLM_BIN" "${VLLM_ARGS[@]}"
