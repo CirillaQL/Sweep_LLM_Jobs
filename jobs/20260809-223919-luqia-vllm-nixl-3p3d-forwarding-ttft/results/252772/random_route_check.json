@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "policy": "independent_prefill_decode_random",
+  "allow_asymmetric_tp": true,
+  "prefill_tp_sizes": [
+    1,
+    1,
+    2
+  ],
+  "decode_tp_sizes": [
+    1,
+    1,
+    2
+  ],
+  "supported_routes": [
+    "P0-D0",
+    "P0-D1",
+    "P0-D2",
+    "P1-D0",
+    "P1-D1",
+    "P1-D2",
+    "P2-D0",
+    "P2-D1",
+    "P2-D2"
+  ],
+  "require_all_routes": false,
+  "expected_requests": 36,
+  "observed_requests": 36,
+  "route_counts": {
+    "P0-D1": 6,
+    "P0-D2": 5,
+    "P1-D0": 6,
+    "P1-D1": 4,
+    "P1-D2": 3,
+    "P2-D0": 6,
+    "P2-D1": 2,
+    "P2-D2": 4
+  },
+  "prefill_counts": {
+    "P0": 11,
+    "P1": 13,
+    "P2": 12
+  },
+  "decode_counts": {
+    "D0": 12,
+    "D1": 12,
+    "D2": 12
+  },
+  "duplicate_counts": [],
+  "missing_counts": [],
+  "unexpected_counts": [],
+  "invalid_routes": [],
+  "unobserved_routes": [
+    "P0-D0"
+  ],
+  "proxy_log": "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260809-223919-luqia-vllm-nixl-3p3d-forwarding-ttft/results/252772/pd_runtime/proxy.log"
+}
