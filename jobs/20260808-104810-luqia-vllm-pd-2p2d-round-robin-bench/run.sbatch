@@ -176,7 +176,7 @@ echo "slurm_job_id=${SLURM_JOB_ID:-unset} nodelist=${SLURM_JOB_NODELIST:-unset}"
 echo "model=${MODEL}"
 echo "work_dir=${PD_WORK_DIR}"
 echo "cache_paths hf=${HF_HOME} hf_hub=${HF_HUB_CACHE} hf_assets=${HF_ASSETS_CACHE} hf_xet=${HF_XET_CACHE} xdg=${XDG_CACHE_HOME} xdg_config=${XDG_CONFIG_HOME} flashinfer=${FLASHINFER_WORKSPACE_BASE} vllm=${VLLM_CACHE_ROOT} torch=${TORCH_HOME} torch_extensions=${TORCH_EXTENSIONS_DIR} triton=${TRITON_CACHE_DIR} torchinductor=${TORCHINDUCTOR_CACHE_DIR} cuda=${CUDA_CACHE_PATH} numba=${NUMBA_CACHE_DIR} ray_tmp=${RAY_TMPDIR} tmp=${TMPDIR}"
-echo "random_route_policy=prefill_index_0_to_$((PREFILL_REPLICAS - 1)),decode_index_0_to_$((DECODE_REPLICAS - 1))"
+echo "random_route_policy=prefill_first,decode_same_tp_only"
 echo "mixed_tp prefill=${PREFILL_TP_SIZES} decode=${DECODE_TP_SIZES} require_all_routes=${REQUIRE_ALL_RANDOM_ROUTES}"
 echo "bench num_prompts=${NUM_PROMPTS} request_rate=${REQUEST_RATE} input_len=${INPUT_LEN} output_len=${OUTPUT_LEN} max_concurrency=${MAX_CONCURRENCY}"
 echo "output_dir=${OUT_DIR}"
@@ -246,6 +246,8 @@ ROUTE_CHECK_ARGS=(
   --expected-requests "$NUM_PROMPTS" \
   --expected-prefill-count "$PREFILL_REPLICAS" \
   --expected-decode-count "$DECODE_REPLICAS" \
+  --expected-prefill-tp-sizes "$PREFILL_TP_SIZES" \
+  --expected-decode-tp-sizes "$DECODE_TP_SIZES" \
   --output "$ROUTE_CHECK_FILE"
 )
 if [ "$REQUIRE_ALL_RANDOM_ROUTES" = true ]; then

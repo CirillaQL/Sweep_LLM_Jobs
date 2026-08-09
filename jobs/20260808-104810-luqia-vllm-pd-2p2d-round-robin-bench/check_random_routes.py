@@ -19,6 +19,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-requests", type=int, required=True)
     parser.add_argument("--expected-prefill-count", type=int, default=2)
     parser.add_argument("--expected-decode-count", type=int, default=2)
+    parser.add_argument("--expected-prefill-tp-sizes", default="1,1")
+    parser.add_argument("--expected-decode-tp-sizes", default="1,1")
     parser.add_argument("--require-all-routes", action="store_true")
     parser.add_argument("--output", type=Path, required=True)
     return parser.parse_args()
@@ -26,10 +28,25 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    prefill_tp_sizes = tuple(
+        int(value) for value in args.expected_prefill_tp_sizes.split(",")
+    )
+    decode_tp_sizes = tuple(
+        int(value) for value in args.expected_decode_tp_sizes.split(",")
+    )
+    if len(prefill_tp_sizes) != args.expected_prefill_count:
+        raise ValueError(
+            "expected Prefill TP list length to match expected Prefill count"
+        )
+    if len(decode_tp_sizes) != args.expected_decode_count:
+        raise ValueError(
+            "expected Decode TP list length to match expected Decode count"
+        )
     supported_routes = tuple(
         f"P{prefill_index}-D{decode_index}"
-        for prefill_index in range(args.expected_prefill_count)
-        for decode_index in range(args.expected_decode_count)
+        for prefill_index, prefill_tp_size in enumerate(prefill_tp_sizes)
+        for decode_index, decode_tp_size in enumerate(decode_tp_sizes)
+        if prefill_tp_size == decode_tp_size
     )
     observations: dict[int, str] = {}
     duplicate_counts: list[int] = []
@@ -55,8 +72,12 @@ def main() -> int:
         if observations[count] not in supported_routes
     ]
     route_counts = Counter(observations.values())
-    prefill_counts = Counter(route[:2] for route in observations.values())
-    decode_counts = Counter(route[3:] for route in observations.values())
+    prefill_counts = Counter(
+        route.split("-", 1)[0] for route in observations.values()
+    )
+    decode_counts = Counter(
+        route.split("-", 1)[1] for route in observations.values()
+    )
     unobserved_routes = sorted(set(supported_routes) - set(observations.values()))
     passed = not (
         duplicate_counts
@@ -67,7 +88,9 @@ def main() -> int:
     )
     report = {
         "passed": passed,
-        "policy": "independent_random_bits",
+        "policy": "prefill_first_symmetric_tp_random",
+        "prefill_tp_sizes": prefill_tp_sizes,
+        "decode_tp_sizes": decode_tp_sizes,
         "supported_routes": supported_routes,
         "require_all_routes": args.require_all_routes,
         "expected_requests": args.expected_requests,
