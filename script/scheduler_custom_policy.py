@@ -50,6 +50,27 @@ DEFAULT_TP_SIZE = int(os.environ.get("PROXY_DEFAULT_TP_SIZE", "1"))
 HTTP_TIMEOUT = aiohttp.ClientTimeout(total=30 * 60)
 
 
+def parse_tp_sizes(name: str) -> tuple[int, ...]:
+    raw = os.environ.get(name, "").strip()
+    if not raw:
+        return ()
+    values = tuple(int(value) for value in raw.split(","))
+    if any(value <= 0 for value in values):
+        raise ValueError(f"{name} must contain positive integers: {raw!r}")
+    return values
+
+
+def optional_port(name: str) -> int | None:
+    raw = os.environ.get(name, "").strip()
+    return int(raw) if raw else None
+
+
+PREFILL_TP_SIZES = parse_tp_sizes("PREFILL_TP_SIZES")
+DECODE_TP_SIZES = parse_tp_sizes("DECODE_TP_SIZES")
+PREFILL_HTTP_PORT_BASE = optional_port("PREFILL_HTTP_PORT_BASE")
+DECODE_HTTP_PORT_BASE = optional_port("DECODE_HTTP_PORT_BASE")
+
+
 @dataclass(frozen=True)
 class Instance:
     http_address: str
@@ -101,6 +122,30 @@ def http_sort_key(address: str) -> tuple[int, str, str]:
         return 65536, address, address
 
 
+def configured_tp_size(
+    instance_type: str,
+    http_address: str,
+    reported_tp_size: int,
+) -> int:
+    """Resolve mixed TP from the configured per-instance port mapping."""
+    if instance_type == "P":
+        tp_sizes = PREFILL_TP_SIZES
+        port_base = PREFILL_HTTP_PORT_BASE
+    else:
+        tp_sizes = DECODE_TP_SIZES
+        port_base = DECODE_HTTP_PORT_BASE
+    if not tp_sizes or port_base is None:
+        return reported_tp_size
+    try:
+        port = int(http_address.rsplit(":", 1)[1])
+    except (IndexError, ValueError):
+        return reported_tp_size
+    ordinal = port - port_base
+    if 0 <= ordinal < len(tp_sizes):
+        return tp_sizes[ordinal]
+    return reported_tp_size
+
+
 def remove_expired(instances: dict[str, Instance]) -> None:
     now = time.time()
     for key, value in list(instances.items()):
@@ -122,7 +167,10 @@ def listen_for_registration(poller: zmq.Poller, router: zmq.Socket) -> None:
             instance_type = data.get("type")
             http_address = str(data.get("http_address") or "")
             zmq_address = str(data.get("zmq_address") or "")
-            tp_size = int(data.get("tp_size", DEFAULT_TP_SIZE))
+            reported_tp_size = int(data.get("tp_size", DEFAULT_TP_SIZE))
+            tp_size = configured_tp_size(
+                instance_type, http_address, reported_tp_size
+            )
         except (AttributeError, TypeError, ValueError) as exc:
             print(f"registry_invalid error={exc} message={message!r}", flush=True)
             continue
@@ -150,7 +198,8 @@ def listen_for_registration(poller: zmq.Poller, router: zmq.Socket) -> None:
             role = "prefill" if instance_type == "P" else "decode"
             print(
                 f"registry_add role={role} http={http_address} "
-                f"zmq={zmq_address} tp_size={tp_size}",
+                f"zmq={zmq_address} tp_size={tp_size} "
+                f"reported_tp_size={reported_tp_size}",
                 flush=True,
             )
 
