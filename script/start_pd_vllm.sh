@@ -127,32 +127,63 @@ DECODE_KV_PORT_BASE="${DECODE_KV_PORT_BASE:-$((34000 + PORT_OFFSET))}"
 
 PD_OUT_DIR="${PD_OUT_DIR:-$PWD/pd_vllm_${SLURM_JOB_ID}}"
 PD_WORK_DIR="${PD_WORK_DIR:-/data/users/chjing/vllm_job_work/${SLURM_JOB_ID}}"
-export HF_HOME="${HF_HOME:-${PD_WORK_DIR}/huggingface}"
-export HF_TOKEN_PATH="${HF_TOKEN_PATH:-${HF_HOME}/token}"
-export HF_HUB_CACHE="${HF_HUB_CACHE:-${HF_HOME}/hub}"
-export HF_ASSETS_CACHE="${HF_ASSETS_CACHE:-${HF_HOME}/assets}"
-export HF_XET_CACHE="${HF_XET_CACHE:-${HF_HOME}/xet}"
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${PD_WORK_DIR}/xdg-cache}"
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-${PD_WORK_DIR}/xdg-config}"
-export FLASHINFER_WORKSPACE_BASE="${FLASHINFER_WORKSPACE_BASE:-${PD_WORK_DIR}/flashinfer}"
-export VLLM_CACHE_ROOT="${VLLM_CACHE_ROOT:-${PD_WORK_DIR}/vllm-cache}"
-export TORCH_HOME="${TORCH_HOME:-${PD_WORK_DIR}/torch-cache}"
-export TORCH_EXTENSIONS_DIR="${TORCH_EXTENSIONS_DIR:-${PD_WORK_DIR}/torch-extensions}"
-export TRITON_CACHE_DIR="${TRITON_CACHE_DIR:-${PD_WORK_DIR}/triton-cache}"
-export TORCHINDUCTOR_CACHE_DIR="${TORCHINDUCTOR_CACHE_DIR:-${PD_WORK_DIR}/torchinductor-cache}"
-export CUDA_CACHE_PATH="${CUDA_CACHE_PATH:-${PD_WORK_DIR}/cuda-cache}"
-export NUMBA_CACHE_DIR="${NUMBA_CACHE_DIR:-${PD_WORK_DIR}/numba-cache}"
-export RAY_TMPDIR="${RAY_TMPDIR:-${PD_WORK_DIR}/ray-tmp}"
-export TMPDIR="${TMPDIR:-${PD_WORK_DIR}/tmp}"
-export TMP="${TMP:-$TMPDIR}"
-export TEMP="${TEMP:-$TMPDIR}"
+case "$PD_WORK_DIR" in
+  /data/users/chjing/vllm_job_work/"${SLURM_JOB_ID}"|/data/users/chjing/vllm_job_work/"${SLURM_JOB_ID}"/*) ;;
+  *) die "unsafe_pd_work_dir path=${PD_WORK_DIR}" ;;
+esac
+
+# Slurm steps can inherit HOME=/root from the launcher. Force every writable
+# user/cache/config location into this job's disposable work tree. In
+# particular, NIXL otherwise probes $HOME/.nixl.cfg during agent startup.
+umask 077
+export HOME="${PD_WORK_DIR}/home"
+export XDG_CACHE_HOME="${PD_WORK_DIR}/xdg-cache"
+export XDG_CONFIG_HOME="${PD_WORK_DIR}/xdg-config"
+export XDG_DATA_HOME="${PD_WORK_DIR}/xdg-data"
+export XDG_STATE_HOME="${PD_WORK_DIR}/xdg-state"
+export XDG_RUNTIME_DIR="${PD_WORK_DIR}/xdg-runtime"
+export NIXL_CONFIG_FILE="${PD_WORK_DIR}/nixl/nixl.cfg"
+export HF_HOME="${PD_WORK_DIR}/huggingface"
+export HF_TOKEN_PATH="${HF_HOME}/token"
+export HF_HUB_CACHE="${HF_HOME}/hub"
+export HF_ASSETS_CACHE="${HF_HOME}/assets"
+export HF_XET_CACHE="${HF_HOME}/xet"
+export HF_DATASETS_CACHE="${HF_HOME}/datasets"
+export HF_MODULES_CACHE="${HF_HOME}/modules"
+export FLASHINFER_WORKSPACE_BASE="${PD_WORK_DIR}/flashinfer"
+export VLLM_CACHE_ROOT="${PD_WORK_DIR}/vllm-cache"
+export VLLM_CONFIG_ROOT="${PD_WORK_DIR}/vllm-config"
+export TORCH_HOME="${PD_WORK_DIR}/torch-cache"
+export TORCH_EXTENSIONS_DIR="${PD_WORK_DIR}/torch-extensions"
+export TRITON_CACHE_DIR="${PD_WORK_DIR}/triton-cache"
+export TORCHINDUCTOR_CACHE_DIR="${PD_WORK_DIR}/torchinductor-cache"
+export CUDA_CACHE_PATH="${PD_WORK_DIR}/cuda-cache"
+export NUMBA_CACHE_DIR="${PD_WORK_DIR}/numba-cache"
+export RAY_TMPDIR="${PD_WORK_DIR}/ray-tmp"
+export PIP_CACHE_DIR="${PD_WORK_DIR}/pip-cache"
+export UV_CACHE_DIR="${PD_WORK_DIR}/uv-cache"
+export PYTHONPYCACHEPREFIX="${PD_WORK_DIR}/python-pycache"
+export TIKTOKEN_CACHE_DIR="${PD_WORK_DIR}/tiktoken-cache"
+export MPLCONFIGDIR="${PD_WORK_DIR}/matplotlib"
+export CUPY_CACHE_DIR="${PD_WORK_DIR}/cupy-cache"
+export TMPDIR="${PD_WORK_DIR}/tmp"
+export TMP="$TMPDIR"
+export TEMP="$TMPDIR"
 mkdir -p \
-  "$PD_OUT_DIR" "$PD_WORK_DIR" "$HF_HOME" "$HF_HUB_CACHE" \
-  "$HF_ASSETS_CACHE" "$HF_XET_CACHE" "$XDG_CACHE_HOME" \
-  "$XDG_CONFIG_HOME" "$FLASHINFER_WORKSPACE_BASE" "$VLLM_CACHE_ROOT" \
-  "$TORCH_HOME" "$TORCH_EXTENSIONS_DIR" "$TRITON_CACHE_DIR" \
+  "$PD_OUT_DIR" "$PD_WORK_DIR" "$HOME" "$HF_HOME" "$HF_HUB_CACHE" \
+  "$HF_ASSETS_CACHE" "$HF_XET_CACHE" "$HF_DATASETS_CACHE" \
+  "$HF_MODULES_CACHE" "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME" \
+  "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_RUNTIME_DIR" \
+  "$(dirname -- "$NIXL_CONFIG_FILE")" "$FLASHINFER_WORKSPACE_BASE" \
+  "$VLLM_CACHE_ROOT" "$VLLM_CONFIG_ROOT" "$TORCH_HOME" \
+  "$TORCH_EXTENSIONS_DIR" "$TRITON_CACHE_DIR" \
   "$TORCHINDUCTOR_CACHE_DIR" "$CUDA_CACHE_PATH" "$NUMBA_CACHE_DIR" \
-  "$RAY_TMPDIR" "$TMPDIR"
+  "$RAY_TMPDIR" "$PIP_CACHE_DIR" "$UV_CACHE_DIR" \
+  "$PYTHONPYCACHEPREFIX" "$TIKTOKEN_CACHE_DIR" "$MPLCONFIGDIR" \
+  "$CUPY_CACHE_DIR" "$TMPDIR"
+touch "$NIXL_CONFIG_FILE"
+chmod 600 "$NIXL_CONFIG_FILE"
+chmod 700 "$HOME" "$XDG_RUNTIME_DIR"
 RUNTIME_PROXY_SCRIPT="${PD_WORK_DIR}/scheduler_custom_policy.py"
 RUNTIME_INSTANCE_SCRIPT="${PD_WORK_DIR}/start_pd_vllm_instance.sh"
 cp -- "$PROXY_SCRIPT" "$RUNTIME_PROXY_SCRIPT"
@@ -295,6 +326,10 @@ launch_instance() {
       PD_KV_CONNECTOR="${PD_KV_CONNECTOR:-NixlConnector}" \
       PD_KV_LOAD_FAILURE_POLICY="${PD_KV_LOAD_FAILURE_POLICY:-fail}" \
       PD_OUT_DIR="$PD_OUT_DIR" PD_WORK_DIR="$PD_WORK_DIR" \
+      HOME="$HOME" NIXL_CONFIG_FILE="$NIXL_CONFIG_FILE" \
+      XDG_CACHE_HOME="$XDG_CACHE_HOME" XDG_CONFIG_HOME="$XDG_CONFIG_HOME" \
+      XDG_DATA_HOME="$XDG_DATA_HOME" XDG_STATE_HOME="$XDG_STATE_HOME" \
+      XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
       MAX_MODEL_LEN="$MAX_MODEL_LEN" \
       MAX_NUM_BATCHED_TOKENS="$MAX_NUM_BATCHED_TOKENS" \
       MAX_NUM_SEQS="$MAX_NUM_SEQS" \
@@ -359,8 +394,12 @@ print_instance_mapping() {
 
 echo "pd_topology connector=${PD_KV_CONNECTOR:-NixlConnector} proxy=${PROXY_NODE}/${PROXY_IP}:${PROXY_HTTP_PORT} prefill=${PREFILL_NODE}/${PREFILL_IP} replicas=${PREFILL_REPLICAS} gpu=${PREFILL_GPU_MODEL} tp_sizes=${PREFILL_TP_SIZES} decode=${DECODE_NODE}/${DECODE_IP} replicas=${DECODE_REPLICAS} gpu=${DECODE_GPU_MODEL} tp_sizes=${DECODE_TP_SIZES}"
 echo "pd_paths output=${PD_OUT_DIR} work=${PD_WORK_DIR} proxy_script=${RUNTIME_PROXY_SCRIPT}"
-echo "pd_cache_paths hf=${HF_HOME} hf_hub=${HF_HUB_CACHE} hf_assets=${HF_ASSETS_CACHE} hf_xet=${HF_XET_CACHE} xdg=${XDG_CACHE_HOME} xdg_config=${XDG_CONFIG_HOME} flashinfer=${FLASHINFER_WORKSPACE_BASE} vllm=${VLLM_CACHE_ROOT} torch=${TORCH_HOME} torch_extensions=${TORCH_EXTENSIONS_DIR} triton=${TRITON_CACHE_DIR} torchinductor=${TORCHINDUCTOR_CACHE_DIR} cuda=${CUDA_CACHE_PATH} numba=${NUMBA_CACHE_DIR} ray_tmp=${RAY_TMPDIR} tmp=${TMPDIR}"
+echo "pd_cache_paths home=${HOME} nixl_config=${NIXL_CONFIG_FILE} hf=${HF_HOME} hf_hub=${HF_HUB_CACHE} hf_assets=${HF_ASSETS_CACHE} hf_xet=${HF_XET_CACHE} xdg=${XDG_CACHE_HOME} xdg_config=${XDG_CONFIG_HOME} xdg_data=${XDG_DATA_HOME} xdg_state=${XDG_STATE_HOME} xdg_runtime=${XDG_RUNTIME_DIR} flashinfer=${FLASHINFER_WORKSPACE_BASE} vllm=${VLLM_CACHE_ROOT} vllm_config=${VLLM_CONFIG_ROOT} torch=${TORCH_HOME} torch_extensions=${TORCH_EXTENSIONS_DIR} triton=${TRITON_CACHE_DIR} torchinductor=${TORCHINDUCTOR_CACHE_DIR} cuda=${CUDA_CACHE_PATH} numba=${NUMBA_CACHE_DIR} ray_tmp=${RAY_TMPDIR} pip=${PIP_CACHE_DIR} uv=${UV_CACHE_DIR} pycache=${PYTHONPYCACHEPREFIX} tiktoken=${TIKTOKEN_CACHE_DIR} matplotlib=${MPLCONFIGDIR} cupy=${CUPY_CACHE_DIR} tmp=${TMPDIR}"
 print_instance_mapping
+
+# Any relative files created by the proxy or its child processes also land in
+# the disposable per-job tree.
+cd "$PD_WORK_DIR"
 
 srun --overlap --kill-on-bad-exit=1 --exact --nodes=1 --nodelist="$PROXY_NODE" \
   --ntasks=1 --ntasks-per-node=1 --cpus-per-task=2 --mem=4G --gres=none \

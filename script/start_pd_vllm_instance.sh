@@ -32,9 +32,66 @@ esac
 
 for name in MODEL VLLM_BIN PYTHON_BIN PD_INSTANCE_NAME PD_EXPECTED_GPU_MODEL \
   PD_NODE_IP PD_NET_IFACE PD_HTTP_PORT PD_KV_PORT PD_TP_SIZE PROXY_IP \
-  PROXY_REGISTER_PORT PD_OUT_DIR; do
+  PROXY_REGISTER_PORT PD_OUT_DIR PD_WORK_DIR; do
   require_env "$name"
 done
+
+case "$PD_WORK_DIR" in
+  /data/users/chjing/vllm_job_work/"${SLURM_JOB_ID}"|/data/users/chjing/vllm_job_work/"${SLURM_JOB_ID}"/*) ;;
+  *) die "unsafe_pd_work_dir path=${PD_WORK_DIR}" ;;
+esac
+
+# Repeat the path isolation inside each Slurm step so a direct invocation of
+# this script cannot fall back to the submit host's HOME or cache directories.
+umask 077
+export HOME="${PD_WORK_DIR}/home"
+export XDG_CACHE_HOME="${PD_WORK_DIR}/xdg-cache"
+export XDG_CONFIG_HOME="${PD_WORK_DIR}/xdg-config"
+export XDG_DATA_HOME="${PD_WORK_DIR}/xdg-data"
+export XDG_STATE_HOME="${PD_WORK_DIR}/xdg-state"
+export XDG_RUNTIME_DIR="${PD_WORK_DIR}/xdg-runtime"
+export NIXL_CONFIG_FILE="${PD_WORK_DIR}/nixl/nixl.cfg"
+export HF_HOME="${PD_WORK_DIR}/huggingface"
+export HF_TOKEN_PATH="${HF_HOME}/token"
+export HF_HUB_CACHE="${HF_HOME}/hub"
+export HF_ASSETS_CACHE="${HF_HOME}/assets"
+export HF_XET_CACHE="${HF_HOME}/xet"
+export HF_DATASETS_CACHE="${HF_HOME}/datasets"
+export HF_MODULES_CACHE="${HF_HOME}/modules"
+export FLASHINFER_WORKSPACE_BASE="${PD_WORK_DIR}/flashinfer"
+export VLLM_CACHE_ROOT="${PD_WORK_DIR}/vllm-cache"
+export VLLM_CONFIG_ROOT="${PD_WORK_DIR}/vllm-config"
+export TORCH_HOME="${PD_WORK_DIR}/torch-cache"
+export TORCH_EXTENSIONS_DIR="${PD_WORK_DIR}/torch-extensions"
+export TRITON_CACHE_DIR="${PD_WORK_DIR}/triton-cache"
+export TORCHINDUCTOR_CACHE_DIR="${PD_WORK_DIR}/torchinductor-cache"
+export CUDA_CACHE_PATH="${PD_WORK_DIR}/cuda-cache"
+export NUMBA_CACHE_DIR="${PD_WORK_DIR}/numba-cache"
+export RAY_TMPDIR="${PD_WORK_DIR}/ray-tmp"
+export PIP_CACHE_DIR="${PD_WORK_DIR}/pip-cache"
+export UV_CACHE_DIR="${PD_WORK_DIR}/uv-cache"
+export PYTHONPYCACHEPREFIX="${PD_WORK_DIR}/python-pycache"
+export TIKTOKEN_CACHE_DIR="${PD_WORK_DIR}/tiktoken-cache"
+export MPLCONFIGDIR="${PD_WORK_DIR}/matplotlib"
+export CUPY_CACHE_DIR="${PD_WORK_DIR}/cupy-cache"
+export TMPDIR="${PD_WORK_DIR}/tmp"
+export TMP="$TMPDIR"
+export TEMP="$TMPDIR"
+mkdir -p \
+  "$PD_OUT_DIR" "$HOME" "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME" \
+  "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_RUNTIME_DIR" \
+  "$(dirname -- "$NIXL_CONFIG_FILE")" "$HF_HOME" "$HF_HUB_CACHE" \
+  "$HF_ASSETS_CACHE" "$HF_XET_CACHE" "$HF_DATASETS_CACHE" \
+  "$HF_MODULES_CACHE" "$FLASHINFER_WORKSPACE_BASE" "$VLLM_CACHE_ROOT" \
+  "$VLLM_CONFIG_ROOT" "$TORCH_HOME" "$TORCH_EXTENSIONS_DIR" \
+  "$TRITON_CACHE_DIR" "$TORCHINDUCTOR_CACHE_DIR" "$CUDA_CACHE_PATH" \
+  "$NUMBA_CACHE_DIR" "$RAY_TMPDIR" "$PIP_CACHE_DIR" "$UV_CACHE_DIR" \
+  "$PYTHONPYCACHEPREFIX" "$TIKTOKEN_CACHE_DIR" "$MPLCONFIGDIR" \
+  "$CUPY_CACHE_DIR" "$TMPDIR"
+touch "$NIXL_CONFIG_FILE"
+chmod 600 "$NIXL_CONFIG_FILE"
+chmod 700 "$HOME" "$XDG_RUNTIME_DIR"
+cd "$PD_WORK_DIR"
 
 for value_name in PD_HTTP_PORT PD_KV_PORT PD_TP_SIZE PROXY_REGISTER_PORT; do
   value="${!value_name}"
@@ -160,6 +217,7 @@ fi
 echo "pd_instance_start instance=${PD_INSTANCE_NAME} role=${ROLE} ordinal=${ORDINAL} host=$(hostname -s) gpu_model=${GPU_NAME} node_ip=${PD_NODE_IP} http_port=${PD_HTTP_PORT} kv_port=${PD_KV_PORT} tp=${PD_TP_SIZE} visible_gpus=${VISIBLE_GPUS}"
 echo "pd_instance_network interface=${PD_NET_IFACE} proxy=${PROXY_IP}:${PROXY_REGISTER_PORT} nccl_net=${NCCL_NET}"
 echo "pd_instance_connector connector=${PD_KV_CONNECTOR} nixl_side_channel=${VLLM_NIXL_SIDE_CHANNEL_HOST:-unset}:${VLLM_NIXL_SIDE_CHANNEL_PORT:-unset} ucx_tls=${UCX_TLS:-unset} ucx_net_devices=${UCX_NET_DEVICES:-unset}"
+echo "pd_instance_paths work=${PD_WORK_DIR} home=${HOME} nixl_config=${NIXL_CONFIG_FILE} xdg_cache=${XDG_CACHE_HOME} tmp=${TMPDIR} cwd=${PWD}"
 echo "pd_instance_model model=${MODEL} max_model_len=${MAX_MODEL_LEN} max_num_batched_tokens=${MAX_NUM_BATCHED_TOKENS} max_num_seqs=${MAX_NUM_SEQS}"
 
 exec "$VLLM_BIN" "${VLLM_ARGS[@]}"
