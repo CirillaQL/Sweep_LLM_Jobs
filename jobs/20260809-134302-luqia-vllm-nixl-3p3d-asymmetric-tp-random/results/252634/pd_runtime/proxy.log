@@ -7,3 +7,11 @@ registry_add source=http role=decode http=10.1.0.3:33546 kv=10.1.0.3:34546 tp_si
 registry_add source=http role=prefill http=10.1.0.5:32544 kv=10.1.0.5:34544 tp_size=1 reported_tp_size=1
 registry_add source=http role=prefill http=10.1.0.5:32545 kv=10.1.0.5:34545 tp_size=1 reported_tp_size=1
 registry_add source=http role=prefill http=10.1.0.5:32546 kv=10.1.0.5:34546 tp_size=2 reported_tp_size=2
+route count=0 policy_route=P1-D0 request_id=4cc3eefb3fa6403da11b89464baac4f0 prefill_http=10.1.0.5:32545 prefill_tp=1 decode_http=10.1.0.3:33544 decode_tp=1
+route count=1 policy_route=P1-D1 request_id=989cd772d1834bbbbadc4713db87bab8 prefill_http=10.1.0.5:32545 prefill_tp=1 decode_http=10.1.0.3:33545 decode_tp=1
+route count=2 policy_route=P2-D2 request_id=0a1ecbbe35a74dc397a90bc5138ddcf6 prefill_http=10.1.0.5:32546 prefill_tp=2 decode_http=10.1.0.3:33546 decode_tp=2
+route count=3 policy_route=P2-D1 request_id=a0f88da8114043ea90b5d33da28b1876 prefill_http=10.1.0.5:32546 prefill_tp=2 decode_http=10.1.0.3:33545 decode_tp=1
+route count=4 policy_route=P1-D1 request_id=ed1cb06c239248d3a61ff671c9f60b22 prefill_http=10.1.0.5:32545 prefill_tp=1 decode_http=10.1.0.3:33545 decode_tp=1
+route count=5 policy_route=P1-D0 request_id=0317686ec07745aa8d02210aa2dda357 prefill_http=10.1.0.5:32545 prefill_tp=1 decode_http=10.1.0.3:33544 decode_tp=1
+route count=6 policy_route=P1-D2 request_id=7c8f88b4b5224e2e9f74e8a54e7ca606 prefill_http=10.1.0.5:32545 prefill_tp=1 decode_http=10.1.0.3:33546 decode_tp=2
+route count=7 policy_route=P1-D0 request_id=fe9a9cbae0a24948bbd5f3b6715556b4 prefill_http=10.1.0.5:32545 prefill_tp=1 decode_http=10.1.0.3:33544 decode_tp=1
