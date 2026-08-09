@@ -1,0 +1,8 @@
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+pd_instance_start instance=Prefill_2 role=prefill ordinal=2 host=uranus gpu_model=NVIDIA L40S|NVIDIA L40S node_ip=10.1.0.5 http_port=32178 kv_port=34178 tp=2 visible_gpus=2,3
+pd_instance_network interface=enp160s0f0np0 proxy=10.1.0.3:31176 nccl_net=Socket
+pd_instance_connector connector=NixlConnector nixl_side_channel=10.1.0.5:34178 ucx_tls=all ucx_net_devices=enp160s0f0np0
+pd_instance_paths work=/data/users/chjing/vllm_job_work/252671 home=/data/users/chjing/vllm_job_work/252671/home nixl_config=/data/users/chjing/vllm_job_work/252671/nixl/nixl.cfg xdg_cache=/data/users/chjing/vllm_job_work/252671/xdg-cache tmp=/data/users/chjing/vllm_job_work/252671/tmp cwd=/data/users/chjing/vllm_job_work/252671
+pd_instance_model model=mistralai/Mistral-7B-v0.1 max_model_len=8192 max_num_batched_tokens=8192 max_num_seqs=32
+pd_clock_agent_started instance=Prefill_2 pid=930483 visible_gpus=2,3
