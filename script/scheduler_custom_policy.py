@@ -78,6 +78,7 @@ DVFS_CLOCK_TIMEOUT_SECONDS = float(
 DVFS_CLOCK_TOLERANCE_MHZ = int(
     os.environ.get("PD_DVFS_CLOCK_TOLERANCE_MHZ", "30")
 )
+DVFS_SETTLE_SECONDS = float(os.environ.get("PD_DVFS_SETTLE_SECONDS", "0"))
 DVFS_OVERLOAD_ACTION = os.environ.get("PD_DVFS_OVERLOAD_ACTION", "reject")
 DVFS_DECISIONS_FILE = Path(
     os.environ.get(
@@ -779,6 +780,7 @@ async def execute_scheduled_request(
     started_wall = time.time()
     started = time.monotonic()
     first_decode_chunk_at: float | None = None
+    forwarding_started: float | None = None
     record: dict[str, Any] = {
         "request_index": index,
         "request_id": request_id,
@@ -853,6 +855,7 @@ async def execute_scheduled_request(
                     "apply_total_ms": round(
                         (time.monotonic() - clock_started) * 1000.0, 3
                     ),
+                    "settle_seconds_excluded_from_ttft": DVFS_SETTLE_SECONDS,
                 }
                 print(
                     f"dvfs count={index} route={route} status={decision['status']} "
@@ -860,15 +863,18 @@ async def execute_scheduled_request(
                     f"predicted_ttft_ms={selected['prefill']['p99_ttft_ms']} "
                     f"predicted_tpot_ms={selected['decode']['p99_tpot_ms']} "
                     f"predicted_power_w={selected['predicted_cluster_power_w']} "
-                    f"clock_lock_wait_ms={lock_wait_ms}",
+                    f"clock_lock_wait_ms={lock_wait_ms} "
+                    f"settle_seconds={DVFS_SETTLE_SECONDS}",
                     flush=True,
                 )
+                forwarding_started = time.monotonic()
                 response, first_decode_chunk_at = await run_pd_forwarding(
                     request, original, route, prefill_alias, decode_alias,
                     prefill_instance, decode_instance, request_id,
                     p_freq=p_freq, d_freq=d_freq,
                 )
         else:
+            forwarding_started = time.monotonic()
             response, first_decode_chunk_at = await run_pd_forwarding(
                 request, original, route, prefill_alias, decode_alias,
                 prefill_instance, decode_instance, request_id,
@@ -880,25 +886,47 @@ async def execute_scheduled_request(
         raise
     finally:
         ended = time.monotonic()
-        e2e_ms = (ended - started) * 1000.0
-        ttft_ms = (
+        raw_e2e_ms = (ended - started) * 1000.0
+        raw_ttft_ms = (
             (first_decode_chunk_at - started) * 1000.0
             if first_decode_chunk_at is not None else None
         )
+        excluded_settle_ms = (
+            DVFS_SETTLE_SECONDS * 1000.0 if ENABLE_PREDICTIVE_DVFS else 0.0
+        )
+        e2e_ms = max(0.0, raw_e2e_ms - excluded_settle_ms)
+        ttft_ms = (
+            max(0.0, raw_ttft_ms - excluded_settle_ms)
+            if raw_ttft_ms is not None else None
+        )
+        forwarding_ttft_ms = (
+            (first_decode_chunk_at - forwarding_started) * 1000.0
+            if first_decode_chunk_at is not None and forwarding_started is not None
+            else None
+        )
         ol = int(record.get("output_tokens_requested", 1))
         proxy_tpot_ms = (
-            max(0.0, e2e_ms - ttft_ms) / max(1, ol - 1)
-            if ttft_ms is not None and ol > 1 else None
+            max(0.0, raw_e2e_ms - raw_ttft_ms) / max(1, ol - 1)
+            if raw_ttft_ms is not None and ol > 1 else None
         )
         record["actual"] = {
             "success": success,
             "error": error,
             "clock_lock_wait_ms": lock_wait_ms,
             "proxy_ttft_ms": round(ttft_ms, 3) if ttft_ms is not None else None,
+            "proxy_ttft_raw_ms": (
+                round(raw_ttft_ms, 3) if raw_ttft_ms is not None else None
+            ),
+            "proxy_ttft_excluded_settle_ms": round(excluded_settle_ms, 3),
+            "proxy_forwarding_ttft_ms": (
+                round(forwarding_ttft_ms, 3)
+                if forwarding_ttft_ms is not None else None
+            ),
             "proxy_tpot_estimate_ms": (
                 round(proxy_tpot_ms, 3) if proxy_tpot_ms is not None else None
             ),
             "proxy_e2e_ms": round(e2e_ms, 3),
+            "proxy_e2e_raw_ms": round(raw_e2e_ms, 3),
             "ttft_slo_met": (
                 ttft_ms <= float(record["slo_ttft_ms"])
                 if ttft_ms is not None and "slo_ttft_ms" in record else None
@@ -1090,6 +1118,7 @@ if __name__ == "__main__":
         f"predictive_dvfs={str(ENABLE_PREDICTIVE_DVFS).lower()} "
         f"dvfs_slo_ttft_ms={DVFS_SLO_TTFT_MS} "
         f"dvfs_slo_tpot_ms={DVFS_SLO_TPOT_MS} "
+        f"dvfs_settle_seconds={DVFS_SETTLE_SECONDS} "
         f"routes={'all_pairs' if ALLOW_ASYMMETRIC_TP else 'symmetric_tp_pairs'}",
         flush=True,
     )

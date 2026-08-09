@@ -16,6 +16,7 @@ def main() -> int:
     parser.add_argument("--telemetry-dir", type=Path, required=True)
     parser.add_argument("--expected-requests", type=int, required=True)
     parser.add_argument("--clock-tolerance-mhz", type=float, default=30.0)
+    parser.add_argument("--settle-seconds", type=float, default=0.0)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
@@ -58,6 +59,21 @@ def main() -> int:
             )
         actual_ttft_slo_met += int(actual.get("ttft_slo_met") is True)
         actual_tpot_slo_met += int(actual.get("tpot_slo_met") is True)
+        raw_ttft = actual.get("proxy_ttft_raw_ms")
+        corrected_ttft = actual.get("proxy_ttft_ms")
+        if actual.get("success") is True:
+            try:
+                excluded = float(raw_ttft) - float(corrected_ttft)
+                expected_excluded = args.settle_seconds * 1000.0
+                if abs(excluded - expected_excluded) > 10.0:
+                    errors.append(
+                        f"request {item.get('request_index')} excluded TTFT "
+                        f"{excluded:.3f} ms != expected {expected_excluded:.3f} ms"
+                    )
+            except (TypeError, ValueError):
+                errors.append(
+                    f"request {item.get('request_index')} has invalid raw/corrected TTFT"
+                )
         recommended = prediction.get("recommended") or {}
         if recommended.get("is_safe") is not True:
             errors.append(
@@ -80,6 +96,15 @@ def main() -> int:
             if int(ack.get("rc", -1)) != 0:
                 errors.append(
                     f"request {item.get('request_index')} {role} clock rc={ack.get('rc')}"
+                )
+            try:
+                ack_settle = float(ack.get("settle_seconds", -1))
+            except (TypeError, ValueError):
+                ack_settle = -1
+            if abs(ack_settle - args.settle_seconds) > 0.01:
+                errors.append(
+                    f"request {item.get('request_index')} {role} settle_seconds="
+                    f"{ack.get('settle_seconds')} expected={args.settle_seconds}"
                 )
             observed = ack.get("observed_mhz", [])
             if not isinstance(observed, list):
@@ -120,6 +145,7 @@ def main() -> int:
     result = {
         "ok": not errors,
         "expected_requests": args.expected_requests,
+        "expected_settle_seconds": args.settle_seconds,
         "decision_count": len(records),
         "successful_decisions": success_count,
         "safe_decisions": safe_count,

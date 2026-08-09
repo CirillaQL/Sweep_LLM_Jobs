@@ -66,6 +66,7 @@ def main() -> int:
     gpu_ids = [value.strip() for value in os.environ["CUDA_VISIBLE_DEVICES"].split(",")]
     output = Path(os.environ["PD_OUT_DIR"]) / f"gpu_telemetry_{instance}.csv"
     interval = float(os.environ.get("PD_DVFS_TELEMETRY_INTERVAL_SECONDS", "0.5"))
+    settle_seconds = float(os.environ.get("PD_DVFS_SETTLE_SECONDS", "0"))
     output.parent.mkdir(parents=True, exist_ok=True)
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
@@ -105,6 +106,27 @@ def main() -> int:
                             f"gpu={gpu_id} rc={proc.returncode} "
                             f"stderr={proc.stderr.strip()}"
                         )
+                lgc_applied = time.time()
+                settle_deadline = time.monotonic() + settle_seconds
+                while RUNNING and time.monotonic() < settle_deadline:
+                    sample_time = time.time()
+                    for gpu_id in gpu_ids:
+                        probe = query_gpu(gpu_id)
+                        writer.writerow({
+                            "unix_ts": f"{sample_time:.6f}", "node": node,
+                            "instance": instance, "gpu_id": gpu_id,
+                            "gpu_uuid": probe["uuid"], "clock_seq": seq,
+                            "target_freq_mhz": target_mhz,
+                            "actual_freq_mhz": probe["clock_mhz"],
+                            "power_w": probe["power_w"],
+                            "util_gpu_pct": probe["util_pct"],
+                            "temperature_c": probe["temperature_c"],
+                            "memory_used_mib": probe["memory_used_mib"],
+                        })
+                    handle.flush()
+                    remaining = settle_deadline - time.monotonic()
+                    if remaining > 0:
+                        time.sleep(min(interval, remaining))
                 probes = {gpu_id: query_gpu(gpu_id) for gpu_id in gpu_ids}
                 observed = [probe["clock_mhz"] for probe in probes.values()]
                 rc = 0 if not errors else 31
@@ -113,6 +135,9 @@ def main() -> int:
                     "target_mhz": target_mhz, "rc": rc,
                     "observed_mhz": observed, "gpu_ids": gpu_ids,
                     "apply_ms": round((time.time() - started) * 1000.0, 3),
+                    "lgc_apply_ms": round((lgc_applied - started) * 1000.0, 3),
+                    "settle_seconds": settle_seconds,
+                    "settle_wait_ms": round((time.time() - lgc_applied) * 1000.0, 3),
                     "errors": errors,
                 }
                 try:
@@ -120,6 +145,7 @@ def main() -> int:
                 except (urllib.error.URLError, TimeoutError):
                     pass
                 last_seq = seq
+                next_sample = time.time() + interval
             now = time.time()
             if now >= next_sample:
                 for gpu_id in gpu_ids:

@@ -89,6 +89,9 @@ ROUTE_CHECK_FILE="${OUT_DIR}/random_route_check.json"
 CHECKER="${SOURCE_JOB_DIR}/check_random_routes.py"
 DVFS_CHECKER="${SCRIPT_ROOT}/check_request_dvfs.py"
 DVFS_CHECK_FILE="${OUT_DIR}/request_dvfs_check.json"
+DVFS_TTFT_CORRECTOR="${SCRIPT_ROOT}/correct_vllm_bench_dvfs_ttft.py"
+DVFS_CORRECTED_BENCH_RESULT="${OUT_DIR}/vllm_bench_detailed_excluding_dvfs_wait.json"
+DVFS_CORRECTED_BENCH_LOG="${OUT_DIR}/vllm_bench_ttft_excluding_dvfs_wait.txt"
 
 export PATH="${ENV_DIR}/bin:${PATH}"
 export PYTHON_BIN VLLM_BIN MODEL STARTUP_TIMEOUT_SECONDS
@@ -121,6 +124,8 @@ export PD_DVFS_OVERLOAD_ACTION="${PD_DVFS_OVERLOAD_ACTION_OVERRIDE:-reject}"
 export PD_DVFS_CLOCK_TOLERANCE_MHZ="${PD_DVFS_CLOCK_TOLERANCE_MHZ_OVERRIDE:-30}"
 export PD_DVFS_KV_EFFECTIVE_BANDWIDTH_GBPS="${PD_DVFS_KV_EFFECTIVE_BANDWIDTH_GBPS_OVERRIDE:-}"
 export PD_DVFS_DISPATCH_MS="${PD_DVFS_DISPATCH_MS_OVERRIDE:-0}"
+export PD_DVFS_SETTLE_SECONDS="${PD_DVFS_SETTLE_SECONDS_OVERRIDE:-0}"
+export PD_DVFS_CLOCK_TIMEOUT_SECONDS="${PD_DVFS_CLOCK_TIMEOUT_SECONDS_OVERRIDE:-30}"
 export MAX_MODEL_LEN=8192
 export MAX_NUM_BATCHED_TOKENS=8192
 export MAX_NUM_SEQS=32
@@ -222,7 +227,7 @@ echo "cache_paths home=${HOME} nixl_config=${NIXL_CONFIG_FILE} hf=${HF_HOME} hf_
 echo "random_route_policy=prefill_first,allow_asymmetric_tp=${CUSTOM_PD_ALLOW_ASYMMETRIC_TP}"
 echo "mixed_tp prefill=${PREFILL_TP_SIZES} decode=${DECODE_TP_SIZES} require_all_routes=${REQUIRE_ALL_RANDOM_ROUTES}"
 echo "bench num_prompts=${NUM_PROMPTS} request_rate=${REQUEST_RATE} input_len=${INPUT_LEN} output_len=${OUTPUT_LEN} max_concurrency=${MAX_CONCURRENCY}"
-echo "predictive_dvfs enabled=${PD_ENABLE_PREDICTIVE_DVFS} slo_ttft_ms=${PD_DVFS_SLO_TTFT_MS} slo_tpot_ms=${PD_DVFS_SLO_TPOT_MS} expected_rate=${PD_DVFS_EXPECTED_REQUEST_RATE} overload_action=${PD_DVFS_OVERLOAD_ACTION}"
+echo "predictive_dvfs enabled=${PD_ENABLE_PREDICTIVE_DVFS} slo_ttft_ms=${PD_DVFS_SLO_TTFT_MS} slo_tpot_ms=${PD_DVFS_SLO_TPOT_MS} expected_rate=${PD_DVFS_EXPECTED_REQUEST_RATE} overload_action=${PD_DVFS_OVERLOAD_ACTION} settle_seconds=${PD_DVFS_SETTLE_SECONDS}"
 echo "output_dir=${OUT_DIR}"
 
 for required in \
@@ -235,9 +240,13 @@ for required in \
     exit 2
   fi
 done
-if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ] && [ ! -s "$DVFS_CHECKER" ]; then
-  echo "required_artifact_missing=${DVFS_CHECKER}"
-  exit 2
+if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
+  for required in "$DVFS_CHECKER" "$DVFS_TTFT_CORRECTOR"; do
+    if [ ! -s "$required" ]; then
+      echo "required_artifact_missing=${required}"
+      exit 2
+    fi
+  done
 fi
 if [ ! -x "$PYTHON_BIN" ] || [ ! -x "$VLLM_BIN" ]; then
   echo "vllm_environment_missing=true python=${PYTHON_BIN} vllm=${VLLM_BIN}"
@@ -287,6 +296,18 @@ print(successful.group(1) if successful else -1, failed.group(1) if failed else 
 ' "$BENCH_LOG")"
 echo "bench_rc=${BENCH_RC} successful_requests=${SUCCESSFUL_REQUESTS} failed_requests=${FAILED_REQUESTS}"
 
+TTFT_CORRECTION_RC=0
+if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
+  echo "phase=correct_ttft_excluding_dvfs_wait"
+  "$PYTHON_BIN" "$DVFS_TTFT_CORRECTOR" \
+    --input "${OUT_DIR}/${BENCH_RESULT}" \
+    --wait-seconds "$PD_DVFS_SETTLE_SECONDS" \
+    --output "$DVFS_CORRECTED_BENCH_RESULT" \
+    > "$DVFS_CORRECTED_BENCH_LOG" 2>&1 || TTFT_CORRECTION_RC=$?
+  cat "$DVFS_CORRECTED_BENCH_LOG" 2>/dev/null || true
+  echo "ttft_correction_rc=${TTFT_CORRECTION_RC}"
+fi
+
 echo "phase=verify_random_routes"
 ROUTE_CHECK_RC=0
 ROUTE_CHECK_ARGS=(
@@ -316,6 +337,7 @@ if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
     --telemetry-dir "$PD_OUT_DIR" \
     --expected-requests "$NUM_PROMPTS" \
     --clock-tolerance-mhz "$PD_DVFS_CLOCK_TOLERANCE_MHZ" \
+    --settle-seconds "$PD_DVFS_SETTLE_SECONDS" \
     --output "$DVFS_CHECK_FILE" || DVFS_CHECK_RC=$?
   echo "request_dvfs_check_rc=${DVFS_CHECK_RC}"
 fi
@@ -331,6 +353,9 @@ if [ "$ROUTE_CHECK_RC" -ne 0 ]; then
 fi
 if [ "$DVFS_CHECK_RC" -ne 0 ]; then
   FINAL_RC=13
+fi
+if [ "$TTFT_CORRECTION_RC" -ne 0 ]; then
+  FINAL_RC=14
 fi
 if ! kill -0 "$PD_LAUNCHER_PID" 2>/dev/null; then
   echo "pd_launcher_alive_after_bench=false"
