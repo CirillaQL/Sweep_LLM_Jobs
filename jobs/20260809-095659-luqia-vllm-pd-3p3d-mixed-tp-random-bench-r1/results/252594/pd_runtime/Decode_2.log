@@ -127,3 +127,36 @@ INFO 08-09 10:02:42 [parallel_state.py:1423] rank 1 in world size 2 is assigned 
 [0;36m(Worker_TP0 pid=1023558)[0;0m INFO 08-09 10:07:10 [p2p_nccl_engine.py:404] 🤝ncclCommInitRank Success, 10.1.0.3:34096👈10.1.0.5:34097, MyRank:1
 [0;36m(Worker_TP0 pid=1023558)[0;0m INFO 08-09 10:07:10 [p2p_nccl_engine.py:52] set_p2p_nccl_context, original_values: {'NCCL_MAX_NCHANNELS': None, 'NCCL_MIN_NCHANNELS': None, 'NCCL_CUMEM_ENABLE': None, 'NCCL_BUFFSIZE': None, 'NCCL_PROTO': None, 'NCCL_ALGO': None}
 [0;36m(Worker_TP0 pid=1023558)[0;0m INFO 08-09 10:07:10 [p2p_nccl_engine.py:404] 🤝ncclCommInitRank Success, 10.1.0.3:34096👈10.1.0.5:34095, MyRank:1
+[0;36m(Worker_TP0 pid=1023558)[0;0m INFO 08-09 10:07:11 [p2p_nccl_engine.py:52] set_p2p_nccl_context, original_values: {'NCCL_MAX_NCHANNELS': None, 'NCCL_MIN_NCHANNELS': None, 'NCCL_CUMEM_ENABLE': None, 'NCCL_BUFFSIZE': None, 'NCCL_PROTO': None, 'NCCL_ALGO': None}
+[0;36m(Worker_TP0 pid=1023558)[0;0m INFO 08-09 10:07:12 [p2p_nccl_engine.py:404] 🤝ncclCommInitRank Success, 10.1.0.3:34096👈10.1.0.5:34094, MyRank:1
+[0;36m(APIServer pid=1023374)[0;0m INFO:     10.1.0.3:60480 - "POST /v1/completions HTTP/1.1" 200 OK
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852] WorkerProc hit an exception.
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852] Traceback (most recent call last):
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/executor/multiproc_executor.py", line 847, in worker_busy_loop
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     output = func(*args, **kwargs)
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/worker_base.py", line 365, in execute_model
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     return self.worker.execute_model(scheduler_output)
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     return func(*args, **kwargs)
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_worker.py", line 630, in execute_model
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     output = self.model_runner.execute_model(
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     return func(*args, **kwargs)
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/gpu_model_runner.py", line 3485, in execute_model
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     with (
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 135, in __enter__
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     return next(self.gen)
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/worker/kv_connector_model_runner_mixin.py", line 96, in _get_kv_connector_output
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     kv_connector.start_load_kv(get_forward_context())
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_connector.py", line 241, in start_load_kv
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     inject_kv_into_layer(
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_connector.py", line 196, in inject_kv_into_layer
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     self.check_tensors_except_dim(layer, kv_cache, 1)
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/distributed/kv_transfer/kv_connector/v1/p2p/p2p_nccl_connector.py", line 543, in check_tensors_except_dim
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852]     raise NotImplementedError(
+[0;36m(Worker_TP0 pid=1023558)[0;0m ERROR 08-09 10:07:12 [multiproc_executor.py:852] NotImplementedError: Currently, only symmetric TP is supported. Asymmetric TP, PP,and others will be supported in future PRs.
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 252594.3 ON ganymede CANCELLED AT 2026-08-09T10:07:16 ***
+srun: error: ganymede: task 0: Killed
+srun: Terminating StepId=252594.3
