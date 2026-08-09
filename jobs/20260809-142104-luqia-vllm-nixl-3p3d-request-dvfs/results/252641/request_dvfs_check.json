@@ -1,0 +1,48 @@
+{
+  "ok": false,
+  "expected_requests": 36,
+  "decision_count": 36,
+  "successful_decisions": 31,
+  "safe_decisions": 36,
+  "overload_fallback_decisions": 0,
+  "actual_ttft_slo_met": 0,
+  "actual_tpot_slo_met": 31,
+  "route_counts": {
+    "P0-D0": 3,
+    "P0-D1": 5,
+    "P0-D2": 8,
+    "P1-D0": 6,
+    "P1-D1": 4,
+    "P1-D2": 2,
+    "P2-D0": 2,
+    "P2-D1": 3,
+    "P2-D2": 3
+  },
+  "frequency_pair_counts": {
+    "P210-D360": 10,
+    "P210-D570": 21
+  },
+  "mean_predicted_cluster_power_w": 203.314,
+  "telemetry_files": [
+    "gpu_telemetry_Decode_0.csv",
+    "gpu_telemetry_Decode_1.csv",
+    "gpu_telemetry_Decode_2.csv",
+    "gpu_telemetry_Prefill_0.csv",
+    "gpu_telemetry_Prefill_1.csv",
+    "gpu_telemetry_Prefill_2.csv"
+  ],
+  "telemetry_rows": 6723,
+  "active_clock_telemetry_rows": 3513,
+  "errors": [
+    "request 0 failed: RuntimeError: clock verification mismatch instance=Prefill_0 target=210 observed=['2520']",
+    "request 0 has no clock targets",
+    "request 1 failed: RuntimeError: clock verification mismatch instance=Prefill_0 target=210 observed=['2520']",
+    "request 1 has no clock targets",
+    "request 2 failed: RuntimeError: clock verification mismatch instance=Prefill_0 target=210 observed=['2520']",
+    "request 2 has no clock targets",
+    "request 5 failed: RuntimeError: clock verification mismatch instance=Decode_0 target=570 observed=['2040']",
+    "request 5 has no clock targets",
+    "request 7 failed: RuntimeError: clock verification mismatch instance=Prefill_1 target=210 observed=['2520']",
+    "request 7 has no clock targets"
+  ]
+}
