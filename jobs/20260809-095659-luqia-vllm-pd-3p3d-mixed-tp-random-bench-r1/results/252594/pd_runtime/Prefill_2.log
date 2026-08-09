@@ -49,3 +49,11 @@ INFO 08-09 10:06:20 [parallel_state.py:1423] rank 0 in world size 2 is assigned 
 [0;36m(Worker_TP0 pid=856444)[0;0m WARNING 08-09 10:06:37 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
 [0;36m(Worker_TP1 pid=856445)[0;0m INFO 08-09 10:06:37 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: fbc58fa9-5486-4a71-ba8d-719094d896ff
 [0;36m(Worker_TP1 pid=856445)[0;0m WARNING 08-09 10:06:37 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(Worker_TP0 pid=856444)[0;0m INFO 08-09 10:06:49 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:0, local_rank:0, http_address:10.1.0.5:32096, zmq_address:10.1.0.5:34096, proxy_address:10.1.0.3:31094, send_type:PUT_ASYNC, buffer_size_threshold:10.00, nccl_num_channels:16
+[0;36m(Worker_TP0 pid=856444)[0;0m INFO 08-09 10:06:49 [utils.py:38] Connectors do not specify a kv cache layout, defaulting to NHD.
+[0;36m(Worker_TP1 pid=856445)[0;0m INFO 08-09 10:06:49 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:1, local_rank:1, http_address:10.1.0.5:32096, zmq_address:10.1.0.5:34097, proxy_address:10.1.0.3:31094, send_type:PUT_ASYNC, buffer_size_threshold:10.00, nccl_num_channels:16
+[0;36m(Worker_TP1 pid=856445)[0;0m INFO 08-09 10:06:49 [utils.py:38] Connectors do not specify a kv cache layout, defaulting to NHD.
+[0;36m(EngineCore_DP0 pid=856387)[0;0m INFO 08-09 10:06:50 [core.py:272] init engine (profile, create kv cache, warmup model) took 18.18 seconds
+[0;36m(EngineCore_DP0 pid=856387)[0;0m /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/tvm_ffi/_optional_torch_c_dlpack.py:174: UserWarning: Failed to JIT torch c dlpack extension, EnvTensorAllocator will not be enabled.
+[0;36m(EngineCore_DP0 pid=856387)[0;0m We recommend installing via `pip install torch-c-dlpack-ext`
+[0;36m(EngineCore_DP0 pid=856387)[0;0m   warnings.warn(
