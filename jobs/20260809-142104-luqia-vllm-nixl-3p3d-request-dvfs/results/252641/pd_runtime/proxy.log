@@ -7,3 +7,8 @@ registry_add source=http role=decode http=10.1.0.3:33658 kv=10.1.0.3:34658 tp_si
 registry_add source=http role=prefill http=10.1.0.5:32656 kv=10.1.0.5:34656 tp_size=1 reported_tp_size=1 instance=Prefill_0 node=uranus gpu_type=l40s
 registry_add source=http role=prefill http=10.1.0.5:32657 kv=10.1.0.5:34657 tp_size=1 reported_tp_size=1 instance=Prefill_1 node=uranus gpu_type=l40s
 registry_add source=http role=prefill http=10.1.0.5:32658 kv=10.1.0.5:34658 tp_size=2 reported_tp_size=2 instance=Prefill_2 node=uranus gpu_type=l40s
+route count=0 policy_route=P0-D2 request_id=08eed0b807a14285b6ef2eeebd2614b1 prefill_instance=Prefill_0 prefill_http=10.1.0.5:32656 prefill_tp=1 decode_instance=Decode_2 decode_http=10.1.0.3:33658 decode_tp=2 predictive_dvfs=True
+route count=1 policy_route=P0-D1 request_id=42f691df92b8423d98e781e9053b522d prefill_instance=Prefill_0 prefill_http=10.1.0.5:32656 prefill_tp=1 decode_instance=Decode_1 decode_http=10.1.0.3:33657 decode_tp=1 predictive_dvfs=True
+route count=2 policy_route=P0-D2 request_id=0bea367974754a428742bd3e9f0ff0ab prefill_instance=Prefill_0 prefill_http=10.1.0.5:32656 prefill_tp=1 decode_instance=Decode_2 decode_http=10.1.0.3:33658 decode_tp=2 predictive_dvfs=True
+route count=3 policy_route=P0-D2 request_id=6d9a1fc4d2174c32bb349e2048a75c81 prefill_instance=Prefill_0 prefill_http=10.1.0.5:32656 prefill_tp=1 decode_instance=Decode_2 decode_http=10.1.0.3:33658 decode_tp=2 predictive_dvfs=True
+dvfs count=3 route=P0-D2 status=OK prefill_mhz=210 decode_mhz=360 predicted_ttft_ms=497.8 predicted_tpot_ms=72.9 predicted_power_w=218.0 clock_lock_wait_ms=0.006
