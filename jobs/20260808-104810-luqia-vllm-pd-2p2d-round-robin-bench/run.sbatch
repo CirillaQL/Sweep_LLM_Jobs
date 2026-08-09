@@ -90,8 +90,11 @@ CHECKER="${SOURCE_JOB_DIR}/check_random_routes.py"
 DVFS_CHECKER="${SCRIPT_ROOT}/check_request_dvfs.py"
 DVFS_CHECK_FILE="${OUT_DIR}/request_dvfs_check.json"
 DVFS_TTFT_CORRECTOR="${SCRIPT_ROOT}/correct_vllm_bench_dvfs_ttft.py"
+FORWARDING_TTFT_SUMMARIZER="${SCRIPT_ROOT}/summarize_forwarding_ttft.py"
 DVFS_CORRECTED_BENCH_RESULT="${OUT_DIR}/vllm_bench_detailed_excluding_dvfs_wait.json"
 DVFS_CORRECTED_BENCH_LOG="${OUT_DIR}/vllm_bench_ttft_excluding_dvfs_wait.txt"
+FORWARDING_TTFT_SUMMARY="${OUT_DIR}/forwarding_ttft_summary.json"
+FORWARDING_TTFT_REQUESTS="${OUT_DIR}/forwarding_ttft_requests.csv"
 
 export PATH="${ENV_DIR}/bin:${PATH}"
 export PYTHON_BIN VLLM_BIN MODEL STARTUP_TIMEOUT_SECONDS
@@ -241,7 +244,10 @@ for required in \
   fi
 done
 if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
-  for required in "$DVFS_CHECKER" "$DVFS_TTFT_CORRECTOR"; do
+  for required in \
+    "$DVFS_CHECKER" \
+    "$DVFS_TTFT_CORRECTOR" \
+    "$FORWARDING_TTFT_SUMMARIZER"; do
     if [ ! -s "$required" ]; then
       echo "required_artifact_missing=${required}"
       exit 2
@@ -330,6 +336,7 @@ cat "$ROUTE_CHECK_FILE" 2>/dev/null || true
 echo "random_route_check_rc=${ROUTE_CHECK_RC}"
 
 DVFS_CHECK_RC=0
+FORWARDING_TTFT_RC=0
 if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
   echo "phase=verify_request_dvfs"
   "$PYTHON_BIN" "$DVFS_CHECKER" \
@@ -340,6 +347,15 @@ if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
     --settle-seconds "$PD_DVFS_SETTLE_SECONDS" \
     --output "$DVFS_CHECK_FILE" || DVFS_CHECK_RC=$?
   echo "request_dvfs_check_rc=${DVFS_CHECK_RC}"
+
+  echo "phase=summarize_exact_forwarding_ttft"
+  "$PYTHON_BIN" "$FORWARDING_TTFT_SUMMARIZER" \
+    --decisions "${PD_OUT_DIR}/request_dvfs_decisions.jsonl" \
+    --expected-requests "$NUM_PROMPTS" \
+    --slo-ttft-ms "$PD_DVFS_SLO_TTFT_MS" \
+    --output "$FORWARDING_TTFT_SUMMARY" \
+    --csv-output "$FORWARDING_TTFT_REQUESTS" || FORWARDING_TTFT_RC=$?
+  echo "forwarding_ttft_summary_rc=${FORWARDING_TTFT_RC}"
 fi
 
 FINAL_RC=0
@@ -356,6 +372,9 @@ if [ "$DVFS_CHECK_RC" -ne 0 ]; then
 fi
 if [ "$TTFT_CORRECTION_RC" -ne 0 ]; then
   FINAL_RC=14
+fi
+if [ "$FORWARDING_TTFT_RC" -ne 0 ]; then
+  FINAL_RC=15
 fi
 if ! kill -0 "$PD_LAUNCHER_PID" 2>/dev/null; then
   echo "pd_launcher_alive_after_bench=false"

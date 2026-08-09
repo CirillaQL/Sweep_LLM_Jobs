@@ -940,6 +940,11 @@ async def execute_scheduled_request(
                 round(forwarding_ttft_ms, 3)
                 if forwarding_ttft_ms is not None else None
             ),
+            "forwarding_ttft_timer": (
+                "after_clock_ack_to_first_decode_chunk"
+                if ENABLE_PREDICTIVE_DVFS
+                else "before_prefill_forward_to_first_decode_chunk"
+            ),
             "proxy_tpot_estimate_ms": (
                 round(proxy_tpot_ms, 3) if proxy_tpot_ms is not None else None
             ),
@@ -948,6 +953,11 @@ async def execute_scheduled_request(
             "ttft_slo_met": (
                 ttft_ms <= float(record["slo_ttft_ms"])
                 if ttft_ms is not None and "slo_ttft_ms" in record else None
+            ),
+            "forwarding_ttft_slo_met": (
+                forwarding_ttft_ms <= float(record["slo_ttft_ms"])
+                if forwarding_ttft_ms is not None and "slo_ttft_ms" in record
+                else None
             ),
             "tpot_slo_met": (
                 proxy_tpot_ms <= float(record["slo_tpot_ms"])

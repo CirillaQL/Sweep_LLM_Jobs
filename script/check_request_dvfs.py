@@ -36,7 +36,8 @@ def main() -> int:
     route_counts = Counter()
     frequency_pair_counts = Counter()
     safe_count = fallback_count = success_count = 0
-    actual_ttft_slo_met = actual_tpot_slo_met = 0
+    actual_ttft_slo_met = actual_forwarding_ttft_slo_met = 0
+    actual_tpot_slo_met = 0
     powers = []
     for item in records:
         route_counts[item.get("route", "missing")] += 1
@@ -58,10 +59,18 @@ def main() -> int:
                 f"request {item.get('request_index')} failed: {actual.get('error')}"
             )
         actual_ttft_slo_met += int(actual.get("ttft_slo_met") is True)
+        actual_forwarding_ttft_slo_met += int(
+            actual.get("forwarding_ttft_slo_met") is True
+        )
         actual_tpot_slo_met += int(actual.get("tpot_slo_met") is True)
         raw_ttft = actual.get("proxy_ttft_raw_ms")
         corrected_ttft = actual.get("proxy_ttft_ms")
         if actual.get("success") is True:
+            forwarding_ttft = actual.get("proxy_forwarding_ttft_ms")
+            if forwarding_ttft is None or float(forwarding_ttft) < 0:
+                errors.append(
+                    f"request {item.get('request_index')} has invalid forwarding TTFT"
+                )
             try:
                 excluded = float(raw_ttft) - float(corrected_ttft)
                 expected_excluded = args.settle_seconds * 1000.0
@@ -151,6 +160,7 @@ def main() -> int:
         "safe_decisions": safe_count,
         "overload_fallback_decisions": fallback_count,
         "actual_ttft_slo_met": actual_ttft_slo_met,
+        "actual_forwarding_ttft_slo_met": actual_forwarding_ttft_slo_met,
         "actual_tpot_slo_met": actual_tpot_slo_met,
         "route_counts": dict(sorted(route_counts.items())),
         "frequency_pair_counts": dict(sorted(frequency_pair_counts.items())),
