@@ -17,6 +17,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--proxy-log", type=Path, required=True)
     parser.add_argument("--expected-requests", type=int, required=True)
+    parser.add_argument("--expected-count-start", type=int, default=0)
     parser.add_argument("--expected-prefill-count", type=int, default=2)
     parser.add_argument("--expected-decode-count", type=int, default=2)
     parser.add_argument("--expected-prefill-tp-sizes", default="1,1")
@@ -64,7 +65,12 @@ def main() -> int:
         observations[count] = match.group(2)
 
     ordered_counts = sorted(observations)
-    expected_counts = list(range(args.expected_requests))
+    expected_counts = list(
+        range(
+            args.expected_count_start,
+            args.expected_count_start + args.expected_requests,
+        )
+    )
     missing_counts = sorted(set(expected_counts) - set(ordered_counts))
     unexpected_counts = sorted(set(ordered_counts) - set(expected_counts))
     invalid_routes = [
@@ -100,6 +106,7 @@ def main() -> int:
         "supported_routes": supported_routes,
         "require_all_routes": args.require_all_routes,
         "expected_requests": args.expected_requests,
+        "expected_count_start": args.expected_count_start,
         "observed_requests": len(observations),
         "route_counts": dict(sorted(route_counts.items())),
         "prefill_counts": dict(sorted(prefill_counts.items())),

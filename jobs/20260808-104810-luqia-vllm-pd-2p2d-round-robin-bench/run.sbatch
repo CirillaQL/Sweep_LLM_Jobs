@@ -33,6 +33,9 @@ MAX_CONCURRENCY="${MAX_CONCURRENCY_OVERRIDE:-16}"
 BENCH_TIMEOUT_SECONDS="${BENCH_TIMEOUT_SECONDS_OVERRIDE:-300}"
 STARTUP_TIMEOUT_SECONDS="${STARTUP_TIMEOUT_SECONDS_OVERRIDE:-900}"
 REQUIRE_ALL_RANDOM_ROUTES="${REQUIRE_ALL_RANDOM_ROUTES_OVERRIDE:-false}"
+WARMUP_ALL_ROUTES="${WARMUP_ALL_ROUTES_OVERRIDE:-false}"
+WARMUP_OUTPUT_TOKENS="${WARMUP_OUTPUT_TOKENS_OVERRIDE:-1}"
+WARMUP_TIMEOUT_SECONDS="${WARMUP_TIMEOUT_SECONDS_OVERRIDE:-300}"
 export CUSTOM_PD_ALLOW_ASYMMETRIC_TP="${CUSTOM_PD_ALLOW_ASYMMETRIC_TP_OVERRIDE:-false}"
 export PD_ENABLE_PREDICTIVE_DVFS="${PD_ENABLE_PREDICTIVE_DVFS_OVERRIDE:-false}"
 
@@ -95,6 +98,10 @@ DVFS_CORRECTED_BENCH_RESULT="${OUT_DIR}/vllm_bench_detailed_excluding_dvfs_wait.
 DVFS_CORRECTED_BENCH_LOG="${OUT_DIR}/vllm_bench_ttft_excluding_dvfs_wait.txt"
 FORWARDING_TTFT_SUMMARY="${OUT_DIR}/forwarding_ttft_summary.json"
 FORWARDING_TTFT_REQUESTS="${OUT_DIR}/forwarding_ttft_requests.csv"
+WARMUP_SCRIPT="${SCRIPT_ROOT}/warmup_pd_routes.py"
+WARMUP_RESULT="${OUT_DIR}/route_warmup.json"
+WARMUP_DECISIONS="${OUT_DIR}/route_warmup_dvfs_decisions.jsonl"
+MEASUREMENT_PROXY_LOG="${OUT_DIR}/proxy_measurement.log"
 
 export PATH="${ENV_DIR}/bin:${PATH}"
 export PYTHON_BIN VLLM_BIN MODEL STARTUP_TIMEOUT_SECONDS
@@ -230,6 +237,7 @@ echo "cache_paths home=${HOME} nixl_config=${NIXL_CONFIG_FILE} hf=${HF_HOME} hf_
 echo "random_route_policy=prefill_first,allow_asymmetric_tp=${CUSTOM_PD_ALLOW_ASYMMETRIC_TP}"
 echo "mixed_tp prefill=${PREFILL_TP_SIZES} decode=${DECODE_TP_SIZES} require_all_routes=${REQUIRE_ALL_RANDOM_ROUTES}"
 echo "bench num_prompts=${NUM_PROMPTS} request_rate=${REQUEST_RATE} input_len=${INPUT_LEN} output_len=${OUTPUT_LEN} max_concurrency=${MAX_CONCURRENCY}"
+echo "warmup all_routes=${WARMUP_ALL_ROUTES} input_tokens=${INPUT_LEN} output_tokens=${WARMUP_OUTPUT_TOKENS} timeout_seconds=${WARMUP_TIMEOUT_SECONDS}"
 echo "predictive_dvfs enabled=${PD_ENABLE_PREDICTIVE_DVFS} slo_ttft_ms=${PD_DVFS_SLO_TTFT_MS} slo_tpot_ms=${PD_DVFS_SLO_TPOT_MS} expected_rate=${PD_DVFS_EXPECTED_REQUEST_RATE} overload_action=${PD_DVFS_OVERLOAD_ACTION} settle_seconds=${PD_DVFS_SETTLE_SECONDS}"
 echo "output_dir=${OUT_DIR}"
 
@@ -243,6 +251,10 @@ for required in \
     exit 2
   fi
 done
+if [ "$WARMUP_ALL_ROUTES" = true ] && [ ! -s "$WARMUP_SCRIPT" ]; then
+  echo "required_artifact_missing=${WARMUP_SCRIPT}"
+  exit 2
+fi
 if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
   for required in \
     "$DVFS_CHECKER" \
@@ -268,6 +280,40 @@ echo "phase=start_pd_cluster"
 PD_LAUNCHER_PID=$!
 wait_for_registry || exit 5
 "$PYTHON_BIN" -m json.tool "$REGISTRY_FILE"
+
+MEASUREMENT_REQUEST_START=0
+PROXY_MEASUREMENT_START_LINE=1
+if [ "$WARMUP_ALL_ROUTES" = true ]; then
+  echo "phase=warmup_all_pd_routes"
+  WARMUP_ARGS=(
+    --base-url "http://${PROXY_IP}:${PROXY_HTTP_PORT}"
+    --model "$MODEL"
+    --prefill-tp-sizes "$PREFILL_TP_SIZES"
+    --decode-tp-sizes "$DECODE_TP_SIZES"
+    --input-tokens "$INPUT_LEN"
+    --output-tokens "$WARMUP_OUTPUT_TOKENS"
+    --timeout-seconds "$WARMUP_TIMEOUT_SECONDS"
+    --output "$WARMUP_RESULT"
+  )
+  if [ "$CUSTOM_PD_ALLOW_ASYMMETRIC_TP" = true ]; then
+    WARMUP_ARGS+=(--allow-asymmetric-tp)
+  fi
+  "$PYTHON_BIN" "$WARMUP_SCRIPT" "${WARMUP_ARGS[@]}" || exit 6
+  "$PYTHON_BIN" -m json.tool "$WARMUP_RESULT"
+  MEASUREMENT_REQUEST_START="$("$PYTHON_BIN" -c '
+import json
+import sys
+print(json.load(open(sys.argv[1], encoding="utf-8"))["request_count"])
+' "$WARMUP_RESULT")"
+  if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
+    cp "${PD_OUT_DIR}/request_dvfs_decisions.jsonl" "$WARMUP_DECISIONS"
+    : > "${PD_OUT_DIR}/request_dvfs_decisions.jsonl"
+  fi
+  # The proxy is unbuffered, but allow the final warmup log line to reach disk.
+  sleep 1
+  PROXY_MEASUREMENT_START_LINE=$(( $(wc -l < "${PD_OUT_DIR}/proxy.log") + 1 ))
+  echo "route_warmup_complete=true routes=${MEASUREMENT_REQUEST_START} measurement_proxy_start_line=${PROXY_MEASUREMENT_START_LINE}"
+fi
 
 echo "phase=vllm_bench"
 timeout --signal=INT --kill-after=20s "${BENCH_TIMEOUT_SECONDS}s" \
@@ -302,6 +348,9 @@ print(successful.group(1) if successful else -1, failed.group(1) if failed else 
 ' "$BENCH_LOG")"
 echo "bench_rc=${BENCH_RC} successful_requests=${SUCCESSFUL_REQUESTS} failed_requests=${FAILED_REQUESTS}"
 
+tail -n "+${PROXY_MEASUREMENT_START_LINE}" \
+  "${PD_OUT_DIR}/proxy.log" > "$MEASUREMENT_PROXY_LOG"
+
 TTFT_CORRECTION_RC=0
 if [ "$PD_ENABLE_PREDICTIVE_DVFS" = true ]; then
   echo "phase=correct_ttft_excluding_dvfs_wait"
@@ -317,8 +366,9 @@ fi
 echo "phase=verify_random_routes"
 ROUTE_CHECK_RC=0
 ROUTE_CHECK_ARGS=(
-  --proxy-log "${PD_OUT_DIR}/proxy.log" \
+  --proxy-log "$MEASUREMENT_PROXY_LOG" \
   --expected-requests "$NUM_PROMPTS" \
+  --expected-count-start "$MEASUREMENT_REQUEST_START" \
   --expected-prefill-count "$PREFILL_REPLICAS" \
   --expected-decode-count "$DECODE_REPLICAS" \
   --expected-prefill-tp-sizes "$PREFILL_TP_SIZES" \
