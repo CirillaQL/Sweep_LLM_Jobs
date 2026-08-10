@@ -6,3 +6,5 @@ registry_add source=http role=decode http=10.1.0.3:33689 kv=10.1.0.3:34689 tp_si
 registry_add source=http role=decode http=10.1.0.3:33690 kv=10.1.0.3:34690 tp_size=2 reported_tp_size=2 instance=Decode_2 node=ganymede gpu_type=l4
 registry_add source=http role=prefill http=10.1.0.5:32688 kv=10.1.0.5:34688 tp_size=1 reported_tp_size=1 instance=Prefill_0 node=uranus gpu_type=l40s
 registry_add source=http role=prefill http=10.1.0.5:32689 kv=10.1.0.5:34689 tp_size=1 reported_tp_size=1 instance=Prefill_1 node=uranus gpu_type=l40s
+registry_add source=http role=prefill http=10.1.0.5:32690 kv=10.1.0.5:34690 tp_size=2 reported_tp_size=2 instance=Prefill_2 node=uranus gpu_type=l40s
+route count=0 policy_route=P0-D0 request_id=6fe281663823444c82e64481b842f207 prefill_instance=Prefill_0 prefill_http=10.1.0.5:32688 prefill_tp=1 decode_instance=Decode_0 decode_http=10.1.0.3:33688 decode_tp=1 predictive_dvfs=True
