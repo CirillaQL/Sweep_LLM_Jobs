@@ -37,3 +37,29 @@ INFO 08-10 17:20:09 [parallel_state.py:1423] rank 0 in world size 2 is assigned 
 [0;36m(Worker_TP0 pid=1151084)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:06<00:00,  2.82s/it]
 [0;36m(Worker_TP0 pid=1151084)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:06<00:00,  3.01s/it]
 [0;36m(Worker_TP0 pid=1151084)[0;0m 
+[0;36m(Worker_TP0 pid=1151084)[0;0m INFO 08-10 17:20:18 [default_loader.py:291] Loading weights took 6.06 seconds
+[0;36m(Worker_TP0 pid=1151084)[0;0m INFO 08-10 17:20:18 [gpu_model_runner.py:4130] Model loading took 6.75 GiB memory and 8.332086 seconds
+[0;36m(Worker_TP0 pid=1151084)[0;0m INFO 08-10 17:20:25 [gpu_worker.py:356] Available KV cache memory: 29.09 GiB
+[0;36m(EngineCore_DP0 pid=1150879)[0;0m INFO 08-10 17:20:25 [kv_cache_utils.py:1307] GPU KV cache size: 476,640 tokens
+[0;36m(EngineCore_DP0 pid=1150879)[0;0m INFO 08-10 17:20:25 [kv_cache_utils.py:1312] Maximum concurrency for 8,192 tokens per request: 58.07x
+[0;36m(Worker_TP1 pid=1151085)[0;0m INFO 08-10 17:20:25 [nixl_connector.py:101] Setting UCX_RCACHE_MAX_UNRELEASED to '1024' to avoid a rare memory leak in UCX when using NIXL.
+[0;36m(Worker_TP0 pid=1151084)[0;0m INFO 08-10 17:20:25 [nixl_connector.py:101] Setting UCX_RCACHE_MAX_UNRELEASED to '1024' to avoid a rare memory leak in UCX when using NIXL.
+[0;36m(Worker_TP1 pid=1151085)[0;0m INFO 08-10 17:20:25 [nixl_connector.py:114] NIXL is available
+[0;36m(Worker_TP1 pid=1151085)[0;0m INFO 08-10 17:20:25 [factory.py:64] Creating v1 connector with name: NixlConnector and engine_id: a5bfc86b-1bf5-45c3-b4de-24f42e8bcfb8
+[0;36m(Worker_TP1 pid=1151085)[0;0m WARNING 08-10 17:20:25 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(Worker_TP1 pid=1151085)[0;0m INFO 08-10 17:20:25 [nixl_connector.py:830] Initializing NIXL wrapper
+[0;36m(Worker_TP1 pid=1151085)[0;0m INFO 08-10 17:20:25 [nixl_connector.py:831] Initializing NIXL worker a5bfc86b-1bf5-45c3-b4de-24f42e8bcfb8
+[0;36m(Worker_TP0 pid=1151084)[0;0m INFO 08-10 17:20:25 [nixl_connector.py:114] NIXL is available
+[0;36m(Worker_TP0 pid=1151084)[0;0m INFO 08-10 17:20:25 [factory.py:64] Creating v1 connector with name: NixlConnector and engine_id: a5bfc86b-1bf5-45c3-b4de-24f42e8bcfb8
+[0;36m(Worker_TP0 pid=1151084)[0;0m WARNING 08-10 17:20:25 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(Worker_TP0 pid=1151084)[0;0m INFO 08-10 17:20:25 [nixl_connector.py:830] Initializing NIXL wrapper
+[0;36m(Worker_TP0 pid=1151084)[0;0m INFO 08-10 17:20:25 [nixl_connector.py:831] Initializing NIXL worker a5bfc86b-1bf5-45c3-b4de-24f42e8bcfb8
+[0;36m(Worker_TP0 pid=1151084)[0;0m 2026-08-10 17:20:26 NIXL INFO    _api.py:390 Backend UCX was instantiated
+[0;36m(Worker_TP0 pid=1151084)[0;0m 2026-08-10 17:20:26 NIXL INFO    _api.py:268 Initialized NIXL agent: 33b572aa-6eab-48b8-9883-335c4278fd62
+[0;36m(Worker_TP0 pid=1151084)[0;0m INFO 08-10 17:20:26 [nixl_connector.py:339] NixlConnector setting KV cache layout to HND for better xfer performance.
+[0;36m(Worker_TP1 pid=1151085)[0;0m 2026-08-10 17:20:26 NIXL INFO    _api.py:390 Backend UCX was instantiated
+[0;36m(Worker_TP1 pid=1151085)[0;0m 2026-08-10 17:20:26 NIXL INFO    _api.py:268 Initialized NIXL agent: 374c4f24-b0e5-41c4-98b9-cc5782d15b15
+[0;36m(Worker_TP1 pid=1151085)[0;0m INFO 08-10 17:20:26 [nixl_connector.py:339] NixlConnector setting KV cache layout to HND for better xfer performance.
+[0;36m(Worker_TP0 pid=1151084)[0;0m INFO 08-10 17:20:26 [nixl_connector.py:1284] Registering KV_Caches. use_mla: False, kv_buffer_device: cuda, use_host_buffer: False
+[0;36m(Worker_TP1 pid=1151085)[0;0m INFO 08-10 17:20:26 [nixl_connector.py:1284] Registering KV_Caches. use_mla: False, kv_buffer_device: cuda, use_host_buffer: False
+[0;36m(EngineCore_DP0 pid=1150879)[0;0m INFO 08-10 17:20:27 [core.py:272] init engine (profile, create kv cache, warmup model) took 9.16 seconds
