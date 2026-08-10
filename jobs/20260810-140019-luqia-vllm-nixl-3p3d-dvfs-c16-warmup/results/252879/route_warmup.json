@@ -1,0 +1,39 @@
+{
+  "ok": false,
+  "allow_asymmetric_tp": true,
+  "prefill_tp_sizes": [
+    1,
+    1,
+    2
+  ],
+  "decode_tp_sizes": [
+    1,
+    1,
+    2
+  ],
+  "expected_routes": [
+    "P0-D0",
+    "P0-D1",
+    "P0-D2",
+    "P1-D0",
+    "P1-D1",
+    "P1-D2",
+    "P2-D0",
+    "P2-D1",
+    "P2-D2"
+  ],
+  "request_count": 1,
+  "successful_routes": [],
+  "requests": [
+    {
+      "route": "P0-D0",
+      "input_tokens": 512,
+      "output_tokens": 1,
+      "ttft_ms": null,
+      "e2e_ms": 48.155,
+      "stream_event_count": 0,
+      "success": false,
+      "error": "HTTPError 503: {\"error\": \"no predicted SLO-safe clock pair for route P0-D0\", \"type\": \"routing_error\"}"
+    }
+  ]
+}
