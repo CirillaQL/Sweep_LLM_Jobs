@@ -1,30 +1,3 @@
-[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
-[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
-custom_proxy_start hostname=ganymede http=0.0.0.0:30640 registry=0.0.0.0:31640 kv_connector=NixlConnector default_route=random allow_asymmetric_tp=true predictive_dvfs=true dvfs_slo_ttft_ms=500 dvfs_slo_tpot_ms=200 dvfs_settle_seconds=20.0 routes=all_pairs
-registry_add source=http role=decode http=10.1.0.3:33640 kv=10.1.0.3:34640 tp_size=1 reported_tp_size=1 instance=Decode_0 node=ganymede gpu_type=l4
-registry_add source=http role=decode http=10.1.0.3:33641 kv=10.1.0.3:34641 tp_size=1 reported_tp_size=1 instance=Decode_1 node=ganymede gpu_type=l4
-registry_add source=http role=decode http=10.1.0.3:33642 kv=10.1.0.3:34642 tp_size=2 reported_tp_size=2 instance=Decode_2 node=ganymede gpu_type=l4
-registry_add source=http role=prefill http=10.1.0.5:32640 kv=10.1.0.5:34640 tp_size=1 reported_tp_size=1 instance=Prefill_0 node=uranus gpu_type=l40s
-registry_add source=http role=prefill http=10.1.0.5:32641 kv=10.1.0.5:34641 tp_size=1 reported_tp_size=1 instance=Prefill_1 node=uranus gpu_type=l40s
-registry_add source=http role=prefill http=10.1.0.5:32642 kv=10.1.0.5:34642 tp_size=2 reported_tp_size=2 instance=Prefill_2 node=uranus gpu_type=l40s
-route count=0 policy_route=P0-D0 request_id=a9540b7ee11e42d9939596cb346e7db6 prefill_instance=Prefill_0 prefill_http=10.1.0.5:32640 prefill_tp=1 decode_instance=Decode_0 decode_http=10.1.0.3:33640 decode_tp=1 predictive_dvfs=True
-dvfs count=0 route=P0-D0 status=OK prefill_mhz=210 decode_mhz=570 predicted_ttft_ms=497.8 predicted_tpot_ms=125.6 predicted_power_w=173.9 clock_lock_wait_ms=0.007 settle_seconds=20.0
-route count=1 policy_route=P0-D1 request_id=378699ce4ad149da9c8929d75a3a794e prefill_instance=Prefill_0 prefill_http=10.1.0.5:32640 prefill_tp=1 decode_instance=Decode_1 decode_http=10.1.0.3:33641 decode_tp=1 predictive_dvfs=True
-dvfs count=1 route=P0-D1 status=OK prefill_mhz=210 decode_mhz=570 predicted_ttft_ms=497.8 predicted_tpot_ms=125.6 predicted_power_w=173.9 clock_lock_wait_ms=0.005 settle_seconds=20.0
-route count=2 policy_route=P0-D2 request_id=521111b5bb794ffd944200f00d29e485 prefill_instance=Prefill_0 prefill_http=10.1.0.5:32640 prefill_tp=1 decode_instance=Decode_2 decode_http=10.1.0.3:33642 decode_tp=2 predictive_dvfs=True
-dvfs count=2 route=P0-D2 status=OK prefill_mhz=210 decode_mhz=360 predicted_ttft_ms=497.8 predicted_tpot_ms=72.9 predicted_power_w=218.0 clock_lock_wait_ms=0.006 settle_seconds=20.0
-route count=3 policy_route=P1-D0 request_id=7e683bd6fc9d476b8588361dc88da749 prefill_instance=Prefill_1 prefill_http=10.1.0.5:32641 prefill_tp=1 decode_instance=Decode_0 decode_http=10.1.0.3:33640 decode_tp=1 predictive_dvfs=True
-dvfs count=3 route=P1-D0 status=OK prefill_mhz=210 decode_mhz=570 predicted_ttft_ms=497.8 predicted_tpot_ms=125.6 predicted_power_w=173.9 clock_lock_wait_ms=0.005 settle_seconds=20.0
-route count=4 policy_route=P1-D1 request_id=fa1622d55f7e4a6cbef218c32bb87b17 prefill_instance=Prefill_1 prefill_http=10.1.0.5:32641 prefill_tp=1 decode_instance=Decode_1 decode_http=10.1.0.3:33641 decode_tp=1 predictive_dvfs=True
-dvfs count=4 route=P1-D1 status=OK prefill_mhz=210 decode_mhz=570 predicted_ttft_ms=497.8 predicted_tpot_ms=125.6 predicted_power_w=173.9 clock_lock_wait_ms=0.006 settle_seconds=20.0
-route count=5 policy_route=P1-D2 request_id=85b99c3d889c4adc9b4b75ec9664bc65 prefill_instance=Prefill_1 prefill_http=10.1.0.5:32641 prefill_tp=1 decode_instance=Decode_2 decode_http=10.1.0.3:33642 decode_tp=2 predictive_dvfs=True
-dvfs count=5 route=P1-D2 status=OK prefill_mhz=210 decode_mhz=360 predicted_ttft_ms=497.8 predicted_tpot_ms=72.9 predicted_power_w=218.0 clock_lock_wait_ms=0.008 settle_seconds=20.0
-route count=6 policy_route=P2-D0 request_id=eb689a091c4c41f1aea80066dd6a562d prefill_instance=Prefill_2 prefill_http=10.1.0.5:32642 prefill_tp=2 decode_instance=Decode_0 decode_http=10.1.0.3:33640 decode_tp=1 predictive_dvfs=True
-dvfs count=6 route=P2-D0 status=OK prefill_mhz=210 decode_mhz=570 predicted_ttft_ms=176.9 predicted_tpot_ms=125.6 predicted_power_w=234.6 clock_lock_wait_ms=0.005 settle_seconds=20.0
-route count=7 policy_route=P2-D1 request_id=cc2831da07d24e5ea6502dcc25ab83eb prefill_instance=Prefill_2 prefill_http=10.1.0.5:32642 prefill_tp=2 decode_instance=Decode_1 decode_http=10.1.0.3:33641 decode_tp=1 predictive_dvfs=True
-dvfs count=7 route=P2-D1 status=OK prefill_mhz=210 decode_mhz=570 predicted_ttft_ms=176.9 predicted_tpot_ms=125.6 predicted_power_w=234.6 clock_lock_wait_ms=0.007 settle_seconds=20.0
-route count=8 policy_route=P2-D2 request_id=a00fb379675146648447dff11ecb34ff prefill_instance=Prefill_2 prefill_http=10.1.0.5:32642 prefill_tp=2 decode_instance=Decode_2 decode_http=10.1.0.3:33642 decode_tp=2 predictive_dvfs=True
-dvfs count=8 route=P2-D2 status=OK prefill_mhz=210 decode_mhz=360 predicted_ttft_ms=176.9 predicted_tpot_ms=72.9 predicted_power_w=278.7 clock_lock_wait_ms=0.006 settle_seconds=20.0
 route count=9 policy_route=P1-D2 request_id=9aa55ec364434b3890da11982296b29c prefill_instance=Prefill_1 prefill_http=10.1.0.5:32641 prefill_tp=1 decode_instance=Decode_2 decode_http=10.1.0.3:33642 decode_tp=2 predictive_dvfs=True
 route count=10 policy_route=P2-D2 request_id=c141e9b0ecde42f8a958da2ecef305f4 prefill_instance=Prefill_2 prefill_http=10.1.0.5:32642 prefill_tp=2 decode_instance=Decode_2 decode_http=10.1.0.3:33642 decode_tp=2 predictive_dvfs=True
 route count=11 policy_route=P1-D0 request_id=d6b9c38c0f4544f2881953886ed54713 prefill_instance=Prefill_1 prefill_http=10.1.0.5:32641 prefill_tp=1 decode_instance=Decode_0 decode_http=10.1.0.3:33640 decode_tp=1 predictive_dvfs=True
@@ -97,8 +70,3 @@ dvfs count=36 route=P2-D2 status=OK prefill_mhz=210 decode_mhz=360 predicted_ttf
 dvfs count=37 route=P2-D2 status=OK prefill_mhz=210 decode_mhz=360 predicted_ttft_ms=176.9 predicted_tpot_ms=72.9 predicted_power_w=278.7 clock_lock_wait_ms=277102.786 settle_seconds=20.0
 dvfs count=43 route=P2-D0 status=OK prefill_mhz=210 decode_mhz=570 predicted_ttft_ms=176.9 predicted_tpot_ms=125.6 predicted_power_w=234.6 clock_lock_wait_ms=219784.86 settle_seconds=20.0
 dvfs count=39 route=P0-D2 status=OK prefill_mhz=210 decode_mhz=360 predicted_ttft_ms=497.8 predicted_tpot_ms=72.9 predicted_power_w=218.0 clock_lock_wait_ms=274293.169 settle_seconds=20.0
-srun: forcing job termination
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
-slurmstepd-ganymede: error: *** STEP 252880.0 ON ganymede CANCELLED AT 2026-08-10T14:52:55 ***
-srun: error: ganymede: task 0: Killed
-srun: Terminating StepId=252880.0
