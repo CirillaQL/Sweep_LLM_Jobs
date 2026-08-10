@@ -1,0 +1,8 @@
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+pd_instance_start instance=Decode_1 role=decode ordinal=1 host=ganymede gpu_model=NVIDIA L4 node_ip=10.1.0.3 http_port=33625 kv_port=34625 tp=1 visible_gpus=1
+pd_instance_network interface=eno12399np0 proxy=10.1.0.3:31624 nccl_net=Socket
+pd_instance_connector connector=NixlConnector nixl_side_channel=10.1.0.3:34625 ucx_tls=all ucx_net_devices=eno12399np0
+pd_instance_paths work=/data/users/chjing/vllm_job_work/252879 home=/data/users/chjing/vllm_job_work/252879/home nixl_config=/data/users/chjing/vllm_job_work/252879/nixl/nixl.cfg xdg_cache=/data/users/chjing/vllm_job_work/252879/xdg-cache tmp=/data/users/chjing/vllm_job_work/252879/tmp cwd=/data/users/chjing/vllm_job_work/252879
+pd_instance_model model=mistralai/Mistral-7B-v0.1 max_model_len=8192 max_num_batched_tokens=8192 max_num_seqs=32
+pd_clock_agent_started instance=Decode_1 pid=1297397 visible_gpus=1
