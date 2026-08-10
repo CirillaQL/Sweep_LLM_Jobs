@@ -25,3 +25,20 @@ pd_clock_agent_started instance=Decode_1 pid=1297397 visible_gpus=1
 [0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:05 [parallel_state.py:1212] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.1.0.3:35697 backend=nccl
 [0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:05 [parallel_state.py:1423] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
 [0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:06 [gpu_model_runner.py:4033] Starting to load model mistralai/Mistral-7B-v0.1...
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:07 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:01<00:01,  1.74s/it]
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:05<00:00,  2.98s/it]
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:05<00:00,  2.79s/it]
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m 
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:14 [default_loader.py:291] Loading weights took 5.80 seconds
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:14 [gpu_model_runner.py:4130] Model loading took 13.5 GiB memory and 7.780900 seconds
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:17 [gpu_worker.py:356] Available KV cache memory: 3.69 GiB
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:17 [kv_cache_utils.py:1307] GPU KV cache size: 30,192 tokens
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:17 [kv_cache_utils.py:1312] Maximum concurrency for 8,192 tokens per request: 3.68x
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:17 [nixl_connector.py:101] Setting UCX_RCACHE_MAX_UNRELEASED to '1024' to avoid a rare memory leak in UCX when using NIXL.
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:17 [nixl_connector.py:114] NIXL is available
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:17 [factory.py:64] Creating v1 connector with name: NixlConnector and engine_id: dc61a101-3de4-4123-a50a-342902eb2af8
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m WARNING 08-10 14:07:17 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:17 [nixl_connector.py:830] Initializing NIXL wrapper
+[0;36m(EngineCore_DP0 pid=1297611)[0;0m INFO 08-10 14:07:17 [nixl_connector.py:831] Initializing NIXL worker dc61a101-3de4-4123-a50a-342902eb2af8
