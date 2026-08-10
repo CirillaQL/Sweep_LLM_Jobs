@@ -6,3 +6,18 @@ pd_instance_connector connector=NixlConnector nixl_side_channel=10.1.0.5:34641 u
 pd_instance_paths work=/data/users/chjing/vllm_job_work/252880 home=/data/users/chjing/vllm_job_work/252880/home nixl_config=/data/users/chjing/vllm_job_work/252880/nixl/nixl.cfg xdg_cache=/data/users/chjing/vllm_job_work/252880/xdg-cache tmp=/data/users/chjing/vllm_job_work/252880/tmp cwd=/data/users/chjing/vllm_job_work/252880
 pd_instance_model model=mistralai/Mistral-7B-v0.1 max_model_len=8192 max_num_batched_tokens=8192 max_num_seqs=32
 pd_clock_agent_started instance=Prefill_1 pid=1116079 visible_gpus=1
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:46 [utils.py:325] 
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:46 [utils.py:325]        █     █     █▄   ▄█
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:46 [utils.py:325]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.15.1
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:46 [utils.py:325]   █▄█▀ █     █     █     █  model   mistralai/Mistral-7B-v0.1
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:46 [utils.py:325]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:46 [utils.py:325] 
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:46 [utils.py:261] non-default args: {'model_tag': 'mistralai/Mistral-7B-v0.1', 'api_server_count': 1, 'host': '0.0.0.0', 'port': 32641, 'model': 'mistralai/Mistral-7B-v0.1', 'dtype': 'float16', 'max_model_len': 8192, 'enforce_eager': True, 'gpu_memory_utilization': 0.82, 'max_num_batched_tokens': 8192, 'max_num_seqs': 32, 'kv_transfer_config': KVTransferConfig(kv_connector='NixlConnector', engine_id='2f674b99-20e2-4536-84b8-3c2789e8ea1f', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_producer', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail')}
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:47 [model.py:541] Resolved architecture: MistralForCausalLM
+[0;36m(APIServer pid=1116080)[0;0m WARNING 08-10 14:37:47 [model.py:1885] Casting torch.bfloat16 to torch.float16.
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:47 [model.py:1561] Using max model len 8192
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:48 [scheduler.py:226] Chunked prefill is enabled with max_num_batched_tokens=8192.
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:48 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(APIServer pid=1116080)[0;0m WARNING 08-10 14:37:48 [vllm.py:662] Enforce eager set, overriding optimization level to -O0
+[0;36m(APIServer pid=1116080)[0;0m INFO 08-10 14:37:48 [vllm.py:762] Cudagraph is disabled under eager mode
+[0;36m(APIServer pid=1116080)[0;0m WARNING 08-10 14:37:48 [vllm.py:980] Turning off hybrid kv cache manager because `--kv-transfer-config` is set. This will reduce the performance of vLLM on LLMs with sliding window attention or Mamba attention. If you are a developer of kv connector, please consider supporting hybrid kv cache manager for your connector by making sure your connector is a subclass of `SupportsHMA` defined in kv_connector/v1/base.py and use --no-disable-hybrid-kv-cache-manager to start vLLM.
