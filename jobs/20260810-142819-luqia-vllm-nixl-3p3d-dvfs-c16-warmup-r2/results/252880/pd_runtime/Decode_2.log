@@ -34,3 +34,32 @@ INFO 08-10 14:35:49 [parallel_state.py:1423] rank 1 in world size 2 is assigned 
 [0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:35:51 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
 [0;36m(Worker_TP0 pid=1308434)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
 [0;36m(Worker_TP0 pid=1308434)[0;0m Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:01<00:01,  1.88s/it]
+[0;36m(Worker_TP0 pid=1308434)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:05<00:00,  3.17s/it]
+[0;36m(Worker_TP0 pid=1308434)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:05<00:00,  2.98s/it]
+[0;36m(Worker_TP0 pid=1308434)[0;0m 
+[0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:35:58 [default_loader.py:291] Loading weights took 6.09 seconds
+[0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:35:58 [gpu_model_runner.py:4130] Model loading took 6.75 GiB memory and 8.070803 seconds
+[0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:36:04 [gpu_worker.py:356] Available KV cache memory: 10.76 GiB
+[0;36m(EngineCore_DP0 pid=1308235)[0;0m INFO 08-10 14:36:04 [kv_cache_utils.py:1307] GPU KV cache size: 176,256 tokens
+[0;36m(EngineCore_DP0 pid=1308235)[0;0m INFO 08-10 14:36:04 [kv_cache_utils.py:1312] Maximum concurrency for 8,192 tokens per request: 21.47x
+[0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:36:04 [nixl_connector.py:101] Setting UCX_RCACHE_MAX_UNRELEASED to '1024' to avoid a rare memory leak in UCX when using NIXL.
+[0;36m(Worker_TP1 pid=1308435)[0;0m INFO 08-10 14:36:04 [nixl_connector.py:101] Setting UCX_RCACHE_MAX_UNRELEASED to '1024' to avoid a rare memory leak in UCX when using NIXL.
+[0;36m(Worker_TP1 pid=1308435)[0;0m INFO 08-10 14:36:05 [nixl_connector.py:114] NIXL is available
+[0;36m(Worker_TP1 pid=1308435)[0;0m INFO 08-10 14:36:05 [factory.py:64] Creating v1 connector with name: NixlConnector and engine_id: 8eae021f-920b-41c1-b54d-c8b144dbb608
+[0;36m(Worker_TP1 pid=1308435)[0;0m WARNING 08-10 14:36:05 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(Worker_TP1 pid=1308435)[0;0m INFO 08-10 14:36:05 [nixl_connector.py:830] Initializing NIXL wrapper
+[0;36m(Worker_TP1 pid=1308435)[0;0m INFO 08-10 14:36:05 [nixl_connector.py:831] Initializing NIXL worker 8eae021f-920b-41c1-b54d-c8b144dbb608
+[0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:36:05 [nixl_connector.py:114] NIXL is available
+[0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:36:05 [factory.py:64] Creating v1 connector with name: NixlConnector and engine_id: 8eae021f-920b-41c1-b54d-c8b144dbb608
+[0;36m(Worker_TP0 pid=1308434)[0;0m WARNING 08-10 14:36:05 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:36:05 [nixl_connector.py:830] Initializing NIXL wrapper
+[0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:36:05 [nixl_connector.py:831] Initializing NIXL worker 8eae021f-920b-41c1-b54d-c8b144dbb608
+[0;36m(Worker_TP1 pid=1308435)[0;0m 2026-08-10 14:36:06 NIXL INFO    _api.py:390 Backend UCX was instantiated
+[0;36m(Worker_TP1 pid=1308435)[0;0m 2026-08-10 14:36:06 NIXL INFO    _api.py:268 Initialized NIXL agent: 8bc82023-2380-41d2-bb8a-5ed67733be34
+[0;36m(Worker_TP1 pid=1308435)[0;0m INFO 08-10 14:36:06 [nixl_connector.py:339] NixlConnector setting KV cache layout to HND for better xfer performance.
+[0;36m(Worker_TP0 pid=1308434)[0;0m 2026-08-10 14:36:06 NIXL INFO    _api.py:390 Backend UCX was instantiated
+[0;36m(Worker_TP0 pid=1308434)[0;0m 2026-08-10 14:36:06 NIXL INFO    _api.py:268 Initialized NIXL agent: d59b75b4-bfb1-42d7-98ab-cc7917dd76d7
+[0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:36:06 [nixl_connector.py:339] NixlConnector setting KV cache layout to HND for better xfer performance.
+[0;36m(Worker_TP1 pid=1308435)[0;0m INFO 08-10 14:36:06 [nixl_connector.py:1284] Registering KV_Caches. use_mla: False, kv_buffer_device: cuda, use_host_buffer: False
+[0;36m(Worker_TP0 pid=1308434)[0;0m INFO 08-10 14:36:06 [nixl_connector.py:1284] Registering KV_Caches. use_mla: False, kv_buffer_device: cuda, use_host_buffer: False
+[0;36m(EngineCore_DP0 pid=1308235)[0;0m INFO 08-10 14:36:06 [core.py:272] init engine (profile, create kv cache, warmup model) took 8.03 seconds
