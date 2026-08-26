@@ -129,3 +129,56 @@
 [0;36m(APIServer pid=325589)[0;0m INFO 08-26 21:23:33 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 8.1 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%, External prefix cache hit rate: 99.2%
 [0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:48066 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:48080 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:23:36 [p2p_nccl_engine.py:52] set_p2p_nccl_context, original_values: {'NCCL_MAX_NCHANNELS': None, 'NCCL_MIN_NCHANNELS': None, 'NCCL_CUMEM_ENABLE': None, 'NCCL_BUFFSIZE': None, 'NCCL_PROTO': None, 'NCCL_ALGO': None}
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:48092 - "GET /metrics HTTP/1.1" 200 OK
+io:325838:326316 [0] NCCL INFO cudaDriverVersion 13020
+io:325838:326316 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo
+io:325838:326316 [0] NCCL INFO Bootstrap: Using eno12399np0:10.1.0.1<0>
+io:325838:326316 [0] NCCL INFO NCCL version 2.27.5+cuda12.9
+io:325838:326316 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so. 
+io:325838:326316 [0] NCCL INFO NCCL_IB_DISABLE set by environment to 1.
+io:325838:326316 [0] NCCL INFO NCCL_SOCKET_IFNAME set by environment to ^lo
+io:325838:326316 [0] NCCL INFO NET/Socket : Using [0]eno12399np0:10.1.0.1<0>
+io:325838:326316 [0] NCCL INFO Initialized NET plugin Socket
+io:325838:326316 [0] NCCL INFO Assigned NET plugin Socket to comm
+io:325838:326316 [0] NCCL INFO Using network Socket
+io:325838:326316 [0] NCCL INFO ncclCommInitRank comm 0x7440d8023910 rank 1 nranks 2 cudaDev 0 nvmlDev 0 busId d000 commId 0x1e4276d0bb56e6f2 - Init START
+io:325838:326316 [0] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+io:325838:326316 [0] NCCL INFO Bootstrap timings total 0.001975 (create 0.000033, send 0.000332, recv 0.000906, ring 0.000131, delay 0.000000)
+io:325838:326316 [0] NCCL INFO NCCL_CUMEM_ENABLE set by environment to 1.
+io:325838:326316 [0] NCCL INFO Setting affinity for GPU 0 to 0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,108,110,112,114,116,118,120,122,124,126
+io:325838:326316 [0] NCCL INFO comm 0x7440d8023910 rank 1 nRanks 2 nNodes 2 localRanks 1 localRank 0 MNNVL 0
+io:325838:326316 [0] NCCL INFO NCCL_MAX_NCHANNELS set by environment to 8.
+io:325838:326316 [0] NCCL INFO NCCL_MIN_NCHANNELS set by environment to 8.
+io:325838:326316 [0] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] 0/-1/-1->1->-1 [2] -1/-1/-1->1->0 [3] 0/-1/-1->1->-1 [4] -1/-1/-1->1->0 [5] 0/-1/-1->1->-1 [6] -1/-1/-1->1->0 [7] 0/-1/-1->1->-1
+io:325838:326316 [0] NCCL INFO P2P Chunksize set to 131072
+io:325838:326316 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+io:325838:327451 [0] NCCL INFO [Proxy Service] Device 0 CPU core 6
+io:325838:327452 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 8
+io:325838:326316 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+io:325838:326316 [0] NCCL INFO 8 coll channels, 8 collnet channels, 0 nvls channels, 8 p2p channels, 2 p2p channels per peer
+io:325838:326316 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+io:325838:326316 [0] NCCL INFO ncclCommInitRank comm 0x7440d8023910 rank 1 nranks 2 cudaDev 0 nvmlDev 0 busId d000 commId 0x1e4276d0bb56e6f2 - Init COMPLETE
+io:325838:326316 [0] NCCL INFO Init timings - ncclCommInitRank: rank 1 nranks 2 total 0.21 (kernels 0.19, alloc 0.01, bootstrap 0.00, allgathers 0.00, topo 0.00, graphs 0.00, connections 0.01, rest 0.00)
+io:325838:327454 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 10
+io:325838:327453 [0] NCCL INFO Channel 01/1 : 0[0] -> 1[0] [receive] via NET/Socket/0/Shared
+io:325838:327453 [0] NCCL INFO Channel 05/1 : 0[0] -> 1[0] [receive] via NET/Socket/0/Shared
+io:325838:326316 [0] NCCL INFO Assigned NET plugin Socket to comm
+io:325838:326316 [0] NCCL INFO Using network Socket
+io:325838:326316 [0] NCCL INFO ncclCommInitRank comm 0x7440dbcdb2d0 rank 1 nranks 2 cudaDev 0 nvmlDev 0 busId d000 commId 0xc5a4c429899ae7ce - Init START
+io:325838:326316 [0] NCCL INFO Bootstrap timings total 0.170891 (create 0.000032, send 0.000361, recv 0.169643, ring 0.000404, delay 0.000000)
+io:325838:326316 [0] NCCL INFO Setting affinity for GPU 0 to 0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,108,110,112,114,116,118,120,122,124,126
+io:325838:326316 [0] NCCL INFO comm 0x7440dbcdb2d0 rank 1 nRanks 2 nNodes 2 localRanks 1 localRank 0 MNNVL 0
+io:325838:326316 [0] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] 0/-1/-1->1->-1 [2] -1/-1/-1->1->0 [3] 0/-1/-1->1->-1 [4] -1/-1/-1->1->0 [5] 0/-1/-1->1->-1 [6] -1/-1/-1->1->0 [7] 0/-1/-1->1->-1
+io:325838[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:23:36 [p2p_nccl_engine.py:404] 🤝ncclCommInitRank Success, 10.1.0.1:14579👈10.1.0.6:14580, MyRank:1
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:48106 - "POST /v1/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:48122 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:48134 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:48148 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:32804 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:32816 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:32822 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:32826 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(APIServer pid=325589)[0;0m INFO 08-26 21:23:43 [loggers.py:257] Engine 000: Avg prompt throughput: 12.9 tokens/s, Avg generation throughput: 11.9 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 0.0%, External prefix cache hit rate: 99.2%
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:32842 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(APIServer pid=325589)[0;0m INFO:     127.0.0.1:32846 - "GET /metrics HTTP/1.1" 200 OK
