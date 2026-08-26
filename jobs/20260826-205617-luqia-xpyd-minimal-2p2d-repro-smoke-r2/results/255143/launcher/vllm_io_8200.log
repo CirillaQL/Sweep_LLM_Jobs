@@ -25,3 +25,13 @@
 [0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:19:59 [backends.py:812] Using cache directory: /data/users/chjing/vllm_job_work/255143/vllm-cache/torch_compile_cache/a900125067/rank_0_0/backbone for vLLM's torch.compile
 [0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:19:59 [backends.py:872] Dynamo bytecode transform time: 8.70 s
 [0;36m(EngineCore_DP0 pid=325838)[0;0m [rank0]:W0826 21:20:05.111000 325838 site-packages/torch/_inductor/utils.py:1613] Not enough SMs to use max_autotune_gemm mode
+[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:20:06 [backends.py:302] Cache the graph of compile range (1, 4096) for later use
+[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:20:13 [backends.py:319] Compiling a graph for compile range (1, 4096) takes 10.05 s
+[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:20:13 [monitor.py:34] torch.compile takes 18.75 s in total
+[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:20:15 [gpu_worker.py:356] Available KV cache memory: 4.03 GiB
+[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:20:15 [kv_cache_utils.py:1307] GPU KV cache size: 33,008 tokens
+[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:20:15 [kv_cache_utils.py:1312] Maximum concurrency for 4,096 tokens per request: 8.03x
+[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:20:15 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 4de7f0cc-014e-45c1-825b-51ec7e998db7
+[0;36m(EngineCore_DP0 pid=325838)[0;0m WARNING 08-26 21:20:15 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:20:35 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:0, local_rank:0, http_address:, zmq_address:10.1.0.1:14579, proxy_address:, send_type:PUT_ASYNC, buffer_size_threshold:1000000000.00, nccl_num_channels:8
+[0;36m(EngineCore_DP0 pid=325838)[0;0m INFO 08-26 21:20:35 [utils.py:38] Connectors do not specify a kv cache layout, defaulting to NHD.
