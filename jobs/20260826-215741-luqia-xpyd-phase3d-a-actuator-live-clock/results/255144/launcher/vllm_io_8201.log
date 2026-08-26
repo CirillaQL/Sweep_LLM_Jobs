@@ -15,3 +15,55 @@
 [0;36m(EngineCore_DP0 pid=345205)[0;0m INFO 08-26 23:15:27 [parallel_state.py:1423] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
 [0;36m(EngineCore_DP0 pid=345205)[0;0m INFO 08-26 23:15:28 [gpu_model_runner.py:4033] Starting to load model mistralai/Mistral-7B-v0.1...
 [0;36m(EngineCore_DP0 pid=345205)[0;0m INFO 08-26 23:15:29 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
+[rank0]:[W826 23:37:03.706996072 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W826 23:37:04.039984647 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[0;36m(APIServer pid=344968)[0;0m Traceback (most recent call last):
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+[0;36m(APIServer pid=344968)[0;0m     return _run_code(code, main_globals, None,
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/runpy.py", line 86, in _run_code
+[0;36m(APIServer pid=344968)[0;0m     exec(code, run_globals)
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 991, in <module>
+[0;36m(APIServer pid=344968)[0;0m     uvloop.run(run_server(args))
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvloop/__init__.py", line 69, in run
+[0;36m(APIServer pid=344968)[0;0m     return loop.run_until_complete(wrapper())
+[0;36m(APIServer pid=344968)[0;0m   File "uvloop/loop.pyx", line 1512, in uvloop.loop.Loop.run_until_complete
+[0;36m(APIServer pid=344968)[0;0m   File "uvloop/loop.pyx", line 1505, in uvloop.loop.Loop.run_until_complete
+[0;36m(APIServer pid=344968)[0;0m   File "uvloop/loop.pyx", line 1379, in uvloop.loop.Loop.run_forever
+[0;36m(APIServer pid=344968)[0;0m   File "uvloop/loop.pyx", line 557, in uvloop.loop.Loop._run
+[0;36m(APIServer pid=344968)[0;0m   File "uvloop/loop.pyx", line 476, in uvloop.loop.Loop._on_idle
+[0;36m(APIServer pid=344968)[0;0m   File "uvloop/cbhandles.pyx", line 83, in uvloop.loop.Handle._run
+[0;36m(APIServer pid=344968)[0;0m   File "uvloop/cbhandles.pyx", line 61, in uvloop.loop.Handle._run
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvloop/__init__.py", line 48, in wrapper
+[0;36m(APIServer pid=344968)[0;0m     return await main
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 919, in run_server
+[0;36m(APIServer pid=344968)[0;0m     await run_server_worker(listen_address, sock, args, **uvicorn_kwargs)
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 938, in run_server_worker
+[0;36m(APIServer pid=344968)[0;0m     async with build_async_engine_client(
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 199, in __aenter__
+[0;36m(APIServer pid=344968)[0;0m     return await anext(self.gen)
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 147, in build_async_engine_client
+[0;36m(APIServer pid=344968)[0;0m     async with build_async_engine_client_from_engine_args(
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 199, in __aenter__
+[0;36m(APIServer pid=344968)[0;0m     return await anext(self.gen)
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 188, in build_async_engine_client_from_engine_args
+[0;36m(APIServer pid=344968)[0;0m     async_llm = AsyncLLM.from_vllm_config(
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/async_llm.py", line 228, in from_vllm_config
+[0;36m(APIServer pid=344968)[0;0m     return cls(
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/async_llm.py", line 155, in __init__
+[0;36m(APIServer pid=344968)[0;0m     self.engine_core = EngineCoreClient.make_async_mp_client(
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 122, in make_async_mp_client
+[0;36m(APIServer pid=344968)[0;0m     return AsyncMPClient(*client_args)
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 819, in __init__
+[0;36m(APIServer pid=344968)[0;0m     super().__init__(
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 499, in __init__
+[0;36m(APIServer pid=344968)[0;0m     self.resources.output_socket = make_zmq_socket(
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/utils/network_utils.py", line 309, in make_zmq_socket
+[0;36m(APIServer pid=344968)[0;0m     socket.bind(path)
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/zmq/sugar/socket.py", line 320, in bind
+[0;36m(APIServer pid=344968)[0;0m     super().bind(addr)
+[0;36m(APIServer pid=344968)[0;0m   File "zmq/backend/cython/_zmq.py", line 1009, in zmq.backend.cython._zmq.Socket.bind
+[0;36m(APIServer pid=344968)[0;0m   File "zmq/backend/cython/_zmq.py", line 179, in zmq.backend.cython._zmq._check_rc
+[0;36m(APIServer pid=344968)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 898, in signal_handler
+[0;36m(APIServer pid=344968)[0;0m     raise KeyboardInterrupt("terminated")
+[0;36m(APIServer pid=344968)[0;0m KeyboardInterrupt: terminated
+[W826 23:37:09.187861957 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
