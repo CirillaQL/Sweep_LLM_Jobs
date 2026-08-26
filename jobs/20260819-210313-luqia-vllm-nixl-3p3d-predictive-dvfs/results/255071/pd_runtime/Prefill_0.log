@@ -16,3 +16,8 @@ pd_clock_agent_started instance=Prefill_0 pid=119343 visible_gpus=0
 [0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:48 [model.py:541] Resolved architecture: MistralForCausalLM
 [0;36m(APIServer pid=119344)[0;0m WARNING 08-26 03:59:48 [model.py:1885] Casting torch.bfloat16 to torch.float16.
 [0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:48 [model.py:1561] Using max model len 8192
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:48 [scheduler.py:226] Chunked prefill is enabled with max_num_batched_tokens=8192.
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:48 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(APIServer pid=119344)[0;0m WARNING 08-26 03:59:48 [vllm.py:662] Enforce eager set, overriding optimization level to -O0
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:48 [vllm.py:762] Cudagraph is disabled under eager mode
+[0;36m(APIServer pid=119344)[0;0m WARNING 08-26 03:59:48 [vllm.py:980] Turning off hybrid kv cache manager because `--kv-transfer-config` is set. This will reduce the performance of vLLM on LLMs with sliding window attention or Mamba attention. If you are a developer of kv connector, please consider supporting hybrid kv cache manager for your connector by making sure your connector is a subclass of `SupportsHMA` defined in kv_connector/v1/base.py and use --no-disable-hybrid-kv-cache-manager to start vLLM.
