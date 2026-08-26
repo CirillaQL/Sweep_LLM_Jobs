@@ -7,3 +7,68 @@
 [0;36m(APIServer pid=561394)[0;0m INFO 08-26 19:15:35 [utils.py:325]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
 [0;36m(APIServer pid=561394)[0;0m INFO 08-26 19:15:35 [utils.py:325] 
 [0;36m(APIServer pid=561394)[0;0m INFO 08-26 19:15:35 [utils.py:261] non-default args: {'host': '0.0.0.0', 'port': 8100, 'model': 'mistralai/Mistral-7B-v0.1', 'max_model_len': 4096, 'enable_prefix_caching': False, 'enable_chunked_prefill': False, 'kv_transfer_config': KVTransferConfig(kv_connector='P2pNcclConnector', engine_id='27ecb310-d078-43f8-9a4b-11ce189b76d0', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_producer', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'send_type': 'PUT'}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='recompute')}
+[0;36m(APIServer pid=561394)[0;0m Traceback (most recent call last):
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/transformers/utils/hub.py", line 479, in cached_files
+[0;36m(APIServer pid=561394)[0;0m     hf_hub_download(
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[0;36m(APIServer pid=561394)[0;0m     return fn(*args, **kwargs)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 969, in hf_hub_download
+[0;36m(APIServer pid=561394)[0;0m     hf_headers = build_hf_headers(
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/huggingface_hub/utils/_deprecation.py", line 101, in inner_f
+[0;36m(APIServer pid=561394)[0;0m     return f(*args, **kwargs)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+[0;36m(APIServer pid=561394)[0;0m     return fn(*args, **kwargs)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/huggingface_hub/utils/_headers.py", line 126, in build_hf_headers
+[0;36m(APIServer pid=561394)[0;0m     token_to_send = get_token_to_send(token)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/huggingface_hub/utils/_headers.py", line 154, in get_token_to_send
+[0;36m(APIServer pid=561394)[0;0m     cached_token = get_token()
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/huggingface_hub/utils/_auth.py", line 49, in get_token
+[0;36m(APIServer pid=561394)[0;0m     return _get_token_from_google_colab() or _get_token_from_environment() or _get_token_from_file()
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/huggingface_hub/utils/_auth.py", line 123, in _get_token_from_file
+[0;36m(APIServer pid=561394)[0;0m     return _clean_token(Path(constants.HF_TOKEN_PATH).read_text())
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/pathlib.py", line 1134, in read_text
+[0;36m(APIServer pid=561394)[0;0m     with self.open(mode='r', encoding=encoding, errors=errors) as f:
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/pathlib.py", line 1119, in open
+[0;36m(APIServer pid=561394)[0;0m     return self._accessor.open(self, mode, buffering, encoding, errors,
+[0;36m(APIServer pid=561394)[0;0m PermissionError: [Errno 13] Permission denied: '/root/.cache/huggingface/token'
+[0;36m(APIServer pid=561394)[0;0m 
+[0;36m(APIServer pid=561394)[0;0m The above exception was the direct cause of the following exception:
+[0;36m(APIServer pid=561394)[0;0m 
+[0;36m(APIServer pid=561394)[0;0m Traceback (most recent call last):
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+[0;36m(APIServer pid=561394)[0;0m     return _run_code(code, main_globals, None,
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/runpy.py", line 86, in _run_code
+[0;36m(APIServer pid=561394)[0;0m     exec(code, run_globals)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 991, in <module>
+[0;36m(APIServer pid=561394)[0;0m     uvloop.run(run_server(args))
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvloop/__init__.py", line 69, in run
+[0;36m(APIServer pid=561394)[0;0m     return loop.run_until_complete(wrapper())
+[0;36m(APIServer pid=561394)[0;0m   File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvloop/__init__.py", line 48, in wrapper
+[0;36m(APIServer pid=561394)[0;0m     return await main
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 919, in run_server
+[0;36m(APIServer pid=561394)[0;0m     await run_server_worker(listen_address, sock, args, **uvicorn_kwargs)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 938, in run_server_worker
+[0;36m(APIServer pid=561394)[0;0m     async with build_async_engine_client(
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 199, in __aenter__
+[0;36m(APIServer pid=561394)[0;0m     return await anext(self.gen)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 147, in build_async_engine_client
+[0;36m(APIServer pid=561394)[0;0m     async with build_async_engine_client_from_engine_args(
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 199, in __aenter__
+[0;36m(APIServer pid=561394)[0;0m     return await anext(self.gen)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 173, in build_async_engine_client_from_engine_args
+[0;36m(APIServer pid=561394)[0;0m     vllm_config = engine_args.create_engine_config(usage_context=usage_context)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/engine/arg_utils.py", line 1365, in create_engine_config
+[0;36m(APIServer pid=561394)[0;0m     maybe_override_with_speculators(
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/transformers_utils/config.py", line 526, in maybe_override_with_speculators
+[0;36m(APIServer pid=561394)[0;0m     config_dict, _ = PretrainedConfig.get_config_dict(
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/transformers/configuration_utils.py", line 662, in get_config_dict
+[0;36m(APIServer pid=561394)[0;0m     config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/transformers/configuration_utils.py", line 721, in _get_config_dict
+[0;36m(APIServer pid=561394)[0;0m     resolved_config_file = cached_file(
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/transformers/utils/hub.py", line 322, in cached_file
+[0;36m(APIServer pid=561394)[0;0m     file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+[0;36m(APIServer pid=561394)[0;0m   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/transformers/utils/hub.py", line 524, in cached_files
+[0;36m(APIServer pid=561394)[0;0m     raise OSError(
+[0;36m(APIServer pid=561394)[0;0m OSError: PermissionError at /root/.cache/huggingface/token when downloading mistralai/Mistral-7B-v0.1. Check cache directory permissions. Common causes: 1) another user is downloading the same model (please wait); 2) a previous download was canceled and the lock file needs manual removal.
+srun: error: neptune: task 0: Exited with exit code 1
