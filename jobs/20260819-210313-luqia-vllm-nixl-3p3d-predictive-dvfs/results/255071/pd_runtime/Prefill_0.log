@@ -6,3 +6,13 @@ pd_instance_connector connector=NixlConnector nixl_side_channel=10.1.0.5:34176 u
 pd_instance_paths work=/data/users/chjing/vllm_job_work/255071 home=/data/users/chjing/vllm_job_work/255071/home nixl_config=/data/users/chjing/vllm_job_work/255071/nixl/nixl.cfg xdg_cache=/data/users/chjing/vllm_job_work/255071/xdg-cache tmp=/data/users/chjing/vllm_job_work/255071/tmp cwd=/data/users/chjing/vllm_job_work/255071
 pd_instance_model model=mistralai/Mistral-7B-v0.1 max_model_len=8192 max_num_batched_tokens=8192 max_num_seqs=32
 pd_clock_agent_started instance=Prefill_0 pid=119343 visible_gpus=0
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:47 [utils.py:325] 
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:47 [utils.py:325]        █     █     █▄   ▄█
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:47 [utils.py:325]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.15.1
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:47 [utils.py:325]   █▄█▀ █     █     █     █  model   mistralai/Mistral-7B-v0.1
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:47 [utils.py:325]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:47 [utils.py:325] 
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:47 [utils.py:261] non-default args: {'model_tag': 'mistralai/Mistral-7B-v0.1', 'api_server_count': 1, 'host': '0.0.0.0', 'port': 32176, 'model': 'mistralai/Mistral-7B-v0.1', 'dtype': 'float16', 'max_model_len': 8192, 'enforce_eager': True, 'gpu_memory_utilization': 0.82, 'max_num_batched_tokens': 8192, 'max_num_seqs': 32, 'kv_transfer_config': KVTransferConfig(kv_connector='NixlConnector', engine_id='be72c62d-bfe0-40b9-9b8d-dfce5606a6a8', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_producer', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail')}
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:48 [model.py:541] Resolved architecture: MistralForCausalLM
+[0;36m(APIServer pid=119344)[0;0m WARNING 08-26 03:59:48 [model.py:1885] Casting torch.bfloat16 to torch.float16.
+[0;36m(APIServer pid=119344)[0;0m INFO 08-26 03:59:48 [model.py:1561] Using max model len 8192
