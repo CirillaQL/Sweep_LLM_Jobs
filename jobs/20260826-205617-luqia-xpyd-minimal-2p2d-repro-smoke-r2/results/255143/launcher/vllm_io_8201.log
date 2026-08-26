@@ -226,3 +226,20 @@ io:3[0;36m(EngineCore_DP0 pid=326621)[0;0m INFO 08-26 21:23:43 [p2p_nccl_engin
 [0;36m(APIServer pid=326393)[0;0m INFO:     127.0.0.1:49602 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=326393)[0;0m INFO 08-26 21:24:31 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 1.8 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%, External prefix cache hit rate: 100.0%
 [0;36m(APIServer pid=326393)[0;0m INFO 08-26 21:24:41 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%, External prefix cache hit rate: 100.0%
+[0;36m(APIServer pid=326393)[0;0m INFO 08-26 21:25:04 [launcher.py:110] Shutting down FastAPI HTTP server.
+26621:327070 [0] NCCL INFO P2P Chunksize set to 131072
+io:326621:327778 [0] NCCL INFO [Proxy Service] Device 0 CPU core 56
+io:326621:327779 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 58
+io:326621:327070 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+io:326621:327070 [0] NCCL INFO 8 coll channels, 8 collnet channels, 0 nvls channels, 8 p2p channels, 2 p2p channels per peer
+io:326621:327070 [0] NCCL INFO ncclCommInitRank comm 0x7973cfce0c10 rank 1 nranks 2 cudaDev 0 nvmlDev 1 busId 37000 commId 0x5e455398b1d99126 - Init COMPLETE
+io:326621:327070 [0] NCCL INFO Init timings - ncclCommInitRank: rank 1 nranks 2 total 0.02 (kernels 0.00, alloc 0.00, bootstrap 0.00, allgathers 0.00, topo 0.00, graphs 0.00, connections 0.01, rest 0.00)
+io:326621:327781 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 60
+io:326621:327780 [0] NCCL INFO Channel 01/1 : 0[1] -> 1[1] [receive] via NET/Socket/0/Shared
+io:326621:327780 [0] NCCL INFO Channel 05/1 : 0[1] -> 1[1] [receive] via NET/Socket/0/Shared
+[rank0]:[W826 21:25:04.384766059 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W826 21:25:04.529291677 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[0;36m(APIServer pid=326393)[0;0m INFO:     Shutting down
+[0;36m(APIServer pid=326393)[0;0m INFO:     Waiting for application shutdown.
+[0;36m(APIServer pid=326393)[0;0m INFO:     Application shutdown complete.
+[W826 21:25:12.323657153 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
