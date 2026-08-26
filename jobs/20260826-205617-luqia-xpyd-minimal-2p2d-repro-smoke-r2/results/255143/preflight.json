@@ -1,0 +1,105 @@
+{
+  "cache_environment": {
+    "CUDA_CACHE_PATH": "/data/users/chjing/vllm_job_work/255143/cuda-cache",
+    "HF_HOME": "/data/users/chjing/vllm_job_work/255143/huggingface",
+    "HF_HUB_CACHE": "/data/users/chjing/vllm_job_work/255143/huggingface/hub",
+    "HF_TOKEN_PATH": "/data/users/chjing/vllm_job_work/255143/huggingface/token",
+    "HOME": "/data/users/chjing/vllm_job_work/255143/home",
+    "TMPDIR": "/data/users/chjing/vllm_job_work/255143/tmp",
+    "TORCH_HOME": "/data/users/chjing/vllm_job_work/255143/torch-cache",
+    "TRITON_CACHE_DIR": "/data/users/chjing/vllm_job_work/255143/triton-cache",
+    "VLLM_CACHE_ROOT": "/data/users/chjing/vllm_job_work/255143/vllm-cache",
+    "XDG_CACHE_HOME": "/data/users/chjing/vllm_job_work/255143/xdg-cache",
+    "XDG_CONFIG_HOME": "/data/users/chjing/vllm_job_work/255143/xdg-config",
+    "XDG_RUNTIME_DIR": "/data/users/chjing/vllm_job_work/255143/xdg-runtime"
+  },
+  "config": {
+    "endpoints": [
+      [
+        "P0",
+        "prefill",
+        "neptune",
+        "NVIDIA L40S",
+        [
+          0
+        ],
+        1,
+        "P2pNcclConnector"
+      ],
+      [
+        "P1",
+        "prefill",
+        "neptune",
+        "NVIDIA L40S",
+        [
+          1
+        ],
+        1,
+        "P2pNcclConnector"
+      ],
+      [
+        "D0",
+        "decode",
+        "io",
+        "NVIDIA L4",
+        [
+          0
+        ],
+        1,
+        "P2pNcclConnector"
+      ],
+      [
+        "D1",
+        "decode",
+        "io",
+        "NVIDIA L4",
+        [
+          1
+        ],
+        1,
+        "P2pNcclConnector"
+      ]
+    ],
+    "routes": [
+      [
+        "P0",
+        "D0"
+      ],
+      [
+        "P0",
+        "D1"
+      ],
+      [
+        "P1",
+        "D0"
+      ],
+      [
+        "P1",
+        "D1"
+      ]
+    ],
+    "workloads": [
+      [
+        "small",
+        128,
+        128,
+        4
+      ],
+      [
+        "prefill_heavy",
+        2048,
+        128,
+        4
+      ]
+    ]
+  },
+  "nvidia_smi": "NVIDIA L4, 0\nNVIDIA L4, 1\nNVIDIA L4, 2\nNVIDIA L4, 3\nNVIDIA L4, 4\nNVIDIA L4, 5\nNVIDIA L4, 6\nNVIDIA L4, 7",
+  "ok": true,
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+  "python": "3.10.17 | packaged by conda-forge | (main, Apr 10 2025, 22:19:12) [GCC 13.3.0]",
+  "slurm_job_id": "255143",
+  "slurm_nodes": "io,neptune",
+  "source_bundle_sha256": "444c34046cc60b5e6652f91949d3074230a24499887ed70f52bb2c15d2dcdb35",
+  "source_commit": "0eb8926f965cfd550f5bcee0095b563b1bb4e41e",
+  "vllm_version": "0.15.1"
+}
