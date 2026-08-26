@@ -233,29 +233,3 @@ neptune:577306:577306 [0] NCCL INFO Bootstrap timings total 0.192917 (create 0.0
 [0;36m(APIServer pid=577103)[0;0m INFO:     10.1.0.1:46884 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=577103)[0;0m INFO:     10.1.0.1:46890 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=577103)[0;0m INFO:     10.1.0.1:46904 - "GET /metrics HTTP/1.1" 200 OK
-[0;36m(APIServer pid=577103)[0;0m INFO 08-26 21:24:25 [launcher.py:110] Shutting down FastAPI HTTP server.
-35, recv 0.191628, ring 0.000607, delay 0.000000)
-neptune:577306:577306 [0] NCCL INFO Setting affinity for GPU 0 to 0,2,4,6,8,10,12,14,64,66,68,70,72,74,76,78
-neptune:577306:577306 [0] NCCL INFO comm 0x620c48e54330 rank 0 nRanks 2 nNodes 2 localRanks 1 localRank 0 MNNVL 0
-neptune:577306:577306 [0] NCCL INFO Channel 00/08 : 0 1
-neptune:577306:577306 [0] NCCL INFO Channel 01/08 : 0 1
-neptune:577306:577306 [0] NCCL INFO Channel 02/08 : 0 1
-neptune:577306:577306 [0] NCCL INFO Channel 03/08 : 0 1
-neptune:577306:577306 [0] NCCL INFO Channel 04/08 : 0 1
-neptune:577306:577306 [0] NCCL INFO Channel 05/08 : 0 1
-neptune:577306:577306 [0] NCCL INFO Channel 06/08 : 0 1
-neptune:577306:577306 [0] NCCL INFO Channel 07/08 : 0 1
-neptune:577306:577306 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] -1/-1/-1->0->1 [2] 1/-1/-1->0->-1 [3] -1/-1/-1->0->1 [4] 1/-1/-1->0->-1 [5] -1/-1/-1->0->1 [6] 1/-1/-1->0->-1 [7] -1/-1/-1->0->1
-neptune:577306:577306 [0] NCCL INFO P2P Chunksize set to 131072
-neptune:577306:577306 [0] NCCL INFO Check P2P Type isAllDirectP2p 0 directMode 0
-neptune:577306:579040 [0] NCCL INFO [Proxy Service] Device 0 CPU core 0
-neptune:577306:579041 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 14
-neptune:577306:577306 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
-neptune:577306:577306 [0] NCCL INFO 8 coll channels, 8 collnet channels, 0 nvls channels, 8 p2p channels, 2 p2p channels per peer
-neptune:577306:577306 [0] NCCL INFO CC Off, workFifoBytes 1048576
-neptune:577306:577306 [0] NCCL INFO ncclCommInitRank comm 0x620c48e54330 rank 0 nranks 2 cudaDev 0 nvmlDev 0 busId 4a000 commId 0xe3a25567200ebc24 - Init COMPLETE
-neptune:577306:577306 [0] NCCL INFO Init timings - ncclCommInitRank: rank 0 nranks 2 total 0.21 (kernels 0.00, alloc 0.00, bootstrap 0.19, allgathers 0.00, topo 0.00, graphs 0.00, connections 0.00, rest 0.00)
-neptune:577306:579042 [0] NCCL INFO Channel 01/1 : 0[0] -> 1[1] [send] via NET/Socket/0/Shared
-neptune:577306:579043 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 66
-neptune:577306:579042 [0] NCCL INFO Channel 05/1 : 0[0] -> 1[1] [send] via NET/Socket/0/Shared
-[rank0]:[W826 21:24:25.134313067 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
