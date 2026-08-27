@@ -1,0 +1,112 @@
+{
+  "cache_environment": {
+    "CUDA_CACHE_PATH": "/data/users/chjing/vllm_job_work/255199/cuda-cache",
+    "HF_HOME": "/data/users/chjing/vllm_job_work/255199/huggingface",
+    "HF_HUB_CACHE": "/data/users/chjing/vllm_job_work/255199/huggingface/hub",
+    "HF_TOKEN_PATH": "/data/users/chjing/vllm_job_work/255199/huggingface/token",
+    "HOME": "/data/users/chjing/vllm_job_work/255199/home",
+    "TMPDIR": "/data/users/chjing/vllm_job_work/255199/tmp",
+    "TORCH_HOME": "/data/users/chjing/vllm_job_work/255199/torch-cache",
+    "TRITON_CACHE_DIR": "/data/users/chjing/vllm_job_work/255199/triton-cache",
+    "VLLM_CACHE_ROOT": "/data/users/chjing/vllm_job_work/255199/vllm-cache",
+    "XDG_CACHE_HOME": "/data/users/chjing/vllm_job_work/255199/xdg-cache",
+    "XDG_CONFIG_HOME": "/data/users/chjing/vllm_job_work/255199/xdg-config",
+    "XDG_RUNTIME_DIR": "/data/users/chjing/vllm_job_work/255199/xdg-runtime"
+  },
+  "config": {
+    "endpoints": [
+      [
+        "P0",
+        "prefill",
+        "neptune",
+        "NVIDIA L40S",
+        [
+          0
+        ],
+        1,
+        "P2pNcclConnector"
+      ],
+      [
+        "P1",
+        "prefill",
+        "neptune",
+        "NVIDIA L40S",
+        [
+          1
+        ],
+        1,
+        "P2pNcclConnector"
+      ],
+      [
+        "D0",
+        "decode",
+        "ganymede",
+        "NVIDIA L4",
+        [
+          0
+        ],
+        1,
+        "P2pNcclConnector"
+      ],
+      [
+        "D1",
+        "decode",
+        "ganymede",
+        "NVIDIA L4",
+        [
+          1
+        ],
+        1,
+        "P2pNcclConnector"
+      ]
+    ],
+    "routes": [
+      [
+        "P0",
+        "D0"
+      ],
+      [
+        "P0",
+        "D1"
+      ],
+      [
+        "P1",
+        "D0"
+      ],
+      [
+        "P1",
+        "D1"
+      ]
+    ],
+    "workloads": [
+      [
+        "small",
+        128,
+        128,
+        2
+      ],
+      [
+        "prefill_heavy",
+        2048,
+        128,
+        2
+      ]
+    ]
+  },
+  "local_model": {
+    "path": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+    "weight_files": [
+      "model-00001-of-00002.safetensors",
+      "model-00002-of-00002.safetensors"
+    ]
+  },
+  "nvidia_smi": "NVIDIA L4, 0\nNVIDIA L4, 1\nNVIDIA L4, 2\nNVIDIA L4, 3\nNVIDIA L4, 4\nNVIDIA L4, 5\nNVIDIA L4, 6\nNVIDIA L4, 7",
+  "ok": true,
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+  "python": "3.10.17 | packaged by conda-forge | (main, Apr 10 2025, 22:19:12) [GCC 13.3.0]",
+  "slurm_job_id": "255199",
+  "slurm_nodes": "ganymede,neptune",
+  "source_bundle_sha256": "77b4dd435bb977e63d4ba829142b4c69bd568f4a0b66b107406bdcdccb9aed70",
+  "source_commit": "0eb8926f965cfd550f5bcee0095b563b1bb4e41e",
+  "vllm_version": "0.15.1"
+}
