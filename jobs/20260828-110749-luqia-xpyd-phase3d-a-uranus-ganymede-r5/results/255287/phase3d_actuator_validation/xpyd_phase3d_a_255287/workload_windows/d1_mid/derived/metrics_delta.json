@@ -1,0 +1,3136 @@
+{
+  "client": {
+    "client_itl_valid_requests": 4,
+    "client_tpot_valid_requests": 4,
+    "client_ttft_valid_requests": 4,
+    "completion_token_sources": {
+      "server_usage": 4
+    },
+    "decode_stream_available_requests": 4,
+    "failed_requests": 0,
+    "input_tokens_total": 4352,
+    "logical_request_count": 4,
+    "logical_request_id_propagated_requests": 4,
+    "max_concurrency": 1,
+    "mean_e2e_latency_ms": 7648.41230100501,
+    "mean_itl_ms": 57.51269523033278,
+    "mean_tpot_ms": 57.51581047441032,
+    "mean_ttft_ms": 343.904370754899,
+    "model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+    "num_warmups": 0,
+    "output_tokens_total": 512,
+    "p99_e2e_latency_ms": 7998.77769798346,
+    "p99_itl_ms": 59.14764358480915,
+    "p99_tpot_ms": 59.15149156439029,
+    "p99_ttft_ms": 486.53826930589275,
+    "requested_output_tokens_total": 512,
+    "requests_total": 4,
+    "successful_requests": 4,
+    "timing_end_unix_s": 1787909268.0089045,
+    "timing_start_unix_s": 1787909237.4138498,
+    "tokenizer_model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+    "trace_csv": "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260828-110749-luqia-xpyd-phase3d-a-uranus-ganymede-r5/results/255287/phase3d_actuator_validation/xpyd_phase3d_a_255287/workload_windows/d1_mid/client/trace.csv",
+    "trace_duration_s": 6.0
+  },
+  "endpoints": {
+    "D0": {
+      "histogram_deltas": {
+        "vllm:e2e_request_latency_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 14.32553505897522
+        },
+        "vllm:inter_token_latency_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.025
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.05
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.075
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.15
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.2
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.4
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 254.0,
+          "sum_seconds": 14.192356900995946
+        },
+        "vllm:request_decode_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 14.192356900995946
+        },
+        "vllm:request_prefill_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.1244725160067901
+        },
+        "vllm:request_queue_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 9.90069966064766e-05
+        },
+        "vllm:time_to_first_token_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.001
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.005
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.02
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.04
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.06
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.08
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.25
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 160.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 640.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2560.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.13427400588989258
+        }
+      },
+      "missing_after": [],
+      "missing_before": [],
+      "reset_or_layout_change_metrics": [],
+      "window": {
+        "completed_requests_per_s": 0.05070523739462176,
+        "delta_completed_requests": 2.0,
+        "delta_generation_tokens": 256.0,
+        "delta_prompt_tokens": 258.0,
+        "end_timestamp_s": 1787909269.0655613,
+        "endpoint_id": "D0",
+        "generation_tokens_per_s": 6.490270386511585,
+        "inter_token_histogram": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.025
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.05
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.075
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.15
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.2
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.4
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 254.0,
+          "sum_seconds": 14.192356900995946
+        },
+        "interval_s": 39.4436571598053,
+        "prompt_tokens_per_s": 6.540975623906207,
+        "reason": "ok",
+        "reset_metrics": [],
+        "start_timestamp_s": 1787909229.6219041,
+        "ttft_histogram": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.001
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.005
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.02
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.04
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.06
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.08
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.25
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 160.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 640.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2560.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.13427400588989258
+        },
+        "valid": true,
+        "window_mean_tbt_ms": 55.87542087006278,
+        "window_mean_ttft_ms": 67.13700294494629,
+        "window_tbt_count": 254,
+        "window_tbt_p95_ms": 75.0,
+        "window_tbt_p99_ms": 75.0,
+        "window_ttft_count": 2,
+        "window_ttft_p95_ms": 80.0,
+        "window_ttft_p99_ms": 80.0
+      }
+    },
+    "D1": {
+      "histogram_deltas": {
+        "vllm:e2e_request_latency_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 15.166353702545166
+        },
+        "vllm:inter_token_latency_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.025
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.05
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.075
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.15
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.2
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.4
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 254.0,
+          "sum_seconds": 15.023442417019396
+        },
+        "vllm:request_decode_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 15.023442417019396
+        },
+        "vllm:request_prefill_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.13302921799186151
+        },
+        "vllm:request_queue_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 9.30440000956878e-05
+        },
+        "vllm:time_to_first_token_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.001
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.005
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.02
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.04
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.06
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.08
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.25
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 160.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 640.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2560.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.144578218460083
+        }
+      },
+      "missing_after": [],
+      "missing_before": [],
+      "reset_or_layout_change_metrics": [],
+      "window": {
+        "completed_requests_per_s": 0.050753877321534954,
+        "delta_completed_requests": 2.0,
+        "delta_generation_tokens": 256.0,
+        "delta_prompt_tokens": 4098.0,
+        "end_timestamp_s": 1787909269.0501378,
+        "endpoint_id": "D1",
+        "generation_tokens_per_s": 6.496496297156474,
+        "inter_token_histogram": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.025
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.05
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.075
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.15
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.2
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.4
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 254.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 254.0,
+          "sum_seconds": 15.023442417019396
+        },
+        "interval_s": 39.4058563709259,
+        "prompt_tokens_per_s": 103.99469463182513,
+        "reason": "ok",
+        "reset_metrics": [],
+        "start_timestamp_s": 1787909229.6442814,
+        "ttft_histogram": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.001
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.005
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.02
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.04
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.06
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.08
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.25
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 160.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 640.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2560.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.144578218460083
+        },
+        "valid": true,
+        "window_mean_tbt_ms": 59.14741109062754,
+        "window_mean_ttft_ms": 72.2891092300415,
+        "window_tbt_count": 254,
+        "window_tbt_p95_ms": 75.0,
+        "window_tbt_p99_ms": 75.0,
+        "window_ttft_count": 2,
+        "window_ttft_p95_ms": 80.0,
+        "window_ttft_p99_ms": 80.0
+      }
+    },
+    "P0": {
+      "histogram_deltas": {
+        "vllm:e2e_request_latency_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 1.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.4847731590270996
+        },
+        "vllm:inter_token_latency_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.025
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.05
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.075
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.15
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.2
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.4
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 0.0,
+          "sum_seconds": 0.0
+        },
+        "vllm:request_decode_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.0
+        },
+        "vllm:request_prefill_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 1.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.4753210707567632
+        },
+        "vllm:request_queue_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.00015475228428840637
+        },
+        "vllm:time_to_first_token_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.001
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.005
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.02
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.04
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.06
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.08
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 1.0,
+              "upper_bound_seconds": 0.25
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 160.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 640.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2560.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.4847731590270996
+        }
+      },
+      "missing_after": [],
+      "missing_before": [],
+      "reset_or_layout_change_metrics": [],
+      "window": {
+        "completed_requests_per_s": 0.05065500024296092,
+        "delta_completed_requests": 2.0,
+        "delta_generation_tokens": 2.0,
+        "delta_prompt_tokens": 2178.0,
+        "end_timestamp_s": 1787909269.1372852,
+        "endpoint_id": "P0",
+        "generation_tokens_per_s": 0.05065500024296092,
+        "inter_token_histogram": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.025
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.05
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.075
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.15
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.2
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.4
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 0.0,
+          "sum_seconds": 0.0
+        },
+        "interval_s": 39.48277544975281,
+        "prompt_tokens_per_s": 55.16329526458444,
+        "reason": "ok",
+        "reset_metrics": [],
+        "start_timestamp_s": 1787909229.6545098,
+        "ttft_histogram": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.001
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.005
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.02
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.04
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.06
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.08
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 1.0,
+              "upper_bound_seconds": 0.25
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 160.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 640.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2560.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.4847731590270996
+        },
+        "valid": true,
+        "window_mean_tbt_ms": null,
+        "window_mean_ttft_ms": 242.3865795135498,
+        "window_tbt_count": 0,
+        "window_tbt_p95_ms": null,
+        "window_tbt_p99_ms": null,
+        "window_ttft_count": 2,
+        "window_ttft_p95_ms": 500.0,
+        "window_ttft_p99_ms": 500.0
+      }
+    },
+    "P1": {
+      "histogram_deltas": {
+        "vllm:e2e_request_latency_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 1.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.4746274948120117
+        },
+        "vllm:inter_token_latency_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.025
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.05
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.075
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.15
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.2
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.4
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 0.0,
+          "sum_seconds": 0.0
+        },
+        "vllm:request_decode_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.0
+        },
+        "vllm:request_prefill_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 1.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.46415802696719766
+        },
+        "vllm:request_queue_time_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.8
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 15.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 30.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 50.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 60.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 120.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 240.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 480.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 960.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1920.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7680.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.00010328693315386772
+        },
+        "vllm:time_to_first_token_seconds": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.001
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.005
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.02
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.04
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.06
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.08
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 1.0,
+              "upper_bound_seconds": 0.25
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 160.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 640.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2560.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.4746274948120117
+        }
+      },
+      "missing_after": [],
+      "missing_before": [],
+      "reset_or_layout_change_metrics": [],
+      "window": {
+        "completed_requests_per_s": 0.050736155597793105,
+        "delta_completed_requests": 2.0,
+        "delta_generation_tokens": 2.0,
+        "delta_prompt_tokens": 2178.0,
+        "end_timestamp_s": 1787909269.1054132,
+        "endpoint_id": "P1",
+        "generation_tokens_per_s": 0.050736155597793105,
+        "inter_token_histogram": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.025
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.05
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.075
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.15
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.2
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.3
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.4
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 0.0,
+          "sum_seconds": 0.0
+        },
+        "interval_s": 39.419620513916016,
+        "prompt_tokens_per_s": 55.251673445996694,
+        "reason": "ok",
+        "reset_metrics": [],
+        "start_timestamp_s": 1787909229.6857927,
+        "ttft_histogram": {
+          "buckets": [
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.001
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.005
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.01
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.02
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.04
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.06
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.08
+            },
+            {
+              "cumulative_count": 0.0,
+              "upper_bound_seconds": 0.1
+            },
+            {
+              "cumulative_count": 1.0,
+              "upper_bound_seconds": 0.25
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 0.75
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 1.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 5.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 7.5
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 10.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 20.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 40.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 80.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 160.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 640.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": 2560.0
+            },
+            {
+              "cumulative_count": 2.0,
+              "upper_bound_seconds": Infinity
+            }
+          ],
+          "count": 2.0,
+          "sum_seconds": 0.4746274948120117
+        },
+        "valid": true,
+        "window_mean_tbt_ms": null,
+        "window_mean_ttft_ms": 237.31374740600586,
+        "window_tbt_count": 0,
+        "window_tbt_p95_ms": null,
+        "window_tbt_p99_ms": null,
+        "window_ttft_count": 2,
+        "window_ttft_p95_ms": 500.0,
+        "window_ttft_p99_ms": 500.0
+      }
+    }
+  },
+  "probe": {
+    "id": "phase3c_combined"
+  }
+}
