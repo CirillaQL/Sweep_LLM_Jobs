@@ -1,0 +1,102 @@
+{
+  "adaptive_dvfs": false,
+  "adaptive_routing": false,
+  "compatible_pairs": [
+    [
+      "P0",
+      "D0"
+    ],
+    [
+      "P0",
+      "D1"
+    ],
+    [
+      "P1",
+      "D0"
+    ],
+    [
+      "P1",
+      "D1"
+    ]
+  ],
+  "created_utc": "2026-08-28T15:19:34.790414+00:00",
+  "endpoints": [
+    {
+      "endpoint_id": "D0",
+      "gpu_ids": [
+        0
+      ],
+      "gpu_type": "NVIDIA L4",
+      "http_uri": "http://127.0.0.1:8200",
+      "kv_connector": "P2pNcclConnector",
+      "node": "ganymede",
+      "role": "decode",
+      "tp_degree": 1
+    },
+    {
+      "endpoint_id": "D1",
+      "gpu_ids": [
+        1
+      ],
+      "gpu_type": "NVIDIA L4",
+      "http_uri": "http://127.0.0.1:8201",
+      "kv_connector": "P2pNcclConnector",
+      "node": "ganymede",
+      "role": "decode",
+      "tp_degree": 1
+    },
+    {
+      "endpoint_id": "P0",
+      "gpu_ids": [
+        0
+      ],
+      "gpu_type": "NVIDIA L40S",
+      "http_uri": "http://10.1.0.5:8100",
+      "kv_connector": "P2pNcclConnector",
+      "node": "uranus",
+      "role": "prefill",
+      "tp_degree": 1
+    },
+    {
+      "endpoint_id": "P1",
+      "gpu_ids": [
+        1
+      ],
+      "gpu_type": "NVIDIA L40S",
+      "http_uri": "http://10.1.0.5:8101",
+      "kv_connector": "P2pNcclConnector",
+      "node": "uranus",
+      "role": "prefill",
+      "tp_degree": 1
+    }
+  ],
+  "fixed_clocks": {
+    "D0": {
+      "graphics_mhz": 1500,
+      "memory_mhz": 6251,
+      "minimum_workload_match_fraction": 0.95
+    },
+    "D1": {
+      "graphics_mhz": 1125,
+      "memory_mhz": 6251,
+      "minimum_workload_match_fraction": 0.95
+    },
+    "P0": {
+      "graphics_mhz": 2520,
+      "memory_mhz": 9001,
+      "minimum_workload_match_fraction": 0.95
+    },
+    "P1": {
+      "graphics_mhz": 2520,
+      "memory_mhz": 9001,
+      "minimum_workload_match_fraction": 0.95
+    }
+  },
+  "git_commit": "e201b20f34876d185579900266348c8bc6d0b888",
+  "model_training": false,
+  "phase": "3C_real_multi_endpoint_substrate_validation",
+  "request_id_namespace": "phase3c-short_verify",
+  "routing_policy": "round_robin_over_explicit_compatible_pairs",
+  "run_id": "short_verify",
+  "schema_version": 1
+}
