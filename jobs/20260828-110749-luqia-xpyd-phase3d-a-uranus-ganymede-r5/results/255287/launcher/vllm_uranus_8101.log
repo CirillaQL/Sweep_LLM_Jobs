@@ -430,3 +430,32 @@ uranus:615283:615283 [0] NCCL INFO Bootstrap timings total 0.002756 (create 0.00
 [0;36m(APIServer pid=615198)[0;0m INFO:     10.1.0.3:55964 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=615198)[0;0m INFO:     10.1.0.3:55978 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=615198)[0;0m INFO 08-28 11:29:10 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%, External prefix cache hit rate: 0.0%
+[0;36m(APIServer pid=615198)[0;0m INFO 08-28 11:29:14 [launcher.py:110] Shutting down FastAPI HTTP server.
+000)
+uranus:615283:615283 [0] NCCL INFO Setting affinity for GPU 1 to 0,2,4,6,8,10,12,14,64,66,68,70,72,74,76,78
+uranus:615283:615283 [0] NCCL INFO comm 0x5b02eed945a0 rank 0 nRanks 2 nNodes 2 localRanks 1 localRank 0 MNNVL 0
+uranus:615283:615283 [0] NCCL INFO Channel 00/08 : 0 1
+uranus:615283:615283 [0] NCCL INFO Channel 01/08 : 0 1
+uranus:615283:615283 [0] NCCL INFO Channel 02/08 : 0 1
+uranus:615283:615283 [0] NCCL INFO Channel 03/08 : 0 1
+uranus:615283:615283 [0] NCCL INFO Channel 04/08 : 0 1
+uranus:615283:615283 [0] NCCL INFO Channel 05/08 : 0 1
+uranus:615283:615283 [0] NCCL INFO Channel 06/08 : 0 1
+uranus:615283:615283 [0] NCCL INFO Channel 07/08 : 0 1
+uranus:615283:615283 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] -1/-1/-1->0->1 [2] 1/-1/-1->0->-1 [3] -1/-1/-1->0->1 [4] 1/-1/-1->0->-1 [5] -1/-1/-1->0->1 [6] 1/-1/-1->0->-1 [7] -1/-1/-1->0->1
+uranus:615283:615283 [0] NCCL INFO P2P Chunksize set to 131072
+uranus:615283:615283 [0] NCCL INFO Check P2P Type isAllDirectP2p 0 directMode 0
+uranus:615283:617024 [0] NCCL INFO [Proxy Service] Device 0 CPU core 76
+uranus:615283:617025 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 66
+uranus:615283:615283 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+uranus:615283:615283 [0] NCCL INFO 8 coll channels, 8 collnet channels, 0 nvls channels, 8 p2p channels, 2 p2p channels per peer
+uranus:615283:615283 [0] NCCL INFO CC Off, workFifoBytes 1048576
+uranus:615283:615283 [0] NCCL INFO ncclCommInitRank comm 0x5b02eed945a0 rank 0 nranks 2 cudaDev 0 nvmlDev 1 busId 61000 commId 0x5a5934367d37a574 - Init COMPLETE
+uranus:615283:615283 [0] NCCL INFO Init timings - ncclCommInitRank: rank 0 nranks 2 total 0.02 (kernels 0.00, alloc 0.00, bootstrap 0.00, allgathers 0.00, topo 0.00, graphs 0.00, connections 0.00, rest 0.00)
+uranus:615283:617026 [0] NCCL INFO Channel 01/1 : 0[1] -> 1[1] [send] via NET/Socket/0/Shared
+uranus:615283:617027 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 10
+uranus:615283:617026 [0] NCCL INFO Channel 05/1 : 0[1] -> 1[1] [send] via NET/Socket/0/Shared
+[rank0]:[W828 11:29:14.391206844 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[0;36m(APIServer pid=615198)[0;0m INFO:     Shutting down
+[0;36m(APIServer pid=615198)[0;0m INFO:     Waiting for application shutdown.
+[0;36m(APIServer pid=615198)[0;0m INFO:     Application shutdown complete.
