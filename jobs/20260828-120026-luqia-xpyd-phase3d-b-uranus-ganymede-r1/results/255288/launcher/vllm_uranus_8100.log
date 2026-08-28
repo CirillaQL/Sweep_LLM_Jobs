@@ -37,3 +37,67 @@
 [0;36m(EngineCore_DP0 pid=623588)[0;0m INFO 08-28 12:09:51 [p2p_nccl_engine.py:188] 💯P2pNcclEngine init, rank:0, local_rank:0, http_address:, zmq_address:10.1.0.5:14579, proxy_address:, send_type:PUT, buffer_size_threshold:1000000000.00, nccl_num_channels:8
 [0;36m(EngineCore_DP0 pid=623588)[0;0m INFO 08-28 12:09:51 [utils.py:38] Connectors do not specify a kv cache layout, defaulting to NHD.
 [0;36m(EngineCore_DP0 pid=623588)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   4%|▍         | 2/51 [00:00<00:02, 18.22it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   8%|▊         | 4/51 [00:00<00:02, 19.16it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  14%|█▎        | 7/51 [00:00<00:02, 19.67it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  20%|█▉        | 10/51 [00:00<00:02, 20.46it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  25%|██▌       | 13/51 [00:00<00:01, 21.23it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  31%|███▏      | 16/51 [00:00<00:01, 21.76it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  37%|███▋      | 19/51 [00:00<00:01, 22.26it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  43%|████▎     | 22/51 [00:01<00:01, 22.86it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  49%|████▉     | 25/51 [00:01<00:01, 23.40it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  55%|█████▍    | 28/51 [00:01<00:00, 23.75it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  61%|██████    | 31/51 [00:01<00:00, 24.21it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  67%|██████▋   | 34/51 [00:01<00:00, 24.67it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  73%|███████▎  | 37/51 [00:01<00:00, 25.10it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  78%|███████▊  | 40/51 [00:01<00:00, 24.75it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  84%|████████▍ | 43/51 [00:01<00:00, 25.23it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  90%|█████████ | 46/51 [00:01<00:00, 25.78it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  96%|█████████▌| 49/51 [00:02<00:00, 26.59it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:02<00:00, 23.82it/s]
+[0;36m(EngineCore_DP0 pid=623588)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/35 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):   9%|▊         | 3/35 [00:00<00:01, 21.81it/s]Capturing CUDA graphs (decode, FULL):  17%|█▋        | 6/35 [00:00<00:01, 23.53it/s]Capturing CUDA graphs (decode, FULL):  26%|██▌       | 9/35 [00:00<00:01, 24.32it/s]Capturing CUDA graphs (decode, FULL):  34%|███▍      | 12/35 [00:00<00:00, 24.99it/s]Capturing CUDA graphs (decode, FULL):  43%|████▎     | 15/35 [00:00<00:00, 25.69it/s]Capturing CUDA graphs (decode, FULL):  51%|█████▏    | 18/35 [00:00<00:00, 26.45it/s]Capturing CUDA graphs (decode, FULL):  60%|██████    | 21/35 [00:00<00:00, 27.22it/s]Capturing CUDA graphs (decode, FULL):  69%|██████▊   | 24/35 [00:00<00:00, 27.86it/s]Capturing CUDA graphs (decode, FULL):  80%|████████  | 28/35 [00:01<00:00, 29.00it/s]Capturing CUDA graphs (decode, FULL):  91%|█████████▏| 32/35 [00:01<00:00, 30.56it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:01<00:00, 28.11it/s]
+[0;36m(EngineCore_DP0 pid=623588)[0;0m INFO 08-28 12:09:55 [gpu_model_runner.py:5063] Graph capturing finished in 4 secs, took 0.50 GiB
+[0;36m(EngineCore_DP0 pid=623588)[0;0m INFO 08-28 12:09:55 [core.py:272] init engine (profile, create kv cache, warmup model) took 44.26 seconds
+[0;36m(EngineCore_DP0 pid=623588)[0;0m INFO 08-28 12:09:56 [factory.py:64] Creating v1 connector with name: P2pNcclConnector and engine_id: 953f0dbd-85a2-4228-a38e-1d61306283e7
+[0;36m(EngineCore_DP0 pid=623588)[0;0m WARNING 08-28 12:09:56 [base.py:166] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+[0;36m(EngineCore_DP0 pid=623588)[0;0m INFO 08-28 12:09:56 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [api_server.py:665] Supported tasks: ['generate']
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [serving.py:177] Warming up chat template processing...
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [hf.py:310] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216] Chat template warmup failed
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216] Traceback (most recent call last):
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/chat_completion/serving.py", line 195, in warmup
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216]     await self._preprocess_chat(
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/entrypoints/openai/engine/serving.py", line 1207, in _preprocess_chat
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216]     conversation, engine_prompt = await renderer.render_messages_async(
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/renderers/hf.py", line 619, in render_messages_async
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216]     prompt_raw = safe_apply_chat_template(
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216]   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/renderers/hf.py", line 451, in safe_apply_chat_template
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216]     raise ChatTemplateResolutionError(
+[0;36m(APIServer pid=623448)[0;0m ERROR 08-28 12:09:57 [serving.py:216] vllm.entrypoints.chat_utils.ChatTemplateResolutionError: As of transformers v4.44, default chat template is no longer allowed, so you must provide a chat template if the tokenizer does not define one.
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [api_server.py:946] Starting vLLM API server 0 on http://0.0.0.0:8100
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:38] Available routes are:
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /openapi.json, Methods: GET, HEAD
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /docs, Methods: GET, HEAD
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /docs/oauth2-redirect, Methods: GET, HEAD
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /redoc, Methods: GET, HEAD
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /scale_elastic_ep, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /is_scaling_elastic_ep, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /tokenize, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /detokenize, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /inference/v1/generate, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /pause, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /resume, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /is_paused, Methods: GET
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /metrics, Methods: GET
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /health, Methods: GET
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/chat/completions, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/chat/completions/render, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/responses, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/responses/{response_id}, Methods: GET
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/responses/{response_id}/cancel, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/audio/transcriptions, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/audio/translations, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/completions, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/completions/render, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/messages, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/models, Methods: GET
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /load, Methods: GET
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /version, Methods: GET
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /ping, Methods: GET
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /ping, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /invocations, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /classify, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/embeddings, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /score, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/score, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /rerank, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v1/rerank, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /v2/rerank, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO 08-28 12:09:57 [launcher.py:46] Route: /pooling, Methods: POST
+[0;36m(APIServer pid=623448)[0;0m INFO:     Started server process [623448]
+[0;36m(APIServer pid=623448)[0;0m INFO:     Waiting for application startup.
+[0;36m(APIServer pid=623448)[0;0m INFO:     Application startup complete.
+[0;36m(APIServer pid=623448)[0;0m INFO:     10.1.0.3:44146 - "GET /health HTTP/1.1" 200 OK
