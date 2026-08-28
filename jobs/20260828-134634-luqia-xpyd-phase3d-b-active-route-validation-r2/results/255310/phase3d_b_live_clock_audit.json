@@ -1,0 +1,565 @@
+{
+  "action_evidence": [
+    {
+      "action_index": 0,
+      "endpoint_id": "D1",
+      "independent_matching_sample_count": 44,
+      "observed_live": true,
+      "readback_valid": true,
+      "reason": "control_01:STEP_DOWN",
+      "target_graphics_mhz": 1125,
+      "target_memory_mhz": 6251
+    },
+    {
+      "action_index": 1,
+      "endpoint_id": "D1",
+      "independent_matching_sample_count": 44,
+      "observed_live": true,
+      "readback_valid": true,
+      "reason": "control_02:STEP_DOWN",
+      "target_graphics_mhz": 750,
+      "target_memory_mhz": 6251
+    },
+    {
+      "action_index": 2,
+      "endpoint_id": "P1",
+      "independent_matching_sample_count": 48,
+      "observed_live": true,
+      "readback_valid": true,
+      "reason": "control_06:STEP_DOWN",
+      "target_graphics_mhz": 1890,
+      "target_memory_mhz": 9001
+    },
+    {
+      "action_index": 3,
+      "endpoint_id": "P1",
+      "independent_matching_sample_count": 46,
+      "observed_live": true,
+      "readback_valid": true,
+      "reason": "control_07:STEP_DOWN",
+      "target_graphics_mhz": 1260,
+      "target_memory_mhz": 9001
+    },
+    {
+      "action_index": 4,
+      "endpoint_id": "D0",
+      "independent_matching_sample_count": 50,
+      "observed_live": true,
+      "readback_valid": true,
+      "reason": "final_safe_high_restoration",
+      "target_graphics_mhz": 1500,
+      "target_memory_mhz": 6251
+    },
+    {
+      "action_index": 5,
+      "endpoint_id": "D1",
+      "independent_matching_sample_count": 46,
+      "observed_live": true,
+      "readback_valid": true,
+      "reason": "final_safe_high_restoration",
+      "target_graphics_mhz": 1500,
+      "target_memory_mhz": 6251
+    },
+    {
+      "action_index": 6,
+      "endpoint_id": "P0",
+      "independent_matching_sample_count": 50,
+      "observed_live": true,
+      "readback_valid": true,
+      "reason": "final_safe_high_restoration",
+      "target_graphics_mhz": 2520,
+      "target_memory_mhz": 9001
+    },
+    {
+      "action_index": 7,
+      "endpoint_id": "P1",
+      "independent_matching_sample_count": 48,
+      "observed_live": true,
+      "readback_valid": true,
+      "reason": "final_safe_high_restoration",
+      "target_graphics_mhz": 2520,
+      "target_memory_mhz": 9001
+    }
+  ],
+  "actuator_action_count": 8,
+  "claim_boundary": "functional feedback-only validation; no energy-optimality claim",
+  "control_iteration_count": 8,
+  "controller_action_count": 4,
+  "endpoint_evidence": {
+    "D0": {
+      "error_sample_count": 0,
+      "identity_valid": true,
+      "maximum_sampling_gap_s": 0.20010018348693848,
+      "memory_target_mhz": 6251,
+      "sample_count": 5595,
+      "sampling_valid": true,
+      "successful_sample_count": 5595
+    },
+    "D1": {
+      "error_sample_count": 0,
+      "identity_valid": true,
+      "maximum_sampling_gap_s": 0.2010791301727295,
+      "memory_target_mhz": 6251,
+      "sample_count": 5595,
+      "sampling_valid": true,
+      "successful_sample_count": 5595
+    },
+    "P0": {
+      "error_sample_count": 0,
+      "identity_valid": true,
+      "maximum_sampling_gap_s": 0.20019149780273438,
+      "memory_target_mhz": 9001,
+      "sample_count": 5594,
+      "sampling_valid": true,
+      "successful_sample_count": 5594
+    },
+    "P1": {
+      "error_sample_count": 0,
+      "identity_valid": true,
+      "maximum_sampling_gap_s": 0.20026707649230957,
+      "memory_target_mhz": 9001,
+      "sample_count": 5594,
+      "sampling_valid": true,
+      "successful_sample_count": 5594
+    }
+  },
+  "feedback_iteration_count": 7,
+  "hard_gates": {
+    "accepted_phase3d_a_valid": true,
+    "active_route_dvfs_verified_in_validation_window": true,
+    "all_native_action_readbacks_valid": true,
+    "all_validation_windows_meet_configured_slos": true,
+    "configured_slos_are_500ms_200ms": true,
+    "configured_topology_is_uranus_ganymede": true,
+    "continuous_monitor_identity": true,
+    "continuous_monitor_no_errors": true,
+    "continuous_sampling_gap": true,
+    "controller_performed_physical_dvfs_action": true,
+    "every_action_target_observed_by_independent_monitor": true,
+    "every_controller_action_observed_during_following_window": true,
+    "every_decision_has_following_window": true,
+    "every_decision_route_executed": true,
+    "every_selected_endpoint_clock_observed_during_serving_window": true,
+    "fresh_feedback_selected_single_route": true,
+    "native_closed_loop_audit_valid": true,
+    "observe_verify_shape_pairs_valid": true
+  },
+  "phase": "3D-B_feedback_only_closed_loop_plus_independent_live_clock_validation",
+  "valid": true,
+  "workload_evidence": [
+    {
+      "actual_pairs": [
+        [
+          "P0",
+          "D0"
+        ],
+        [
+          "P0",
+          "D1"
+        ],
+        [
+          "P1",
+          "D0"
+        ],
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "controller_actions_loaded": [],
+      "max_tpot_ms": 56.03743426983119,
+      "max_ttft_ms": 696.733007003786,
+      "mean_tpot_ms": 55.937595630922935,
+      "mean_ttft_ms": 518.0081582511775,
+      "request_count": 4,
+      "route_executed": true,
+      "selected_endpoint_loaded_clocks": {
+        "D0": {
+          "matching_sample_count_during_serving_window": 81,
+          "matching_sample_count_with_positive_utilization": 40,
+          "target_graphics_mhz": 1500,
+          "target_memory_mhz": 6251,
+          "valid": true
+        },
+        "D1": {
+          "matching_sample_count_during_serving_window": 81,
+          "matching_sample_count_with_positive_utilization": 38,
+          "target_graphics_mhz": 1500,
+          "target_memory_mhz": 6251,
+          "valid": true
+        },
+        "P0": {
+          "matching_sample_count_during_serving_window": 81,
+          "matching_sample_count_with_positive_utilization": 4,
+          "target_graphics_mhz": 2520,
+          "target_memory_mhz": 9001,
+          "valid": true
+        },
+        "P1": {
+          "matching_sample_count_during_serving_window": 81,
+          "matching_sample_count_with_positive_utilization": 3,
+          "target_graphics_mhz": 2520,
+          "target_memory_mhz": 9001,
+          "valid": true
+        }
+      },
+      "selected_pairs": [
+        [
+          "P0",
+          "D0"
+        ],
+        [
+          "P0",
+          "D1"
+        ],
+        [
+          "P1",
+          "D0"
+        ],
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "slo_valid": false,
+      "tpot_slo_ms": 200.0,
+      "tpot_violation_count": 0,
+      "ttft_slo_ms": 500.0,
+      "ttft_violation_count": 3,
+      "window_id": "short_observe"
+    },
+    {
+      "actual_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "controller_actions_loaded": [
+        {
+          "endpoint_id": "D1",
+          "matching_sample_count_during_serving_window": 74,
+          "matching_sample_count_with_positive_utilization": 74,
+          "target_graphics_mhz": 1125,
+          "valid": true
+        }
+      ],
+      "max_tpot_ms": 56.39029514286594,
+      "max_ttft_ms": 202.13965901348274,
+      "mean_tpot_ms": 56.38123489679567,
+      "mean_ttft_ms": 190.84552450294723,
+      "request_count": 4,
+      "route_executed": true,
+      "selected_endpoint_loaded_clocks": {
+        "D1": {
+          "matching_sample_count_during_serving_window": 74,
+          "matching_sample_count_with_positive_utilization": 74,
+          "target_graphics_mhz": 1125,
+          "target_memory_mhz": 6251,
+          "valid": true
+        },
+        "P1": {
+          "matching_sample_count_during_serving_window": 75,
+          "matching_sample_count_with_positive_utilization": 4,
+          "target_graphics_mhz": 2520,
+          "target_memory_mhz": 9001,
+          "valid": true
+        }
+      },
+      "selected_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "slo_valid": true,
+      "tpot_slo_ms": 200.0,
+      "tpot_violation_count": 0,
+      "ttft_slo_ms": 500.0,
+      "ttft_violation_count": 0,
+      "window_id": "short_verify"
+    },
+    {
+      "actual_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "controller_actions_loaded": [
+        {
+          "endpoint_id": "D1",
+          "matching_sample_count_during_serving_window": 87,
+          "matching_sample_count_with_positive_utilization": 86,
+          "target_graphics_mhz": 750,
+          "valid": true
+        }
+      ],
+      "max_tpot_ms": 61.44468139696289,
+      "max_ttft_ms": 510.01819799421355,
+      "mean_tpot_ms": 61.4272877539897,
+      "mean_ttft_ms": 493.22232674603583,
+      "request_count": 4,
+      "route_executed": true,
+      "selected_endpoint_loaded_clocks": {
+        "D1": {
+          "matching_sample_count_during_serving_window": 87,
+          "matching_sample_count_with_positive_utilization": 86,
+          "target_graphics_mhz": 750,
+          "target_memory_mhz": 6251,
+          "valid": true
+        },
+        "P1": {
+          "matching_sample_count_during_serving_window": 88,
+          "matching_sample_count_with_positive_utilization": 9,
+          "target_graphics_mhz": 2520,
+          "target_memory_mhz": 9001,
+          "valid": true
+        }
+      },
+      "selected_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "slo_valid": false,
+      "tpot_slo_ms": 200.0,
+      "tpot_violation_count": 0,
+      "ttft_slo_ms": 500.0,
+      "ttft_violation_count": 1,
+      "window_id": "prefill_heavy_observe"
+    },
+    {
+      "actual_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "controller_actions_loaded": [],
+      "max_tpot_ms": 61.42753846033306,
+      "max_ttft_ms": 474.91226700367406,
+      "mean_tpot_ms": 61.42100815076634,
+      "mean_ttft_ms": 472.4980342507479,
+      "request_count": 4,
+      "route_executed": true,
+      "selected_endpoint_loaded_clocks": {
+        "D1": {
+          "matching_sample_count_during_serving_window": 87,
+          "matching_sample_count_with_positive_utilization": 86,
+          "target_graphics_mhz": 750,
+          "target_memory_mhz": 6251,
+          "valid": true
+        },
+        "P1": {
+          "matching_sample_count_during_serving_window": 86,
+          "matching_sample_count_with_positive_utilization": 9,
+          "target_graphics_mhz": 2520,
+          "target_memory_mhz": 9001,
+          "valid": true
+        }
+      },
+      "selected_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "slo_valid": true,
+      "tpot_slo_ms": 200.0,
+      "tpot_violation_count": 0,
+      "ttft_slo_ms": 500.0,
+      "ttft_violation_count": 0,
+      "window_id": "prefill_heavy_verify"
+    },
+    {
+      "actual_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "controller_actions_loaded": [],
+      "max_tpot_ms": 57.36097005097761,
+      "max_ttft_ms": 207.8750549990218,
+      "mean_tpot_ms": 57.35698920980212,
+      "mean_ttft_ms": 186.41745324930525,
+      "request_count": 4,
+      "route_executed": true,
+      "selected_endpoint_loaded_clocks": {
+        "D1": {
+          "matching_sample_count_during_serving_window": 296,
+          "matching_sample_count_with_positive_utilization": 295,
+          "target_graphics_mhz": 750,
+          "target_memory_mhz": 6251,
+          "valid": true
+        },
+        "P1": {
+          "matching_sample_count_during_serving_window": 297,
+          "matching_sample_count_with_positive_utilization": 2,
+          "target_graphics_mhz": 2520,
+          "target_memory_mhz": 9001,
+          "valid": true
+        }
+      },
+      "selected_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "slo_valid": true,
+      "tpot_slo_ms": 200.0,
+      "tpot_violation_count": 0,
+      "ttft_slo_ms": 500.0,
+      "ttft_violation_count": 0,
+      "window_id": "decode_heavy_observe"
+    },
+    {
+      "actual_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "controller_actions_loaded": [],
+      "max_tpot_ms": 57.3599815999806,
+      "max_ttft_ms": 212.32859800511505,
+      "mean_tpot_ms": 57.35586971763862,
+      "mean_ttft_ms": 181.205458502518,
+      "request_count": 4,
+      "route_executed": true,
+      "selected_endpoint_loaded_clocks": {
+        "D1": {
+          "matching_sample_count_during_serving_window": 297,
+          "matching_sample_count_with_positive_utilization": 295,
+          "target_graphics_mhz": 750,
+          "target_memory_mhz": 6251,
+          "valid": true
+        },
+        "P1": {
+          "matching_sample_count_during_serving_window": 296,
+          "matching_sample_count_with_positive_utilization": 4,
+          "target_graphics_mhz": 2520,
+          "target_memory_mhz": 9001,
+          "valid": true
+        }
+      },
+      "selected_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "slo_valid": true,
+      "tpot_slo_ms": 200.0,
+      "tpot_violation_count": 0,
+      "ttft_slo_ms": 500.0,
+      "ttft_violation_count": 0,
+      "window_id": "decode_heavy_verify"
+    },
+    {
+      "actual_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "controller_actions_loaded": [
+        {
+          "endpoint_id": "P1",
+          "matching_sample_count_during_serving_window": 151,
+          "matching_sample_count_with_positive_utilization": 4,
+          "target_graphics_mhz": 1890,
+          "valid": true
+        }
+      ],
+      "max_tpot_ms": 58.06640675589332,
+      "max_ttft_ms": 242.29907100379933,
+      "mean_tpot_ms": 58.063093665351325,
+      "mean_ttft_ms": 214.04713375522988,
+      "request_count": 4,
+      "route_executed": true,
+      "selected_endpoint_loaded_clocks": {
+        "D1": {
+          "matching_sample_count_during_serving_window": 152,
+          "matching_sample_count_with_positive_utilization": 151,
+          "target_graphics_mhz": 750,
+          "target_memory_mhz": 6251,
+          "valid": true
+        },
+        "P1": {
+          "matching_sample_count_during_serving_window": 151,
+          "matching_sample_count_with_positive_utilization": 4,
+          "target_graphics_mhz": 1890,
+          "target_memory_mhz": 9001,
+          "valid": true
+        }
+      },
+      "selected_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "slo_valid": true,
+      "tpot_slo_ms": 200.0,
+      "tpot_violation_count": 0,
+      "ttft_slo_ms": 500.0,
+      "ttft_violation_count": 0,
+      "window_id": "balanced_observe"
+    },
+    {
+      "actual_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "controller_actions_loaded": [
+        {
+          "endpoint_id": "P1",
+          "matching_sample_count_during_serving_window": 152,
+          "matching_sample_count_with_positive_utilization": 4,
+          "target_graphics_mhz": 1260,
+          "valid": true
+        }
+      ],
+      "max_tpot_ms": 58.07744501574299,
+      "max_ttft_ms": 257.8213779925136,
+      "mean_tpot_ms": 58.067180187036705,
+      "mean_ttft_ms": 229.39573374242173,
+      "request_count": 4,
+      "route_executed": true,
+      "selected_endpoint_loaded_clocks": {
+        "D1": {
+          "matching_sample_count_during_serving_window": 152,
+          "matching_sample_count_with_positive_utilization": 151,
+          "target_graphics_mhz": 750,
+          "target_memory_mhz": 6251,
+          "valid": true
+        },
+        "P1": {
+          "matching_sample_count_during_serving_window": 152,
+          "matching_sample_count_with_positive_utilization": 4,
+          "target_graphics_mhz": 1260,
+          "target_memory_mhz": 9001,
+          "valid": true
+        }
+      },
+      "selected_pairs": [
+        [
+          "P1",
+          "D1"
+        ]
+      ],
+      "slo_valid": true,
+      "tpot_slo_ms": 200.0,
+      "tpot_violation_count": 0,
+      "ttft_slo_ms": 500.0,
+      "ttft_violation_count": 0,
+      "window_id": "balanced_verify"
+    }
+  ]
+}
