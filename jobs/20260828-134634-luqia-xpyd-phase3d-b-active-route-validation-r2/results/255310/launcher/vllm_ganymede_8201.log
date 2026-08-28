@@ -537,3 +537,18 @@ ganymede:231676:232103 [0] NCCL INFO comm 0x7d9177cdb540 rank 1 nRanks 2 nNodes 
 [0;36m(APIServer pid=231467)[0;0m INFO:     127.0.0.1:35490 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=231467)[0;0m INFO 08-28 17:28:38 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 10.6 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%, External prefix cache hit rate: 99.9%
 [0;36m(APIServer pid=231467)[0;0m INFO 08-28 17:28:48 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%, External prefix cache hit rate: 99.9%
+[0;36m(APIServer pid=231467)[0;0m INFO 08-28 17:29:20 [launcher.py:110] Shutting down FastAPI HTTP server.
+2 localRanks 1 localRank 0 MNNVL 0
+ganymede:231676:232103 [0] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] 0/-1/-1->1->-1 [2] -1/-1/-1->1->0 [3] 0/-1/-1->1->-1 [4] -1/-1/-1->1->0 [5] 0/-1/-1->1->-1 [6] -1/-1/-1->1->0 [7] 0/-1/-1->1->-1
+ganymede:231676:232103 [0] NCCL INFO P2P Chunksize set to 131072
+ganymede:231676:232836 [0] NCCL INFO [Proxy Service] Device 0 CPU core 70
+ganymede:231676:232837 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 72
+ganymede:231676:232103 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+ganymede:231676:232103 [0] NCCL INFO 8 coll channels, 8 collnet channels, 0 nvls channels, 8 p2p channels, 2 p2p channels per peer
+ganymede:231676:232103 [0] NCCL INFO ncclCommInitRank comm 0x7d9177cdb540 rank 1 nranks 2 cudaDev 0 nvmlDev 1 busId 37000 commId 0xc5118136816cb70a - Init COMPLETE
+ganymede:231676:232103 [0] NCCL INFO Init timings - ncclCommInitRank: rank 1 nranks 2 total 0.02 (kernels 0.00, alloc 0.00, bootstrap 0.00, allgathers 0.00, topo 0.00, graphs 0.00, connections 0.01, rest 0.00)
+ganymede:231676:232838 [0] NCCL INFO Channel 01/1 : 0[1] -> 1[1] [receive] via NET/Socket/0/Shared
+ganymede:231676:232839 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 14
+ganymede:231676:232838 [0] NCCL INFO Channel 05/1 : 0[1] -> 1[1] [receive] via NET/Socket/0/Shared
+[rank0]:[W828 17:29:20.446295057 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W828 17:29:21.544682516 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())

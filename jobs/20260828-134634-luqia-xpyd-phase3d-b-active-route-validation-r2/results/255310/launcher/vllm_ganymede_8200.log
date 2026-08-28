@@ -476,3 +476,18 @@ ganymede:230856:231411 [0] NCCL INFO comm 0x7d14cbcf2c50 rank 1 nRanks 2 nNodes 
 [0;36m(APIServer pid=230630)[0;0m INFO:     127.0.0.1:39300 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=230630)[0;0m INFO:     127.0.0.1:39314 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=230630)[0;0m INFO:     127.0.0.1:39328 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(APIServer pid=230630)[0;0m INFO 08-28 17:29:20 [launcher.py:110] Shutting down FastAPI HTTP server.
+localRanks 1 localRank 0 MNNVL 0
+ganymede:230856:231411 [0] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] 0/-1/-1->1->-1 [2] -1/-1/-1->1->0 [3] 0/-1/-1->1->-1 [4] -1/-1/-1->1->0 [5] 0/-1/-1->1->-1 [6] -1/-1/-1->1->0 [7] 0/-1/-1->1->-1
+ganymede:230856:231411 [0] NCCL INFO P2P Chunksize set to 131072
+ganymede:230856:232811 [0] NCCL INFO [Proxy Service] Device 0 CPU core 98
+ganymede:230856:232812 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 36
+ganymede:230856:231411 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+ganymede:230856:231411 [0] NCCL INFO 8 coll channels, 8 collnet channels, 0 nvls channels, 8 p2p channels, 2 p2p channels per peer
+ganymede:230856:231411 [0] NCCL INFO ncclCommInitRank comm 0x7d14cbcf2c50 rank 1 nranks 2 cudaDev 0 nvmlDev 0 busId d000 commId 0x60a8ff93ec9c2aa - Init COMPLETE
+ganymede:230856:231411 [0] NCCL INFO Init timings - ncclCommInitRank: rank 1 nranks 2 total 0.20 (kernels 0.00, alloc 0.01, bootstrap 0.15, allgathers 0.02, topo 0.00, graphs 0.00, connections 0.01, rest 0.00)
+ganymede:230856:232813 [0] NCCL INFO Channel 01/1 : 0[1] -> 1[0] [receive] via NET/Socket/0/Shared
+ganymede:230856:232814 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 40
+ganymede:230856:232813 [0] NCCL INFO Channel 05/1 : 0[1] -> 1[0] [receive] via NET/Socket/0/Shared
+[rank0]:[W828 17:29:20.520674115 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W828 17:29:21.616872790 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
