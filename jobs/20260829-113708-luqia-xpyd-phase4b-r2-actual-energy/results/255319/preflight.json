@@ -1,0 +1,47 @@
+{
+  "decision_evidence": "feedback+candidates+selected route+target/readback+actual route+energy",
+  "energy_baseline": "same-job STATIC",
+  "model_path": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+  "phase": "4B-r2",
+  "policies": [
+    "STATIC",
+    "FEEDBACK_ROUTING_ONLY",
+    "FEEDBACK_DVFS_ONLY",
+    "FULL_FEEDBACK"
+  ],
+  "slo": {
+    "tpot_ms": 200.0,
+    "ttft_ms": 500.0
+  },
+  "topology": {
+    "D0": [
+      "decode",
+      "ganymede",
+      [
+        0
+      ]
+    ],
+    "D1": [
+      "decode",
+      "ganymede",
+      [
+        1
+      ]
+    ],
+    "P0": [
+      "prefill",
+      "uranus",
+      [
+        0
+      ]
+    ],
+    "P1": [
+      "prefill",
+      "uranus",
+      [
+        1
+      ]
+    ]
+  },
+  "valid": true
+}
