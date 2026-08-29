@@ -4462,3 +4462,22 @@ ganymede:384677:385239 [0] NCCL INFO comm 0x79ce8bcdb450 rank 1 nRanks 2 nNodes 
 [0;36m(APIServer pid=384433)[0;0m INFO:     127.0.0.1:44680 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=384433)[0;0m INFO:     127.0.0.1:44692 - "GET /metrics HTTP/1.1" 200 OK
 [0;36m(APIServer pid=384433)[0;0m INFO:     127.0.0.1:44700 - "GET /metrics HTTP/1.1" 200 OK
+[0;36m(APIServer pid=384433)[0;0m INFO 08-29 15:41:47 [launcher.py:110] Shutting down FastAPI HTTP server.
+ocalRanks 1 localRank 0 MNNVL 0
+ganymede:384677:385239 [0] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] 0/-1/-1->1->-1 [2] -1/-1/-1->1->0 [3] 0/-1/-1->1->-1 [4] -1/-1/-1->1->0 [5] 0/-1/-1->1->-1 [6] -1/-1/-1->1->0 [7] 0/-1/-1->1->-1
+ganymede:384677:385239 [0] NCCL INFO P2P Chunksize set to 131072
+ganymede:384677:386671 [0] NCCL INFO [Proxy Service] Device 0 CPU core 24
+ganymede:384677:386672 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 90
+ganymede:384677:385239 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+ganymede:384677:385239 [0] NCCL INFO 8 coll channels, 8 collnet channels, 0 nvls channels, 8 p2p channels, 2 p2p channels per peer
+ganymede:384677:385239 [0] NCCL INFO ncclCommInitRank comm 0x79ce8bcdb450 rank 1 nranks 2 cudaDev 0 nvmlDev 0 busId d000 commId 0xf3840b4e606b8c21 - Init COMPLETE
+ganymede:384677:385239 [0] NCCL INFO Init timings - ncclCommInitRank: rank 1 nranks 2 total 0.18 (kernels 0.00, alloc 0.01, bootstrap 0.15, allgathers 0.01, topo 0.00, graphs 0.00, connections 0.01, rest 0.00)
+ganymede:384677:386674 [0] NCCL INFO [Proxy Progress] Device 0 CPU core 30
+ganymede:384677:386673 [0] NCCL INFO Channel 01/1 : 0[1] -> 1[0] [receive] via NET/Socket/0/Shared
+ganymede:384677:386673 [0] NCCL INFO Channel 05/1 : 0[1] -> 1[0] [receive] via NET/Socket/0/Shared
+[rank0]:[W829 15:41:47.895192224 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W829 15:41:47.000057265 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
+[0;36m(APIServer pid=384433)[0;0m INFO:     Shutting down
+[0;36m(APIServer pid=384433)[0;0m INFO:     Waiting for application shutdown.
+[0;36m(APIServer pid=384433)[0;0m INFO:     Application shutdown complete.
+[W829 15:41:54.881992598 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())
