@@ -1,0 +1,12 @@
+[0;36m(APIServer pid=372045)[0;0m INFO 08-29 12:19:58 [utils.py:325] 
+[0;36m(APIServer pid=372045)[0;0m INFO 08-29 12:19:58 [utils.py:325]        █     █     █▄   ▄█
+[0;36m(APIServer pid=372045)[0;0m INFO 08-29 12:19:58 [utils.py:325]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.15.1
+[0;36m(APIServer pid=372045)[0;0m INFO 08-29 12:19:58 [utils.py:325]   █▄█▀ █     █     █     █  model   /data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da
+[0;36m(APIServer pid=372045)[0;0m INFO 08-29 12:19:58 [utils.py:325]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+[0;36m(APIServer pid=372045)[0;0m INFO 08-29 12:19:58 [utils.py:325] 
+[0;36m(APIServer pid=372045)[0;0m INFO 08-29 12:19:58 [utils.py:261] non-default args: {'host': '0.0.0.0', 'port': 8200, 'model': '/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da', 'max_model_len': 4096, 'gpu_memory_utilization': 0.82, 'enable_prefix_caching': False, 'enable_chunked_prefill': False, 'kv_transfer_config': KVTransferConfig(kv_connector='P2pNcclConnector', engine_id='808c11d7-eb77-42d2-ae1d-ccbc55797ba6', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_consumer', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='recompute')}
+[0;36m(APIServer pid=372045)[0;0m INFO 08-29 12:19:58 [model.py:541] Resolved architecture: MistralForCausalLM
+[0;36m(APIServer pid=372045)[0;0m INFO 08-29 12:19:58 [model.py:1561] Using max model len 4096
+[0;36m(APIServer pid=372045)[0;0m WARNING 08-29 12:19:58 [arg_utils.py:1909] This model does not officially support disabling chunked prefill. Disabling this manually may cause the engine to crash or produce incorrect outputs.
+[0;36m(APIServer pid=372045)[0;0m INFO 08-29 12:19:59 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(APIServer pid=372045)[0;0m WARNING 08-29 12:19:59 [vllm.py:980] Turning off hybrid kv cache manager because `--kv-transfer-config` is set. This will reduce the performance of vLLM on LLMs with sliding window attention or Mamba attention. If you are a developer of kv connector, please consider supporting hybrid kv cache manager for your connector by making sure your connector is a subclass of `SupportsHMA` defined in kv_connector/v1/base.py and use --no-disable-hybrid-kv-cache-manager to start vLLM.
