@@ -1,0 +1,110 @@
+{
+  "block_order": [
+    {
+      "policy": "STATIC",
+      "workload": "prefill_heavy"
+    },
+    {
+      "policy": "FULL_FEEDBACK",
+      "workload": "both_heavy"
+    },
+    {
+      "policy": "FEEDBACK_DVFS_ONLY",
+      "workload": "both_heavy"
+    },
+    {
+      "policy": "STATIC",
+      "workload": "small_light"
+    },
+    {
+      "policy": "FEEDBACK_ROUTING_ONLY",
+      "workload": "both_heavy"
+    },
+    {
+      "policy": "FULL_FEEDBACK",
+      "workload": "decode_heavy"
+    },
+    {
+      "policy": "FULL_FEEDBACK",
+      "workload": "prefill_heavy"
+    },
+    {
+      "policy": "FEEDBACK_DVFS_ONLY",
+      "workload": "decode_heavy"
+    },
+    {
+      "policy": "FEEDBACK_DVFS_ONLY",
+      "workload": "small_light"
+    },
+    {
+      "policy": "FEEDBACK_ROUTING_ONLY",
+      "workload": "small_light"
+    },
+    {
+      "policy": "FEEDBACK_DVFS_ONLY",
+      "workload": "prefill_heavy"
+    },
+    {
+      "policy": "FEEDBACK_ROUTING_ONLY",
+      "workload": "decode_heavy"
+    },
+    {
+      "policy": "STATIC",
+      "workload": "decode_heavy"
+    },
+    {
+      "policy": "STATIC",
+      "workload": "both_heavy"
+    },
+    {
+      "policy": "FEEDBACK_ROUTING_ONLY",
+      "workload": "prefill_heavy"
+    },
+    {
+      "policy": "FULL_FEEDBACK",
+      "workload": "small_light"
+    }
+  ],
+  "energy_comparison_baseline": "same-job STATIC policy",
+  "models": [],
+  "oracle_sha256": null,
+  "policies": [
+    "STATIC",
+    "FEEDBACK_ROUTING_ONLY",
+    "FEEDBACK_DVFS_ONLY",
+    "FULL_FEEDBACK"
+  ],
+  "repeats": 5,
+  "requests_per_repeat": 4,
+  "smoke": false,
+  "workloads": [
+    {
+      "count": 4,
+      "id": "small_light",
+      "input_len": 128,
+      "output_len": 64,
+      "rate_rps": 0.5
+    },
+    {
+      "count": 4,
+      "id": "prefill_heavy",
+      "input_len": 2048,
+      "output_len": 64,
+      "rate_rps": 0.5
+    },
+    {
+      "count": 4,
+      "id": "decode_heavy",
+      "input_len": 128,
+      "output_len": 256,
+      "rate_rps": 0.5
+    },
+    {
+      "count": 4,
+      "id": "both_heavy",
+      "input_len": 512,
+      "output_len": 128,
+      "rate_rps": 1.0
+    }
+  ]
+}
