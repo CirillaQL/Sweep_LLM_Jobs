@@ -1,0 +1,71 @@
+{
+  "confirmation_repeats": 5,
+  "controller": "coordinate lower-bound binary search from completed windows only",
+  "dispatch_mode": "closed_loop_batches",
+  "frequency_grid_specs": {
+    "decode": {
+      "levels": 15,
+      "maximum_mhz": 1500,
+      "minimum_mhz": 450
+    },
+    "prefill": {
+      "levels": 17,
+      "maximum_mhz": 2520,
+      "minimum_mhz": 900
+    }
+  },
+  "max_concurrency": 2,
+  "maximum_observed_concurrency": 2,
+  "minimum_observed_concurrency": 2,
+  "model_path": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+  "phase": "4B_fine_grained_binary_feedback_DVFS",
+  "probe_repeats": 2,
+  "raw_output_root": "/data/users/chjing/vllm_job_work/255346/binary_dvfs",
+  "routes": [
+    [
+      "P0",
+      "D0"
+    ],
+    [
+      "P1",
+      "D1"
+    ]
+  ],
+  "routing": "frozen deterministic round-robin over disjoint routes",
+  "slo": {
+    "tpot_ms": 200.0,
+    "ttft_ms": 500.0
+  },
+  "topology": {
+    "D0": [
+      "decode",
+      "ganymede",
+      [
+        0
+      ]
+    ],
+    "D1": [
+      "decode",
+      "ganymede",
+      [
+        1
+      ]
+    ],
+    "P0": [
+      "prefill",
+      "uranus",
+      [
+        0
+      ]
+    ],
+    "P1": [
+      "prefill",
+      "uranus",
+      [
+        1
+      ]
+    ]
+  },
+  "ttft_measurement_scope": "proxy request_received to first real decode chunk",
+  "valid": true
+}
