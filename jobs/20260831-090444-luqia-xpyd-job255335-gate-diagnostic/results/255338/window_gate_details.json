@@ -1,0 +1,792 @@
+{
+  "read_only": true,
+  "source_run": "/data/users/chjing/vllm_job_work/255335/binary_dvfs/xpyd_binary_dvfs_255335",
+  "valid": true,
+  "window_count": 4,
+  "windows": [
+    {
+      "client": {
+        "client_itl_valid_requests": 16,
+        "client_tpot_valid_requests": 16,
+        "client_ttft_valid_requests": 16,
+        "completion_token_sources": {
+          "server_usage": 16
+        },
+        "decode_stream_available_requests": 16,
+        "failed_requests": 0,
+        "input_tokens_total": 2048,
+        "logical_request_count": 16,
+        "logical_request_id_propagated_requests": 16,
+        "max_concurrency": 4,
+        "mean_e2e_latency_ms": 1224.3697850608442,
+        "mean_itl_ms": 58.05931544527993,
+        "mean_tpot_ms": 58.084289999775756,
+        "mean_ttft_ms": 353.105435064208,
+        "model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+        "num_warmups": 0,
+        "output_tokens_total": 256,
+        "p99_e2e_latency_ms": 1675.4201788397038,
+        "p99_itl_ms": 58.61110739526339,
+        "p99_tpot_ms": 58.623634693406835,
+        "p99_ttft_ms": 797.3831505922134,
+        "requested_output_tokens_total": 256,
+        "requests_total": 16,
+        "successful_requests": 16,
+        "timing_end_unix_s": 1788126194.5031943,
+        "timing_start_unix_s": 1788126189.0837002,
+        "tokenizer_model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+        "trace_csv": "/data/users/chjing/vllm_job_work/255335/binary_dvfs/xpyd_binary_dvfs_255335/raw/windows/001-global_warmup-warmup-r01/client/trace.csv",
+        "trace_duration_s": 3.75
+      },
+      "controller_row": {
+        "D0_requested_freq_mhz": "1500",
+        "D1_requested_freq_mhz": "1500",
+        "D_pool_energy_j": "583.6859999999999",
+        "P0_requested_freq_mhz": "2520",
+        "P1_requested_freq_mhz": "2520",
+        "P_pool_energy_j": "946.829",
+        "achieved_throughput_rps": "2.95230505856186",
+        "axis": "",
+        "candidate_index": "",
+        "clocks_valid": "True",
+        "completed_requests": "16",
+        "concurrency_valid": "False",
+        "configured_max_concurrency": "4",
+        "confirmation_attempt": "0",
+        "frequency_match_fraction_json": "{\"D0\": 1.0, \"D1\": 1.0, \"P0\": 1.0, \"P1\": 1.0}",
+        "hard_gates_json": "{\"endpoint_assignment\": true, \"endpoint_coverage\": true, \"explicit_compatibility\": true, \"fixed_clocks\": true, \"logical_request_id\": true, \"no_invalidating_thermal_or_hw_slowdown\": true, \"no_resource_overlap\": true, \"nvml_energy_windows\": true, \"pair_coverage\": true, \"phase3a_token_semantics\": true, \"real_sse_and_latency\": true, \"requested_output_tokens\": true}",
+        "joules_per_request": "95.65718749999999",
+        "max_tpot_ms": "58.626146133368216",
+        "max_ttft_ms": "836.2117449869402",
+        "mean_tpot_ms": "58.084289999775756",
+        "mean_ttft_ms": "353.105435064208",
+        "measurement_valid": "True",
+        "observed_peak_concurrency": "0",
+        "offered_rate_rps": "4.0",
+        "p99_tpot_ms": "58.623634693406835",
+        "p99_ttft_ms": "797.3831505922134",
+        "phase": "warmup",
+        "repeat": "1",
+        "route_distribution_json": "{\"P0->D0\": 8, \"P0->D1\": 0, \"P1->D0\": 0, \"P1->D1\": 8}",
+        "route_valid": "True",
+        "slo_goodput_rps": "2.583266926241628",
+        "slo_pass": "False",
+        "slo_violation_count": "2",
+        "total_gpu_gross_energy_j": "1530.5149999999999",
+        "window_end_unix_s": "1788126194.5031943",
+        "window_id": "001-global_warmup-warmup-r01",
+        "window_start_unix_s": "1788126189.0837002",
+        "workload": "global_warmup"
+      },
+      "endpoint_clock_targets": {
+        "D0": {
+          "graphics": {
+            "maximum_mhz": 1500.0,
+            "mean_mhz": 1500.0,
+            "minimum_mhz": 1500.0,
+            "sample_count": 27,
+            "target_match_count": 27,
+            "target_match_fraction": 1.0,
+            "target_mhz": 1500.0
+          },
+          "memory": {
+            "maximum_mhz": 6251.0,
+            "mean_mhz": 6251.0,
+            "minimum_mhz": 6251.0,
+            "sample_count": 27,
+            "target_match_count": 27,
+            "target_match_fraction": 1.0,
+            "target_mhz": 6251.0
+          }
+        },
+        "D1": {
+          "graphics": {
+            "maximum_mhz": 1500.0,
+            "mean_mhz": 1500.0,
+            "minimum_mhz": 1500.0,
+            "sample_count": 27,
+            "target_match_count": 27,
+            "target_match_fraction": 1.0,
+            "target_mhz": 1500.0
+          },
+          "memory": {
+            "maximum_mhz": 6251.0,
+            "mean_mhz": 6251.0,
+            "minimum_mhz": 6251.0,
+            "sample_count": 27,
+            "target_match_count": 27,
+            "target_match_fraction": 1.0,
+            "target_mhz": 6251.0
+          }
+        },
+        "P0": {
+          "graphics": {
+            "maximum_mhz": 2520.0,
+            "mean_mhz": 2520.0,
+            "minimum_mhz": 2520.0,
+            "sample_count": 27,
+            "target_match_count": 27,
+            "target_match_fraction": 1.0,
+            "target_mhz": 2520.0
+          },
+          "memory": {
+            "maximum_mhz": 9001.0,
+            "mean_mhz": 9001.0,
+            "minimum_mhz": 9001.0,
+            "sample_count": 27,
+            "target_match_count": 27,
+            "target_match_fraction": 1.0,
+            "target_mhz": 9001.0
+          }
+        },
+        "P1": {
+          "graphics": {
+            "maximum_mhz": 2520.0,
+            "mean_mhz": 2520.0,
+            "minimum_mhz": 2520.0,
+            "sample_count": 27,
+            "target_match_count": 27,
+            "target_match_fraction": 1.0,
+            "target_mhz": 2520.0
+          },
+          "memory": {
+            "maximum_mhz": 9001.0,
+            "mean_mhz": 9001.0,
+            "minimum_mhz": 9001.0,
+            "sample_count": 27,
+            "target_match_count": 27,
+            "target_match_fraction": 1.0,
+            "target_mhz": 9001.0
+          }
+        }
+      },
+      "route_matrix": {
+        "P0->D0": 8,
+        "P0->D1": 0,
+        "P1->D0": 0,
+        "P1->D1": 8
+      },
+      "substrate_audit": {
+        "assignment_errors": [],
+        "claim_boundary": "substrate validation only; no routing novelty or optimization claim",
+        "endpoint_request_counts": {
+          "D0": 8,
+          "D1": 8,
+          "P0": 8,
+          "P1": 8
+        },
+        "hard_gates": {
+          "endpoint_assignment": true,
+          "endpoint_coverage": true,
+          "explicit_compatibility": true,
+          "fixed_clocks": true,
+          "logical_request_id": true,
+          "no_invalidating_thermal_or_hw_slowdown": true,
+          "no_resource_overlap": true,
+          "nvml_energy_windows": true,
+          "pair_coverage": true,
+          "phase3a_token_semantics": true,
+          "real_sse_and_latency": true,
+          "requested_output_tokens": true
+        },
+        "route_counts": {
+          "P0->D0": 8,
+          "P0->D1": 0,
+          "P1->D0": 0,
+          "P1->D1": 8
+        },
+        "token_errors": [],
+        "valid": true
+      },
+      "window_id": "001-global_warmup-warmup-r01"
+    },
+    {
+      "client": {
+        "client_itl_valid_requests": 16,
+        "client_tpot_valid_requests": 16,
+        "client_ttft_valid_requests": 16,
+        "completion_token_sources": {
+          "server_usage": 16
+        },
+        "decode_stream_available_requests": 16,
+        "failed_requests": 0,
+        "input_tokens_total": 2048,
+        "logical_request_count": 16,
+        "logical_request_id_propagated_requests": 16,
+        "max_concurrency": 4,
+        "mean_e2e_latency_ms": 3901.2176181859104,
+        "mean_itl_ms": 57.76939924192175,
+        "mean_tpot_ms": 57.77338590477093,
+        "mean_ttft_ms": 261.494306185341,
+        "model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+        "num_warmups": 0,
+        "output_tokens_total": 1024,
+        "p99_e2e_latency_ms": 3955.749783536885,
+        "p99_itl_ms": 58.065014588508,
+        "p99_tpot_ms": 58.06925903538257,
+        "p99_ttft_ms": 298.39500625093933,
+        "requested_output_tokens_total": 1024,
+        "requests_total": 16,
+        "successful_requests": 16,
+        "timing_end_unix_s": 1788126250.3863523,
+        "timing_start_unix_s": 1788126231.545015,
+        "tokenizer_model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+        "trace_csv": "/data/users/chjing/vllm_job_work/255335/binary_dvfs/xpyd_binary_dvfs_255335/raw/windows/002-small_light-baseline_high-r01/client/trace.csv",
+        "trace_duration_s": 15.0
+      },
+      "controller_row": {
+        "D0_requested_freq_mhz": "1500",
+        "D1_requested_freq_mhz": "1500",
+        "D_pool_energy_j": "2349.931",
+        "P0_requested_freq_mhz": "2520",
+        "P1_requested_freq_mhz": "2520",
+        "P_pool_energy_j": "3047.7380000000003",
+        "achieved_throughput_rps": "0.8491966269050494",
+        "axis": "",
+        "candidate_index": "",
+        "clocks_valid": "True",
+        "completed_requests": "16",
+        "concurrency_valid": "False",
+        "configured_max_concurrency": "4",
+        "confirmation_attempt": "0",
+        "frequency_match_fraction_json": "{\"D0\": 1.0, \"D1\": 1.0, \"P0\": 1.0, \"P1\": 1.0}",
+        "hard_gates_json": "{\"endpoint_assignment\": true, \"endpoint_coverage\": true, \"explicit_compatibility\": true, \"fixed_clocks\": true, \"logical_request_id\": true, \"no_invalidating_thermal_or_hw_slowdown\": true, \"no_resource_overlap\": true, \"nvml_energy_windows\": true, \"pair_coverage\": true, \"phase3a_token_semantics\": true, \"real_sse_and_latency\": true, \"requested_output_tokens\": true}",
+        "joules_per_request": "337.3543125",
+        "max_tpot_ms": "58.06934361859772",
+        "max_ttft_ms": "299.09267800394446",
+        "mean_tpot_ms": "57.77338590477093",
+        "mean_ttft_ms": "261.494306185341",
+        "measurement_valid": "True",
+        "observed_peak_concurrency": "0",
+        "offered_rate_rps": "1.0",
+        "p99_tpot_ms": "58.06925903538257",
+        "p99_ttft_ms": "298.39500625093933",
+        "phase": "baseline_high",
+        "repeat": "1",
+        "route_distribution_json": "{\"P0->D0\": 8, \"P0->D1\": 0, \"P1->D0\": 0, \"P1->D1\": 8}",
+        "route_valid": "True",
+        "slo_goodput_rps": "0.8491966269050494",
+        "slo_pass": "True",
+        "slo_violation_count": "0",
+        "total_gpu_gross_energy_j": "5397.669",
+        "window_end_unix_s": "1788126250.3863523",
+        "window_id": "002-small_light-baseline_high-r01",
+        "window_start_unix_s": "1788126231.545015",
+        "workload": "small_light"
+      },
+      "endpoint_clock_targets": {
+        "D0": {
+          "graphics": {
+            "maximum_mhz": 1500.0,
+            "mean_mhz": 1500.0,
+            "minimum_mhz": 1500.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 1500.0
+          },
+          "memory": {
+            "maximum_mhz": 6251.0,
+            "mean_mhz": 6251.0,
+            "minimum_mhz": 6251.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 6251.0
+          }
+        },
+        "D1": {
+          "graphics": {
+            "maximum_mhz": 1500.0,
+            "mean_mhz": 1500.0,
+            "minimum_mhz": 1500.0,
+            "sample_count": 95,
+            "target_match_count": 95,
+            "target_match_fraction": 1.0,
+            "target_mhz": 1500.0
+          },
+          "memory": {
+            "maximum_mhz": 6251.0,
+            "mean_mhz": 6251.0,
+            "minimum_mhz": 6251.0,
+            "sample_count": 95,
+            "target_match_count": 95,
+            "target_match_fraction": 1.0,
+            "target_mhz": 6251.0
+          }
+        },
+        "P0": {
+          "graphics": {
+            "maximum_mhz": 2520.0,
+            "mean_mhz": 2520.0,
+            "minimum_mhz": 2520.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 2520.0
+          },
+          "memory": {
+            "maximum_mhz": 9001.0,
+            "mean_mhz": 9001.0,
+            "minimum_mhz": 9001.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 9001.0
+          }
+        },
+        "P1": {
+          "graphics": {
+            "maximum_mhz": 2520.0,
+            "mean_mhz": 2520.0,
+            "minimum_mhz": 2520.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 2520.0
+          },
+          "memory": {
+            "maximum_mhz": 9001.0,
+            "mean_mhz": 9001.0,
+            "minimum_mhz": 9001.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 9001.0
+          }
+        }
+      },
+      "route_matrix": {
+        "P0->D0": 8,
+        "P0->D1": 0,
+        "P1->D0": 0,
+        "P1->D1": 8
+      },
+      "substrate_audit": {
+        "assignment_errors": [],
+        "claim_boundary": "substrate validation only; no routing novelty or optimization claim",
+        "endpoint_request_counts": {
+          "D0": 8,
+          "D1": 8,
+          "P0": 8,
+          "P1": 8
+        },
+        "hard_gates": {
+          "endpoint_assignment": true,
+          "endpoint_coverage": true,
+          "explicit_compatibility": true,
+          "fixed_clocks": true,
+          "logical_request_id": true,
+          "no_invalidating_thermal_or_hw_slowdown": true,
+          "no_resource_overlap": true,
+          "nvml_energy_windows": true,
+          "pair_coverage": true,
+          "phase3a_token_semantics": true,
+          "real_sse_and_latency": true,
+          "requested_output_tokens": true
+        },
+        "route_counts": {
+          "P0->D0": 8,
+          "P0->D1": 0,
+          "P1->D0": 0,
+          "P1->D1": 8
+        },
+        "token_errors": [],
+        "valid": true
+      },
+      "window_id": "002-small_light-baseline_high-r01"
+    },
+    {
+      "client": {
+        "client_itl_valid_requests": 16,
+        "client_tpot_valid_requests": 16,
+        "client_ttft_valid_requests": 16,
+        "completion_token_sources": {
+          "server_usage": 16
+        },
+        "decode_stream_available_requests": 16,
+        "failed_requests": 0,
+        "input_tokens_total": 2048,
+        "logical_request_count": 16,
+        "logical_request_id_propagated_requests": 16,
+        "max_concurrency": 4,
+        "mean_e2e_latency_ms": 3898.4025916324754,
+        "mean_itl_ms": 57.77364491754384,
+        "mean_tpot_ms": 57.77757869342052,
+        "mean_ttft_ms": 258.4151339469827,
+        "model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+        "num_warmups": 0,
+        "output_tokens_total": 1024,
+        "p99_e2e_latency_ms": 3963.7883772607893,
+        "p99_itl_ms": 58.100356441175954,
+        "p99_tpot_ms": 58.1039410084486,
+        "p99_ttft_ms": 305.26490166957956,
+        "requested_output_tokens_total": 1024,
+        "requests_total": 16,
+        "successful_requests": 16,
+        "timing_end_unix_s": 1788126308.175755,
+        "timing_start_unix_s": 1788126289.3128963,
+        "tokenizer_model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+        "trace_csv": "/data/users/chjing/vllm_job_work/255335/binary_dvfs/xpyd_binary_dvfs_255335/raw/windows/003-small_light-baseline_high-r02/client/trace.csv",
+        "trace_duration_s": 15.0
+      },
+      "controller_row": {
+        "D0_requested_freq_mhz": "1500",
+        "D1_requested_freq_mhz": "1500",
+        "D_pool_energy_j": "2362.3779999999997",
+        "P0_requested_freq_mhz": "2520",
+        "P1_requested_freq_mhz": "2520",
+        "P_pool_energy_j": "3091.9939999999997",
+        "achieved_throughput_rps": "0.8482277364825904",
+        "axis": "",
+        "candidate_index": "",
+        "clocks_valid": "True",
+        "completed_requests": "16",
+        "concurrency_valid": "False",
+        "configured_max_concurrency": "4",
+        "confirmation_attempt": "0",
+        "frequency_match_fraction_json": "{\"D0\": 1.0, \"D1\": 1.0, \"P0\": 1.0, \"P1\": 1.0}",
+        "hard_gates_json": "{\"endpoint_assignment\": true, \"endpoint_coverage\": true, \"explicit_compatibility\": true, \"fixed_clocks\": true, \"logical_request_id\": true, \"no_invalidating_thermal_or_hw_slowdown\": true, \"no_resource_overlap\": true, \"nvml_energy_windows\": true, \"pair_coverage\": true, \"phase3a_token_semantics\": true, \"real_sse_and_latency\": true, \"requested_output_tokens\": true}",
+        "joules_per_request": "340.89824999999996",
+        "max_tpot_ms": "58.104928729811775",
+        "max_ttft_ms": "307.6628660201095",
+        "mean_tpot_ms": "57.77757869342052",
+        "mean_ttft_ms": "258.4151339469827",
+        "measurement_valid": "True",
+        "observed_peak_concurrency": "0",
+        "offered_rate_rps": "1.0",
+        "p99_tpot_ms": "58.1039410084486",
+        "p99_ttft_ms": "305.26490166957956",
+        "phase": "baseline_high",
+        "repeat": "2",
+        "route_distribution_json": "{\"P0->D0\": 8, \"P0->D1\": 0, \"P1->D0\": 0, \"P1->D1\": 8}",
+        "route_valid": "True",
+        "slo_goodput_rps": "0.8482277364825904",
+        "slo_pass": "True",
+        "slo_violation_count": "0",
+        "total_gpu_gross_energy_j": "5454.371999999999",
+        "window_end_unix_s": "1788126308.175755",
+        "window_id": "003-small_light-baseline_high-r02",
+        "window_start_unix_s": "1788126289.3128963",
+        "workload": "small_light"
+      },
+      "endpoint_clock_targets": {
+        "D0": {
+          "graphics": {
+            "maximum_mhz": 1500.0,
+            "mean_mhz": 1500.0,
+            "minimum_mhz": 1500.0,
+            "sample_count": 95,
+            "target_match_count": 95,
+            "target_match_fraction": 1.0,
+            "target_mhz": 1500.0
+          },
+          "memory": {
+            "maximum_mhz": 6251.0,
+            "mean_mhz": 6251.0,
+            "minimum_mhz": 6251.0,
+            "sample_count": 95,
+            "target_match_count": 95,
+            "target_match_fraction": 1.0,
+            "target_mhz": 6251.0
+          }
+        },
+        "D1": {
+          "graphics": {
+            "maximum_mhz": 1500.0,
+            "mean_mhz": 1500.0,
+            "minimum_mhz": 1500.0,
+            "sample_count": 95,
+            "target_match_count": 95,
+            "target_match_fraction": 1.0,
+            "target_mhz": 1500.0
+          },
+          "memory": {
+            "maximum_mhz": 6251.0,
+            "mean_mhz": 6251.0,
+            "minimum_mhz": 6251.0,
+            "sample_count": 95,
+            "target_match_count": 95,
+            "target_match_fraction": 1.0,
+            "target_mhz": 6251.0
+          }
+        },
+        "P0": {
+          "graphics": {
+            "maximum_mhz": 2520.0,
+            "mean_mhz": 2520.0,
+            "minimum_mhz": 2520.0,
+            "sample_count": 95,
+            "target_match_count": 95,
+            "target_match_fraction": 1.0,
+            "target_mhz": 2520.0
+          },
+          "memory": {
+            "maximum_mhz": 9001.0,
+            "mean_mhz": 9001.0,
+            "minimum_mhz": 9001.0,
+            "sample_count": 95,
+            "target_match_count": 95,
+            "target_match_fraction": 1.0,
+            "target_mhz": 9001.0
+          }
+        },
+        "P1": {
+          "graphics": {
+            "maximum_mhz": 2520.0,
+            "mean_mhz": 2520.0,
+            "minimum_mhz": 2520.0,
+            "sample_count": 95,
+            "target_match_count": 95,
+            "target_match_fraction": 1.0,
+            "target_mhz": 2520.0
+          },
+          "memory": {
+            "maximum_mhz": 9001.0,
+            "mean_mhz": 9001.0,
+            "minimum_mhz": 9001.0,
+            "sample_count": 95,
+            "target_match_count": 95,
+            "target_match_fraction": 1.0,
+            "target_mhz": 9001.0
+          }
+        }
+      },
+      "route_matrix": {
+        "P0->D0": 8,
+        "P0->D1": 0,
+        "P1->D0": 0,
+        "P1->D1": 8
+      },
+      "substrate_audit": {
+        "assignment_errors": [],
+        "claim_boundary": "substrate validation only; no routing novelty or optimization claim",
+        "endpoint_request_counts": {
+          "D0": 8,
+          "D1": 8,
+          "P0": 8,
+          "P1": 8
+        },
+        "hard_gates": {
+          "endpoint_assignment": true,
+          "endpoint_coverage": true,
+          "explicit_compatibility": true,
+          "fixed_clocks": true,
+          "logical_request_id": true,
+          "no_invalidating_thermal_or_hw_slowdown": true,
+          "no_resource_overlap": true,
+          "nvml_energy_windows": true,
+          "pair_coverage": true,
+          "phase3a_token_semantics": true,
+          "real_sse_and_latency": true,
+          "requested_output_tokens": true
+        },
+        "route_counts": {
+          "P0->D0": 8,
+          "P0->D1": 0,
+          "P1->D0": 0,
+          "P1->D1": 8
+        },
+        "token_errors": [],
+        "valid": true
+      },
+      "window_id": "003-small_light-baseline_high-r02"
+    },
+    {
+      "client": {
+        "client_itl_valid_requests": 16,
+        "client_tpot_valid_requests": 16,
+        "client_ttft_valid_requests": 16,
+        "completion_token_sources": {
+          "server_usage": 16
+        },
+        "decode_stream_available_requests": 16,
+        "failed_requests": 0,
+        "input_tokens_total": 2048,
+        "logical_request_count": 16,
+        "logical_request_id_propagated_requests": 16,
+        "max_concurrency": 4,
+        "mean_e2e_latency_ms": 3909.6627547987737,
+        "mean_itl_ms": 57.77208876587259,
+        "mean_tpot_ms": 57.77629549895267,
+        "mean_ttft_ms": 269.7561383647553,
+        "model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+        "num_warmups": 0,
+        "output_tokens_total": 1024,
+        "p99_e2e_latency_ms": 3969.8129951866576,
+        "p99_itl_ms": 58.07562562732196,
+        "p99_tpot_ms": 58.08015151876986,
+        "p99_ttft_ms": 312.20473305147607,
+        "requested_output_tokens_total": 1024,
+        "requests_total": 16,
+        "successful_requests": 16,
+        "timing_end_unix_s": 1788126363.8328443,
+        "timing_start_unix_s": 1788126344.9785583,
+        "tokenizer_model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+        "trace_csv": "/data/users/chjing/vllm_job_work/255335/binary_dvfs/xpyd_binary_dvfs_255335/raw/windows/004-small_light-baseline_high-r03/client/trace.csv",
+        "trace_duration_s": 15.0
+      },
+      "controller_row": {
+        "D0_requested_freq_mhz": "1500",
+        "D1_requested_freq_mhz": "1500",
+        "D_pool_energy_j": "2362.4610000000002",
+        "P0_requested_freq_mhz": "2520",
+        "P1_requested_freq_mhz": "2520",
+        "P_pool_energy_j": "3054.873",
+        "achieved_throughput_rps": "0.8486134154230759",
+        "axis": "",
+        "candidate_index": "",
+        "clocks_valid": "True",
+        "completed_requests": "16",
+        "concurrency_valid": "False",
+        "configured_max_concurrency": "4",
+        "confirmation_attempt": "0",
+        "frequency_match_fraction_json": "{\"D0\": 1.0, \"D1\": 1.0, \"P0\": 1.0, \"P1\": 1.0}",
+        "hard_gates_json": "{\"endpoint_assignment\": true, \"endpoint_coverage\": true, \"explicit_compatibility\": true, \"fixed_clocks\": true, \"logical_request_id\": true, \"no_invalidating_thermal_or_hw_slowdown\": true, \"no_resource_overlap\": true, \"nvml_energy_windows\": true, \"pair_coverage\": true, \"phase3a_token_semantics\": true, \"real_sse_and_latency\": true, \"requested_output_tokens\": true}",
+        "joules_per_request": "338.58337500000005",
+        "max_tpot_ms": "58.080577778459954",
+        "max_ttft_ms": "314.1632190090604",
+        "mean_tpot_ms": "57.77629549895267",
+        "mean_ttft_ms": "269.7561383647553",
+        "measurement_valid": "True",
+        "observed_peak_concurrency": "0",
+        "offered_rate_rps": "1.0",
+        "p99_tpot_ms": "58.08015151876986",
+        "p99_ttft_ms": "312.20473305147607",
+        "phase": "baseline_high",
+        "repeat": "3",
+        "route_distribution_json": "{\"P0->D0\": 8, \"P0->D1\": 0, \"P1->D0\": 0, \"P1->D1\": 8}",
+        "route_valid": "True",
+        "slo_goodput_rps": "0.8486134154230759",
+        "slo_pass": "True",
+        "slo_violation_count": "0",
+        "total_gpu_gross_energy_j": "5417.334000000001",
+        "window_end_unix_s": "1788126363.8328443",
+        "window_id": "004-small_light-baseline_high-r03",
+        "window_start_unix_s": "1788126344.9785583",
+        "workload": "small_light"
+      },
+      "endpoint_clock_targets": {
+        "D0": {
+          "graphics": {
+            "maximum_mhz": 1500.0,
+            "mean_mhz": 1500.0,
+            "minimum_mhz": 1500.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 1500.0
+          },
+          "memory": {
+            "maximum_mhz": 6251.0,
+            "mean_mhz": 6251.0,
+            "minimum_mhz": 6251.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 6251.0
+          }
+        },
+        "D1": {
+          "graphics": {
+            "maximum_mhz": 1500.0,
+            "mean_mhz": 1500.0,
+            "minimum_mhz": 1500.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 1500.0
+          },
+          "memory": {
+            "maximum_mhz": 6251.0,
+            "mean_mhz": 6251.0,
+            "minimum_mhz": 6251.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 6251.0
+          }
+        },
+        "P0": {
+          "graphics": {
+            "maximum_mhz": 2520.0,
+            "mean_mhz": 2520.0,
+            "minimum_mhz": 2520.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 2520.0
+          },
+          "memory": {
+            "maximum_mhz": 9001.0,
+            "mean_mhz": 9001.0,
+            "minimum_mhz": 9001.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 9001.0
+          }
+        },
+        "P1": {
+          "graphics": {
+            "maximum_mhz": 2520.0,
+            "mean_mhz": 2520.0,
+            "minimum_mhz": 2520.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 2520.0
+          },
+          "memory": {
+            "maximum_mhz": 9001.0,
+            "mean_mhz": 9001.0,
+            "minimum_mhz": 9001.0,
+            "sample_count": 94,
+            "target_match_count": 94,
+            "target_match_fraction": 1.0,
+            "target_mhz": 9001.0
+          }
+        }
+      },
+      "route_matrix": {
+        "P0->D0": 8,
+        "P0->D1": 0,
+        "P1->D0": 0,
+        "P1->D1": 8
+      },
+      "substrate_audit": {
+        "assignment_errors": [],
+        "claim_boundary": "substrate validation only; no routing novelty or optimization claim",
+        "endpoint_request_counts": {
+          "D0": 8,
+          "D1": 8,
+          "P0": 8,
+          "P1": 8
+        },
+        "hard_gates": {
+          "endpoint_assignment": true,
+          "endpoint_coverage": true,
+          "explicit_compatibility": true,
+          "fixed_clocks": true,
+          "logical_request_id": true,
+          "no_invalidating_thermal_or_hw_slowdown": true,
+          "no_resource_overlap": true,
+          "nvml_energy_windows": true,
+          "pair_coverage": true,
+          "phase3a_token_semantics": true,
+          "real_sse_and_latency": true,
+          "requested_output_tokens": true
+        },
+        "route_counts": {
+          "P0->D0": 8,
+          "P0->D1": 0,
+          "P1->D0": 0,
+          "P1->D1": 8
+        },
+        "token_errors": [],
+        "valid": true
+      },
+      "window_id": "004-small_light-baseline_high-r03"
+    }
+  ]
+}
