@@ -1,0 +1,358 @@
+#!/usr/bin/env python3
+"""Fail-closed preflight for the online 2P2D binary-feedback job."""
+
+from __future__ import annotations
+
+import argparse
+from concurrent.futures import ThreadPoolExecutor
+import hashlib
+import importlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+import platform
+import subprocess
+import sys
+from typing import Any
+
+
+EXPECTED_SOURCE_COMMIT = "0eb8926f965cfd550f5bcee0095b563b1bb4e41e"
+EXPECTED_SOURCE_BUNDLE_SHA256 = (
+    "b98f36002511ac718c1cb7cf9ed3fd1d76ae630ee36c5e5e0adc36c580fd6ef3"
+)
+EXPECTED_PAIRS = tuple(
+    (("P0", "D0"), ("P1", "D1"))
+)
+CACHE_ENV_VARS = (
+    "HF_HOME",
+    "HF_TOKEN_PATH",
+    "HF_HUB_CACHE",
+    "XDG_CACHE_HOME",
+    "XDG_CONFIG_HOME",
+    "XDG_RUNTIME_DIR",
+    "VLLM_CACHE_ROOT",
+    "TORCH_HOME",
+    "TRITON_CACHE_DIR",
+    "CUDA_CACHE_PATH",
+    "TMPDIR",
+)
+
+
+def command_output(argv: list[str]) -> str:
+    process = subprocess.run(argv, capture_output=True, text=True, check=False)
+    if process.returncode:
+        raise RuntimeError(
+            f"command failed rc={process.returncode}: {' '.join(argv)}"
+        )
+    return process.stdout.strip()
+
+
+def bundle_digest(root: Path) -> str:
+    digest = hashlib.sha256()
+    for path in sorted(item for item in root.rglob("*") if item.is_file()):
+        digest.update(str(path.relative_to(root)).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def validate_source(source_root: Path) -> dict[str, Any]:
+    required = (
+        source_root / "run_disagg_benchmark.sh",
+        source_root / "gpu_monitor.py",
+        source_root / "paper/scripts/replay_synthetic_trace.py",
+        source_root / "paper/scripts/xpyd/phase3c_substrate.py",
+        source_root / "paper/scripts/xpyd/disagg_proxy.py",
+        source_root / "paper/scripts/xpyd/workload_frequency_table.py",
+        source_root / "paper/scripts/xpyd/online_feedback_controller.py",
+    )
+    missing = [str(path) for path in required if not path.is_file()]
+    if missing:
+        raise FileNotFoundError(f"vendored XPYD files missing: {missing}")
+    observed_digest = bundle_digest(source_root)
+    if observed_digest != EXPECTED_SOURCE_BUNDLE_SHA256:
+        raise ValueError(
+            "source bundle digest mismatch: "
+            f"expected={EXPECTED_SOURCE_BUNDLE_SHA256} observed={observed_digest}"
+        )
+    launcher = required[0].read_text(encoding="utf-8")
+    proxy = required[4].read_text(encoding="utf-8")
+    for marker in (
+        'XPYD_ENDPOINTS_PER_ROLE="${XPYD_ENDPOINTS_PER_ROLE:-2}"',
+        "endpoint_index<XPYD_ENDPOINTS_PER_ROLE",
+        '"kv_connector":"P2pNcclConnector"',
+        '"send_type":"PUT"',
+    ):
+        if marker not in launcher:
+            raise ValueError(f"2P2D launcher marker missing: {marker}")
+    table = required[5].read_text(encoding="utf-8")
+    controller = required[6].read_text(encoding="utf-8")
+    for marker in (
+        "class WorkloadFrequencyTable",
+        "threading.RLock()",
+        "expected_revision",
+        "candidate.measured_power_w >= current.measured_power_w",
+        "os.replace(temporary, self._persistence_path)",
+    ):
+        if marker not in table:
+            raise ValueError(f"frequency-table marker missing: {marker}")
+    for marker in (
+        "frequency_table=WorkloadFrequencyTable",
+        '@app.get("/xpyd/frequency-table")',
+        '@app.put("/xpyd/frequency-table/{workload_id}")',
+    ):
+        if marker not in proxy:
+            raise ValueError(f"proxy frequency-table marker missing: {marker}")
+    for marker in (
+        "class OnlineFeedbackController",
+        "class PhysicalFeedbackRuntime",
+        'await self.actuate("service"',
+        'await self._search_axis(\n            "P"',
+        'await self._search_axis(\n            "D"',
+        "self._pending.add(workload_id)",
+        "await self._queue.put",
+        "probe_interval_s",
+    ):
+        if marker not in controller:
+            raise ValueError(f"online feedback marker missing: {marker}")
+    return {"source_bundle_sha256": observed_digest, "required_files": len(required)}
+
+
+def validate_config(path: Path) -> dict[str, Any]:
+    config = json.loads(path.read_text(encoding="utf-8"))
+    endpoints = config.get("endpoints", [])
+    compact = [
+        (
+            item.get("endpoint_id"),
+            item.get("role"),
+            item.get("node"),
+            item.get("gpu_ids"),
+            item.get("tp_degree"),
+            item.get("http_port"),
+            item.get("kv_port"),
+            item.get("kv_connector"),
+        )
+        for item in endpoints
+    ]
+    expected = []
+    for index in range(2):
+        expected.append(
+            (f"P{index}", "prefill", "neptune", [index], 1,
+             8100 + index, 14579 + index, "P2pNcclConnector")
+        )
+    for index in range(2):
+        expected.append(
+            (f"D{index}", "decode", "io", [index], 1,
+             8200 + index, 14579 + index, "P2pNcclConnector")
+        )
+    if compact != expected:
+        raise ValueError(f"unexpected 2P2D endpoint topology: {compact!r}")
+    pairs = tuple(
+        (row.get("prefill_endpoint_id"), row.get("decode_endpoint_id"))
+        for row in config.get("compatible_pairs", [])
+        if row.get("supported") is True
+    )
+    if pairs != EXPECTED_PAIRS:
+        raise ValueError(f"unexpected compatible pairs: {pairs!r}")
+    workloads = [
+        (row.get("id"), row.get("input_len"), row.get("output_len"),
+         row.get("count"), row.get("rate_rps"))
+        for row in config.get("workloads", [])
+    ]
+    if workloads != [
+        ("small_light", 128, 64, 16, 0.04),
+        ("prefill_medium", 1024, 64, 16, 0.04),
+        ("prefill_heavy", 2048, 64, 16, 0.04),
+        ("decode_medium", 128, 128, 16, 0.04),
+        ("decode_heavy", 128, 256, 16, 0.04),
+        ("balanced_medium", 512, 128, 16, 0.04),
+        ("both_heavy", 2048, 256, 16, 0.04),
+    ]:
+        raise ValueError(f"unexpected workload matrix: {workloads!r}")
+    if config.get("routing_policy") != "round_robin":
+        raise ValueError("single selected pair must use deterministic routing")
+    if config.get("frequency_table_path") != "$XPYD_FREQUENCY_TABLE_PATH":
+        raise ValueError("job must persist the frequency table")
+    if config.get("vllm_version") != "0.15.1":
+        raise ValueError("2P2D job requires vLLM 0.15.1")
+    if config.get("model") != "$XPYD_LOCAL_MODEL_PATH":
+        raise ValueError("job config must use the validated local model")
+    if config.get("tokenizer_model") != "$XPYD_LOCAL_MODEL_PATH":
+        raise ValueError("job config must use the validated local tokenizer")
+    if config.get("output_root") != "$XPYD_FEEDBACK_TABLE_OUTPUT_ROOT":
+        raise ValueError("job config must use the isolated output-root variable")
+    if config.get("client", {}).get("max_concurrency") != 1:
+        raise ValueError("connector validation boundary requires max_concurrency=1")
+    table = config.get("online_feedback", {})
+    if table.get("enabled") is not True:
+        raise ValueError("online feedback must be enabled")
+    if table.get("service_pair") != ["P1", "D1"]:
+        raise ValueError("service pair must be P1->D1")
+    if table.get("experiment_pair") != ["P0", "D0"]:
+        raise ValueError("experiment pair must be P0->D0")
+    if table.get("slo") != {"ttft_ms": 500.0, "tpot_ms": 200.0}:
+        raise ValueError("frequency table SLO must be TTFT=500ms, TPOT=200ms")
+    if float(table.get("service_request_interval_s", 0)) != 25.0:
+        raise ValueError("service request interval must be 25 seconds")
+    if float(table.get("probe_request_interval_s", 0)) != 20.0:
+        raise ValueError("experiment probe interval must be 20 seconds")
+    if table.get("search_order") != ["prefill", "decode"]:
+        raise ValueError("binary search must run P before D")
+    if table.get("algorithm") != "lower_bound_binary_search":
+        raise ValueError("unexpected feedback search algorithm")
+    grids = table.get("frequency_grids", {})
+    if grids.get("prefill") != {"minimum_mhz": 900, "maximum_mhz": 2520, "levels": 17}:
+        raise ValueError("unexpected prefill frequency grid")
+    if grids.get("decode") != {"minimum_mhz": 450, "maximum_mhz": 1500, "levels": 15}:
+        raise ValueError("unexpected decode frequency grid")
+    if config.get("background_experiment_traffic") is not True:
+        raise ValueError("background experiment traffic must be declared")
+    coverage = config.get("coverage_policy", {})
+    if coverage != {
+        "required_endpoint_ids": ["P1", "D1"],
+        "required_pairs": [["P1", "D1"]],
+    }:
+        raise ValueError("physical scaffold must audit only the selected pair")
+    return {
+        "endpoint_count": len(compact),
+        "pair_count": len(pairs),
+        "routing_policy": config["routing_policy"],
+        "workloads": workloads,
+        "service_pair": table["service_pair"],
+        "experiment_pair": table["experiment_pair"],
+        "frequency_search_enabled": True,
+        "dvfs_actuation_enabled": True,
+        "service_request_interval_s": table["service_request_interval_s"],
+        "probe_request_interval_s": table["probe_request_interval_s"],
+    }
+
+
+def validate_concurrent_table(source_root: Path) -> dict[str, Any]:
+    module_path = source_root / "paper/scripts/xpyd/workload_frequency_table.py"
+    spec = importlib.util.spec_from_file_location("xpyd_frequency_table_preflight", module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("could not load workload frequency table")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    table = module.WorkloadFrequencyTable()
+    if tuple(table.keys) != tuple(module.WORKLOAD_KEYS) or len(table.keys) != 7:
+        raise RuntimeError("frequency table must expose the exact seven keys")
+
+    def write(power: float) -> None:
+        table.write("both_heavy", {
+            "prefill_frequency_mhz": 1500,
+            "decode_frequency_mhz": 900,
+            "measured_power_w": power,
+            "ttft_ms": 400.0,
+            "tpot_ms": 150.0,
+            "prefill_endpoint_id": "P0",
+            "decode_endpoint_id": "D0",
+            "sample_count": 16,
+            "source": "static_preflight",
+            "slo_met": True,
+        })
+
+    powers = [180.0, 140.0, 175.0, 95.0, 120.0, 101.0, 160.0]
+    with ThreadPoolExecutor(max_workers=len(powers)) as executor:
+        list(executor.map(write, powers))
+    entry = table.read("both_heavy")
+    if entry.value is None or entry.value.measured_power_w != min(powers):
+        raise RuntimeError("concurrent writes did not retain lowest power")
+    stale_conflict = False
+    try:
+        table.write("both_heavy", entry.value, expected_revision=0)
+    except module.FrequencyTableError:
+        stale_conflict = True
+    if not stale_conflict:
+        raise RuntimeError("stale revision was not rejected")
+    return {
+        "key_count": len(table.keys),
+        "concurrent_lowest_power_w": entry.value.measured_power_w,
+        "revision": entry.revision,
+        "stale_revision_rejected": stale_conflict,
+    }
+
+
+def validate_runtime_environment() -> dict[str, Any]:
+    job_id = os.environ.get("SLURM_JOB_ID")
+    if not job_id or not job_id.isdigit():
+        raise ValueError(f"invalid SLURM_JOB_ID: {job_id!r}")
+    expected_root = (Path("/data/users/chjing/vllm_job_work") / job_id).resolve()
+    cache_values: dict[str, str] = {}
+    for name in CACHE_ENV_VARS:
+        raw = os.environ.get(name)
+        if not raw:
+            raise ValueError(f"required cache variable missing: {name}")
+        resolved = Path(raw).resolve()
+        if resolved != expected_root and expected_root not in resolved.parents:
+            raise ValueError(f"{name} is outside the job cache: {raw}")
+        cache_values[name] = raw
+    for name in ("HF_HUB_CACHE", "XDG_RUNTIME_DIR", "TMPDIR"):
+        path = Path(cache_values[name])
+        if not path.is_dir() or not os.access(path, os.W_OK | os.X_OK):
+            raise ValueError(f"cache directory is not writable: {name}={path}")
+    model = Path(os.environ.get("XPYD_LOCAL_MODEL_PATH", ""))
+    if not model.is_dir() or not (model / "config.json").is_file():
+        raise ValueError(f"validated local model is unavailable: {model}")
+    sys.path.insert(0, os.environ["SOURCE_ROOT"] + "/paper/scripts")
+    for module_name in (
+        "xpyd.phase3c_substrate",
+        "xpyd.disagg_proxy",
+        "xpyd.online_feedback_controller",
+        "aiohttp",
+        "transformers",
+        "pynvml",
+    ):
+        importlib.import_module(module_name)
+    vllm = importlib.import_module("vllm")
+    if getattr(vllm, "__version__", None) != "0.15.1":
+        raise RuntimeError(
+            f"expected vLLM 0.15.1, got {getattr(vllm, '__version__', None)!r}"
+        )
+    return {
+        "slurm_job_id": job_id,
+        "slurm_nodes": os.environ.get("SLURM_JOB_NODELIST"),
+        "cache_environment": cache_values,
+        "local_model": str(model),
+        "vllm_version": vllm.__version__,
+        "nvidia_smi": command_output(
+            ["nvidia-smi", "--query-gpu=name,index", "--format=csv,noheader"]
+        ),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--source-root", type=Path, required=True)
+    parser.add_argument("--config", type=Path, required=True)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--static-only", action="store_true")
+    args = parser.parse_args()
+
+    report: dict[str, Any] = {
+        "ok": True,
+        "source_commit": EXPECTED_SOURCE_COMMIT,
+        "source": validate_source(args.source_root),
+        "config": validate_config(args.config),
+        "frequency_table": validate_concurrent_table(args.source_root),
+        "python": sys.version,
+        "platform": platform.platform(),
+        "static_only": args.static_only,
+    }
+    if not args.static_only:
+        os.environ["SOURCE_ROOT"] = str(args.source_root)
+        report["runtime"] = validate_runtime_environment()
+    if args.output is not None:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(
+            json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+    print("xpyd_preflight=" + json.dumps(report, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
