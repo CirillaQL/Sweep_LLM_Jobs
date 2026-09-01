@@ -1,0 +1,107 @@
+{
+  "config": {
+    "dvfs_actuation_enabled": true,
+    "endpoint_count": 4,
+    "experiment_frequency_settle_s": 10.0,
+    "experiment_pair": [
+      "P0",
+      "D0"
+    ],
+    "frequency_search_enabled": true,
+    "pair_count": 2,
+    "probe_request_interval_s": 20.0,
+    "routing_policy": "round_robin",
+    "service_frequency_settle_s": 10.0,
+    "service_pair": [
+      "P1",
+      "D1"
+    ],
+    "service_request_interval_s": 25.0,
+    "workloads": [
+      [
+        "small_light",
+        128,
+        64,
+        16,
+        0.04
+      ],
+      [
+        "prefill_medium",
+        1024,
+        64,
+        16,
+        0.04
+      ],
+      [
+        "prefill_heavy",
+        2048,
+        64,
+        16,
+        0.04
+      ],
+      [
+        "decode_medium",
+        128,
+        128,
+        16,
+        0.04
+      ],
+      [
+        "decode_heavy",
+        128,
+        256,
+        16,
+        0.04
+      ],
+      [
+        "balanced_medium",
+        512,
+        128,
+        16,
+        0.04
+      ],
+      [
+        "both_heavy",
+        2048,
+        256,
+        16,
+        0.04
+      ]
+    ]
+  },
+  "frequency_table": {
+    "concurrent_lowest_power_w": 95.0,
+    "key_count": 7,
+    "revision": 3,
+    "stale_revision_rejected": true
+  },
+  "ok": true,
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+  "python": "3.10.17 | packaged by conda-forge | (main, Apr 10 2025, 22:19:12) [GCC 13.3.0]",
+  "runtime": {
+    "cache_environment": {
+      "CUDA_CACHE_PATH": "/data/users/chjing/vllm_job_work/255388/cuda-cache",
+      "HF_HOME": "/data/users/chjing/vllm_job_work/255388/huggingface",
+      "HF_HUB_CACHE": "/data/users/chjing/vllm_job_work/255388/huggingface/hub",
+      "HF_TOKEN_PATH": "/data/users/chjing/vllm_job_work/255388/huggingface/token",
+      "TMPDIR": "/data/users/chjing/vllm_job_work/255388/tmp",
+      "TORCH_HOME": "/data/users/chjing/vllm_job_work/255388/torch-cache",
+      "TRITON_CACHE_DIR": "/data/users/chjing/vllm_job_work/255388/triton-cache",
+      "VLLM_CACHE_ROOT": "/data/users/chjing/vllm_job_work/255388/vllm-cache",
+      "XDG_CACHE_HOME": "/data/users/chjing/vllm_job_work/255388/xdg-cache",
+      "XDG_CONFIG_HOME": "/data/users/chjing/vllm_job_work/255388/xdg-config",
+      "XDG_RUNTIME_DIR": "/data/users/chjing/vllm_job_work/255388/xdg-runtime"
+    },
+    "local_model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+    "nvidia_smi": "NVIDIA L4, 0\nNVIDIA L4, 1\nNVIDIA L4, 2\nNVIDIA L4, 3\nNVIDIA L4, 4\nNVIDIA L4, 5\nNVIDIA L4, 6\nNVIDIA L4, 7",
+    "slurm_job_id": "255388",
+    "slurm_nodes": "ganymede,uranus",
+    "vllm_version": "0.15.1"
+  },
+  "source": {
+    "required_files": 7,
+    "source_bundle_sha256": "ce0c1a8c67088ec7b81f044455f6a9f00b5904fe318e93b43af82b6f34e16013"
+  },
+  "source_commit": "0eb8926f965cfd550f5bcee0095b563b1bb4e41e",
+  "static_only": false
+}
