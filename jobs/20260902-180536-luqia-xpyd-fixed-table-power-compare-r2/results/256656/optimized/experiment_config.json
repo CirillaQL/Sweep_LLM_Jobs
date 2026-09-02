@@ -1,0 +1,135 @@
+{
+  "model": "$XPYD_LOCAL_MODEL_PATH",
+  "tokenizer_model": "$XPYD_LOCAL_MODEL_PATH",
+  "vllm_version": "0.15.1",
+  "output_root": "$XPYD_FEEDBACK_TABLE_OUTPUT_ROOT",
+  "proxy_uri": "$XPYD_PROXY_URI",
+  "proxy_diagnostics_log": "$XPYD_PROXY_DIAGNOSTICS_LOG",
+  "frequency_table_path": "$XPYD_FREQUENCY_TABLE_PATH",
+  "routing_policy": "round_robin",
+  "workload_ordering": "windowed",
+  "background_experiment_traffic": false,
+  "comparison_mode": "fixed_optimal_table",
+  "fixed_frequency_table": {
+    "small_light": {"prefill_frequency_mhz": 900, "decode_frequency_mhz": 720, "measured_power_w": 136.3098844812254, "measured_energy_j": 522.6850000000001, "ttft_ms": 223.73315482400358, "tpot_ms": 57.28690347612081, "prefill_endpoint_id": "P0", "decode_endpoint_id": "D0", "sample_count": 5, "updated_unix_s": 1788334896.1981063, "source": "job255414_online_axis_energy_search", "slo_met": true},
+    "prefill_medium": {"prefill_frequency_mhz": 900, "decode_frequency_mhz": 975, "measured_power_w": 137.40234463619626, "measured_energy_j": 561.6268, "ttft_ms": 426.2323738192208, "tpot_ms": 58.17716942882047, "prefill_endpoint_id": "P0", "decode_endpoint_id": "D0", "sample_count": 5, "updated_unix_s": 1788336083.6223528, "source": "job255414_online_axis_energy_search", "slo_met": true},
+    "prefill_heavy": {"prefill_frequency_mhz": 1980, "decode_frequency_mhz": 975, "measured_power_w": 145.70564139708327, "measured_energy_j": 621.0276, "ttft_ms": 488.77341841580346, "tpot_ms": 59.89870388533861, "prefill_endpoint_id": "P0", "decode_endpoint_id": "D0", "sample_count": 5, "updated_unix_s": 1788337299.3939562, "source": "job255414_online_axis_energy_search", "slo_met": true},
+    "decode_medium": {"prefill_frequency_mhz": 900, "decode_frequency_mhz": 975, "measured_power_w": 129.3681326680161, "measured_energy_j": 959.8186, "ttft_ms": 224.1878967732191, "tpot_ms": 56.66705523131738, "prefill_endpoint_id": "P0", "decode_endpoint_id": "D0", "sample_count": 5, "updated_unix_s": 1788338700.4122214, "source": "job255414_online_axis_energy_search", "slo_met": true},
+    "decode_heavy": {"prefill_frequency_mhz": 900, "decode_frequency_mhz": 975, "measured_power_w": 125.11972580511238, "measured_energy_j": 1838.8914, "ttft_ms": 217.42389720166102, "tpot_ms": 56.78129167063162, "prefill_endpoint_id": "P0", "decode_endpoint_id": "D0", "sample_count": 5, "updated_unix_s": 1788340365.5913997, "source": "job255414_online_axis_energy_search", "slo_met": true},
+    "balanced_medium": {"prefill_frequency_mhz": 900, "decode_frequency_mhz": 975, "measured_power_w": 128.6826639043831, "measured_energy_j": 971.3416, "ttft_ms": 268.61099222442135, "tpot_ms": 57.321249001556794, "prefill_endpoint_id": "P0", "decode_endpoint_id": "D0", "sample_count": 5, "updated_unix_s": 1788341364.286283, "source": "job255414_online_axis_energy_search", "slo_met": true}
+  },
+  "online_feedback": {
+    "enabled": true,
+    "service_pair": ["P1", "D1"],
+    "experiment_pair": ["P0", "D0"],
+    "service_request_interval_s": 25.0,
+    "probe_request_interval_s": 20.0,
+    "service_frequency_settle_s": 10.0,
+    "experiment_frequency_settle_s": 10.0,
+    "service_warmup_requests": 2,
+    "experiment_warmup_requests": 0,
+    "probe_samples_per_candidate": 5,
+    "minimum_dwell_s": 1.0,
+    "event_log": "$XPYD_FEEDBACK_EVENT_LOG",
+    "service_request_log": "$XPYD_SERVICE_REQUEST_LOG",
+    "slo": {"ttft_ms": 500.0, "tpot_ms": 200.0},
+    "exploration_slo": {"ttft_ms": 500.0, "tpot_ms": 200.0},
+    "axis_search_levels": {"prefill": 7, "decode": 5},
+    "frequency_grids": {
+      "prefill": {"minimum_mhz": 900, "maximum_mhz": 2520, "levels": 7},
+      "decode": {"minimum_mhz": 450, "maximum_mhz": 1500, "levels": 5}
+    },
+    "search_order": ["prefill", "decode"],
+    "algorithm": "sequential_axis_minimum_mean_request_energy"
+  },
+  "steady_state": {
+    "discard_first_per_configuration_window": 3,
+    "minimum_samples": 8,
+    "maximum_cv": 0.10
+  },
+  "scrape_interval_s": 1.0,
+  "collector": {"timeout_s": 5.0},
+  "pre_window_s": 1.0,
+  "post_window_s": 0.5,
+  "sampling": {
+    "period_s": 0.2,
+    "late_tolerance_s": 0.05,
+    "readiness_timeout_s": 180.0,
+    "maximum_gap_s": 0.5,
+    "maximum_boundary_gap_s": 0.4,
+    "minimum_coverage_ratio": 0.9
+  },
+  "client": {
+    "script": "paper/scripts/replay_synthetic_trace.py",
+    "max_concurrency": 1,
+    "request_timeout_s": 900
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "P0", "role": "prefill", "node": "uranus",
+      "gpu_type": "NVIDIA L40S", "gpu_ids": [0], "cuda_visible_device": "0",
+      "monitor_gpu_allocation_count": 2, "tp_degree": 1,
+      "http_uri": "http://$XPYD_P0_HTTP_HOST:8100",
+      "http_host": "$XPYD_P0_HTTP_HOST", "http_port": 8100,
+      "addr_host": "$XPYD_P_ADDR_HOST", "kv_port": 14579,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 2520,
+      "expected_gpu_name": "L40S"
+    },
+    {
+      "endpoint_id": "P1", "role": "prefill", "node": "uranus",
+      "gpu_type": "NVIDIA L40S", "gpu_ids": [1], "cuda_visible_device": "1",
+      "monitor_gpu_allocation_count": 2, "tp_degree": 1,
+      "http_uri": "http://$XPYD_P1_HTTP_HOST:8101",
+      "http_host": "$XPYD_P1_HTTP_HOST", "http_port": 8101,
+      "addr_host": "$XPYD_P_ADDR_HOST", "kv_port": 14580,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 2520,
+      "expected_gpu_name": "L40S"
+    },
+    {
+      "endpoint_id": "D0", "role": "decode", "node": "ganymede",
+      "gpu_type": "NVIDIA L4", "gpu_ids": [0], "cuda_visible_device": "0",
+      "monitor_gpu_allocation_count": 2, "tp_degree": 1,
+      "http_uri": "http://$XPYD_D0_HTTP_HOST:8200",
+      "http_host": "$XPYD_D0_HTTP_HOST", "http_port": 8200,
+      "addr_host": "$XPYD_D_ADDR_HOST", "kv_port": 14579,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 1500,
+      "expected_gpu_name": "L4"
+    },
+    {
+      "endpoint_id": "D1", "role": "decode", "node": "ganymede",
+      "gpu_type": "NVIDIA L4", "gpu_ids": [1], "cuda_visible_device": "1",
+      "monitor_gpu_allocation_count": 2, "tp_degree": 1,
+      "http_uri": "http://$XPYD_D1_HTTP_HOST:8201",
+      "http_host": "$XPYD_D1_HTTP_HOST", "http_port": 8201,
+      "addr_host": "$XPYD_D_ADDR_HOST", "kv_port": 14580,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 1500,
+      "expected_gpu_name": "L4"
+    }
+  ],
+  "fixed_clocks": {
+    "P0": {"graphics_mhz": 2520, "memory_mhz": 9001, "minimum_workload_match_fraction": 0.95},
+    "P1": {"graphics_mhz": 2520, "memory_mhz": 9001, "minimum_workload_match_fraction": 0.95},
+    "D0": {"graphics_mhz": 1500, "memory_mhz": 6251, "minimum_workload_match_fraction": 0.95},
+    "D1": {"graphics_mhz": 1500, "memory_mhz": 6251, "minimum_workload_match_fraction": 0.95}
+  },
+  "compatible_pairs": [
+    {"prefill_endpoint_id": "P0", "decode_endpoint_id": "D0", "connector": "P2pNcclConnector", "prefill_tp": 1, "decode_tp": 1, "supported": true, "reason": "dedicated experiment pair"},
+    {"prefill_endpoint_id": "P1", "decode_endpoint_id": "D1", "connector": "P2pNcclConnector", "prefill_tp": 1, "decode_tp": 1, "supported": true, "reason": "dedicated production-service pair"}
+  ],
+  "workloads": [
+    {"id": "small_light", "input_len": 128, "output_len": 64, "count": 48, "rate_rps": 0.04},
+    {"id": "prefill_medium", "input_len": 1024, "output_len": 64, "count": 48, "rate_rps": 0.04},
+    {"id": "prefill_heavy", "input_len": 2048, "output_len": 64, "count": 48, "rate_rps": 0.04},
+    {"id": "decode_medium", "input_len": 128, "output_len": 128, "count": 48, "rate_rps": 0.04},
+    {"id": "decode_heavy", "input_len": 128, "output_len": 256, "count": 48, "rate_rps": 0.04},
+    {"id": "balanced_medium", "input_len": 512, "output_len": 128, "count": 48, "rate_rps": 0.04}
+  ],
+  "coverage_policy": {
+    "required_endpoint_ids": ["P1", "D1"],
+    "required_pairs": [["P1", "D1"]]
+  },
+  "server_logs": {
+    "P0": "$XPYD_P0_SERVER_LOG", "P1": "$XPYD_P1_SERVER_LOG",
+    "D0": "$XPYD_D0_SERVER_LOG", "D1": "$XPYD_D1_SERVER_LOG"
+  }
+}
