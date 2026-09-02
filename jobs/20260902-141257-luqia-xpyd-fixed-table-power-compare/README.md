@@ -24,4 +24,4 @@ Raw data and all caches stay below
 the Job include both run audits, per-workload energy CSVs, and the final
 `power_comparison.{json,csv,md}` report.
 
-The `NOT_READY` marker is deliberate: this Job has not been submitted.
+The `READY` marker authorizes broker submission.
