@@ -28,4 +28,4 @@ R2 fixes the Job 256655 audit failure by including the two configured service
 warmups in the exact vLLM endpoint counter expectations. Warmups remain absent
 from the 288 formal request rows and from route-bounded latency/energy windows.
 
-The `NOT_READY` marker is deliberate: this corrected Job has not been submitted.
+The `READY` marker authorizes broker submission.
