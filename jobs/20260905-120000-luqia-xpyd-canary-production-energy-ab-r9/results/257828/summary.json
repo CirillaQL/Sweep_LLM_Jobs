@@ -1,0 +1,419 @@
+{
+  "valid": true,
+  "design": "continuous_feedback_observation",
+  "stop_rule": {
+    "minimum_table_requests_per_class": 30
+  },
+  "comparison": [
+    {
+      "workload_id": "balanced_medium",
+      "safe_high": {
+        "n": 17,
+        "mean_duration_s": 8.040194315068861,
+        "mean_power_w": 144.33173225540503,
+        "joules_per_request": 1160.4551731639488,
+        "inference_mean_power_w": 148.39527836362237,
+        "inference_joules_per_request": 1095.7368799046997,
+        "ttft_p95_ms": 226.55908740125597,
+        "control_inclusive_ttft_p95_ms": 3925.6900787353516,
+        "tpot_p95_ms": 56.40205063373144,
+        "first_request_start": 1788678478.8992875,
+        "last_request_end": 1788680099.8542712,
+        "frequency_pairs": [
+          [
+            2520,
+            1500
+          ]
+        ]
+      },
+      "table": {
+        "n": 40,
+        "mean_duration_s": 9.086842399835586,
+        "mean_power_w": 114.49829056665132,
+        "joules_per_request": 1040.4279214297421,
+        "inference_mean_power_w": 121.2352609605715,
+        "inference_joules_per_request": 909.0277707518078,
+        "ttft_p95_ms": 265.4840202012565,
+        "control_inclusive_ttft_p95_ms": 2121.4059472084045,
+        "tpot_p95_ms": 56.9835970827239,
+        "first_request_start": 1788680193.2723796,
+        "last_request_end": 1788684384.2306116,
+        "frequency_pairs": [
+          [
+            900,
+            1125
+          ]
+        ]
+      },
+      "observed_energy_reduction_percent": 10.343118330625012,
+      "observed_power_reduction_percent": 20.670050322656255,
+      "evidence": "observational; unequal sample counts, time drift and Canary activity may confound comparisons"
+    },
+    {
+      "workload_id": "both_heavy",
+      "safe_high": {
+        "n": 27,
+        "mean_duration_s": 16.655447951069586,
+        "mean_power_w": 145.34181997192732,
+        "joules_per_request": 2420.7331176561615,
+        "inference_mean_power_w": 149.51076708371497,
+        "inference_joules_per_request": 2287.3609808286033,
+        "ttft_p95_ms": 470.75617470545694,
+        "control_inclusive_ttft_p95_ms": 4178.62913608551,
+        "tpot_p95_ms": 58.14919105749212,
+        "first_request_start": 1788678491.3828652,
+        "last_request_end": 1788681181.982166,
+        "frequency_pairs": [
+          [
+            2520,
+            1500
+          ]
+        ]
+      },
+      "table": {
+        "n": 30,
+        "mean_duration_s": 19.44125317732493,
+        "mean_power_w": 116.1889203951811,
+        "joules_per_request": 2258.8582178027677,
+        "inference_mean_power_w": 123.41230968947602,
+        "inference_joules_per_request": 1951.0026092760265,
+        "ttft_p95_ms": 506.0322687961161,
+        "control_inclusive_ttft_p95_ms": 4187.912058830261,
+        "tpot_p95_ms": 60.00396948360254,
+        "first_request_start": 1788681269.072728,
+        "last_request_end": 1788684408.864422,
+        "frequency_pairs": [
+          [
+            1710,
+            975
+          ]
+        ]
+      },
+      "observed_energy_reduction_percent": 6.687019674854811,
+      "observed_power_reduction_percent": 20.058163288705952,
+      "evidence": "observational; unequal sample counts, time drift and Canary activity may confound comparisons"
+    },
+    {
+      "workload_id": "decode_heavy",
+      "safe_high": {
+        "n": 14,
+        "mean_duration_s": 15.718766399792262,
+        "mean_power_w": 143.95527293513186,
+        "joules_per_request": 2262.799307285675,
+        "inference_mean_power_w": 147.84228472626643,
+        "inference_joules_per_request": 2141.092096662415,
+        "ttft_p95_ms": 197.60020596440881,
+        "control_inclusive_ttft_p95_ms": 3825.555658340454,
+        "tpot_p95_ms": 56.028829486949334,
+        "first_request_start": 1788678459.3158064,
+        "last_request_end": 1788679773.5829191,
+        "frequency_pairs": [
+          [
+            2520,
+            1500
+          ]
+        ]
+      },
+      "table": {
+        "n": 43,
+        "mean_duration_s": 16.263295068297275,
+        "mean_power_w": 116.17385809000045,
+        "joules_per_request": 1889.369733340172,
+        "inference_mean_power_w": 119.8168848153828,
+        "inference_joules_per_request": 1759.552337626905,
+        "ttft_p95_ms": 213.50287006935105,
+        "control_inclusive_ttft_p95_ms": 2063.8728857040405,
+        "tpot_p95_ms": 56.773005283538104,
+        "first_request_start": 1788679857.8552907,
+        "last_request_end": 1788684369.9878209,
+        "frequency_pairs": [
+          [
+            900,
+            975
+          ]
+        ]
+      },
+      "observed_energy_reduction_percent": 16.502991349835956,
+      "observed_power_reduction_percent": 19.298643445766714,
+      "evidence": "observational; unequal sample counts, time drift and Canary activity may confound comparisons"
+    },
+    {
+      "workload_id": "decode_medium",
+      "safe_high": {
+        "n": 9,
+        "mean_duration_s": 8.206223169962565,
+        "mean_power_w": 142.20274039827157,
+        "joules_per_request": 1166.9474230884678,
+        "inference_mean_power_w": 147.67867395930685,
+        "inference_joules_per_request": 1077.8850302683811,
+        "ttft_p95_ms": 192.69542638212442,
+        "control_inclusive_ttft_p95_ms": 2921.8828678131104,
+        "tpot_p95_ms": 55.957773525641834,
+        "first_request_start": 1788678446.9171338,
+        "last_request_end": 1788679242.4792583,
+        "frequency_pairs": [
+          [
+            2520,
+            1500
+          ]
+        ]
+      },
+      "table": {
+        "n": 48,
+        "mean_duration_s": 9.140104055404663,
+        "mean_power_w": 112.50858798343141,
+        "joules_per_request": 1028.3402012952138,
+        "inference_mean_power_w": 119.1816322726559,
+        "inference_joules_per_request": 885.2027527876975,
+        "ttft_p95_ms": 213.1383237312548,
+        "control_inclusive_ttft_p95_ms": 1944.7393655776978,
+        "tpot_p95_ms": 56.850185935105024,
+        "first_request_start": 1788679331.9591177,
+        "last_request_end": 1788684348.6011035,
+        "frequency_pairs": [
+          [
+            900,
+            900
+          ]
+        ]
+      },
+      "observed_energy_reduction_percent": 11.877760647211781,
+      "observed_power_reduction_percent": 20.881561305833372,
+      "evidence": "observational; unequal sample counts, time drift and Canary activity may confound comparisons"
+    },
+    {
+      "workload_id": "prefill_heavy",
+      "safe_high": {
+        "n": 6,
+        "mean_duration_s": 5.350077509880066,
+        "mean_power_w": 141.95391310484683,
+        "joules_per_request": 759.4644379417101,
+        "inference_mean_power_w": 154.25508813413109,
+        "inference_joules_per_request": 635.6150612259904,
+        "ttft_p95_ms": 472.09905146155506,
+        "control_inclusive_ttft_p95_ms": 4153.6518931388855,
+        "tpot_p95_ms": 58.088837655275945,
+        "first_request_start": 1788678437.7362227,
+        "last_request_end": 1788678929.3732529,
+        "frequency_pairs": [
+          [
+            2520,
+            1500
+          ]
+        ]
+      },
+      "table": {
+        "n": 51,
+        "mean_duration_s": 6.098474680208692,
+        "mean_power_w": 114.37257974829096,
+        "joules_per_request": 697.4982817051019,
+        "inference_mean_power_w": 126.89262914588693,
+        "inference_joules_per_request": 546.1551979647986,
+        "ttft_p95_ms": 504.75775549421087,
+        "control_inclusive_ttft_p95_ms": 2508.8213682174683,
+        "tpot_p95_ms": 60.361386230585005,
+        "first_request_start": 1788679021.4280815,
+        "last_request_end": 1788684334.3107903,
+        "frequency_pairs": [
+          [
+            1710,
+            900
+          ]
+        ]
+      },
+      "observed_energy_reduction_percent": 8.159191285446886,
+      "observed_power_reduction_percent": 19.4297802387345,
+      "evidence": "observational; unequal sample counts, time drift and Canary activity may confound comparisons"
+    },
+    {
+      "workload_id": "prefill_medium",
+      "safe_high": {
+        "n": 4,
+        "mean_duration_s": 5.721894264221191,
+        "mean_power_w": 134.03023781725267,
+        "joules_per_request": 766.9068489987403,
+        "inference_mean_power_w": 150.63633193928047,
+        "inference_joules_per_request": 584.9353977991268,
+        "ttft_p95_ms": 296.5668186545372,
+        "control_inclusive_ttft_p95_ms": 3986.1072063446045,
+        "tpot_p95_ms": 56.96637064453199,
+        "first_request_start": 1788678428.6758227,
+        "last_request_end": 1788678722.8598356,
+        "frequency_pairs": [
+          [
+            2520,
+            1500
+          ]
+        ]
+      },
+      "table": {
+        "n": 53,
+        "mean_duration_s": 4.072346304947475,
+        "mean_power_w": 121.36031755615238,
+        "joules_per_request": 494.2212407670493,
+        "inference_mean_power_w": 121.40849635918521,
+        "inference_joules_per_request": 493.74223908072094,
+        "ttft_p95_ms": 384.2200341867283,
+        "control_inclusive_ttft_p95_ms": 391.0931587219238,
+        "tpot_p95_ms": 58.49775008317675,
+        "first_request_start": 1788678813.789169,
+        "last_request_end": 1788684322.8913002,
+        "frequency_pairs": [
+          [
+            1005,
+            900
+          ]
+        ]
+      },
+      "observed_energy_reduction_percent": 35.55654882828396,
+      "observed_power_reduction_percent": 9.45303124685599,
+      "evidence": "observational; unequal sample counts, time drift and Canary activity may confound comparisons"
+    },
+    {
+      "workload_id": "small_light",
+      "safe_high": {
+        "n": 2,
+        "mean_duration_s": 3.7355886697769165,
+        "mean_power_w": 146.53076007437392,
+        "joules_per_request": 547.378647107631,
+        "inference_mean_power_w": 146.58811701518783,
+        "inference_joules_per_request": 546.6555679999292,
+        "ttft_p95_ms": 212.88915645563975,
+        "control_inclusive_ttft_p95_ms": 221.06447219848633,
+        "tpot_p95_ms": 55.95832617744612,
+        "first_request_start": 1788678419.864564,
+        "last_request_end": 1788678515.57042,
+        "frequency_pairs": [
+          [
+            2520,
+            1500
+          ]
+        ]
+      },
+      "table": {
+        "n": 55,
+        "mean_duration_s": 7.058966866406528,
+        "mean_power_w": 103.8676598043119,
+        "joules_per_request": 733.1983690498228,
+        "inference_mean_power_w": 119.67368930118953,
+        "inference_joules_per_request": 453.0970937596803,
+        "ttft_p95_ms": 211.21842535212636,
+        "control_inclusive_ttft_p95_ms": 3919.148635864258,
+        "tpot_p95_ms": 56.84713104218688,
+        "first_request_start": 1788678603.8925183,
+        "last_request_end": 1788684313.620337,
+        "frequency_pairs": [
+          [
+            1005,
+            900
+          ]
+        ]
+      },
+      "observed_energy_reduction_percent": -33.947199607450905,
+      "observed_power_reduction_percent": 29.115456883188013,
+      "evidence": "observational; unequal sample counts, time drift and Canary activity may confound comparisons"
+    }
+  ],
+  "canary_overhead": {
+    "scope": "P0+D0 GPU boards; excludes model loading, CPU, NIC",
+    "exploration": {
+      "start": 1788678419.864518,
+      "end": 1788681260.2549102,
+      "duration_s": 2840.390392303467,
+      "energy_j": 355081.7582463585,
+      "mean_power_w": 125.0116037600023,
+      "endpoints": {
+        "P0": {
+          "energy_j": 183253.75431090593,
+          "clock_match_fraction": null,
+          "mean_power_w": 64.51710117294579,
+          "samples": 25886
+        },
+        "D0": {
+          "energy_j": 171828.00393545255,
+          "clock_match_fraction": null,
+          "mean_power_w": 60.494502587056516,
+          "samples": 23779
+        }
+      }
+    },
+    "exploration_mean_power_w": 125.0116037600023,
+    "per_class": [
+      {
+        "workload_id": "small_light",
+        "attempts": 1,
+        "duration_s": 182.93959712982178,
+        "gross_j": 21577.350446697325,
+        "mean_power_w": 117.94794995303894
+      },
+      {
+        "workload_id": "prefill_medium",
+        "attempts": 1,
+        "duration_s": 188.78074860572815,
+        "gross_j": 22732.95231437683,
+        "mean_power_w": 120.41986527903326
+      },
+      {
+        "workload_id": "prefill_heavy",
+        "attempts": 1,
+        "duration_s": 210.47545385360718,
+        "gross_j": 26713.134154286236,
+        "mean_power_w": 126.9180498970019
+      },
+      {
+        "workload_id": "decode_medium",
+        "attempts": 1,
+        "duration_s": 289.9186978340149,
+        "gross_j": 35357.26094285771,
+        "mean_power_w": 121.95578004113607
+      },
+      {
+        "workload_id": "decode_heavy",
+        "attempts": 1,
+        "duration_s": 511.0882167816162,
+        "gross_j": 63103.779349502176,
+        "mean_power_w": 123.46944671680016
+      },
+      {
+        "workload_id": "balanced_medium",
+        "attempts": 1,
+        "duration_s": 321.6521186828613,
+        "gross_j": 39336.43828930706,
+        "mean_power_w": 122.29497648075971
+      },
+      {
+        "workload_id": "both_heavy",
+        "attempts": 2,
+        "duration_s": 1129.6768367290497,
+        "gross_j": 145742.8991824165,
+        "mean_power_w": 129.01291275867118
+      }
+    ],
+    "inter_attempt_and_queue_energy_j": 517.9435669146478,
+    "interpretation": "gross extra GPU budget of exploration including warmup, tuning, gaps and retries; no idle-subtracted estimate without a dedicated counterfactual baseline"
+  },
+  "production_whole_trace": {
+    "start": 1788678419.864518,
+    "end": 1788684414.0713644,
+    "duration_s": 5994.206846475601,
+    "energy_j": 658021.8787754625,
+    "mean_power_w": 109.77630496057338,
+    "endpoints": {
+      "P1": {
+        "energy_j": 402036.80289795995,
+        "clock_match_fraction": null,
+        "mean_power_w": 67.07089247918505,
+        "samples": 54585
+      },
+      "D1": {
+        "energy_j": 255985.07587750256,
+        "clock_match_fraction": null,
+        "mean_power_w": 42.705412481388336,
+        "samples": 51085
+      }
+    }
+  },
+  "production_requests": 399,
+  "slo_policy": "report_only_per_user",
+  "evidence_boundary": "natural before/after observation, not randomized causal estimate; report sample imbalance and Canary overlap"
+}

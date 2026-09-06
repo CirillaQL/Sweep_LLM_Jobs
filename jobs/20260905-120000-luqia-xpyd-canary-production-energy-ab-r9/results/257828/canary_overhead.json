@@ -1,0 +1,78 @@
+{
+  "scope": "P0+D0 GPU boards; excludes model loading, CPU, NIC",
+  "exploration": {
+    "start": 1788678419.864518,
+    "end": 1788681260.2549102,
+    "duration_s": 2840.390392303467,
+    "energy_j": 355081.7582463585,
+    "mean_power_w": 125.0116037600023,
+    "endpoints": {
+      "P0": {
+        "energy_j": 183253.75431090593,
+        "clock_match_fraction": null,
+        "mean_power_w": 64.51710117294579,
+        "samples": 25886
+      },
+      "D0": {
+        "energy_j": 171828.00393545255,
+        "clock_match_fraction": null,
+        "mean_power_w": 60.494502587056516,
+        "samples": 23779
+      }
+    }
+  },
+  "exploration_mean_power_w": 125.0116037600023,
+  "per_class": [
+    {
+      "workload_id": "small_light",
+      "attempts": 1,
+      "duration_s": 182.93959712982178,
+      "gross_j": 21577.350446697325,
+      "mean_power_w": 117.94794995303894
+    },
+    {
+      "workload_id": "prefill_medium",
+      "attempts": 1,
+      "duration_s": 188.78074860572815,
+      "gross_j": 22732.95231437683,
+      "mean_power_w": 120.41986527903326
+    },
+    {
+      "workload_id": "prefill_heavy",
+      "attempts": 1,
+      "duration_s": 210.47545385360718,
+      "gross_j": 26713.134154286236,
+      "mean_power_w": 126.9180498970019
+    },
+    {
+      "workload_id": "decode_medium",
+      "attempts": 1,
+      "duration_s": 289.9186978340149,
+      "gross_j": 35357.26094285771,
+      "mean_power_w": 121.95578004113607
+    },
+    {
+      "workload_id": "decode_heavy",
+      "attempts": 1,
+      "duration_s": 511.0882167816162,
+      "gross_j": 63103.779349502176,
+      "mean_power_w": 123.46944671680016
+    },
+    {
+      "workload_id": "balanced_medium",
+      "attempts": 1,
+      "duration_s": 321.6521186828613,
+      "gross_j": 39336.43828930706,
+      "mean_power_w": 122.29497648075971
+    },
+    {
+      "workload_id": "both_heavy",
+      "attempts": 2,
+      "duration_s": 1129.6768367290497,
+      "gross_j": 145742.8991824165,
+      "mean_power_w": 129.01291275867118
+    }
+  ],
+  "inter_attempt_and_queue_energy_j": 517.9435669146478,
+  "interpretation": "gross extra GPU budget of exploration including warmup, tuning, gaps and retries; no idle-subtracted estimate without a dedicated counterfactual baseline"
+}

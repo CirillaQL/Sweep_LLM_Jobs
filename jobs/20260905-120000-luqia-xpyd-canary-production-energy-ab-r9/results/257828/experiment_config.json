@@ -1,0 +1,297 @@
+{
+  "model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+  "tokenizer_model": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+  "vllm_version": "0.15.1",
+  "output_root": "/data/users/chjing/vllm_job_work/257828/feedback_frequency_table_2p2d/xpyd_phase3c_substrate",
+  "proxy_uri": "http://127.0.0.1:8000",
+  "proxy_diagnostics_log": "/data/users/chjing/vllm_job_work/257828/feedback_frequency_table_2p2d/launcher/xpyd_phase3c_proxy_257828.jsonl",
+  "frequency_table_path": "/data/users/chjing/vllm_job_work/257828/feedback_frequency_table_2p2d/frequency_table.json",
+  "routing_policy": "round_robin",
+  "workload_ordering": "interleaved",
+  "background_experiment_traffic": true,
+  "cold_start_unknown_system": true,
+  "historical_seed_enabled": false,
+  "search_prior": "none",
+  "energy_validation_protocol": {
+    "driver": "xpyd.energy_validation",
+    "mode": "continuous_feedback_observation",
+    "minimum_table_requests_per_class": 30,
+    "sampling_interval_seconds": 0.1,
+    "slo_policy": "report_only",
+    "workload_count_note": "legacy trace count/rate below unused; interleaved service runs until each class has at least 30 natural Table hits"
+  },
+  "online_feedback": {
+    "enabled": true,
+    "service_pair": [
+      "P1",
+      "D1"
+    ],
+    "experiment_pair": [
+      "P0",
+      "D0"
+    ],
+    "service_request_interval_s": 5.0,
+    "probe_request_interval_s": 0.0,
+    "service_frequency_settle_s": 0.5,
+    "experiment_frequency_settle_s": 0.5,
+    "service_warmup_requests": 0,
+    "experiment_warmup_requests": 1,
+    "probe_samples_per_candidate": 3,
+    "minimum_probe_samples": 3,
+    "candidate_stability_cv": 0.05,
+    "candidate_slo_headroom_ratio": 0.9,
+    "minimum_dwell_s": 0.5,
+    "event_log": "/data/users/chjing/vllm_job_work/257828/feedback_frequency_table_2p2d/feedback_events.jsonl",
+    "service_request_log": "/data/users/chjing/vllm_job_work/257828/feedback_frequency_table_2p2d/service_request_dispatch.jsonl",
+    "slo": {
+      "ttft_ms": 500.0,
+      "tpot_ms": 200.0
+    },
+    "exploration_slo": {
+      "ttft_ms": 500.0,
+      "tpot_ms": 200.0
+    },
+    "axis_search_levels": {
+      "prefill": 17,
+      "decode": 15
+    },
+    "frequency_grids": {
+      "prefill": {
+        "minimum_mhz": 900,
+        "maximum_mhz": 2520,
+        "levels": 17
+      },
+      "decode": {
+        "minimum_mhz": 450,
+        "maximum_mhz": 1500,
+        "levels": 15
+      }
+    },
+    "search_order": [
+      "prefill",
+      "decode"
+    ],
+    "algorithm": "binary_slo_boundary_then_bounded_neighbor_minimum_mean_request_energy",
+    "energy_refinement_candidate_budget": 9,
+    "exploration_max_attempts": 3,
+    "exploration_retry_backoff_s": 5.0,
+    "exploration_shutdown_timeout_s": 36000.0
+  },
+  "steady_state": {
+    "discard_first_per_configuration_window": 3,
+    "minimum_samples": 8,
+    "maximum_cv": 0.1
+  },
+  "scrape_interval_s": 1.0,
+  "collector": {
+    "timeout_s": 5.0
+  },
+  "pre_window_s": 1.0,
+  "post_window_s": 0.5,
+  "sampling": {
+    "period_s": 0.2,
+    "late_tolerance_s": 0.05,
+    "readiness_timeout_s": 180.0,
+    "maximum_gap_s": 0.5,
+    "maximum_boundary_gap_s": 0.4,
+    "minimum_coverage_ratio": 0.9
+  },
+  "client": {
+    "script": "paper/scripts/replay_synthetic_trace.py",
+    "max_concurrency": 1,
+    "request_timeout_s": 900
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "P0",
+      "role": "prefill",
+      "node": "uranus",
+      "gpu_type": "NVIDIA L40S",
+      "gpu_ids": [
+        0
+      ],
+      "cuda_visible_device": "0",
+      "monitor_gpu_allocation_count": 2,
+      "tp_degree": 1,
+      "http_uri": "http://10.1.0.5:8100",
+      "http_host": "10.1.0.5",
+      "http_port": 8100,
+      "addr_host": "10.1.0.5",
+      "kv_port": 14579,
+      "kv_connector": "P2pNcclConnector",
+      "configured_frequency_mhz": 2520,
+      "expected_gpu_name": "L40S"
+    },
+    {
+      "endpoint_id": "P1",
+      "role": "prefill",
+      "node": "uranus",
+      "gpu_type": "NVIDIA L40S",
+      "gpu_ids": [
+        1
+      ],
+      "cuda_visible_device": "1",
+      "monitor_gpu_allocation_count": 2,
+      "tp_degree": 1,
+      "http_uri": "http://10.1.0.5:8101",
+      "http_host": "10.1.0.5",
+      "http_port": 8101,
+      "addr_host": "10.1.0.5",
+      "kv_port": 14580,
+      "kv_connector": "P2pNcclConnector",
+      "configured_frequency_mhz": 2520,
+      "expected_gpu_name": "L40S"
+    },
+    {
+      "endpoint_id": "D0",
+      "role": "decode",
+      "node": "ganymede",
+      "gpu_type": "NVIDIA L4",
+      "gpu_ids": [
+        0
+      ],
+      "cuda_visible_device": "0",
+      "monitor_gpu_allocation_count": 2,
+      "tp_degree": 1,
+      "http_uri": "http://127.0.0.1:8200",
+      "http_host": "127.0.0.1",
+      "http_port": 8200,
+      "addr_host": "10.1.0.3",
+      "kv_port": 14579,
+      "kv_connector": "P2pNcclConnector",
+      "configured_frequency_mhz": 1500,
+      "expected_gpu_name": "L4"
+    },
+    {
+      "endpoint_id": "D1",
+      "role": "decode",
+      "node": "ganymede",
+      "gpu_type": "NVIDIA L4",
+      "gpu_ids": [
+        1
+      ],
+      "cuda_visible_device": "1",
+      "monitor_gpu_allocation_count": 2,
+      "tp_degree": 1,
+      "http_uri": "http://127.0.0.1:8201",
+      "http_host": "127.0.0.1",
+      "http_port": 8201,
+      "addr_host": "10.1.0.3",
+      "kv_port": 14580,
+      "kv_connector": "P2pNcclConnector",
+      "configured_frequency_mhz": 1500,
+      "expected_gpu_name": "L4"
+    }
+  ],
+  "fixed_clocks": {
+    "P0": {
+      "graphics_mhz": 2520,
+      "memory_mhz": 9001,
+      "minimum_workload_match_fraction": 0.95
+    },
+    "P1": {
+      "graphics_mhz": 2520,
+      "memory_mhz": 9001,
+      "minimum_workload_match_fraction": 0.95
+    },
+    "D0": {
+      "graphics_mhz": 1500,
+      "memory_mhz": 6251,
+      "minimum_workload_match_fraction": 0.95
+    },
+    "D1": {
+      "graphics_mhz": 1500,
+      "memory_mhz": 6251,
+      "minimum_workload_match_fraction": 0.95
+    }
+  },
+  "compatible_pairs": [
+    {
+      "prefill_endpoint_id": "P0",
+      "decode_endpoint_id": "D0",
+      "connector": "P2pNcclConnector",
+      "prefill_tp": 1,
+      "decode_tp": 1,
+      "supported": true,
+      "reason": "dedicated experiment pair"
+    },
+    {
+      "prefill_endpoint_id": "P1",
+      "decode_endpoint_id": "D1",
+      "connector": "P2pNcclConnector",
+      "prefill_tp": 1,
+      "decode_tp": 1,
+      "supported": true,
+      "reason": "dedicated production-service pair"
+    }
+  ],
+  "workloads": [
+    {
+      "id": "small_light",
+      "input_len": 128,
+      "output_len": 64,
+      "count": 96,
+      "rate_rps": 0.2
+    },
+    {
+      "id": "prefill_medium",
+      "input_len": 1024,
+      "output_len": 64,
+      "count": 96,
+      "rate_rps": 0.2
+    },
+    {
+      "id": "prefill_heavy",
+      "input_len": 2048,
+      "output_len": 64,
+      "count": 96,
+      "rate_rps": 0.2
+    },
+    {
+      "id": "decode_medium",
+      "input_len": 128,
+      "output_len": 128,
+      "count": 96,
+      "rate_rps": 0.2
+    },
+    {
+      "id": "decode_heavy",
+      "input_len": 128,
+      "output_len": 256,
+      "count": 96,
+      "rate_rps": 0.2
+    },
+    {
+      "id": "balanced_medium",
+      "input_len": 512,
+      "output_len": 128,
+      "count": 96,
+      "rate_rps": 0.2
+    },
+    {
+      "id": "both_heavy",
+      "input_len": 2048,
+      "output_len": 256,
+      "count": 96,
+      "rate_rps": 0.2
+    }
+  ],
+  "coverage_policy": {
+    "required_endpoint_ids": [
+      "P1",
+      "D1"
+    ],
+    "required_pairs": [
+      [
+        "P1",
+        "D1"
+      ]
+    ]
+  },
+  "server_logs": {
+    "P0": "/data/users/chjing/vllm_job_work/257828/feedback_frequency_table_2p2d/launcher/vllm_uranus_8100.log",
+    "P1": "/data/users/chjing/vllm_job_work/257828/feedback_frequency_table_2p2d/launcher/vllm_uranus_8101.log",
+    "D0": "/data/users/chjing/vllm_job_work/257828/feedback_frequency_table_2p2d/launcher/vllm_ganymede_8200.log",
+    "D1": "/data/users/chjing/vllm_job_work/257828/feedback_frequency_table_2p2d/launcher/vllm_ganymede_8201.log"
+  }
+}
