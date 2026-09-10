@@ -1,0 +1,167 @@
+{
+  "model": "$XPYD_LOCAL_MODEL_PATH",
+  "tokenizer_model": "$XPYD_LOCAL_MODEL_PATH",
+  "vllm_version": "0.15.1",
+  "output_root": "$XPYD_FEEDBACK_TABLE_OUTPUT_ROOT",
+  "proxy_uri": "$XPYD_PROXY_URI",
+  "proxy_diagnostics_log": "$XPYD_PROXY_DIAGNOSTICS_LOG",
+  "frequency_table_path": "$XPYD_FREQUENCY_TABLE_PATH",
+  "routing_policy": "round_robin",
+  "workload_ordering": "windowed_by_type",
+  "background_experiment_traffic": false,
+  "cold_start_unknown_system": true,
+  "historical_seed_enabled": false,
+  "search_prior": "none",
+  "energy_validation_protocol": {
+    "driver": "xpyd.load_frequency_energy",
+    "mode": "open_loop_request_active_axis_factorized_energy_search",
+    "sampling_interval_seconds": 0.05,
+    "slo_policy": "report_ttft_only_no_selection_gate",
+    "workload_count_note": "the driver generates an independent open-loop frequency search for every configured workload/load cell"
+  },
+  "load_frequency_energy": {
+    "experiment_pair": ["P0", "D0"],
+    "load_rps": [
+      0.1, 0.3, 0.5, 0.7, 0.9, 1.1, 1.3, 1.5,
+      1.7, 1.9, 2.1, 2.3, 2.5, 2.7, 2.9, 3.0
+    ],
+    "minimum_requests_per_candidate": 12,
+    "maximum_requests_per_candidate": 60,
+    "target_arrival_window_s": 20.0,
+    "maximum_inflight_requests": 64,
+    "warmup_requests_per_workload": 3,
+    "confirmation_windows": 2,
+    "confirmation_max_attempts": 3,
+    "frequency_settle_s": 0.5,
+    "candidate_cooldown_s": 2.0,
+    "drain_timeout_s": 900.0,
+    "request_timeout_s": 900.0,
+    "experiment_timeout_s": 82800.0,
+    "reference_ttft_ms": 500.0,
+    "selection_objective": "minimum_joint_P0_D0_request_active_union_joules_per_completed_request",
+    "primary_energy_boundary": "union_of_client_send_to_client_complete_intervals",
+    "idle_gap_policy": "exclude_time_with_zero_requests_in_flight",
+    "concurrent_request_attribution": "equal_share_per_energy_segment_among_inflight_requests",
+    "secondary_energy_metric": "gross_first_send_through_full_drain_joules_per_request",
+    "timestamp_clock_policy": "time_ns_and_monotonic_ns_at_client_plus_proxy_stage_wall_and_monotonic_clocks",
+    "selection_constraints": "measurement validity only; TTFT is descriptive",
+    "search_method": "binary adjacent-slope minimum on P17 at D-high, then D15 at selected P"
+  },
+  "online_feedback": {
+    "enabled": false,
+    "service_pair": ["P1", "D1"],
+    "experiment_pair": ["P0", "D0"],
+    "service_request_interval_s": 5.0,
+    "probe_request_interval_s": 0.0,
+    "service_frequency_settle_s": 0.5,
+    "experiment_frequency_settle_s": 0.5,
+    "service_warmup_requests": 0,
+    "experiment_warmup_requests": 1,
+    "probe_samples_per_candidate": 3,
+    "minimum_probe_samples": 3,
+    "candidate_stability_cv": 0.05,
+    "candidate_slo_headroom_ratio": 0.90,
+    "minimum_dwell_s": 0.5,
+    "event_log": "$XPYD_FEEDBACK_EVENT_LOG",
+    "service_request_log": "$XPYD_SERVICE_REQUEST_LOG",
+    "slo": {"ttft_ms": 500.0, "tpot_ms": 200.0},
+    "exploration_slo": {"ttft_ms": 500.0, "tpot_ms": 200.0},
+    "axis_search_levels": {"prefill": 17, "decode": 15},
+    "frequency_grids": {
+      "prefill": {"minimum_mhz": 900, "maximum_mhz": 2520, "levels": 17},
+      "decode": {"minimum_mhz": 450, "maximum_mhz": 1500, "levels": 15}
+    },
+    "search_order": ["prefill", "decode"],
+    "algorithm": "per_load_binary_adjacent_energy_slope_P_then_D_no_slo_gate",
+    "energy_refinement_candidate_budget": 9,
+    "exploration_max_attempts": 3,
+    "exploration_retry_backoff_s": 5.0,
+    "exploration_shutdown_timeout_s": 36000.0
+  },
+  "steady_state": {
+    "discard_first_per_configuration_window": 3,
+    "minimum_samples": 8,
+    "maximum_cv": 0.10
+  },
+  "scrape_interval_s": 1.0,
+  "collector": {"timeout_s": 5.0},
+  "pre_window_s": 1.0,
+  "post_window_s": 0.5,
+  "sampling": {
+    "period_s": 0.2,
+    "late_tolerance_s": 0.05,
+    "readiness_timeout_s": 180.0,
+    "maximum_gap_s": 0.5,
+    "maximum_boundary_gap_s": 0.4,
+    "minimum_coverage_ratio": 0.9
+  },
+  "client": {
+    "script": "paper/scripts/replay_synthetic_trace.py",
+    "max_concurrency": 64,
+    "request_timeout_s": 900
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "P0", "role": "prefill", "node": "uranus",
+      "gpu_type": "NVIDIA L40S", "gpu_ids": [0], "cuda_visible_device": "0",
+      "monitor_gpu_allocation_count": 2, "tp_degree": 1,
+      "http_uri": "http://$XPYD_P0_HTTP_HOST:8100",
+      "http_host": "$XPYD_P0_HTTP_HOST", "http_port": 8100,
+      "addr_host": "$XPYD_P_ADDR_HOST", "kv_port": 14579,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 2520,
+      "expected_gpu_name": "L40S"
+    },
+    {
+      "endpoint_id": "P1", "role": "prefill", "node": "uranus",
+      "gpu_type": "NVIDIA L40S", "gpu_ids": [1], "cuda_visible_device": "1",
+      "monitor_gpu_allocation_count": 2, "tp_degree": 1,
+      "http_uri": "http://$XPYD_P1_HTTP_HOST:8101",
+      "http_host": "$XPYD_P1_HTTP_HOST", "http_port": 8101,
+      "addr_host": "$XPYD_P_ADDR_HOST", "kv_port": 14580,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 2520,
+      "expected_gpu_name": "L40S"
+    },
+    {
+      "endpoint_id": "D0", "role": "decode", "node": "ganymede",
+      "gpu_type": "NVIDIA L4", "gpu_ids": [0], "cuda_visible_device": "0",
+      "monitor_gpu_allocation_count": 2, "tp_degree": 1,
+      "http_uri": "http://$XPYD_D0_HTTP_HOST:8200",
+      "http_host": "$XPYD_D0_HTTP_HOST", "http_port": 8200,
+      "addr_host": "$XPYD_D_ADDR_HOST", "kv_port": 14579,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 1500,
+      "expected_gpu_name": "L4"
+    },
+    {
+      "endpoint_id": "D1", "role": "decode", "node": "ganymede",
+      "gpu_type": "NVIDIA L4", "gpu_ids": [1], "cuda_visible_device": "1",
+      "monitor_gpu_allocation_count": 2, "tp_degree": 1,
+      "http_uri": "http://$XPYD_D1_HTTP_HOST:8201",
+      "http_host": "$XPYD_D1_HTTP_HOST", "http_port": 8201,
+      "addr_host": "$XPYD_D_ADDR_HOST", "kv_port": 14580,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 1500,
+      "expected_gpu_name": "L4"
+    }
+  ],
+  "fixed_clocks": {
+    "P0": {"graphics_mhz": 2520, "memory_mhz": 9001, "minimum_workload_match_fraction": 0.95},
+    "P1": {"graphics_mhz": 2520, "memory_mhz": 9001, "minimum_workload_match_fraction": 0.95},
+    "D0": {"graphics_mhz": 1500, "memory_mhz": 6251, "minimum_workload_match_fraction": 0.95},
+    "D1": {"graphics_mhz": 1500, "memory_mhz": 6251, "minimum_workload_match_fraction": 0.95}
+  },
+  "compatible_pairs": [
+    {"prefill_endpoint_id": "P0", "decode_endpoint_id": "D0", "connector": "P2pNcclConnector", "prefill_tp": 1, "decode_tp": 1, "supported": true, "reason": "dedicated experiment pair"},
+    {"prefill_endpoint_id": "P1", "decode_endpoint_id": "D1", "connector": "P2pNcclConnector", "prefill_tp": 1, "decode_tp": 1, "supported": true, "reason": "dedicated production-service pair"}
+  ],
+  "workloads": [
+    {"id": "small_light", "input_len": 128, "output_len": 64, "count": 96, "rate_rps": 0.20},
+    {"id": "prefill_medium", "input_len": 1024, "output_len": 64, "count": 96, "rate_rps": 0.20}
+  ],
+  "coverage_policy": {
+    "required_endpoint_ids": ["P0", "D0"],
+    "required_pairs": [["P0", "D0"]]
+  },
+  "server_logs": {
+    "P0": "$XPYD_P0_SERVER_LOG", "P1": "$XPYD_P1_SERVER_LOG",
+    "D0": "$XPYD_D0_SERVER_LOG", "D1": "$XPYD_D1_SERVER_LOG"
+  }
+}
