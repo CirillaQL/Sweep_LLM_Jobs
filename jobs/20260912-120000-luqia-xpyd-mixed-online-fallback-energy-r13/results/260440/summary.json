@@ -1,0 +1,442 @@
+{
+  "valid": true,
+  "design": "fully_random_variable_shape_online_feedback_with_terminal_safe_high_fallback",
+  "random_seed": 20260912,
+  "online_phase_start": 1789198732.1822958,
+  "online_phase_end": 1789202157.03027,
+  "frequency_table": {
+    "small_light": {
+      "workload_id": "small_light",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 900,
+        "decode_frequency_mhz": 900,
+        "measured_power_w": 121.12484481448416,
+        "measured_energy_j": 457.2646773656209,
+        "ttft_ms": 195.60968030709773,
+        "tpot_ms": 56.92405465216126,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789198894.6427,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "prefill_medium": {
+      "workload_id": "prefill_medium",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 1110,
+        "decode_frequency_mhz": 1125,
+        "measured_power_w": 125.97331167184575,
+        "measured_energy_j": 503.4711661040783,
+        "ttft_ms": 389.3497251207009,
+        "tpot_ms": 58.048087914957286,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789200588.193467,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "prefill_heavy": {
+      "workload_id": "prefill_heavy",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 2520,
+        "decode_frequency_mhz": 1500,
+        "measured_power_w": null,
+        "measured_energy_j": null,
+        "ttft_ms": null,
+        "tpot_ms": null,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 0,
+        "updated_unix_s": 1789201318.6864173,
+        "source": "safe_high_after_slo_exhausted",
+        "slo_met": false,
+        "fallback_reason": "OnlineFeedbackError: no SLO-safe P frequency"
+      }
+    },
+    "decode_medium": {
+      "workload_id": "decode_medium",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 900,
+        "decode_frequency_mhz": 900,
+        "measured_power_w": 121.9896405133327,
+        "measured_energy_j": 905.6558612734079,
+        "ttft_ms": 192.28246223647147,
+        "tpot_ms": 56.98390711923415,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789200376.3599393,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "decode_heavy": {
+      "workload_id": "decode_heavy",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 1005,
+        "decode_frequency_mhz": 900,
+        "measured_power_w": 121.9606694707494,
+        "measured_energy_j": 1870.640728076299,
+        "ttft_ms": 188.0278256488964,
+        "tpot_ms": 57.13126578791375,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789199833.6679928,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "balanced_medium": {
+      "workload_id": "balanced_medium",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 1005,
+        "decode_frequency_mhz": 900,
+        "measured_power_w": 122.50392196107195,
+        "measured_energy_j": 927.3598051716884,
+        "ttft_ms": 275.290336785838,
+        "tpot_ms": 57.80229967766801,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789199212.2835507,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "both_heavy": {
+      "workload_id": "both_heavy",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 2520,
+        "decode_frequency_mhz": 1500,
+        "measured_power_w": null,
+        "measured_energy_j": null,
+        "ttft_ms": null,
+        "tpot_ms": null,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 0,
+        "updated_unix_s": 1789201246.650526,
+        "source": "safe_high_after_slo_exhausted",
+        "slo_met": false,
+        "fallback_reason": "OnlineFeedbackError: no SLO-safe P frequency"
+      }
+    }
+  },
+  "canary_overhead": {
+    "scope": "P0+D0 GPU boards; CPU and NIC excluded",
+    "exploration_wall_start": 1789198732.1845245,
+    "exploration_wall_end": 1789201318.6182754,
+    "exploration_wall_duration_s": 2586.4337508678436,
+    "exploration_wall_gross_energy_j": 334370.14288431406,
+    "exploration_wall_gross_mean_power_w": 129.27844866396464,
+    "attempt_gross_duration_sum_s": 2565.508125305176,
+    "attempt_gross_energy_sum_j": 332227.3911449313,
+    "probe_request_count": 286,
+    "probe_request_active_duration_sum_s": 2383.791930437088,
+    "probe_request_active_energy_sum_j": 315487.1205794439,
+    "probe_control_inclusive_duration_sum_s": 2527.896192073822,
+    "probe_control_inclusive_energy_sum_j": 328309.11408046633,
+    "per_class": [
+      {
+        "workload_id": "small_light",
+        "attempts": 1,
+        "probe_requests": 37,
+        "gross_duration_s": 162.46377563476562,
+        "gross_energy_j": 19271.326773814857,
+        "request_active_energy_j": 17280.827156953514,
+        "request_active_duration_s": 140.04818487167358,
+        "control_inclusive_energy_j": 18896.651009224355
+      },
+      {
+        "workload_id": "prefill_medium",
+        "attempts": 1,
+        "probe_requests": 45,
+        "gross_duration_s": 211.70759439468384,
+        "gross_energy_j": 26095.62540679425,
+        "request_active_energy_j": 23349.397263132036,
+        "request_active_duration_s": 180.90351128578186,
+        "control_inclusive_energy_j": 25416.70351740718
+      },
+      {
+        "workload_id": "prefill_heavy",
+        "attempts": 3,
+        "probe_requests": 45,
+        "gross_duration_s": 217.1769723892212,
+        "gross_energy_j": 30399.333362080157,
+        "request_active_energy_j": 27399.066265381873,
+        "request_active_duration_s": 186.40480303764343,
+        "control_inclusive_energy_j": 29651.88284997642
+      },
+      {
+        "workload_id": "decode_medium",
+        "attempts": 1,
+        "probe_requests": 36,
+        "gross_duration_s": 286.9647800922394,
+        "gross_energy_j": 35149.329614549875,
+        "request_active_energy_j": 33378.09348465502,
+        "request_active_duration_s": 267.11027336120605,
+        "control_inclusive_energy_j": 34652.76331087202
+      },
+      {
+        "workload_id": "decode_heavy",
+        "attempts": 1,
+        "probe_requests": 39,
+        "gross_duration_s": 621.2669825553894,
+        "gross_energy_j": 77126.13653277606,
+        "request_active_energy_j": 74995.35539228469,
+        "request_active_duration_s": 597.3949918746948,
+        "control_inclusive_energy_j": 76672.13497216254
+      },
+      {
+        "workload_id": "balanced_medium",
+        "attempts": 1,
+        "probe_requests": 39,
+        "gross_duration_s": 317.5803368091583,
+        "gross_energy_j": 39156.165716804564,
+        "request_active_energy_j": 37102.08071259409,
+        "request_active_duration_s": 294.65490531921387,
+        "control_inclusive_energy_j": 38695.26905064285
+      },
+      {
+        "workload_id": "both_heavy",
+        "attempts": 3,
+        "probe_requests": 45,
+        "gross_duration_s": 748.347683429718,
+        "gross_energy_j": 105029.47373811156,
+        "request_active_energy_j": 101982.30030444264,
+        "request_active_duration_s": 717.2752606868744,
+        "control_inclusive_energy_j": 104323.70937018096
+      }
+    ],
+    "idle_gap_policy": "primary probe energy excludes all time outside client-send/completed-stream intervals",
+    "gross_wall_interpretation": "P0+D0 energy from first queued exploration until all seven classes finish, including Canary-side idle and retry gaps"
+  },
+  "paired_comparison": [
+    {
+      "workload_id": "balanced_medium",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 1118.7637187431876,
+      "table_active_mean_j": 928.6279303102443,
+      "active_mean_saving_j": 190.13578843294331,
+      "active_median_saving_j": 189.8911630883813,
+      "active_energy_reduction_percent": 16.995169332675598,
+      "safe_high_control_inclusive_mean_j": 1244.1291792374104,
+      "table_control_inclusive_mean_j": 1108.286466266339,
+      "control_inclusive_mean_saving_j": 135.8427129710714,
+      "control_inclusive_energy_reduction_percent": 10.918698414768814,
+      "safe_high_ttft_p95_ms": 233.9794661384076,
+      "table_ttft_p95_ms": 284.05417384346947,
+      "safe_high_tpot_p95_ms": 56.561124645855934,
+      "table_tpot_p95_ms": 57.82196501324117,
+      "table_frequency_pairs": [
+        [
+          1005,
+          900
+        ]
+      ]
+    },
+    {
+      "workload_id": "both_heavy",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": true,
+      "safe_high_active_mean_j": 2436.6696703992784,
+      "table_active_mean_j": 2433.6471225883192,
+      "active_mean_saving_j": 3.022547810959319,
+      "active_median_saving_j": 3.467853356152773,
+      "active_energy_reduction_percent": 0.1240442168947766,
+      "safe_high_control_inclusive_mean_j": 2456.7224054488665,
+      "table_control_inclusive_mean_j": 2461.098501523646,
+      "control_inclusive_mean_saving_j": -4.376096074779828,
+      "control_inclusive_energy_reduction_percent": -0.17812741338109275,
+      "safe_high_ttft_p95_ms": 520.645905751735,
+      "table_ttft_p95_ms": 519.1582727944478,
+      "safe_high_tpot_p95_ms": 58.46035873253179,
+      "table_tpot_p95_ms": 58.460308369183416,
+      "table_frequency_pairs": [
+        [
+          2520,
+          1500
+        ]
+      ]
+    },
+    {
+      "workload_id": "decode_heavy",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 2273.477967189004,
+      "table_active_mean_j": 1874.5074162253488,
+      "active_mean_saving_j": 398.9705509636551,
+      "active_median_saving_j": 375.40461218357086,
+      "active_energy_reduction_percent": 17.54890774054671,
+      "safe_high_control_inclusive_mean_j": 2430.3913483324773,
+      "table_control_inclusive_mean_j": 2056.951688223208,
+      "control_inclusive_mean_saving_j": 373.43966010926914,
+      "control_inclusive_energy_reduction_percent": 15.365412667613835,
+      "safe_high_ttft_p95_ms": 198.68920899461955,
+      "table_ttft_p95_ms": 200.7966145640239,
+      "safe_high_tpot_p95_ms": 56.14008795773628,
+      "table_tpot_p95_ms": 57.14039558246965,
+      "table_frequency_pairs": [
+        [
+          1005,
+          900
+        ]
+      ]
+    },
+    {
+      "workload_id": "decode_medium",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 1098.9073887790244,
+      "table_active_mean_j": 903.6106427932779,
+      "active_mean_saving_j": 195.29674598574638,
+      "active_median_saving_j": 198.41027068533003,
+      "active_energy_reduction_percent": 17.771902162086377,
+      "safe_high_control_inclusive_mean_j": 1229.715679994474,
+      "table_control_inclusive_mean_j": 1064.6622277687613,
+      "control_inclusive_mean_saving_j": 165.05345222571245,
+      "control_inclusive_energy_reduction_percent": 13.42208243018046,
+      "safe_high_ttft_p95_ms": 187.80732600716874,
+      "table_ttft_p95_ms": 204.02263002470136,
+      "safe_high_tpot_p95_ms": 56.049415804797185,
+      "table_tpot_p95_ms": 56.995167252139055,
+      "table_frequency_pairs": [
+        [
+          900,
+          900
+        ]
+      ]
+    },
+    {
+      "workload_id": "prefill_heavy",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": true,
+      "safe_high_active_mean_j": 652.5854858060678,
+      "table_active_mean_j": 651.5489440253004,
+      "active_mean_saving_j": 1.0365417807673414,
+      "active_median_saving_j": -1.2317897006869316,
+      "active_energy_reduction_percent": 0.15883616833540423,
+      "safe_high_control_inclusive_mean_j": 781.0764937940985,
+      "table_control_inclusive_mean_j": 785.1288887709379,
+      "control_inclusive_mean_saving_j": -4.052394976839423,
+      "control_inclusive_energy_reduction_percent": -0.5188217810978811,
+      "safe_high_ttft_p95_ms": 518.8313352875412,
+      "table_ttft_p95_ms": 518.2385871419683,
+      "safe_high_tpot_p95_ms": 58.350457460030064,
+      "table_tpot_p95_ms": 58.34943187390631,
+      "table_frequency_pairs": [
+        [
+          2520,
+          1500
+        ]
+      ]
+    },
+    {
+      "workload_id": "prefill_medium",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 597.4150993308673,
+      "table_active_mean_j": 504.6322287867467,
+      "active_mean_saving_j": 92.78287054412067,
+      "active_median_saving_j": 87.23309162631631,
+      "active_energy_reduction_percent": 15.530720707936878,
+      "safe_high_control_inclusive_mean_j": 680.2094406190639,
+      "table_control_inclusive_mean_j": 773.5434116506949,
+      "control_inclusive_mean_saving_j": -93.33397103163104,
+      "control_inclusive_energy_reduction_percent": -13.721357784550458,
+      "safe_high_ttft_p95_ms": 333.012650127057,
+      "table_ttft_p95_ms": 405.56117412634194,
+      "safe_high_tpot_p95_ms": 57.23610234762177,
+      "table_tpot_p95_ms": 58.08665071116006,
+      "table_frequency_pairs": [
+        [
+          1110,
+          1125
+        ]
+      ]
+    },
+    {
+      "workload_id": "small_light",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 560.9662775276229,
+      "table_active_mean_j": 459.3528789278741,
+      "active_mean_saving_j": 101.6133985997488,
+      "active_median_saving_j": 99.59128424338996,
+      "active_energy_reduction_percent": 18.113994133051108,
+      "safe_high_control_inclusive_mean_j": 656.9722700854763,
+      "table_control_inclusive_mean_j": 643.5588014665991,
+      "control_inclusive_mean_saving_j": 13.413468618877232,
+      "control_inclusive_energy_reduction_percent": 2.0417100126816696,
+      "safe_high_ttft_p95_ms": 198.56968969106674,
+      "table_ttft_p95_ms": 204.04947260394692,
+      "safe_high_tpot_p95_ms": 56.002149250818114,
+      "table_tpot_p95_ms": 56.91900468281105,
+      "table_frequency_pairs": [
+        [
+          900,
+          900
+        ]
+      ]
+    }
+  ],
+  "online_requests_per_class": {
+    "small_light": 58,
+    "prefill_medium": 46,
+    "prefill_heavy": 44,
+    "decode_medium": 38,
+    "decode_heavy": 49,
+    "balanced_medium": 49,
+    "both_heavy": 35
+  },
+  "online_table_policy_requests_per_class": {
+    "small_light": 55,
+    "prefill_medium": 20,
+    "prefill_heavy": 12,
+    "decode_medium": 19,
+    "decode_heavy": 34,
+    "balanced_medium": 41,
+    "both_heavy": 12
+  },
+  "fallback_workloads": [
+    "prefill_heavy",
+    "both_heavy"
+  ],
+  "production_request_count": 487,
+  "matched_evaluation_request_count": 168,
+  "sampler_health": {
+    "P": {
+      "samples": 178106,
+      "max_abs_transport_delay_s": 0.03857898712158203,
+      "over_250ms_samples": 0
+    },
+    "D": {
+      "samples": 157518,
+      "max_abs_transport_delay_s": 0.0373690128326416,
+      "over_250ms_samples": 0
+    }
+  },
+  "energy_boundaries": {
+    "primary": "client send to completed SSE stream; idle and DVFS settle excluded",
+    "secondary": "before DVFS actuation to completed SSE stream; switching/settle included"
+  },
+  "evidence_boundary": "serial mixed-shape requests with randomized matched A/B; does not represent concurrent queueing load"
+}
