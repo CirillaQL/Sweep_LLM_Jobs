@@ -1,0 +1,106 @@
+"""Architecture-only primitives for future XpYd disaggregated serving."""
+
+from xpyd.compatibility import CompatibilityTable, ConnectorCompatibility
+from xpyd.feedback_scheduler import (
+    DVFSAction,
+    DVFSRecommendation,
+    FeedbackScheduler,
+    FeedbackSchedulerConfig,
+    LatencySafetyMetric,
+    NoEligibleRouteError,
+    RouteCandidate,
+    RouteEvaluation,
+)
+from xpyd.hardware import (
+    GPUTypeProfile,
+    HardwareProfile,
+    NodeProfile,
+    from_current_gpu_specs,
+    from_gpu_specs,
+)
+from xpyd.registry import (
+    DuplicateEndpointError,
+    EndpointRegistry,
+    GPUAllocationConflictError,
+)
+from xpyd.telemetry import (
+    EWMA,
+    EndpointTelemetrySample,
+    EndpointTelemetrySnapshot,
+    TelemetryAggregator,
+)
+from xpyd.prometheus import (
+    HistogramDeltaError,
+    MetricSample,
+    PrometheusHistogram,
+    PrometheusParseError,
+    PrometheusScrape,
+    histogram_quantile_upper_bound,
+    histogram_violation_fraction_at_boundary,
+    parse_prometheus_text,
+)
+from xpyd.types import (
+    EndpointRole,
+    EndpointSpec,
+    EndpointState,
+    LifecycleState,
+    RoutingDecision,
+)
+from xpyd.vllm_metrics import (
+    AmbiguousMetricError,
+    VLLMMetricsCollector,
+    VLLMMetricsConnectionError,
+    VLLMMetricsError,
+    VLLMMetricsHTTPError,
+    VLLMMetricsSnapshot,
+    VLLMWindowDelta,
+    VLLMWindowTracker,
+    window_delta_to_telemetry_sample,
+)
+
+__all__ = [
+    "CompatibilityTable",
+    "ConnectorCompatibility",
+    "AmbiguousMetricError",
+    "DVFSAction",
+    "DVFSRecommendation",
+    "DuplicateEndpointError",
+    "EndpointRegistry",
+    "EndpointRole",
+    "EndpointSpec",
+    "EndpointState",
+    "EndpointTelemetrySample",
+    "EndpointTelemetrySnapshot",
+    "EWMA",
+    "FeedbackScheduler",
+    "FeedbackSchedulerConfig",
+    "GPUAllocationConflictError",
+    "GPUTypeProfile",
+    "HardwareProfile",
+    "HistogramDeltaError",
+    "LatencySafetyMetric",
+    "LifecycleState",
+    "NodeProfile",
+    "NoEligibleRouteError",
+    "MetricSample",
+    "PrometheusHistogram",
+    "PrometheusParseError",
+    "PrometheusScrape",
+    "RouteCandidate",
+    "RouteEvaluation",
+    "RoutingDecision",
+    "TelemetryAggregator",
+    "VLLMMetricsCollector",
+    "VLLMMetricsConnectionError",
+    "VLLMMetricsError",
+    "VLLMMetricsHTTPError",
+    "VLLMMetricsSnapshot",
+    "VLLMWindowDelta",
+    "VLLMWindowTracker",
+    "from_current_gpu_specs",
+    "from_gpu_specs",
+    "histogram_quantile_upper_bound",
+    "histogram_violation_fraction_at_boundary",
+    "parse_prometheus_text",
+    "window_delta_to_telemetry_sample",
+]
