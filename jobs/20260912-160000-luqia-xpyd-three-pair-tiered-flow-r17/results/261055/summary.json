@@ -1,0 +1,516 @@
+{
+  "valid": true,
+  "design": "three_pair_fixed_high_and_jointly_confirmed_fixed_medium_class_routing",
+  "tier_routing_table": {
+    "eligible": [
+      "decode_medium",
+      "decode_heavy",
+      "balanced_medium"
+    ],
+    "frequencies": [
+      1005,
+      900
+    ],
+    "status": "published",
+    "representatives": {
+      "small_light": [
+        900,
+        900
+      ],
+      "prefill_medium": [
+        1005,
+        900
+      ],
+      "decode_medium": [
+        900,
+        600
+      ],
+      "decode_heavy": [
+        900,
+        675
+      ],
+      "balanced_medium": [
+        900,
+        900
+      ]
+    },
+    "confirmation": {
+      "small_light": {
+        "eligible": false,
+        "error": null,
+        "samples": 9,
+        "mean_energy_j": 464.01389710439577,
+        "reason": "clock_quality_or_latency_headroom_or_energy_band_not_confirmed"
+      },
+      "prefill_medium": {
+        "eligible": false,
+        "error": null,
+        "samples": 9,
+        "mean_energy_j": 504.9182332133253,
+        "reason": "clock_quality_or_latency_headroom_or_energy_band_not_confirmed"
+      },
+      "decode_medium": {
+        "eligible": true,
+        "error": null,
+        "samples": 9,
+        "mean_energy_j": 897.8805978082949,
+        "reason": "confirmed_near_optimal_with_headroom"
+      },
+      "decode_heavy": {
+        "eligible": true,
+        "error": null,
+        "samples": 9,
+        "mean_energy_j": 1853.8657082410323,
+        "reason": "confirmed_near_optimal_with_headroom"
+      },
+      "balanced_medium": {
+        "eligible": true,
+        "error": null,
+        "samples": 9,
+        "mean_energy_j": 915.8902245387435,
+        "reason": "confirmed_near_optimal_with_headroom"
+      }
+    }
+  },
+  "production_medium_requests": 147,
+  "production_high_requests": 1544,
+  "random_seed": 20260912,
+  "online_phase_start": 1789360747.0812092,
+  "online_phase_end": 1789364156.2149467,
+  "frequency_table": {
+    "small_light": {
+      "workload_id": "small_light",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 900,
+        "decode_frequency_mhz": 975,
+        "measured_power_w": 120.47644923997784,
+        "measured_energy_j": 453.43306352198124,
+        "ttft_ms": 190.90563210193068,
+        "tpot_ms": 56.73315621563397,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789360897.154559,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "prefill_medium": {
+      "workload_id": "prefill_medium",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 1005,
+        "decode_frequency_mhz": 1125,
+        "measured_power_w": 124.33268997546513,
+        "measured_energy_j": 496.35238045454025,
+        "ttft_ms": 392.0027770102024,
+        "tpot_ms": 58.04224533532455,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789361891.0970407,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "prefill_heavy": {
+      "workload_id": "prefill_heavy",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 2520,
+        "decode_frequency_mhz": 1500,
+        "measured_power_w": 153.24018809980865,
+        "measured_energy_j": 630.4900800362229,
+        "ttft_ms": 498.20861492771655,
+        "tpot_ms": 58.32545614582598,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789361383.100752,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "decode_medium": {
+      "workload_id": "decode_medium",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 900,
+        "decode_frequency_mhz": 825,
+        "measured_power_w": 120.29766332985436,
+        "measured_energy_j": 895.7670607541999,
+        "ttft_ms": 192.33919763937593,
+        "tpot_ms": 57.1541398880193,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789361694.66051,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "decode_heavy": {
+      "workload_id": "decode_heavy",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 900,
+        "decode_frequency_mhz": 900,
+        "measured_power_w": 120.66905291652601,
+        "measured_energy_j": 1853.0149459814031,
+        "ttft_ms": 226.5587405534461,
+        "tpot_ms": 57.13102916147228,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789362465.4938104,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "balanced_medium": {
+      "workload_id": "balanced_medium",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 1005,
+        "decode_frequency_mhz": 1125,
+        "measured_power_w": 123.09290082463797,
+        "measured_energy_j": 923.0932274560133,
+        "ttft_ms": 278.61321319360286,
+        "tpot_ms": 57.15783775988922,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789361239.5737088,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "both_heavy": {
+      "workload_id": "both_heavy",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 2520,
+        "decode_frequency_mhz": 1500,
+        "measured_power_w": null,
+        "measured_energy_j": null,
+        "ttft_ms": null,
+        "tpot_ms": null,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 0,
+        "updated_unix_s": 1789363225.1464314,
+        "source": "safe_high_after_slo_exhausted",
+        "slo_met": false,
+        "fallback_reason": "OnlineFeedbackError: no SLO-safe P frequency"
+      }
+    }
+  },
+  "canary_overhead": {
+    "scope": "P0+D0 GPU boards; CPU and NIC excluded",
+    "exploration_wall_start": 1789360747.083384,
+    "exploration_wall_end": 1789363585.038644,
+    "exploration_wall_duration_s": 2837.955260038376,
+    "exploration_wall_gross_energy_j": 362007.2761492878,
+    "exploration_wall_gross_mean_power_w": 127.55919067744311,
+    "attempt_gross_duration_sum_s": 2822.915751695633,
+    "attempt_gross_energy_sum_j": 360467.8040782213,
+    "probe_request_count": 313,
+    "probe_request_active_duration_sum_s": 2644.3836693763733,
+    "probe_request_active_energy_sum_j": 344147.4673906863,
+    "probe_control_inclusive_duration_sum_s": 2779.8008272647858,
+    "probe_control_inclusive_energy_sum_j": 356123.56913291663,
+    "per_class": [
+      {
+        "workload_id": "small_light",
+        "attempts": 2,
+        "probe_requests": 43,
+        "gross_duration_s": 189.79516983032227,
+        "gross_energy_j": 22390.916742414236,
+        "request_active_energy_j": 20049.532788276672,
+        "request_active_duration_s": 163.35829544067383,
+        "control_inclusive_energy_j": 21909.768683969975
+      },
+      {
+        "workload_id": "prefill_medium",
+        "attempts": 2,
+        "probe_requests": 51,
+        "gross_duration_s": 234.96606063842773,
+        "gross_energy_j": 28578.744788244367,
+        "request_active_energy_j": 26034.934414237738,
+        "request_active_duration_s": 205.90996479988098,
+        "control_inclusive_energy_j": 27905.71758171916
+      },
+      {
+        "workload_id": "prefill_heavy",
+        "attempts": 1,
+        "probe_requests": 30,
+        "gross_duration_s": 143.44500541687012,
+        "gross_energy_j": 20262.3842876181,
+        "request_active_energy_j": 18395.842916168272,
+        "request_active_duration_s": 124.610276222229,
+        "control_inclusive_energy_j": 19839.58952370286
+      },
+      {
+        "workload_id": "decode_medium",
+        "attempts": 2,
+        "probe_requests": 48,
+        "gross_duration_s": 379.58992052078247,
+        "gross_energy_j": 46014.520622342825,
+        "request_active_energy_j": 43961.40422601998,
+        "request_active_duration_s": 356.65324997901917,
+        "control_inclusive_energy_j": 45413.40973393619
+      },
+      {
+        "workload_id": "decode_heavy",
+        "attempts": 2,
+        "probe_requests": 45,
+        "gross_duration_s": 713.8653881549835,
+        "gross_energy_j": 87473.51426585764,
+        "request_active_energy_j": 85373.0396798402,
+        "request_active_duration_s": 690.3254396915436,
+        "control_inclusive_energy_j": 86809.22038706392
+      },
+      {
+        "workload_id": "balanced_medium",
+        "attempts": 2,
+        "probe_requests": 51,
+        "gross_duration_s": 412.1181175708771,
+        "gross_energy_j": 50363.6531842798,
+        "request_active_energy_j": 47915.0141434893,
+        "request_active_duration_s": 384.69695353507996,
+        "control_inclusive_energy_j": 49672.75006221235
+      },
+      {
+        "workload_id": "both_heavy",
+        "attempts": 3,
+        "probe_requests": 45,
+        "gross_duration_s": 749.1360895633698,
+        "gross_energy_j": 105384.07018746436,
+        "request_active_energy_j": 102417.6992226541,
+        "request_active_duration_s": 718.8294897079468,
+        "control_inclusive_energy_j": 104573.11316031218
+      }
+    ],
+    "idle_gap_policy": "primary probe energy excludes all time outside client-send/completed-stream intervals",
+    "gross_wall_interpretation": "P0+D0 energy from first queued exploration until all seven classes finish, including Canary-side idle and retry gaps"
+  },
+  "paired_comparison": [
+    {
+      "workload_id": "balanced_medium",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 382.67672280656797,
+      "table_active_mean_j": 315.9387199015667,
+      "active_mean_saving_j": 66.73800290500122,
+      "active_median_saving_j": 60.197559570893645,
+      "active_energy_reduction_percent": 17.439786359499937,
+      "safe_high_control_inclusive_mean_j": 382.6914303265512,
+      "table_control_inclusive_mean_j": 315.96768346553046,
+      "control_inclusive_mean_saving_j": 66.7237468610207,
+      "control_inclusive_energy_reduction_percent": 17.435390911180118,
+      "safe_high_ttft_p95_ms": 727.3445182829164,
+      "table_ttft_p95_ms": 924.937246076297,
+      "safe_high_tpot_p95_ms": 60.24276316301877,
+      "table_tpot_p95_ms": 62.80877628981881,
+      "table_frequency_pairs": [
+        [
+          1005,
+          900
+        ]
+      ]
+    },
+    {
+      "workload_id": "both_heavy",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 861.0793668584278,
+      "table_active_mean_j": 863.1092054340988,
+      "active_mean_saving_j": -2.029838575671173,
+      "active_median_saving_j": -0.5441604399432549,
+      "active_energy_reduction_percent": -0.23573187952196098,
+      "safe_high_control_inclusive_mean_j": 861.10391435648,
+      "table_control_inclusive_mean_j": 863.1452971783777,
+      "control_inclusive_mean_saving_j": -2.0413828218977224,
+      "control_inclusive_energy_reduction_percent": -0.23706579285768178,
+      "safe_high_ttft_p95_ms": 1680.3258043597452,
+      "table_ttft_p95_ms": 1674.9764094362035,
+      "safe_high_tpot_p95_ms": 65.50792076535139,
+      "table_tpot_p95_ms": 65.5366066815603,
+      "table_frequency_pairs": [
+        [
+          2520,
+          1500
+        ]
+      ]
+    },
+    {
+      "workload_id": "decode_heavy",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 712.2329818035165,
+      "table_active_mean_j": 576.4152236708129,
+      "active_mean_saving_j": 135.8177581327036,
+      "active_median_saving_j": 116.25807219588506,
+      "active_energy_reduction_percent": 19.06928794406373,
+      "safe_high_control_inclusive_mean_j": 712.2695549055934,
+      "table_control_inclusive_mean_j": 576.423277387706,
+      "control_inclusive_mean_saving_j": 135.84627751788744,
+      "control_inclusive_energy_reduction_percent": 19.072312803808238,
+      "safe_high_ttft_p95_ms": 554.25280907657,
+      "table_ttft_p95_ms": 581.8586539593525,
+      "safe_high_tpot_p95_ms": 59.011195961249406,
+      "table_tpot_p95_ms": 61.00960775237216,
+      "table_frequency_pairs": [
+        [
+          1005,
+          900
+        ]
+      ]
+    },
+    {
+      "workload_id": "decode_medium",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 364.30890931747854,
+      "table_active_mean_j": 294.6731111233433,
+      "active_mean_saving_j": 69.63579819413523,
+      "active_median_saving_j": 61.75448707894731,
+      "active_energy_reduction_percent": 19.114492238083265,
+      "safe_high_control_inclusive_mean_j": 364.32261241910356,
+      "table_control_inclusive_mean_j": 294.69609080938,
+      "control_inclusive_mean_saving_j": 69.62652160972358,
+      "control_inclusive_energy_reduction_percent": 19.11122703787262,
+      "safe_high_ttft_p95_ms": 542.3064567265101,
+      "table_ttft_p95_ms": 589.8143681581132,
+      "safe_high_tpot_p95_ms": 58.680522268711535,
+      "table_tpot_p95_ms": 60.64270435758915,
+      "table_frequency_pairs": [
+        [
+          1005,
+          900
+        ]
+      ]
+    },
+    {
+      "workload_id": "prefill_heavy",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 285.32865703913075,
+      "table_active_mean_j": 284.6592911183834,
+      "active_mean_saving_j": 0.6693659207473294,
+      "active_median_saving_j": 0.45757426756124175,
+      "active_energy_reduction_percent": 0.23459470481982844,
+      "safe_high_control_inclusive_mean_j": 285.34312390784424,
+      "table_control_inclusive_mean_j": 284.6858987789601,
+      "control_inclusive_mean_saving_j": 0.6572251288841263,
+      "control_inclusive_energy_reduction_percent": 0.2303280064657829,
+      "safe_high_ttft_p95_ms": 1682.070363056846,
+      "table_ttft_p95_ms": 1674.6627389453351,
+      "safe_high_tpot_p95_ms": 65.34601414595988,
+      "table_tpot_p95_ms": 65.34163513136632,
+      "table_frequency_pairs": [
+        [
+          2520,
+          1500
+        ]
+      ]
+    },
+    {
+      "workload_id": "prefill_medium",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 228.3419864345342,
+      "table_active_mean_j": 230.17331465209523,
+      "active_mean_saving_j": -1.8313282175610652,
+      "active_median_saving_j": -2.9795334155981834,
+      "active_energy_reduction_percent": -0.802011161484797,
+      "safe_high_control_inclusive_mean_j": 228.3716999484847,
+      "table_control_inclusive_mean_j": 230.20068224705756,
+      "control_inclusive_mean_saving_j": -1.8289822985728772,
+      "control_inclusive_energy_reduction_percent": -0.8008795743892316,
+      "safe_high_ttft_p95_ms": 994.7053698007949,
+      "table_ttft_p95_ms": 1033.2813422428444,
+      "safe_high_tpot_p95_ms": 61.87655785383577,
+      "table_tpot_p95_ms": 61.88888902493574,
+      "table_frequency_pairs": [
+        [
+          2520,
+          1500
+        ]
+      ]
+    },
+    {
+      "workload_id": "small_light",
+      "matched_pairs": 12,
+      "is_safe_high_fallback": false,
+      "safe_high_active_mean_j": 189.23705804658434,
+      "table_active_mean_j": 190.54220456816256,
+      "active_mean_saving_j": -1.3051465215782325,
+      "active_median_saving_j": 0.5990636522571222,
+      "active_energy_reduction_percent": -0.6896886556210072,
+      "safe_high_control_inclusive_mean_j": 189.27703979673484,
+      "table_control_inclusive_mean_j": 190.5836536704252,
+      "control_inclusive_mean_saving_j": -1.3066138736903667,
+      "control_inclusive_energy_reduction_percent": -0.6903182103299709,
+      "safe_high_ttft_p95_ms": 555.5329612339847,
+      "table_ttft_p95_ms": 553.490147786215,
+      "safe_high_tpot_p95_ms": 58.680329874078645,
+      "table_tpot_p95_ms": 59.02573682907457,
+      "table_frequency_pairs": [
+        [
+          2520,
+          1500
+        ]
+      ]
+    }
+  ],
+  "online_requests_per_class": {
+    "small_light": 171,
+    "prefill_medium": 179,
+    "prefill_heavy": 257,
+    "decode_medium": 190,
+    "decode_heavy": 260,
+    "balanced_medium": 240,
+    "both_heavy": 226
+  },
+  "online_table_policy_requests_per_class": {
+    "small_light": 24,
+    "prefill_medium": 16,
+    "prefill_heavy": 30,
+    "decode_medium": 47,
+    "decode_heavy": 51,
+    "balanced_medium": 19,
+    "both_heavy": 20
+  },
+  "fallback_workloads": [
+    "both_heavy"
+  ],
+  "production_clock_noncompliant_requests": 358,
+  "production_slo_noncompliant_requests": 1312,
+  "production_request_count": 1691,
+  "matched_evaluation_request_count": 168,
+  "sampler_health": {
+    "P": {
+      "samples": 185790,
+      "max_abs_transport_delay_s": 0.19988799095153809,
+      "over_250ms_samples": 0
+    },
+    "D": {
+      "samples": 148869,
+      "max_abs_transport_delay_s": 0.21477866172790527,
+      "over_250ms_samples": 0
+    }
+  },
+  "energy_boundaries": {
+    "primary": "client send to completed SSE stream; idle and DVFS settle excluded",
+    "secondary": "before DVFS actuation to completed SSE stream; switching/settle included"
+  },
+  "evidence_boundary": "same-category concurrent bursts; drain before category/clock change; per-request energy is in-flight share, not independent board measurement; low-load Canary table is not concurrency-optimal proof"
+}
