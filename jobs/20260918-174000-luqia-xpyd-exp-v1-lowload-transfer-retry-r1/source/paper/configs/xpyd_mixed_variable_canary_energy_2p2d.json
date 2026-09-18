@@ -1,0 +1,203 @@
+{
+  "model": "$XPYD_LOCAL_MODEL_PATH",
+  "tokenizer_model": "$XPYD_LOCAL_MODEL_PATH",
+  "vllm_version": "0.15.1",
+  "output_root": "$XPYD_FEEDBACK_TABLE_OUTPUT_ROOT",
+  "proxy_uri": "$XPYD_PROXY_URI",
+  "proxy_diagnostics_log": "$XPYD_PROXY_DIAGNOSTICS_LOG",
+  "frequency_table_path": "$XPYD_FREQUENCY_TABLE_PATH",
+  "routing_policy": "round_robin",
+  "workload_ordering": "seven_contiguous_workload_transfer_windows",
+  "background_experiment_traffic": true,
+  "cold_start_unknown_system": true,
+  "historical_seed_enabled": false,
+  "search_prior": "none",
+  "mixed_variable_energy_validation": {
+    "driver": "xpyd.mixed_variable_canary_energy",
+    "mode": "sequential_low_load_canary_to_production_transfer",
+    "random_seed": 20260912,
+    "baseline_requests_per_workload": 12,
+    "transfer_requests_per_workload": 48,
+    "request_interval_s": 5.0,
+    "canary_queue_wait_s": 21600.0,
+    "terminal_slo_failure_policy": "publish_explicit_safe_high_fallback",
+    "production_clock_policy": "record_only_never_abort_for_mismatch",
+    "canary_clock_exhaustion_policy": "publish_explicit_safe_high_fallback",
+    "terminal_infrastructure_failure_policy": "record_and_continue",
+    "frequency_settle_s": 0.15,
+    "request_timeout_s": 900.0,
+    "exploration_timeout_s": 43200.0,
+    "primary_energy_boundary": "client_send_to_completed_stream",
+    "secondary_energy_boundary": "before_frequency_actuation_to_completed_stream",
+    "slo_policy": "Canary copies one Production request per class, performs one P-axis binary-plus-greedy energy search followed by one D-axis binary-plus-greedy energy search, confirms the joint P/D point, and then publishes exactly one Table entry; exhausted search publishes fallback; Production violations are recorded only",
+    "design_note": "Low-load transfer experiment: P0D0 Canary copies one request from each class, finds P and D coordinate-wise energy minima under the separable P-energy-plus-D-energy global-optimum assumption, confirms that joint point, writes the Table once, and stops experimenting for that class. The isolated P1D1 Production group first runs a same-class high-frequency baseline and then runs 48 requests at the learned P/D pair. The seven classes are strictly sequential. Missing Canary Table data and individual request failures are recorded rather than terminating the remaining windows."
+  },
+  "tiered_flow": {
+    "purpose": "three_tier_observational_flow_validation_with_controlled_pd_cross_routes_not_global_optimality",
+    "frequency_policy": "all_production_endpoints_start_high_then_selected_endpoint_tiers_apply_per_drained_burst",
+    "tiers": {
+      "high": {"pair": ["P1", "D1"], "prefill_mhz": 2520, "decode_mhz": 1500},
+      "middle": {"pair": ["P2", "D2"], "prefill_mhz": 1710, "decode_mhz": 975},
+      "low": {"pair": ["P3", "D3"], "prefill_mhz": 900, "decode_mhz": 450}
+    },
+    "endpoint_frequency_mhz": {
+      "P1": 2520, "P2": 1710, "P3": 900,
+      "D1": 1500, "D2": 975, "D3": 450
+    },
+    "route_control_path": "$XPYD_ROUTE_CONTROL_PATH",
+    "route_control_reload": "before_each_drained_production_burst",
+    "production_assignment": "round_robin_logical_tier_per_drained_homogeneous_burst"
+  },
+  "telemetry_contract": {
+    "schema_version": 1,
+    "output": "nodegroup_telemetry.jsonl",
+    "arrival_rate_window_s": 60.0,
+    "prefill_capacity_input_tokens_per_s": null,
+    "decode_capacity_output_tokens_per_s": null,
+    "rho_policy": "null_until_capacity_is_calibrated; never infer capacity from the same observation",
+    "batch_size_policy": "max_of_current_prefill_and_decode_running_requests",
+    "metrics_policy": "read_only_vllm_prometheus_scrape; unavailable metrics are null with telemetry_errors"
+  },
+  "online_feedback": {
+    "enabled": true,
+    "service_pair": ["P1", "D1"],
+    "experiment_pair": ["P0", "D0"],
+    "service_request_interval_s": 5.0,
+    "probe_request_interval_s": 5.0,
+    "service_frequency_settle_s": 0.15,
+    "experiment_frequency_settle_s": 0.15,
+    "service_warmup_requests": 0,
+    "experiment_warmup_requests": 1,
+    "probe_samples_per_candidate": 3,
+    "minimum_probe_samples": 3,
+    "candidate_stability_cv": 0.05,
+    "candidate_slo_headroom_ratio": 0.90,
+    "minimum_dwell_s": 0.10,
+    "event_log": "$XPYD_FEEDBACK_EVENT_LOG",
+    "service_request_log": "$XPYD_SERVICE_REQUEST_LOG",
+    "slo": {"ttft_ms": 500.0, "tpot_ms": 200.0},
+    "exploration_slo": {"ttft_ms": 500.0, "tpot_ms": 200.0},
+    "axis_search_levels": {"prefill": 17, "decode": 15},
+    "frequency_grids": {
+      "prefill": {"minimum_mhz": 900, "maximum_mhz": 2520, "levels": 17},
+      "decode": {"minimum_mhz": 450, "maximum_mhz": 1500, "levels": 15}
+    },
+    "search_order": ["prefill", "decode"],
+    "algorithm": "one_copy_per_class_binary_plus_greedy_coordinate_search_P_then_D_under_separable_energy_assumption",
+    "energy_refinement_candidate_budget": 9,
+    "exploration_max_attempts": 3,
+    "exploration_retry_backoff_s": 5.0,
+    "exploration_shutdown_timeout_s": 36000.0
+  },
+  "steady_state": {
+    "discard_first_per_configuration_window": 3,
+    "minimum_samples": 8,
+    "maximum_cv": 0.10
+  },
+  "scrape_interval_s": 1.0,
+  "collector": {"timeout_s": 5.0},
+  "pre_window_s": 1.0,
+  "post_window_s": 0.5,
+  "sampling": {
+    "period_s": 0.2,
+    "late_tolerance_s": 0.05,
+    "readiness_timeout_s": 180.0,
+    "maximum_gap_s": 0.5,
+    "maximum_boundary_gap_s": 0.4,
+    "minimum_coverage_ratio": 0.9
+  },
+  "client": {
+    "script": "paper/scripts/replay_synthetic_trace.py",
+    "max_concurrency": 1,
+    "request_timeout_s": 900
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "P0", "role": "prefill", "node": "neptune",
+      "gpu_type": "NVIDIA L40S", "gpu_ids": [0], "cuda_visible_device": "0",
+      "monitor_gpu_allocation_count": 4, "tp_degree": 1,
+      "http_uri": "http://$XPYD_P0_HTTP_HOST:8100",
+      "http_host": "$XPYD_P0_HTTP_HOST", "http_port": 8100,
+      "addr_host": "$XPYD_P_ADDR_HOST", "kv_port": 14579,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 2520,
+      "expected_gpu_name": "L40S"
+    },
+    {
+      "endpoint_id": "P1", "role": "prefill", "node": "neptune",
+      "gpu_type": "NVIDIA L40S", "gpu_ids": [1], "cuda_visible_device": "1",
+      "monitor_gpu_allocation_count": 4, "tp_degree": 1,
+      "http_uri": "http://$XPYD_P1_HTTP_HOST:8101",
+      "http_host": "$XPYD_P1_HTTP_HOST", "http_port": 8101,
+      "addr_host": "$XPYD_P_ADDR_HOST", "kv_port": 14580,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 2520,
+      "expected_gpu_name": "L40S"
+    },
+    {
+      "endpoint_id": "D0", "role": "decode", "node": "ganymede",
+      "gpu_type": "NVIDIA L4", "gpu_ids": [0], "cuda_visible_device": "0",
+      "monitor_gpu_allocation_count": 4, "tp_degree": 1,
+      "http_uri": "http://$XPYD_D0_HTTP_HOST:8200",
+      "http_host": "$XPYD_D0_HTTP_HOST", "http_port": 8200,
+      "addr_host": "$XPYD_D_ADDR_HOST", "kv_port": 14579,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 1500,
+      "expected_gpu_name": "L4"
+    },
+    {
+      "endpoint_id": "D1", "role": "decode", "node": "ganymede",
+      "gpu_type": "NVIDIA L4", "gpu_ids": [1], "cuda_visible_device": "1",
+      "monitor_gpu_allocation_count": 4, "tp_degree": 1,
+      "http_uri": "http://$XPYD_D1_HTTP_HOST:8201",
+      "http_host": "$XPYD_D1_HTTP_HOST", "http_port": 8201,
+      "addr_host": "$XPYD_D_ADDR_HOST", "kv_port": 14580,
+      "kv_connector": "P2pNcclConnector", "configured_frequency_mhz": 1500,
+      "expected_gpu_name": "L4"
+    }
+    ,
+    {"endpoint_id":"P2","role":"prefill","node":"neptune","gpu_type":"NVIDIA L40S","gpu_ids":[2],"cuda_visible_device":"2","monitor_gpu_allocation_count":4,"tp_degree":1,"http_uri":"http://$XPYD_P2_HTTP_HOST:8102","http_host":"$XPYD_P2_HTTP_HOST","http_port":8102,"addr_host":"$XPYD_P_ADDR_HOST","kv_port":14581,"kv_connector":"P2pNcclConnector","configured_frequency_mhz":2520,"expected_gpu_name":"L40S"},
+    {"endpoint_id":"D2","role":"decode","node":"ganymede","gpu_type":"NVIDIA L4","gpu_ids":[2],"cuda_visible_device":"2","monitor_gpu_allocation_count":4,"tp_degree":1,"http_uri":"http://$XPYD_D2_HTTP_HOST:8202","http_host":"$XPYD_D2_HTTP_HOST","http_port":8202,"addr_host":"$XPYD_D_ADDR_HOST","kv_port":14581,"kv_connector":"P2pNcclConnector","configured_frequency_mhz":1500,"expected_gpu_name":"L4"},
+    {"endpoint_id":"P3","role":"prefill","node":"neptune","gpu_type":"NVIDIA L40S","gpu_ids":[3],"cuda_visible_device":"3","monitor_gpu_allocation_count":4,"tp_degree":1,"http_uri":"http://$XPYD_P3_HTTP_HOST:8103","http_host":"$XPYD_P3_HTTP_HOST","http_port":8103,"addr_host":"$XPYD_P_ADDR_HOST","kv_port":14582,"kv_connector":"P2pNcclConnector","configured_frequency_mhz":2520,"expected_gpu_name":"L40S"},
+    {"endpoint_id":"D3","role":"decode","node":"ganymede","gpu_type":"NVIDIA L4","gpu_ids":[3],"cuda_visible_device":"3","monitor_gpu_allocation_count":4,"tp_degree":1,"http_uri":"http://$XPYD_D3_HTTP_HOST:8203","http_host":"$XPYD_D3_HTTP_HOST","http_port":8203,"addr_host":"$XPYD_D_ADDR_HOST","kv_port":14582,"kv_connector":"P2pNcclConnector","configured_frequency_mhz":1500,"expected_gpu_name":"L4"}
+  ],
+  "fixed_clocks": {
+    "P2": {"graphics_mhz": 2520, "memory_mhz": 9001, "minimum_workload_match_fraction": 0.95},
+    "D2": {"graphics_mhz": 1500, "memory_mhz": 6251, "minimum_workload_match_fraction": 0.95},
+    "P3": {"graphics_mhz": 2520, "memory_mhz": 9001, "minimum_workload_match_fraction": 0.95},
+    "D3": {"graphics_mhz": 1500, "memory_mhz": 6251, "minimum_workload_match_fraction": 0.95},
+    "P0": {"graphics_mhz": 2520, "memory_mhz": 9001, "minimum_workload_match_fraction": 0.95},
+    "P1": {"graphics_mhz": 2520, "memory_mhz": 9001, "minimum_workload_match_fraction": 0.95},
+    "D0": {"graphics_mhz": 1500, "memory_mhz": 6251, "minimum_workload_match_fraction": 0.95},
+    "D1": {"graphics_mhz": 1500, "memory_mhz": 6251, "minimum_workload_match_fraction": 0.95}
+  },
+  "compatible_pairs": [
+    {"prefill_endpoint_id": "P0", "decode_endpoint_id": "D0", "connector": "P2pNcclConnector", "prefill_tp": 1, "decode_tp": 1, "supported": true, "reason": "dedicated experiment pair"},
+    {"prefill_endpoint_id": "P1", "decode_endpoint_id": "D1", "connector": "P2pNcclConnector", "prefill_tp": 1, "decode_tp": 1, "supported": true, "reason": "dedicated production-service pair"}
+,
+    {"prefill_endpoint_id":"P2","decode_endpoint_id":"D2","connector":"P2pNcclConnector","prefill_tp":1,"decode_tp":1,"supported":true,"reason":"fixed middle production tier"},
+    {"prefill_endpoint_id":"P3","decode_endpoint_id":"D3","connector":"P2pNcclConnector","prefill_tp":1,"decode_tp":1,"supported":true,"reason":"default low production tier"},
+    {"prefill_endpoint_id":"P1","decode_endpoint_id":"D2","connector":"P2pNcclConnector","prefill_tp":1,"decode_tp":1,"supported":true,"reason":"route-control cross pair"},
+    {"prefill_endpoint_id":"P1","decode_endpoint_id":"D3","connector":"P2pNcclConnector","prefill_tp":1,"decode_tp":1,"supported":true,"reason":"route-control cross pair"},
+    {"prefill_endpoint_id":"P2","decode_endpoint_id":"D1","connector":"P2pNcclConnector","prefill_tp":1,"decode_tp":1,"supported":true,"reason":"route-control cross pair"},
+    {"prefill_endpoint_id":"P2","decode_endpoint_id":"D3","connector":"P2pNcclConnector","prefill_tp":1,"decode_tp":1,"supported":true,"reason":"route-control cross pair"},
+    {"prefill_endpoint_id":"P3","decode_endpoint_id":"D1","connector":"P2pNcclConnector","prefill_tp":1,"decode_tp":1,"supported":true,"reason":"route-control cross pair"},
+    {"prefill_endpoint_id":"P3","decode_endpoint_id":"D2","connector":"P2pNcclConnector","prefill_tp":1,"decode_tp":1,"supported":true,"reason":"route-control cross pair"}
+  ],
+  "workloads": [
+    {"id": "small_light", "input_len": 160, "output_len": 64, "count": 1, "rate_rps": 0.5, "shape_panel": [{"input_len": 128, "output_len": 48}, {"input_len": 160, "output_len": 64}, {"input_len": 200, "output_len": 80}]},
+    {"id": "prefill_medium", "input_len": 1024, "output_len": 64, "count": 1, "rate_rps": 0.5, "shape_panel": [{"input_len": 768, "output_len": 48}, {"input_len": 1024, "output_len": 64}, {"input_len": 1280, "output_len": 80}]},
+    {"id": "prefill_heavy", "input_len": 2048, "output_len": 64, "count": 1, "rate_rps": 0.5, "shape_panel": [{"input_len": 1792, "output_len": 48}, {"input_len": 2048, "output_len": 64}, {"input_len": 2304, "output_len": 80}]},
+    {"id": "decode_medium", "input_len": 128, "output_len": 128, "count": 1, "rate_rps": 0.5, "shape_panel": [{"input_len": 96, "output_len": 96}, {"input_len": 128, "output_len": 128}, {"input_len": 200, "output_len": 160}]},
+    {"id": "decode_heavy", "input_len": 128, "output_len": 256, "count": 1, "rate_rps": 0.5, "shape_panel": [{"input_len": 96, "output_len": 224}, {"input_len": 128, "output_len": 256}, {"input_len": 200, "output_len": 320}]},
+    {"id": "balanced_medium", "input_len": 512, "output_len": 128, "count": 1, "rate_rps": 0.5, "shape_panel": [{"input_len": 384, "output_len": 96}, {"input_len": 512, "output_len": 128}, {"input_len": 640, "output_len": 160}]},
+    {"id": "both_heavy", "input_len": 2048, "output_len": 256, "count": 1, "rate_rps": 0.5, "shape_panel": [{"input_len": 1792, "output_len": 224}, {"input_len": 2048, "output_len": 256}, {"input_len": 2304, "output_len": 320}]}
+  ],
+  "coverage_policy": {
+    "required_endpoint_ids": ["P1", "D1", "P2", "D2", "P3", "D3"],
+    "required_pairs": [["P1", "D1"], ["P2", "D2"], ["P3", "D3"]]
+  },
+  "server_logs": {
+    "P0": "$XPYD_P0_SERVER_LOG", "P1": "$XPYD_P1_SERVER_LOG",
+    "D0": "$XPYD_D0_SERVER_LOG", "D1": "$XPYD_D1_SERVER_LOG",
+    "P2": "$XPYD_P2_SERVER_LOG", "D2": "$XPYD_D2_SERVER_LOG",
+    "P3": "$XPYD_P3_SERVER_LOG", "D3": "$XPYD_D3_SERVER_LOG"
+  }
+}
