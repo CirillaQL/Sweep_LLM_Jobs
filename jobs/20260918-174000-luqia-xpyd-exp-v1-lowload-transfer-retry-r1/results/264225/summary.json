@@ -1,0 +1,407 @@
+{
+  "valid": true,
+  "design": "exp_v1_sequential_low_load_canary_to_p1d1_production_transfer",
+  "production_pair": [
+    "P1",
+    "D1"
+  ],
+  "frequency_table": {
+    "small_light": {
+      "workload_id": "small_light",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 900,
+        "decode_frequency_mhz": 975,
+        "measured_power_w": 121.1553474608644,
+        "measured_energy_j": 458.5712065647046,
+        "ttft_ms": 214.54661388415843,
+        "tpot_ms": 56.72405949248379,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789746685.2008743,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "prefill_medium": {
+      "workload_id": "prefill_medium",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 1200,
+        "decode_frequency_mhz": 1050,
+        "measured_power_w": 124.82498183854214,
+        "measured_energy_j": 500.660816108187,
+        "ttft_ms": 395.2373707201332,
+        "tpot_ms": 58.28922789489413,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789747384.1886284,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "prefill_heavy": {
+      "workload_id": "prefill_heavy",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 2520,
+        "decode_frequency_mhz": 1500,
+        "measured_power_w": null,
+        "measured_energy_j": null,
+        "ttft_ms": null,
+        "tpot_ms": null,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 0,
+        "updated_unix_s": 1789748133.394043,
+        "source": "safe_high_after_slo_exhausted",
+        "slo_met": false,
+        "fallback_reason": "OnlineFeedbackError: no SLO-safe P frequency"
+      }
+    },
+    "decode_medium": {
+      "workload_id": "decode_medium",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 900,
+        "decode_frequency_mhz": 975,
+        "measured_power_w": 122.12087715252545,
+        "measured_energy_j": 904.1742347031832,
+        "ttft_ms": 194.19030470307916,
+        "tpot_ms": 56.799944618031525,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789748904.1630616,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "decode_heavy": {
+      "workload_id": "decode_heavy",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 1200,
+        "decode_frequency_mhz": 975,
+        "measured_power_w": 123.09410755495408,
+        "measured_energy_j": 1883.569351007541,
+        "ttft_ms": 197.71711039356887,
+        "tpot_ms": 56.93748561930718,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789750204.1363568,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "balanced_medium": {
+      "workload_id": "balanced_medium",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 1005,
+        "decode_frequency_mhz": 1050,
+        "measured_power_w": 122.78922386932614,
+        "measured_energy_j": 923.5606068397561,
+        "ttft_ms": 278.853220352903,
+        "tpot_ms": 57.33710941593624,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 3,
+        "updated_unix_s": 1789751623.371928,
+        "source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+        "slo_met": true,
+        "fallback_reason": null
+      }
+    },
+    "both_heavy": {
+      "workload_id": "both_heavy",
+      "revision": 1,
+      "value": {
+        "prefill_frequency_mhz": 2520,
+        "decode_frequency_mhz": 1500,
+        "measured_power_w": null,
+        "measured_energy_j": null,
+        "ttft_ms": null,
+        "tpot_ms": null,
+        "prefill_endpoint_id": "P0",
+        "decode_endpoint_id": "D0",
+        "sample_count": 0,
+        "updated_unix_s": 1789753074.102599,
+        "source": "safe_high_after_slo_exhausted",
+        "slo_met": false,
+        "fallback_reason": "OnlineFeedbackError: no SLO-safe P frequency"
+      }
+    }
+  },
+  "low_load_transfer_comparison": [
+    {
+      "timestamp": 1789747113.01156,
+      "workload_id": "small_light",
+      "production_pair": [
+        "P1",
+        "D1"
+      ],
+      "request_interval_s": 5.0,
+      "baseline": {
+        "request_count": 12,
+        "active_energy_mean_j": 577.6861619713405,
+        "ttft_mean_ms": 199.80308306791508,
+        "ttft_p95_ms": 216.5634386939928,
+        "tpot_mean_ms": 55.978084682038876,
+        "tpot_p95_ms": 56.01351887600708
+      },
+      "transfer": {
+        "request_count": 48,
+        "active_energy_mean_j": 436.6501968181692,
+        "ttft_mean_ms": 210.49034641570566,
+        "ttft_p95_ms": 214.5661377813667,
+        "tpot_mean_ms": 56.68340689413162,
+        "tpot_p95_ms": 56.74291046342188
+      },
+      "canary_table_written": true,
+      "canary_learned_frequency": true,
+      "canary_table_source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+      "canary_p_mhz": 900,
+      "canary_d_mhz": 975,
+      "canary_ttft_ms": 214.54661388415843,
+      "canary_tpot_ms": 56.72405949248379,
+      "canary_energy_j": 458.5712065647046,
+      "table_wait_error": null,
+      "canary_terminal_error": null
+    },
+    {
+      "timestamp": 1789747828.1630216,
+      "workload_id": "prefill_medium",
+      "production_pair": [
+        "P1",
+        "D1"
+      ],
+      "request_interval_s": 5.0,
+      "baseline": {
+        "request_count": 12,
+        "active_energy_mean_j": 559.7881193744639,
+        "ttft_mean_ms": 296.3850245966266,
+        "ttft_p95_ms": 348.80291590234265,
+        "tpot_mean_ms": 56.91089641530869,
+        "tpot_p95_ms": 57.24010024311115
+      },
+      "transfer": {
+        "request_count": 48,
+        "active_energy_mean_j": 490.73158678722876,
+        "ttft_mean_ms": 348.9386811803949,
+        "ttft_p95_ms": 398.015892424155,
+        "tpot_mean_ms": 57.90276235431687,
+        "tpot_p95_ms": 58.32741412001108
+      },
+      "canary_table_written": true,
+      "canary_learned_frequency": true,
+      "canary_table_source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+      "canary_p_mhz": 1200,
+      "canary_d_mhz": 1050,
+      "canary_ttft_ms": 395.2373707201332,
+      "canary_tpot_ms": 58.28922789489413,
+      "canary_energy_j": 500.660816108187,
+      "table_wait_error": null,
+      "canary_terminal_error": null
+    },
+    {
+      "timestamp": 1789748582.079114,
+      "workload_id": "prefill_heavy",
+      "production_pair": [
+        "P1",
+        "D1"
+      ],
+      "request_interval_s": 5.0,
+      "baseline": {
+        "request_count": 12,
+        "active_energy_mean_j": 631.1514039319009,
+        "ttft_mean_ms": 468.2463416441654,
+        "ttft_p95_ms": 523.3338341466151,
+        "tpot_mean_ms": 58.06147575028175,
+        "tpot_p95_ms": 58.35821618874192
+      },
+      "transfer": {
+        "request_count": 48,
+        "active_energy_mean_j": 641.4217867086021,
+        "ttft_mean_ms": 470.11146309766144,
+        "ttft_p95_ms": 518.0632292293012,
+        "tpot_mean_ms": 58.07521922084109,
+        "tpot_p95_ms": 58.36573570710312
+      },
+      "canary_table_written": true,
+      "canary_learned_frequency": false,
+      "canary_table_source": "safe_high_after_slo_exhausted",
+      "canary_p_mhz": 2520,
+      "canary_d_mhz": 1500,
+      "canary_ttft_ms": null,
+      "canary_tpot_ms": null,
+      "canary_energy_j": null,
+      "table_wait_error": null,
+      "canary_terminal_error": null
+    },
+    {
+      "timestamp": 1789749513.8033295,
+      "workload_id": "decode_medium",
+      "production_pair": [
+        "P1",
+        "D1"
+      ],
+      "request_interval_s": 5.0,
+      "baseline": {
+        "request_count": 12,
+        "active_energy_mean_j": 1163.053332536171,
+        "ttft_mean_ms": 194.39389975741506,
+        "ttft_p95_ms": 201.2955372221768,
+        "tpot_mean_ms": 55.98506088975651,
+        "tpot_p95_ms": 56.054733980244976
+      },
+      "transfer": {
+        "request_count": 48,
+        "active_energy_mean_j": 889.4822295719447,
+        "ttft_mean_ms": 206.6031040691693,
+        "ttft_p95_ms": 213.31842090003192,
+        "tpot_mean_ms": 56.68863825325992,
+        "tpot_p95_ms": 56.820255491528194
+      },
+      "canary_table_written": true,
+      "canary_learned_frequency": true,
+      "canary_table_source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+      "canary_p_mhz": 900,
+      "canary_d_mhz": 975,
+      "canary_ttft_ms": 194.19030470307916,
+      "canary_tpot_ms": 56.799944618031525,
+      "canary_energy_j": 904.1742347031832,
+      "table_wait_error": null,
+      "canary_terminal_error": null
+    },
+    {
+      "timestamp": 1789751223.4103239,
+      "workload_id": "decode_heavy",
+      "production_pair": [
+        "P1",
+        "D1"
+      ],
+      "request_interval_s": 5.0,
+      "baseline": {
+        "request_count": 12,
+        "active_energy_mean_j": 2333.6157441797354,
+        "ttft_mean_ms": 192.70303503920636,
+        "ttft_p95_ms": 199.7349329176359,
+        "tpot_mean_ms": 56.05985740927223,
+        "tpot_p95_ms": 56.14413379590818
+      },
+      "transfer": {
+        "request_count": 48,
+        "active_energy_mean_j": 1937.6603556824848,
+        "ttft_mean_ms": 201.7911186606701,
+        "ttft_p95_ms": 206.64894537767395,
+        "tpot_mean_ms": 56.835322780209786,
+        "tpot_p95_ms": 56.95580212643142
+      },
+      "canary_table_written": true,
+      "canary_learned_frequency": true,
+      "canary_table_source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+      "canary_p_mhz": 1200,
+      "canary_d_mhz": 975,
+      "canary_ttft_ms": 197.71711039356887,
+      "canary_tpot_ms": 56.93748561930718,
+      "canary_energy_j": 1883.569351007541,
+      "table_wait_error": null,
+      "canary_terminal_error": null
+    },
+    {
+      "timestamp": 1789752234.881287,
+      "workload_id": "balanced_medium",
+      "production_pair": [
+        "P1",
+        "D1"
+      ],
+      "request_interval_s": 5.0,
+      "baseline": {
+        "request_count": 12,
+        "active_energy_mean_j": 1138.7368625365198,
+        "ttft_mean_ms": 238.7999474691848,
+        "ttft_p95_ms": 295.75446883682156,
+        "tpot_mean_ms": 56.399078803274904,
+        "tpot_p95_ms": 56.56165810574267
+      },
+      "transfer": {
+        "request_count": 48,
+        "active_energy_mean_j": 898.1315348449474,
+        "ttft_mean_ms": 259.90918852524675,
+        "ttft_p95_ms": 290.5804932001047,
+        "tpot_mean_ms": 57.11737892955528,
+        "tpot_p95_ms": 57.362712838074906
+      },
+      "canary_table_written": true,
+      "canary_learned_frequency": true,
+      "canary_table_source": "binary_slo_bounded_neighbor_energy_refinement_p95",
+      "canary_p_mhz": 1005,
+      "canary_d_mhz": 1050,
+      "canary_ttft_ms": 278.853220352903,
+      "canary_tpot_ms": 57.33710941593624,
+      "canary_energy_j": 923.5606068397561,
+      "table_wait_error": null,
+      "canary_terminal_error": null
+    },
+    {
+      "timestamp": 1789754087.3854632,
+      "workload_id": "both_heavy",
+      "production_pair": [
+        "P1",
+        "D1"
+      ],
+      "request_interval_s": 5.0,
+      "baseline": {
+        "request_count": 12,
+        "active_energy_mean_j": 2295.7721315858266,
+        "ttft_mean_ms": 465.5906088106955,
+        "ttft_p95_ms": 499.08494298579166,
+        "tpot_mean_ms": 58.09641298039986,
+        "tpot_p95_ms": 58.28664875714292
+      },
+      "transfer": {
+        "request_count": 48,
+        "active_energy_mean_j": 2384.2348005403765,
+        "ttft_mean_ms": 475.0942967851491,
+        "ttft_p95_ms": 525.2573965233751,
+        "tpot_mean_ms": 58.12730396693939,
+        "tpot_p95_ms": 58.46299803012918
+      },
+      "canary_table_written": true,
+      "canary_learned_frequency": false,
+      "canary_table_source": "safe_high_after_slo_exhausted",
+      "canary_p_mhz": 2520,
+      "canary_d_mhz": 1500,
+      "canary_ttft_ms": null,
+      "canary_tpot_ms": null,
+      "canary_energy_j": null,
+      "table_wait_error": null,
+      "canary_terminal_error": null
+    }
+  ],
+  "production_failures": [],
+  "production_request_count": 420,
+  "production_clock_noncompliant_requests": 0,
+  "production_slo_noncompliant_requests": 34,
+  "sampler_health": {
+    "P": {
+      "samples": 453128,
+      "max_abs_transport_delay_s": 0.15813422203063965,
+      "over_250ms_samples": 0
+    },
+    "D": {
+      "samples": 423628,
+      "max_abs_transport_delay_s": 0.19580388069152832,
+      "over_250ms_samples": 0
+    }
+  },
+  "evidence_boundary": "one request every five seconds and concurrency one; sequential before/after observation only"
+}
