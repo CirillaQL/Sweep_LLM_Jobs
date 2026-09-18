@@ -16,7 +16,7 @@ def validate(root: Path) -> None:
     assert config["cold_start_unknown_system"] is True
     assert config["historical_seed_enabled"] is False
     assert config["search_prior"] == "none"
-    assert config["routing_policy"] == "sequential_low_load_canary_to_production_transfer"
+    assert config["routing_policy"] == "round_robin"
     assert config["workload_ordering"] == "seven_contiguous_workload_transfer_windows"
     assert protocol['baseline_requests_per_workload'] == 12
     assert protocol['transfer_requests_per_workload'] == 48

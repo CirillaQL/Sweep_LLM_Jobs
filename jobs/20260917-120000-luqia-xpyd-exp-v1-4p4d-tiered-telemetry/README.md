@@ -33,6 +33,8 @@ than an immediate experiment-wide exit. `workload_transfer_windows.jsonl` and
 `low_load_transfer_summary.json` compare Canary's learned measurement with
 Production's high-frequency baseline and migrated-frequency window. This is a
 low-load transferability observation, not a capacity result or causal proof.
+The substrate-facing `routing_policy` remains `round_robin` for compatibility;
+the experiment driver itself owns and enforces the seven sequential windows.
 
 ## Per-request telemetry contract
 
