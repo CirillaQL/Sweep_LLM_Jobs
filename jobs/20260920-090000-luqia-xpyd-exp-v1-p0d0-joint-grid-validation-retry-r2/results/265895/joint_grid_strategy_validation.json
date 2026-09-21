@@ -1,0 +1,35 @@
+{
+  "failure": {
+    "created_utc": "2026-09-21T13:36:58.303175+00:00",
+    "decode_frequency_mhz": 1500,
+    "endpoint_pair": [
+      "P0",
+      "D0"
+    ],
+    "exception_chain": [
+      {
+        "message": "prefill request failed",
+        "repr": "ProxyUpstreamError('prefill request failed')",
+        "type": "xpyd.disagg_proxy.ProxyUpstreamError"
+      },
+      {
+        "message": "Cannot connect to host 10.1.0.6:8100 ssl:default [Connect call failed ('10.1.0.6', 8100)]",
+        "repr": "ClientConnectorError(ConnectionKey(host='10.1.0.6', port=8100, is_ssl=False, ssl=True, proxy=None, proxy_auth=None, proxy_headers_hash=None), ConnectionRefusedError(111, \"Connect call failed ('10.1.0.6', 8100)\"))",
+        "type": "aiohttp.client_exceptions.ClientConnectorError"
+      },
+      {
+        "message": "[Errno 111] Connect call failed ('10.1.0.6', 8100)",
+        "repr": "ConnectionRefusedError(111, \"Connect call failed ('10.1.0.6', 8100)\")",
+        "type": "builtins.ConnectionRefusedError"
+      }
+    ],
+    "prefill_frequency_mhz": 2520,
+    "proxy_diagnostics": "proxy_diagnostics.jsonl",
+    "schema_version": 1,
+    "stage": "p0d0_end_to_end_smoke",
+    "workload_id": "small_light"
+  },
+  "failure_stage": "p0d0_end_to_end_smoke",
+  "schema_version": 1,
+  "valid": false
+}
