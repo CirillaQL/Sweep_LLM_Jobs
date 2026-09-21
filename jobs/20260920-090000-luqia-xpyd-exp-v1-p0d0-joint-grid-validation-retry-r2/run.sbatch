@@ -50,8 +50,37 @@ fi
 [ -n "${XPYD_LOCAL_MODEL_PATH}" ] && [ -d "${XPYD_LOCAL_MODEL_PATH}" ] || { echo "local_mistral_snapshot_not_found=${LOCAL_MODEL_SNAPSHOT_ROOT}" >&2; exit 2; }
 export XPYD_LOCAL_MODEL_PATH MODEL="${XPYD_LOCAL_MODEL_PATH}" HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
 
-export HF_HOME="${WORK_DIR}/huggingface" HF_HUB_CACHE="${WORK_DIR}/huggingface/hub" XDG_CACHE_HOME="${WORK_DIR}/xdg-cache" XDG_CONFIG_HOME="${WORK_DIR}/xdg-config" XDG_RUNTIME_DIR="${WORK_DIR}/xdg-runtime" TORCH_HOME="${WORK_DIR}/torch-cache" TORCH_EXTENSIONS_DIR="${WORK_DIR}/torch-extensions" TRITON_CACHE_DIR="${WORK_DIR}/triton-cache" CUDA_CACHE_PATH="${WORK_DIR}/cuda-cache" TMPDIR="${WORK_DIR}/tmp"
-mkdir -p "${RAW_ROOT}" "${RESULT_DIR}" "${GIT_RESULT_DIR}" "${XPYD_JOINT_GRID_OUTPUT}" "${HF_HUB_CACHE}" "${XDG_CACHE_HOME}" "${XDG_CONFIG_HOME}" "${XDG_RUNTIME_DIR}" "${TORCH_HOME}" "${TORCH_EXTENSIONS_DIR}" "${TRITON_CACHE_DIR}" "${CUDA_CACHE_PATH}" "${TMPDIR}"
+export HF_HOME="${WORK_DIR}/huggingface" HF_TOKEN_PATH="${WORK_DIR}/huggingface/token"
+export HF_HUB_CACHE="${WORK_DIR}/huggingface/hub"
+export HF_ASSETS_CACHE="${WORK_DIR}/huggingface/assets"
+export HF_XET_CACHE="${WORK_DIR}/huggingface/xet"
+export HF_DATASETS_CACHE="${WORK_DIR}/huggingface/datasets"
+export HF_MODULES_CACHE="${WORK_DIR}/huggingface/modules"
+export XDG_CACHE_HOME="${WORK_DIR}/xdg-cache" XDG_CONFIG_HOME="${WORK_DIR}/xdg-config"
+export XDG_DATA_HOME="${WORK_DIR}/xdg-data" XDG_STATE_HOME="${WORK_DIR}/xdg-state"
+export XDG_RUNTIME_DIR="${WORK_DIR}/xdg-runtime"
+export FLASHINFER_WORKSPACE_BASE="${WORK_DIR}/flashinfer"
+export VLLM_CACHE_ROOT="${WORK_DIR}/vllm-cache" VLLM_CONFIG_ROOT="${WORK_DIR}/vllm-config"
+export TORCH_HOME="${WORK_DIR}/torch-cache" TORCH_EXTENSIONS_DIR="${WORK_DIR}/torch-extensions"
+export TRITON_CACHE_DIR="${WORK_DIR}/triton-cache"
+export TORCHINDUCTOR_CACHE_DIR="${WORK_DIR}/torchinductor-cache"
+export CUDA_CACHE_PATH="${WORK_DIR}/cuda-cache" NUMBA_CACHE_DIR="${WORK_DIR}/numba-cache"
+export RAY_TMPDIR="${WORK_DIR}/ray-tmp" PIP_CACHE_DIR="${WORK_DIR}/pip-cache"
+export UV_CACHE_DIR="${WORK_DIR}/uv-cache" PYTHONPYCACHEPREFIX="${WORK_DIR}/python-pycache"
+export TIKTOKEN_CACHE_DIR="${WORK_DIR}/tiktoken-cache" MPLCONFIGDIR="${WORK_DIR}/matplotlib"
+export CUPY_CACHE_DIR="${WORK_DIR}/cupy-cache"
+export TMPDIR="${WORK_DIR}/tmp" TMP="${WORK_DIR}/tmp" TEMP="${WORK_DIR}/tmp"
+
+mkdir -p "${RAW_ROOT}" "${RESULT_DIR}" "${GIT_RESULT_DIR}" "${XPYD_JOINT_GRID_OUTPUT}" \
+  "${HF_HUB_CACHE}" "${HF_ASSETS_CACHE}" "${HF_XET_CACHE}" \
+  "${HF_DATASETS_CACHE}" "${HF_MODULES_CACHE}" \
+  "${XDG_CACHE_HOME}" "${XDG_CONFIG_HOME}" "${XDG_DATA_HOME}" \
+  "${XDG_STATE_HOME}" "${XDG_RUNTIME_DIR}" "${FLASHINFER_WORKSPACE_BASE}" \
+  "${VLLM_CACHE_ROOT}" "${VLLM_CONFIG_ROOT}" "${TORCH_HOME}" \
+  "${TORCH_EXTENSIONS_DIR}" "${TRITON_CACHE_DIR}" "${TORCHINDUCTOR_CACHE_DIR}" \
+  "${CUDA_CACHE_PATH}" "${NUMBA_CACHE_DIR}" "${RAY_TMPDIR}" "${PIP_CACHE_DIR}" \
+  "${UV_CACHE_DIR}" "${PYTHONPYCACHEPREFIX}" "${TIKTOKEN_CACHE_DIR}" \
+  "${MPLCONFIGDIR}" "${CUPY_CACHE_DIR}" "${TMPDIR}"
 chmod 700 "${XDG_RUNTIME_DIR}" "${TMPDIR}"
 
 for required in "${PYTHON_BIN}" "${CONFIG}" "${SOURCE_ROOT}/run_disagg_benchmark.sh" "${SOURCE_ROOT}/gpu_monitor.py" "${SOURCE_ROOT}/paper/scripts/xpyd/joint_grid_validation.py" "${JOB_DIR}/validate_job.py"; do [ -e "${required}" ] || { echo "required_artifact_missing=${required}" >&2; exit 2; }; done
