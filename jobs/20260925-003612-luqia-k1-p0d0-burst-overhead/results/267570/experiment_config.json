@@ -1,0 +1,198 @@
+{
+  "model": "$XPYD_LOCAL_MODEL_PATH",
+  "tokenizer_model": "$XPYD_LOCAL_MODEL_PATH",
+  "vllm_version": "0.15.1",
+  "output_root": "$XPYD_K1_OUTPUT",
+  "proxy_uri": "$XPYD_PROXY_URI",
+  "proxy_diagnostics_log": "$XPYD_PROXY_DIAGNOSTICS_LOG",
+  "frequency_table_path": "$XPYD_FREQUENCY_TABLE_PATH",
+  "routing_policy": "round_robin",
+  "execution_mode": "p0d0_burst_overhead_k1",
+  "online_feedback": {
+    "enabled": false,
+    "event_log": "$XPYD_FEEDBACK_EVENT_LOG",
+    "frequency_grids": {
+      "prefill": {
+        "minimum_mhz": 900,
+        "maximum_mhz": 2520,
+        "levels": 17
+      },
+      "decode": {
+        "minimum_mhz": 450,
+        "maximum_mhz": 1500,
+        "levels": 15
+      }
+    },
+    "axis_search_levels": {
+      "prefill": 17,
+      "decode": 15
+    },
+    "minimum_dwell_s": 0.1,
+    "experiment_frequency_settle_s": 0.15
+  },
+  "sampling": {
+    "period_s": 0.2,
+    "late_tolerance_s": 0.05,
+    "readiness_timeout_s": 180.0,
+    "maximum_gap_s": 0.5,
+    "maximum_boundary_gap_s": 0.4,
+    "minimum_coverage_ratio": 0.9
+  },
+  "client": {
+    "script": "paper/scripts/replay_synthetic_trace.py",
+    "max_concurrency": 1,
+    "request_timeout_s": 900
+  },
+  "endpoints": [
+    {
+      "endpoint_id": "P0",
+      "role": "prefill",
+      "node": "neptune",
+      "gpu_type": "NVIDIA L40S",
+      "gpu_ids": [
+        0
+      ],
+      "cuda_visible_device": "0",
+      "tp_degree": 1,
+      "http_uri": "http://$XPYD_P0_HTTP_HOST:8100",
+      "http_host": "$XPYD_P0_HTTP_HOST",
+      "http_port": 8100,
+      "addr_host": "$XPYD_P_ADDR_HOST",
+      "kv_port": 14579,
+      "kv_connector": "P2pNcclConnector",
+      "configured_frequency_mhz": 2520,
+      "expected_gpu_name": "L40S"
+    },
+    {
+      "endpoint_id": "D0",
+      "role": "decode",
+      "node": "ganymede",
+      "gpu_type": "NVIDIA L4",
+      "gpu_ids": [
+        0
+      ],
+      "cuda_visible_device": "0",
+      "tp_degree": 1,
+      "http_uri": "http://$XPYD_D0_HTTP_HOST:8200",
+      "http_host": "$XPYD_D0_HTTP_HOST",
+      "http_port": 8200,
+      "addr_host": "$XPYD_D_ADDR_HOST",
+      "kv_port": 14579,
+      "kv_connector": "P2pNcclConnector",
+      "configured_frequency_mhz": 1500,
+      "expected_gpu_name": "L4"
+    }
+  ],
+  "fixed_clocks": {
+    "P0": {
+      "graphics_mhz": 2520,
+      "memory_mhz": 9001,
+      "minimum_workload_match_fraction": 0.95
+    },
+    "D0": {
+      "graphics_mhz": 1500,
+      "memory_mhz": 6251,
+      "minimum_workload_match_fraction": 0.95
+    }
+  },
+  "compatible_pairs": [
+    {
+      "prefill_endpoint_id": "P0",
+      "decode_endpoint_id": "D0",
+      "connector": "P2pNcclConnector",
+      "prefill_tp": 1,
+      "decode_tp": 1,
+      "supported": true,
+      "reason": "sole K1 burst-overhead experiment pair"
+    }
+  ],
+  "workloads": [
+    {
+      "id": "small_light",
+      "input_len": 160,
+      "output_len": 64,
+      "count": 1,
+      "rate_rps": 0.2
+    },
+    {
+      "id": "prefill_medium",
+      "input_len": 1024,
+      "output_len": 64,
+      "count": 1,
+      "rate_rps": 0.2
+    },
+    {
+      "id": "decode_medium",
+      "input_len": 128,
+      "output_len": 128,
+      "count": 1,
+      "rate_rps": 0.2
+    },
+    {
+      "id": "decode_heavy",
+      "input_len": 128,
+      "output_len": 256,
+      "count": 1,
+      "rate_rps": 0.2
+    },
+    {
+      "id": "balanced_medium",
+      "input_len": 512,
+      "output_len": 128,
+      "count": 1,
+      "rate_rps": 0.2
+    }
+  ],
+  "burst_overhead": {
+    "seed": 20260925,
+    "reference_p_mhz": 2520,
+    "reference_d_mhz": 1500,
+    "frequency_settle_s": 0.5,
+    "reserve_s": 90,
+    "idle_gap_s": 1.0,
+    "probe_output_len": 16,
+    "phase_order": [
+      "bursts_reference",
+      "decode_busy_1500",
+      "decode_busy_1050",
+      "bursts_p1305",
+      "bursts_p1815"
+    ],
+    "burst_lengths": [
+      128,
+      1024
+    ],
+    "burst_sizes": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "burst_reps": 5,
+    "background_levels": [
+      0,
+      1,
+      4,
+      8,
+      16
+    ],
+    "background_input_len": 128,
+    "background_output_len": 400,
+    "background_warmup_s": 4.0,
+    "busy_probe_lengths": [
+      128,
+      1024
+    ],
+    "busy_probe_reps": 3,
+    "busy_probe_gap_s": 0.5,
+    "freq_burst_lengths": [
+      1024
+    ],
+    "freq_burst_sizes": [
+      1,
+      4,
+      8
+    ],
+    "freq_burst_reps": 3
+  }
+}
