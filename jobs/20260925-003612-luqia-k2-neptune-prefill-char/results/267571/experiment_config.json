@@ -1,0 +1,16 @@
+{
+  "server_url": "http://127.0.0.1:8100",
+  "memory_mhz": 9001,
+  "seed": 20260925,
+  "reserve_s": 60,
+  "smoke_freq_mhz": 2520,
+  "phase_order": ["bursts_k1", "idle_and_switch", "bursts_freq", "poisson"],
+  "bursts_k1": {"freqs_mhz": [2520], "input_lens": [128, 1024, 2048], "burst_sizes": [1, 2, 4, 8],
+                "reps": 5, "max_tokens": 1, "gap_s": 0.5, "settle_s": 1.0},
+  "idle_and_switch": {"idle_modes": ["unlocked", 2520, 1305], "settle_s": 5, "measure_s": 15,
+                      "switch_pair": [1305, 2520], "switch_reps": 3},
+  "bursts_freq": {"freqs_mhz": [2115, 1815, 1305], "input_lens": [128, 1024, 2048], "burst_sizes": [1, 2, 4, 8],
+                  "reps": 3, "max_tokens": 1, "gap_s": 0.5, "settle_s": 1.0},
+  "poisson": {"freqs_mhz": [2520, 1305], "rates_rps": [4, 8, 12], "duration_s": 30,
+              "input_lens": [128, 512, 1024, 2048], "max_tokens": 1, "settle_s": 1.0}
+}
