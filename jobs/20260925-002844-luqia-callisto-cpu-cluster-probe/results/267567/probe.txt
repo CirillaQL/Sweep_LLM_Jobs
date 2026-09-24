@@ -1,0 +1,200 @@
+
+===== job =====
+job_id=267567 host=callisto user=chjing date=2026-09-25T00:22:24+02:00
+pwd=/data/users/chjing/Sweep_LLM_Jobs_broker
+$ id
+uid=10271(chjing) gid=0(root) groups=0(root),10002(admin),10272(chjing)
+[exit=0]
+
+===== partitions (name, time limit, max nodes, default time, state) =====
+$ sinfo -o %P %l %L %D %t %N
+PARTITION TIMELIMIT DEFAULTTIME NODES STATE NODELIST
+short* 30:00 n/a 1 drain io
+short* 30:00 n/a 1 mix callisto
+short* 30:00 n/a 4 alloc europa,ganymede,neptune,uranus
+long 1-00:00:00 n/a 1 drain io
+long 1-00:00:00 n/a 1 mix callisto
+long 1-00:00:00 n/a 4 alloc europa,ganymede,neptune,uranus
+debug 3-00:00:00 n/a 1 mix callisto
+debug 3-00:00:00 n/a 3 alloc europa,ganymede,uranus
+[exit=0]
+$ scontrol show partition
+PartitionName=short
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=ALL
+   AllocNodes=ALL Default=YES QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=00:30:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED MaxCPUsPerSocket=UNLIMITED
+   NodeSets=ALL
+   Nodes=callisto,europa,ganymede,io,neptune,uranus
+   PriorityJobFactor=1 PriorityTier=2 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=OFF
+   State=UP TotalCPUs=768 TotalNodes=6 SelectTypeParameters=NONE
+   JobDefaults=DefCpuPerGPU=4
+   DefMemPerCPU=2048 MaxMemPerCPU=4096
+   TRES=cpu=768,mem=3092718M,node=6,billing=768,gres/gpu=40
+
+PartitionName=long
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=1-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED MaxCPUsPerSocket=UNLIMITED
+   NodeSets=ALL
+   Nodes=callisto,europa,ganymede,io,neptune,uranus
+   PriorityJobFactor=1 PriorityTier=1 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=OFF
+   State=UP TotalCPUs=768 TotalNodes=6 SelectTypeParameters=NONE
+   JobDefaults=DefCpuPerGPU=4
+   DefMemPerCPU=2048 MaxMemPerCPU=4096
+   TRES=cpu=768,mem=3092718M,node=6,billing=768,gres/gpu=40
+
+PartitionName=debug
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=ALL
+   AllocNodes=ALL Default=NO QoS=N/A
+   DefaultTime=NONE DisableRootJobs=NO ExclusiveUser=NO GraceTime=0 Hidden=NO
+   MaxNodes=UNLIMITED MaxTime=3-00:00:00 MinNodes=0 LLN=NO MaxCPUsPerNode=UNLIMITED MaxCPUsPerSocket=UNLIMITED
+   Nodes=callisto,europa,ganymede,uranus
+   PriorityJobFactor=1 PriorityTier=1 RootOnly=NO ReqResv=NO OverSubscribe=NO
+   OverTimeLimit=NONE PreemptMode=OFF
+   State=UP TotalCPUs=512 TotalNodes=4 SelectTypeParameters=NONE
+   JobDefaults=DefCpuPerGPU=4
+   DefMemPerCPU=4000 MaxMemPerCPU=4000
+   TRES=cpu=512,mem=2061812M,node=4,billing=512,gres/gpu=28
+
+[exit=0]
+
+===== nodes: GPUs configured vs allocated =====
+$ bash -c scontrol show node callisto | grep -E 'NodeName|State|CfgTRES|AllocTRES|Gres|RealMemory|AllocMem'
+NodeName=callisto Arch=x86_64 CoresPerSocket=32 
+   Gres=gpu:L4:8,nvgpufreq:1
+   RealMemory=515453 AllocMem=338944 FreeMem=67073 Sockets=2 Boards=1
+   State=MIXED ThreadsPerCore=2 TmpDisk=0 Weight=1 Owner=N/A MCS_label=N/A
+   CfgTRES=cpu=128,mem=515453M,billing=128,gres/gpu=8
+   AllocTRES=cpu=98,mem=331G,gres/gpu=1,gres/gpu:l4=1
+[exit=0]
+$ bash -c scontrol show node europa | grep -E 'NodeName|State|CfgTRES|AllocTRES|Gres|RealMemory|AllocMem'
+NodeName=europa Arch=x86_64 CoresPerSocket=32 
+   Gres=gpu:L4:8,nvgpufreq:1
+   RealMemory=515453 AllocMem=512000 FreeMem=68233 Sockets=2 Boards=1
+   State=ALLOCATED ThreadsPerCore=2 TmpDisk=0 Weight=1 Owner=N/A MCS_label=N/A
+   CfgTRES=cpu=128,mem=515453M,billing=128,gres/gpu=8
+   AllocTRES=cpu=128,mem=500G
+[exit=0]
+$ bash -c scontrol show node ganymede | grep -E 'NodeName|State|CfgTRES|AllocTRES|Gres|RealMemory|AllocMem'
+NodeName=ganymede Arch=x86_64 CoresPerSocket=32 
+   Gres=gpu:L4:8,nvgpufreq:1
+   RealMemory=515453 AllocMem=512000 FreeMem=92925 Sockets=2 Boards=1
+   State=ALLOCATED ThreadsPerCore=2 TmpDisk=0 Weight=1 Owner=N/A MCS_label=N/A
+   CfgTRES=cpu=128,mem=515453M,billing=128,gres/gpu=8
+   AllocTRES=cpu=128,mem=500G
+[exit=0]
+$ bash -c scontrol show node neptune | grep -E 'NodeName|State|CfgTRES|AllocTRES|Gres|RealMemory|AllocMem'
+NodeName=neptune Arch=x86_64 CoresPerSocket=32 
+   Gres=gpu:L40s:4,nvgpufreq:1
+   RealMemory=515453 AllocMem=512000 FreeMem=8717 Sockets=2 Boards=1
+   State=ALLOCATED ThreadsPerCore=2 TmpDisk=0 Weight=1 Owner=N/A MCS_label=N/A
+   CfgTRES=cpu=128,mem=515453M,billing=128,gres/gpu=4
+   AllocTRES=cpu=128,mem=500G
+[exit=0]
+$ bash -c scontrol show node uranus | grep -E 'NodeName|State|CfgTRES|AllocTRES|Gres|RealMemory|AllocMem'
+NodeName=uranus Arch=x86_64 CoresPerSocket=32 
+   Gres=gpu:L40s:4,nvgpufreq:1
+   RealMemory=515453 AllocMem=512000 FreeMem=8553 Sockets=2 Boards=1
+   State=ALLOCATED ThreadsPerCore=2 TmpDisk=0 Weight=1 Owner=N/A MCS_label=N/A
+   CfgTRES=cpu=128,mem=515453M,billing=128,gres/gpu=4
+   AllocTRES=cpu=128,mem=500G
+[exit=0]
+$ bash -c scontrol show node sensai | grep -E 'NodeName|State|CfgTRES|AllocTRES|Gres|RealMemory|AllocMem'
+[exit=1]
+
+===== queue on GPU nodes =====
+$ squeue -w callisto,europa,ganymede,neptune,uranus -o %.10i %.9P %.10u %.2t %.10M %.10l %.5D %.4C %.8m %b %R
+     JOBID PARTITION       USER ST       TIME TIME_LIMIT NODES CPUS MIN_MEMO TRES_PER_NODE NODELIST(REASON)
+    267567      long     chjing  R       0:01      10:00     1    2       1G N/A callisto
+    267515      long     karppa  R       4:51    6:00:00     1   64     250G N/A europa
+    267514      long     karppa  R       8:24    6:00:00     1   64     250G N/A ganymede
+    267513      long     karppa  R      10:18    6:00:00     1   64     250G N/A ganymede
+    267565      long   danialme  R      16:01    1:30:00     1   24      48G N/A callisto
+    267512      long     karppa  R      19:01    6:00:00     1   64     250G N/A uranus
+    267511      long     karppa  R      19:19    6:00:00     1   64     250G N/A neptune
+    267510      long     karppa  R      19:54    6:00:00     1   64     250G N/A uranus
+    267509      long     karppa  R      23:44    6:00:00     1   64     250G N/A neptune
+    267508      long     karppa  R      38:49    6:00:00     1   64     250G N/A callisto
+    267448      long   zhichaoz  R      58:11    2:30:00     1    8      32G gres/gpu:L4:1 callisto
+    267506      long     karppa  R      58:11    6:00:00     1   64     250G N/A europa
+[exit=0]
+$ squeue -u chjing -o %.10i %.9P %.20j %.2t %.10M %.10l %R
+     JOBID PARTITION                 NAME ST       TIME TIME_LIMIT NODELIST(REASON)
+    267567      long 20260925-002844-luqi  R       0:01      10:00 callisto
+[exit=0]
+
+===== my QoS / association limits =====
+$ sacctmgr -n show assoc user=chjing format=Cluster,Account,Partition,QOS,MaxJobs,MaxSubmit,GrpTRES
+sacctmgr: error: slurm_persist_conn_open_without_init: failed to open persistent connection to host:localhost:6819: Connection refused
+sacctmgr: error: Sending PersistInit msg: Connection refused
+[exit=1]
+$ sacctmgr -n show qos format=Name,MaxWall,MaxTRESPU,MaxJobsPU,Priority
+sacctmgr: error: slurm_persist_conn_open_without_init: failed to open persistent connection to host:localhost:6819: Connection refused
+sacctmgr: error: Sending PersistInit msg: Connection refused
+[exit=1]
+
+===== software environment =====
+$ ls -ld /data/users/chjing/miniforge3/envs/cuda-env /data/users/chjing/miniforge3/envs/cuda-env/bin/python
+drwxrwxr-x 30 chjing chjing 35 Aug 23 17:05 /data/users/chjing/miniforge3/envs/cuda-env
+lrwxrwxrwx  1 chjing chjing 10 Feb  5  2026 /data/users/chjing/miniforge3/envs/cuda-env/bin/python -> python3.10
+[exit=0]
+$ /data/users/chjing/miniforge3/envs/cuda-env/bin/python -c import sys; print(sys.version)
+3.10.17 | packaged by conda-forge | (main, Apr 10 2025, 22:19:12) [GCC 13.3.0]
+[exit=0]
+$ /data/users/chjing/miniforge3/envs/cuda-env/bin/python -
+vllm 0.15.1
+torch 2.9.1
+nvidia-ml-py 13.590.48
+pynvml not installed
+transformers 4.57.6
+[exit=0]
+
+===== model snapshot =====
+$ bash -c ls -la '/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots'/*/ | head -30
+total 8
+drwxr-xr-x 2 chjing nogroup 11 Aug 26 21:16 .
+drwxr-xr-x 3 chjing nogroup  3 Aug 26 21:14 ..
+lrwxrwxrwx 1 chjing nogroup 52 Aug 26 21:14 config.json -> ../../blobs/f4989f072a7f517d01d479eb1685c6e50e014f88
+lrwxrwxrwx 1 chjing nogroup 52 Aug 26 21:15 generation_config.json -> ../../blobs/2c5f418036a121b3fd432d1bf2b3c5c9daf59fab
+lrwxrwxrwx 1 chjing nogroup 76 Aug 26 21:16 model-00001-of-00002.safetensors -> ../../blobs/9742cb4764964155b7a5f35eefad651f590006091ddeb536863d6c5865cca1b9
+lrwxrwxrwx 1 chjing nogroup 76 Aug 26 21:15 model-00002-of-00002.safetensors -> ../../blobs/9bcf56354ec0c68b5f8e97b4f3b02d16af899a65b0868d6dba5a51c1b30f01cb
+lrwxrwxrwx 1 chjing nogroup 52 Aug 26 21:15 model.safetensors.index.json -> ../../blobs/1d76bd3b4dd491998e6f67d1a7b181623ebbf7f9
+lrwxrwxrwx 1 chjing nogroup 52 Aug 26 21:15 special_tokens_map.json -> ../../blobs/451134b2ddc2e78555d1e857518c54b4bdc2e87d
+lrwxrwxrwx 1 chjing nogroup 52 Aug 26 21:15 tokenizer.json -> ../../blobs/1e9f59c515a01088e1f7f72b68ab99f92d15fb96
+lrwxrwxrwx 1 chjing nogroup 76 Aug 26 21:15 tokenizer.model -> ../../blobs/dadfd56d766715c61d2ef780a525ab43b8e6da4de6865bda3d95fdef5e134055
+lrwxrwxrwx 1 chjing nogroup 52 Aug 26 21:15 tokenizer_config.json -> ../../blobs/c482ae9f11e5008531fa78cf5d85fee7f5056bb6
+[exit=0]
+$ bash -c du -sh '/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots' 2>/dev/null
+7.5K	/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots
+[exit=0]
+
+===== GPU tooling and clock-lock permission (read-only) =====
+$ which nvidia-smi
+/usr/bin/nvidia-smi
+[exit=0]
+$ nvidia-smi -L
+GPU 0: NVIDIA L4 (UUID: GPU-9a2ebbe4-b393-f824-a56c-febcb25c77e0)
+GPU 1: NVIDIA L4 (UUID: GPU-ba037542-fab3-b9c3-2a51-75a884a14fdb)
+GPU 2: NVIDIA L4 (UUID: GPU-ec17e160-2127-67e8-4d59-2beae77ca15e)
+GPU 3: NVIDIA L4 (UUID: GPU-155e8008-d0d1-0be9-8b04-662323bbe9c1)
+GPU 4: NVIDIA L4 (UUID: GPU-7dabb902-7ba6-3e49-e0c6-fc04d99a1e69)
+GPU 5: NVIDIA L4 (UUID: GPU-aead87e9-75b9-c567-36b6-1fcf32e38b9f)
+GPU 6: NVIDIA L4 (UUID: GPU-d41dcf1d-39da-1c2e-c2f2-03be0ab4d277)
+GPU 7: NVIDIA L4 (UUID: GPU-30bf5d52-e250-c344-d81c-072c0d69946c)
+[exit=0]
+$ sudo -n -l /usr/bin/nvidia-smi
+sudo: a password is required
+[exit=1]
+
+===== filesystem =====
+$ df -h /data /tmp
+Filesystem                         Size  Used Avail Use% Mounted on
+minerva:/data                       59T   56T  2.7T  96% /data
+/dev/mapper/ubuntu--vg-ubuntu--lv  1.8T   34G  1.6T   2% /
+[exit=0]
+
+probe_done=1
