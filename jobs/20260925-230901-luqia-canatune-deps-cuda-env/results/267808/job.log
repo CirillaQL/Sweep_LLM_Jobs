@@ -1,2 +1,68 @@
 start=2026-09-25T23:16:35+02:00 host=callisto python=/data/users/chjing/miniforge3/envs/cuda-env/bin/python
 Python 3.10.17
+--- installed before
+fastapi                           0.128.1
+httptools                         0.7.1
+httpx                             0.28.1
+nvidia-ml-py                      13.590.48
+pydantic                          2.12.5
+PyYAML                            6.0.3
+starlette                         0.50.0
+torch                             2.9.1
+uvicorn                           0.40.0
+uvloop                            0.22.1
+vllm                              0.15.1
+watchfiles                        1.1.1
+websockets                        16.0
+--- dry run
+Requirement already satisfied: fastapi<1,>=0.115 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (0.128.1)
+Requirement already satisfied: httpx<1,>=0.27 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (0.28.1)
+Requirement already satisfied: nvidia-ml-py<14,>=12 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (13.590.48)
+Requirement already satisfied: pyyaml<7,>=6.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (6.0.3)
+Requirement already satisfied: uvicorn<1,>=0.34 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (0.40.0)
+Requirement already satisfied: starlette<0.51.0,>=0.40.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from fastapi<1,>=0.115) (0.50.0)
+Requirement already satisfied: pydantic>=2.7.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from fastapi<1,>=0.115) (2.12.5)
+Requirement already satisfied: typing-extensions>=4.8.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from fastapi<1,>=0.115) (4.15.0)
+Requirement already satisfied: annotated-doc>=0.0.2 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from fastapi<1,>=0.115) (0.0.4)
+Requirement already satisfied: anyio in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from httpx<1,>=0.27) (4.12.1)
+Requirement already satisfied: certifi in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from httpx<1,>=0.27) (2026.1.4)
+Requirement already satisfied: httpcore==1.* in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from httpx<1,>=0.27) (1.0.9)
+Requirement already satisfied: idna in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from httpx<1,>=0.27) (3.11)
+Requirement already satisfied: h11>=0.16 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from httpcore==1.*->httpx<1,>=0.27) (0.16.0)
+Requirement already satisfied: click>=7.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn<1,>=0.34->uvicorn[standard]<1,>=0.34) (8.3.1)
+Requirement already satisfied: httptools>=0.6.3 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (0.7.1)
+Requirement already satisfied: python-dotenv>=0.13 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (1.2.1)
+Requirement already satisfied: uvloop>=0.15.1 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (0.22.1)
+Requirement already satisfied: watchfiles>=0.13 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (1.1.1)
+Requirement already satisfied: websockets>=10.4 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (16.0)
+Requirement already satisfied: annotated-types>=0.6.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from pydantic>=2.7.0->fastapi<1,>=0.115) (0.7.0)
+Requirement already satisfied: pydantic-core==2.41.5 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from pydantic>=2.7.0->fastapi<1,>=0.115) (2.41.5)
+Requirement already satisfied: typing-inspection>=0.4.2 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from pydantic>=2.7.0->fastapi<1,>=0.115) (0.4.2)
+Requirement already satisfied: exceptiongroup>=1.0.2 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from anyio->httpx<1,>=0.27) (1.3.1)
+--- install
+Requirement already satisfied: fastapi<1,>=0.115 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (0.128.1)
+Requirement already satisfied: httpx<1,>=0.27 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (0.28.1)
+Requirement already satisfied: nvidia-ml-py<14,>=12 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (13.590.48)
+Requirement already satisfied: pyyaml<7,>=6.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (6.0.3)
+Requirement already satisfied: uvicorn<1,>=0.34 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (0.40.0)
+Requirement already satisfied: starlette<0.51.0,>=0.40.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from fastapi<1,>=0.115) (0.50.0)
+Requirement already satisfied: pydantic>=2.7.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from fastapi<1,>=0.115) (2.12.5)
+Requirement already satisfied: typing-extensions>=4.8.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from fastapi<1,>=0.115) (4.15.0)
+Requirement already satisfied: annotated-doc>=0.0.2 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from fastapi<1,>=0.115) (0.0.4)
+Requirement already satisfied: anyio in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from httpx<1,>=0.27) (4.12.1)
+Requirement already satisfied: certifi in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from httpx<1,>=0.27) (2026.1.4)
+Requirement already satisfied: httpcore==1.* in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from httpx<1,>=0.27) (1.0.9)
+Requirement already satisfied: idna in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from httpx<1,>=0.27) (3.11)
+Requirement already satisfied: h11>=0.16 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from httpcore==1.*->httpx<1,>=0.27) (0.16.0)
+Requirement already satisfied: click>=7.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn<1,>=0.34->uvicorn[standard]<1,>=0.34) (8.3.1)
+Requirement already satisfied: httptools>=0.6.3 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (0.7.1)
+Requirement already satisfied: python-dotenv>=0.13 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (1.2.1)
+Requirement already satisfied: uvloop>=0.15.1 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (0.22.1)
+Requirement already satisfied: watchfiles>=0.13 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (1.1.1)
+Requirement already satisfied: websockets>=10.4 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from uvicorn[standard]<1,>=0.34) (16.0)
+Requirement already satisfied: annotated-types>=0.6.0 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from pydantic>=2.7.0->fastapi<1,>=0.115) (0.7.0)
+Requirement already satisfied: pydantic-core==2.41.5 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from pydantic>=2.7.0->fastapi<1,>=0.115) (2.41.5)
+Requirement already satisfied: typing-inspection>=0.4.2 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from pydantic>=2.7.0->fastapi<1,>=0.115) (0.4.2)
+Requirement already satisfied: exceptiongroup>=1.0.2 in /data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages (from anyio->httpx<1,>=0.27) (1.3.1)
+--- freeze diff (< before, > after)
+--- import check
