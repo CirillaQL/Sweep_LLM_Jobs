@@ -1,0 +1,17 @@
+{
+  "server_url": "http://127.0.0.1:8200",
+  "memory_mhz": 6251,
+  "seed": 20260926,
+  "reserve_s": 60,
+  "smoke_freq_mhz": 1050,
+  "phase_order": ["switch_probe", "closed_loop", "idle_and_switch"],
+  "switch_probe": {"pair": [1050, 1500], "reps": 6, "gap_s": 0.5,
+                   "loaded_concurrency": 16, "loaded_input_len": 512, "loaded_max_tokens": 256,
+                   "loaded_warmup_s": 10},
+  "closed_loop": {"freqs_mhz": [1050, 1500], "levels": [32, 48, 64, 96, 128],
+                  "input_len": 512, "max_tokens": 256,
+                  "warmup_s": 15, "window_s": 30, "metrics_period_s": 0.5,
+                  "settle_s": 1.0, "drain_s": 90, "gap_s": 2.0},
+  "idle_and_switch": {"idle_modes": [750, 450], "settle_s": 5, "measure_s": 15,
+                      "switch_pair": [1050, 1500], "switch_reps": 0}
+}
