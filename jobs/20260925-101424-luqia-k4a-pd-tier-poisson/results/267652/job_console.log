@@ -121,3 +121,20 @@ All done.
   [ganymede] ... 90s
   [ganymede] ... 100s
 [ganymede] vLLM server ready (100s)
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260925-101424-luqia-k4a-pd-tier-poisson/source/paper/scripts/xpyd/pd_burst_overhead.py", line 453, in <module>
+    raise SystemExit(main())
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260925-101424-luqia-k4a-pd-tier-poisson/source/paper/scripts/xpyd/pd_burst_overhead.py", line 447, in main
+    summary = asyncio.run(run(config, args.output))
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20260925-101424-luqia-k4a-pd-tier-poisson/source/paper/scripts/xpyd/pd_burst_overhead.py", line 418, in run
+    raise RuntimeError("P0/D0 smoke failed; experiment not started: %s" % smoke["error"])
+RuntimeError: P0/D0 smoke failed; experiment not started: ProxyUpstreamError: prefill request failed
+[trap] Cleaning up servers and monitors...
