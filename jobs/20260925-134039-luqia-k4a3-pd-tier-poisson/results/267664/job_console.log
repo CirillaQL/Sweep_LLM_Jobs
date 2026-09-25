@@ -113,3 +113,44 @@ minerva:/data    59T   56T  2.2T  97% /data
   [uranus] ... 150s
   [uranus] ... 160s
   [uranus] ... 170s
+[uranus] ERROR: no vLLM output after 180s; collecting diagnostics
+       267664.8      env     short   chjing      3:00 uranus
+   267664.batch    batch     short   chjing      4:46 ganymede
+--- sacct
+sacct: error: slurm_persist_conn_open_without_init: failed to open persistent connection to host:localhost:6819: Connection refused
+sacct: error: Sending PersistInit msg: Connection refused
+sacct: error: Problem talking to the database: Connection refused
+--- processes, GPU and /data on uranus
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+2348072 Dl         03:00 nfs_wait_bit_killable    /data/users/chjing/miniforge3/envs/cuda-env/bin/python -m vllm.entrypoints.openai.api_server --model /data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da --host 0.0.0.0 --port 8100 --tensor-parallel-size 1 --disable-log-requests --max-model-len 4096 --kv-transfer-config {"kv_connector":"P2pNcclConnector","kv_role":"kv_producer","kv_port":14579,"kv_connector_extra_config":{"send_type":"PUT_ASYNC"}} --no-enable-prefix-caching --no-enable-chunked-prefill
+index, memory.used [MiB], utilization.gpu [%], clocks.current.sm [MHz]
+0, 0 MiB, 0 %, 2520 MHz
+1, 0 MiB, 0 %, 210 MHz
+2, 0 MiB, 0 %, 210 MHz
+3, 0 MiB, 0 %, 210 MHz
+pid, used_gpu_memory [MiB]
+minerva:/data    59T   56T  2.2T  97% /data
+=== 2026-09-25T13:50:38+02:00 node=uranus log=/data/users/chjing/vllm_job_work/267664/k4a_pd_tier_poisson/launcher/vllm_uranus_8100.log
+--- log head
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+--- job steps
+         STEPID     NAME PARTITION     USER      TIME NODELIST
+      267664.10      env     short   chjing      3:01 uranus
+   267664.batch    batch     short   chjing      7:53 ganymede
+--- sacct
+sacct: error: slurm_persist_conn_open_without_init: failed to open persistent connection to host:localhost:6819: Connection refused
+sacct: error: Sending PersistInit msg: Connection refused
+sacct: error: Problem talking to the database: Connection refused
+--- processes, GPU and /data on uranus
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+2350560 Dl         03:00 nfs_wait_bit_killable    /data/users/chjing/miniforge3/envs/cuda-env/bin/python -m vllm.entrypoints.openai.api_server --model /data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da --host 0.0.0.0 --port 8100 --tensor-parallel-size 1 --disable-log-requests --max-model-len 4096 --kv-transfer-config {"kv_connector":"P2pNcclConnector","kv_role":"kv_producer","kv_port":14579,"kv_connector_extra_config":{"send_type":"PUT_ASYNC"}} --no-enable-prefix-caching --no-enable-chunked-prefill
+index, memory.used [MiB], utilization.gpu [%], clocks.current.sm [MHz]
+0, 0 MiB, 0 %, 2520 MHz
+1, 0 MiB, 0 %, 210 MHz
+2, 0 MiB, 0 %, 210 MHz
+3, 0 MiB, 0 %, 210 MHz
+pid, used_gpu_memory [MiB]
+minerva:/data    59T   56T  2.2T  97% /data
