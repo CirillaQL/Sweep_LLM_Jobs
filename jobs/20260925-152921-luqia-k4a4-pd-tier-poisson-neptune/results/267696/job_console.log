@@ -1,0 +1,22 @@
+{"endpoint_pair": ["P0", "D0"], "phases": ["tier_poisson", "park_idle"], "valid": true}
+detected_neptune=gpu=0|GPU-35fd1bf9-5849-1263-ccc4-a5ccc837400f, NVIDIA L40S
+detected_ganymede=gpu=0|GPU-07e36d4f-3eca-a88d-1c31-445fc0d863e8, NVIDIA L4
+allocated neptune=0 ganymede=0
+runtime_config_gpu_ids=P0:0,D0:0
+xpyd_job=20260925-152921-luqia-k4a4-pd-tier-poisson-neptune
+xpyd_endpoint_pair=P0_to_D0_only
+xpyd_k1b_send_type=PUT_ASYNC
+xpyd_k4a_phases=tier_poisson(2/4/6 rps x P 1305/1815/2520, D 1050),park_idle
+xpyd_driver_deadline_epoch=1790345720
+B5 End-to-End Disaggregated Serving Benchmark
+Results directory: /data/users/chjing/vllm_job_work/267696/k4a_pd_tier_poisson/launcher
+Selected experiment set: E
+Active nodes: neptune ganymede
+
+Pre-flight: killing any orphaned vLLM processes...
+XpYd characterization: legacy persistence/reset mutations disabled; one fixed-clock lock will be applied.
+
+==================================
+Experiment E: Disaggregated vLLM
+==================================
+  vLLM version: 0.15.1
