@@ -33,3 +33,35 @@ P0 ready: GPU=0 HTTP=8100 KV=14579
 D0 ready: GPU=0 HTTP=8200 KV=14579
 P1 ready: GPU=1 HTTP=8101 KV=14580
 All 2 Prefill instances are ready
+INFO:     Started server process [2934138]
+INFO:     Waiting for application startup.
+INFO:     10.1.0.3:52804 - "GET /gpus/0/clocks HTTP/1.1" 200 OK
+INFO:     10.1.0.3:44156 - "GET /gpus/0/clocks HTTP/1.1" 200 OK
+INFO:     10.1.0.3:52814 - "POST /gpus/1/lock HTTP/1.1" 200 OK
+INFO:     10.1.0.3:44160 - "POST /gpus/1/lock HTTP/1.1" 200 OK
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:18814 (Press CTRL+C to quit)
+INFO:     10.1.0.3:52826 - "GET /gpus/0/clocks HTTP/1.1" 200 OK
+INFO:     10.1.0.3:44162 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     10.1.0.3:44172 - "GET /gpus/0/clocks HTTP/1.1" 200 OK
+INFO:     10.1.0.3:52840 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     10.1.0.3:52844 - "POST /gpus/0/lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33028 - "GET /health HTTP/1.1" 200 OK
+CanaTune ready: http://127.0.0.1:18814/health
+INFO:     10.1.0.3:44180 - "POST /gpus/0/lock HTTP/1.1" 200 OK
+D1 ready: GPU=1 HTTP=8201 KV=14580
+All 2 Decode instances are ready
+INFO:     10.1.0.3:44182 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     10.1.0.3:52856 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33040 - "GET /canatune/state HTTP/1.1" 200 OK
+smoke: ready after 262 s
+smoke: t=262s phase=park
+INFO:     127.0.0.1:33040 - "GET /canatune/tiers HTTP/1.1" 200 OK
+INFO:     10.1.0.3:44186 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     10.1.0.3:52868 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     10.1.0.3:44192 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     10.1.0.3:52876 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     10.1.0.3:52886 - "POST /gpus/0/lock HTTP/1.1" 200 OK
+INFO:     10.1.0.3:44206 - "POST /gpus/0/lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33056 - "GET /canatune/state HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33056 - "GET /canatune/tiers HTTP/1.1" 200 OK
