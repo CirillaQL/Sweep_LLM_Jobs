@@ -8050,3 +8050,39 @@ INFO:     10.1.0.3:50486 - "GET /gpus HTTP/1.1" 200 OK
 INFO:     10.1.0.3:55062 - "GET /gpus HTTP/1.1" 200 OK
 INFO:     10.1.0.3:55066 - "POST /gpus/1/lock HTTP/1.1" 200 OK
 INFO:     10.1.0.3:50492 - "POST /gpus/1/lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53044 - "GET /canatune/state HTTP/1.1" 200 OK
+smoke: t=1389s phase=done
+INFO:     10.1.0.3:55080 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53044 - "GET /canatune/tiers HTTP/1.1" 200 OK
+smoke: published after 1389 s
+INFO:     10.1.0.3:50496 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     10.1.0.3:39058 - "POST /gpus/0/lock HTTP/1.1" 200 OK
+INFO:     10.1.0.3:60170 - "POST /gpus/0/lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37422 - "GET /canatune/state HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37422 - "GET /canatune/tiers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37422 - "GET /canatune/risk HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     10.1.0.3:60184 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     10.1.0.3:39064 - "GET /gpus HTTP/1.1" 200 OK
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3082318]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 268135.6 ON neptune CANCELLED AT 2026-09-26T15:55:10 ***
+slurmstepd-ganymede: error: *** STEP 268135.7 ON ganymede CANCELLED AT 2026-09-26T15:55:10 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 268135.5 ON ganymede CANCELLED AT 2026-09-26T15:55:12 ***
+slurmstepd-neptune: error: *** STEP 268135.4 ON neptune CANCELLED AT 2026-09-26T15:55:12 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+smoke: {"status": "published", "ready_s": 241.5, "published_s": 1389.4, "controller_exit": 143}
+RESULT=ok (tier table published)
+--- teardown 2026-09-26T15:55:12+02:00
