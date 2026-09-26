@@ -11425,3 +11425,29 @@ INFO:     10.1.0.3:34348 - "GET /gpus HTTP/1.1" 200 OK
 INFO:     10.1.0.3:49294 - "GET /gpus HTTP/1.1" 200 OK
 INFO:     10.1.0.3:49304 - "POST /gpus/0/lock HTTP/1.1" 200 OK
 INFO:     10.1.0.3:34362 - "POST /gpus/1/lock HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57190 - "GET /canatune/state HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57190 - "GET /canatune/tiers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57190 - "GET /canatune/risk HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3014414]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 268010.6 ON neptune CANCELLED AT 2026-09-26T10:26:32 ***
+slurmstepd-ganymede: error: *** STEP 268010.7 ON ganymede CANCELLED AT 2026-09-26T10:26:32 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 268010.5 ON ganymede CANCELLED AT 2026-09-26T10:26:34 ***
+slurmstepd-neptune: error: *** STEP 268010.4 ON neptune CANCELLED AT 2026-09-26T10:26:34 ***
+srun: error: neptune: task 0: Killed
+srun: error: ganymede: task 0: Killed
+smoke: {"status": "published", "ready_s": 236.0, "published_s": 1815.1, "controller_exit": 143}
+RESULT=ok (tier table published)
+--- teardown 2026-09-26T10:26:34+02:00
