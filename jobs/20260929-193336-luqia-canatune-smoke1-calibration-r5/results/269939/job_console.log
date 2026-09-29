@@ -49,3 +49,25 @@ A Decode instance exited unexpectedly (status 0)
 srun: error: ganymede: task 0: Exited with exit code 1
 CanaTune controller: decode exited with status 1
 INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3752929]
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 269939.6 ON neptune CANCELLED AT 2026-09-29T19:49:58 ***
+srun: error: neptune: task 0: Killed
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 269939.5 ON ganymede CANCELLED AT 2026-09-29T19:49:59 ***
+slurmstepd-neptune: error: *** STEP 269939.4 ON neptune CANCELLED AT 2026-09-29T19:49:59 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+smoke: service stopped early (1)
+smoke: /metrics of P0 failed: ConnectError('[Errno 111] Connection refused')
+smoke: /metrics of P1 failed: ConnectError('[Errno 111] Connection refused')
+smoke: /metrics of D0 failed: ConnectError('[Errno 111] Connection refused')
+smoke: /metrics of D1 failed: ConnectError('[Errno 111] Connection refused')
+smoke: {"status": "stopped_early", "ready_s": 310.8, "published_s": null, "controller_exit": 1}
+RESULT_run_a=failed stage=service_stopped_early
