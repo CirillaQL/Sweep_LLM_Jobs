@@ -1,0 +1,181 @@
+{
+  "canary": {
+    "explore_s": 2226.3450943129137,
+    "history": [
+      {
+        "end": 2884979.272535408,
+        "error": null,
+        "kind": "full",
+        "outcome": "published",
+        "reason": "cold_start"
+      }
+    ],
+    "kind": "full",
+    "lengths_default": true,
+    "pending": null,
+    "phase": "done",
+    "reason": "cold_start",
+    "reused_windows": 1,
+    "running": false,
+    "windows": 47
+  },
+  "controller": {
+    "loads": {
+      "G0": 0.0,
+      "G1": 0.0
+    },
+    "max_point": "2520/2040",
+    "tiers": {
+      "alpha_tokens": 894.9978540939558,
+      "capacity_h": 6198.19270391945,
+      "capacity_l": null,
+      "decode_kv_limit": 0.9,
+      "decode_max_running": 28,
+      "decode_wall": true,
+      "evidence": {
+        "alpha_fit": {
+          "prefill_ms_by_length": {
+            "1024": 102.22494089975953,
+            "128": 50.270200707018375,
+            "2048": 151.09824994578958,
+            "512": 74.72688006237149
+          },
+          "quadratic": {
+            "a_ms": 42.40414013999451,
+            "b_ms": 0.0646752434063628,
+            "c_ms": -5.681665341423474e-06,
+            "quad_share": -0.15778906860375008
+          }
+        },
+        "alpha_source": "metrics",
+        "alpha_tokens": 894.9978540939558,
+        "capacity_c0": 7291.991416375823,
+        "capacity_h_fraction": 0.85,
+        "decode": {
+          "b_star_concurrency": {
+            "1170": 28,
+            "2040": 28
+          },
+          "b_star_running": 28,
+          "decode_clock_repeats": 2,
+          "decode_j_per_token": {
+            "1170": 0.3242008463541667,
+            "1605": 0.35340919753864247,
+            "2040": 0.3534853316112231,
+            "300": 0.46296319508272055,
+            "735": 0.3400817200377747
+          },
+          "decode_load_concurrency": 20,
+          "decode_window_s": 60,
+          "k_star_tokens": 32959.98447355653,
+          "kv_capacity_tokens": 32992,
+          "kv_peak_clean": 0.9990295972828724,
+          "kv_wall": true
+        },
+        "duration_s": 2223.4370233668014,
+        "f_eff": 2505,
+        "f_h": 1080,
+        "f_l": null,
+        "idle_power_w": {
+          "decode": {
+            "1170": 22.724954042982453,
+            "1605": 25.45956731179674,
+            "2040": 29.084728013516827,
+            "300": 21.089474934805498,
+            "735": 21.894093284474906
+          },
+          "prefill": {
+            "1080": 60.47475925659522,
+            "1560": 62.13127632417812,
+            "2040": 64.40778650623123,
+            "2520": 77.04103209893978,
+            "600": 58.935849247724455
+          }
+        },
+        "idle_ttft_ms": {
+          "1024": 188.68628423660994,
+          "128": 132.0429928600788,
+          "2048": 245.04164094105363,
+          "512": 163.96915772929788
+        },
+        "joint": {
+          "decode_alone": 1170,
+          "h": {
+            "1170": {
+              "requests": 64,
+              "ttft_p95_ms": 680.9336701408029,
+              "violations": 0
+            }
+          }
+        },
+        "low_load": 2187.5974249127466,
+        "prefill_energy_low": {
+          "1080": 71.8183,
+          "870": 71.07,
+          "900": 71.0908,
+          "960": 71.3861
+        },
+        "prefill_energy_target": {
+          "1080": 42.206140625,
+          "1545": 43.079765625,
+          "2025": 44.276515625,
+          "2505": 49.206296875,
+          "600": 49.57555,
+          "840": 48.80694871794872,
+          "870": 41.654984375,
+          "900": 41.728671875,
+          "960": 41.9658125
+        },
+        "prompt_limit": null,
+        "reused_windows": 1,
+        "target_load": 5833.593133100659,
+        "windows": 47
+      },
+      "h": "1080/1170",
+      "l": null,
+      "park": "600/300",
+      "published_at": 1790706616.8402665,
+      "tau_down": null,
+      "tau_up": null
+    }
+  },
+  "lengths": {
+    "output_p50": 64.0,
+    "output_p90": 64.0,
+    "prompt_mean": 928.0,
+    "prompt_p50": 1024.0,
+    "prompt_p90": 2048.0,
+    "samples": 4
+  },
+  "router": {
+    "admitted": 0,
+    "groups": [
+      {
+        "canary": true,
+        "decode": "D0",
+        "effective": "1080/1170",
+        "n_await": 0,
+        "n_inflight": 0,
+        "name": "G0",
+        "prefill": "P0",
+        "state": "active",
+        "t_await": 0,
+        "tier": "H"
+      },
+      {
+        "canary": false,
+        "decode": "D1",
+        "effective": "1080/1170",
+        "n_await": 0,
+        "n_inflight": 0,
+        "name": "G1",
+        "prefill": "P1",
+        "state": "active",
+        "t_await": 0,
+        "tier": "H"
+      }
+    ],
+    "open_admission": false,
+    "rejections": 0
+  }
+}
