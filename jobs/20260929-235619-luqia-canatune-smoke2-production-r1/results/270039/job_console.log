@@ -121,3 +121,156 @@ smoke2: ready after 185 s
 smoke2: trace: 3933 requests over 970 s, low=1.50rps, mid=3.00rps, high=6.50rps, overload=11.00rps, cool=1.50rps, canary=2.00rps, pressure=6.00rps, tail=1.50rps
 smoke2: warmed P0/D0
 smoke2: warmed P1/D1
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_transports/default.py", line 394, in handle_async_request
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpcore/_async/connection_pool.py", line 256, in handle_async_request
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpcore/_async/connection_pool.py", line 236, in handle_async_request
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpcore/_async/connection.py", line 101, in handle_async_request
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpcore/_async/connection.py", line 78, in handle_async_request
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpcore/_async/connection.py", line 124, in _connect
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpcore/_backends/auto.py", line 31, in connect_tcp
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpcore/_backends/anyio.py", line 113, in connect_tcp
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 153, in __exit__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+httpcore.ConnectError: All connection attempts failed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/vllm_job_work/270039/CanaTune/src/canatune/proxy/proxy.py", line 328, in completions
+    prefill_response = await client.post(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1859, in post
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1540, in request
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1629, in send
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1730, in _send_single_request
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_transports/default.py", line 393, in handle_async_request
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/contextlib.py", line 153, in __exit__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+httpx.ConnectError: All connection attempts failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py", line 416, in run_asgi
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/applications.py", line 1138, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/applications.py", line 107, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 115, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 101, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 355, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+  File "/data/users/chjing/vllm_job_work/270039/CanaTune/src/canatune/proxy/proxy.py", line 339, in completions
+    finish("prefill_error", None)
+  File "/data/users/chjing/vllm_job_work/270039/CanaTune/src/canatune/proxy/proxy.py", line 297, in finish
+    baseline_log.write(
+  File "/data/users/chjing/vllm_job_work/270039/CanaTune/src/canatune/infrastructure/records.py", line 30, in write
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/pathlib.py", line 1119, in open
+OSError: [Errno 24] Too many open files: '/data/users/chjing/vllm_job_work/270039/baseline/records/requests.jsonl'
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py", line 416, in run_asgi
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/applications.py", line 1138, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/applications.py", line 107, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 115, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 101, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 355, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+  File "/data/users/chjing/vllm_job_work/270039/CanaTune/src/canatune/proxy/proxy.py", line 327, in completions
+    async with factory() as client:
+  File "/data/users/chjing/vllm_job_work/270039/CanaTune/src/canatune/proxy/proxy.py", line 217, in <lambda>
+    lambda: httpx.AsyncClient(timeout=httpx.Timeout(timeout_s, connect=10), trust_env=False)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1402, in __init__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1445, in _init_transport
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_transports/default.py", line 297, in __init__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_config.py", line 40, in create_ssl_context
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/ssl.py", line 766, in create_default_context
+OSError: [Errno 24] Too many open files
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py", line 416, in run_asgi
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/applications.py", line 1138, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/applications.py", line 107, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 115, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 101, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 355, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+  File "/data/users/chjing/vllm_job_work/270039/CanaTune/src/canatune/proxy/proxy.py", line 327, in completions
+    async with factory() as client:
+  File "/data/users/chjing/vllm_job_work/270039/CanaTune/src/canatune/proxy/proxy.py", line 217, in <lambda>
+    lambda: httpx.AsyncClient(timeout=httpx.Timeout(timeout_s, connect=10), trust_env=False)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1402, in __init__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1445, in _init_transport
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_transports/default.py", line 297, in __init__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_config.py", line 40, in create_ssl_context
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/ssl.py", line 766, in create_default_context
+OSError: [Errno 24] Too many open files
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py", line 416, in run_asgi
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/applications.py", line 1138, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/applications.py", line 107, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 115, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 101, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 355, in app
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+  File "/data/users/chjing/vllm_job_work/270039/CanaTune/src/canatune/proxy/proxy.py", line 327, in completions
+    async with factory() as client:
+  File "/data/users/chjing/vllm_job_work/270039/CanaTune/src/canatune/proxy/proxy.py", line 217, in <lambda>
+    lambda: httpx.AsyncClient(timeout=httpx.Timeout(timeout_s, connect=10), trust_env=False)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1402, in __init__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_client.py", line 1445, in _init_transport
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_transports/default.py", line 297, in __init__
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_config.py", line 40, in create_ssl_context
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/ssl.py", line 766, in create_default_context
+OSError: [Errno 24] Too many open files
