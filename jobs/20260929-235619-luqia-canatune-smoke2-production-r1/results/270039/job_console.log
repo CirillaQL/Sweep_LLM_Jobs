@@ -892,3 +892,36 @@ Traceback (most recent call last):
   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/httpx/_config.py", line 40, in create_ssl_context
   File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/ssl.py", line 766, in create_default_context
 OSError: [Errno 24] Too many open files
+smoke2: low: ok=277/277 rejected=0 violated=1 p95=758.092372212559 J/req=170.70339856532678
+smoke2: mid: ok=357/357 rejected=0 violated=8 p95=871.3722759857774 J/req=98.80783427416378
+smoke2: high: ok=984/984 rejected=0 violated=490 p95=54513.35167326033 J/req=52.90039326646076
+smoke2: overload: ok=957/986 rejected=0 violated=826 p95=182502.6028980501 J/req=35.97067208739533
+smoke2: cool: ok=276/276 rejected=0 violated=138 p95=175227.52279276028 J/req=189.7318452093152
+smoke2: canary: ok=73/73 rejected=0 violated=37 p95=74736.9732838124 J/req=150.51785631958424
+smoke2: pressure: ok=904/904 rejected=0 violated=452 p95=89659.67567590997 J/req=56.00134153958548
+smoke2: tail: ok=76/76 rejected=0 violated=38 p95=94467.27762417868 J/req=217.4409632086503
+smoke2: all: ok=3904/3933 rejected=0 violated=1990 p95=154371.9322499819 J/req=76.72686402280995
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3824480]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 270039.11 ON ganymede CANCELLED AT 2026-09-30T03:15:16 ***
+slurmstepd-neptune: error: *** STEP 270039.10 ON neptune CANCELLED AT 2026-09-30T03:15:16 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 270039.9 ON ganymede CANCELLED AT 2026-09-30T03:15:17 ***
+slurmstepd-neptune: error: *** STEP 270039.8 ON neptune CANCELLED AT 2026-09-30T03:15:17 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+smoke2: {"mode": "baseline", "ready_s": 185.3, "run": {"started_wall": 1790729881.4694574, "played_s": 970.0009302860126, "finished_s": 1034.5734263239428, "unfinished": 0, "requests": 3933}, "status": "done", "controller_exit": 143}
+RESULT_baseline=ok
+RESULT=ok (cantune and baseline done)
+--- teardown 2026-09-30T03:15:18+02:00
