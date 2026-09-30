@@ -1,0 +1,188 @@
+{
+  "canary": {
+    "explore_s": 2532.505471458193,
+    "history": [
+      {
+        "end": 2907043.428762798,
+        "error": null,
+        "kind": "full",
+        "outcome": "published",
+        "reason": "cold_start"
+      },
+      {
+        "end": 2907806.543962784,
+        "error": null,
+        "kind": "relocate",
+        "outcome": "aborted",
+        "reason": "length_shift"
+      }
+    ],
+    "kind": "relocate",
+    "lengths_default": false,
+    "pending": null,
+    "phase": "ramp",
+    "reason": "length_shift",
+    "reused_windows": 0,
+    "running": false,
+    "windows": 5
+  },
+  "controller": {
+    "loads": {
+      "G0": 0.0,
+      "G1": 1570.824412013139
+    },
+    "max_point": "2520/2040",
+    "tiers": {
+      "alpha_tokens": 650.2493466812656,
+      "capacity_h": 7891.2467334063285,
+      "capacity_l": null,
+      "decode_kv_limit": 0.9,
+      "decode_max_running": 24,
+      "decode_wall": true,
+      "evidence": {
+        "alpha_fit": {
+          "prefill_ms_by_length": {
+            "1024": 86.05575701221824,
+            "128": 43.15776517614722,
+            "2048": 151.33035462349653,
+            "512": 68.37988225743175
+          },
+          "quadratic": {
+            "a_ms": 40.01503360327813,
+            "b_ms": 0.042332587337457435,
+            "c_ms": 5.745827959016967e-06,
+            "quad_share": 0.15980002725378653
+          }
+        },
+        "alpha_source": "metrics",
+        "alpha_tokens": 650.2493466812656,
+        "capacity_c0": 7891.2467334063285,
+        "capacity_h_fraction": 1.0,
+        "decode": {
+          "b_star_concurrency": {
+            "1170": 24,
+            "2040": 28
+          },
+          "b_star_running": 24,
+          "decode_clock_repeats": 2,
+          "decode_j_per_token": {
+            "1170": 0.32602962239583333,
+            "1605": 0.3531743374075941,
+            "2040": 0.35334462890624996,
+            "300": 0.4627453871783088,
+            "735": 0.3400981928228022
+          },
+          "decode_load_concurrency": 20,
+          "decode_window_s": 60,
+          "k_star_tokens": 29902.501698204756,
+          "kv_capacity_tokens": 32992,
+          "kv_peak_clean": 0.9063561377971858,
+          "kv_wall": true
+        },
+        "duration_s": 2369.6103196609765,
+        "f_eff": 2505,
+        "f_h": 1545,
+        "f_l": null,
+        "idle_power_w": {
+          "decode": {
+            "1170": 21.758062254903564,
+            "1605": 24.438961321805188,
+            "2040": 28.08209806117986,
+            "300": 20.663740947908373,
+            "735": 20.99199465398301
+          },
+          "prefill": {
+            "1080": 60.15601270450289,
+            "1560": 61.88352362842266,
+            "2040": 64.01318341445983,
+            "2520": 75.35614136444573,
+            "600": 58.54736528285308
+          }
+        },
+        "idle_ttft_ms": {
+          "1024": 169.31498097255826,
+          "128": 121.80987512692809,
+          "2048": 240.15623424202204,
+          "512": 149.84870981425047
+        },
+        "joint": {
+          "decode_alone": 1170,
+          "h": {
+            "1170": {
+              "requests": 80,
+              "ttft_p95_ms": 701.796576846391,
+              "violations": 0
+            }
+          }
+        },
+        "low_load": 2367.3740200218986,
+        "prefill_energy_low": {
+          "1020": 62.2112,
+          "1080": 62.2581,
+          "1545": 63.11024999999999,
+          "990": 62.071583333333336
+        },
+        "prefill_energy_target": {
+          "1020": 37.503975000000004,
+          "1080": 37.567525,
+          "1545": 38.228925,
+          "2025": 39.4012625,
+          "2505": 43.263925,
+          "600": 40.53218867924529,
+          "840": 39.52023333333333,
+          "960": 37.424975,
+          "990": 37.39915
+        },
+        "prompt_limit": null,
+        "reused_windows": 1,
+        "target_load": 6312.997386725063,
+        "windows": 48
+      },
+      "h": "1545/1170",
+      "l": null,
+      "park": "600/300",
+      "published_at": 1790728680.8903615,
+      "tau_down": null,
+      "tau_up": null
+    }
+  },
+  "lengths": {
+    "output_p50": 64.0,
+    "output_p90": 64.0,
+    "prompt_mean": 859.648,
+    "prompt_p50": 512.0,
+    "prompt_p90": 2048.0,
+    "samples": 2000
+  },
+  "router": {
+    "admitted": 3619,
+    "groups": [
+      {
+        "canary": true,
+        "decode": "D0",
+        "effective": null,
+        "n_await": 0,
+        "n_inflight": 0,
+        "name": "G0",
+        "prefill": "P0",
+        "state": "park",
+        "t_await": 0,
+        "tier": "park"
+      },
+      {
+        "canary": false,
+        "decode": "D1",
+        "effective": "1545/1170",
+        "n_await": 0,
+        "n_inflight": 0,
+        "name": "G1",
+        "prefill": "P1",
+        "state": "active",
+        "t_await": 0,
+        "tier": "H"
+      }
+    ],
+    "open_admission": false,
+    "rejections": 313
+  }
+}
