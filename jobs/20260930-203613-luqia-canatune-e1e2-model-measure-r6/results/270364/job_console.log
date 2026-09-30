@@ -102,3 +102,34 @@ CanaTune controller: reset http://10.1.0.3:9300 GPU 1: ok
 measure: service stopped early (1)
 measure: {"status": 3, "elapsed_s": 5.1}
 attempt 2 failed rc=3; resuming after the last finished window
+=== measure attempt 3 start=2026-09-30T21:01:58+02:00 deadline_s=15304
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+INFO:     Started server process [2706134]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 9300): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Started server process [3964258]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 9300): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+srun: error: neptune: task 0: Exited with exit code 1
+CanaTune controller: prefill_agent exited with status 1
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 270364.17 ON ganymede CANCELLED AT 2026-09-30T21:02:01 ***
+slurmstepd-neptune: error: *** STEP 270364.16 ON neptune CANCELLED AT 2026-09-30T21:02:01 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
