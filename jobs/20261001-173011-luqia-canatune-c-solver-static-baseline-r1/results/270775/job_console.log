@@ -146,3 +146,32 @@ smoke2: pressure: ok=1184/1185 rejected=0 violated=3 p95=662.4736413359642 J/req
 smoke2: tail: ok=124/124 rejected=0 violated=0 p95=454.69237212091684 J/req=209.22814976569146
 smoke2: all: ok=5046/5286 rejected=239 violated=217 p95=969.2853367887437 J/req=95.05104307762234
 smoke2: checks: {"parked": false, "woken": false, "planned": false, "boosted": true, "unboosted": true, "canary_claimed": false, "canary_aborted": false, "plans": 0, "verifications": 0, "clock_failures": 0, "clock_errors": 0}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [106040]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 270775.12 ON ganymede CANCELLED AT 2026-10-01T22:20:11 ***
+slurmstepd-neptune: error: *** STEP 270775.13 ON neptune CANCELLED AT 2026-10-01T22:20:11 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9575 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9575 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9575 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9575 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9575 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9575 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 270775.10 ON ganymede CANCELLED AT 2026-10-01T22:20:13 ***
+slurmstepd-neptune: error: *** STEP 270775.11 ON neptune CANCELLED AT 2026-10-01T22:20:13 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+smoke2: {"mode": "static", "ready_s": 235.3, "reached_h": true, "run": {"started_wall": 1790885037.0402613, "played_s": 970.0003872532398, "finished_s": 973.519123238977, "unfinished": 0, "requests": 5286}, "status": "done", "controller_exit": 143}
+RESULT_static=ok
+--- clocks before the baseline (reset)
