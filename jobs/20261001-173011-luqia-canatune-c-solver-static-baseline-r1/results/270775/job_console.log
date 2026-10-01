@@ -61,3 +61,42 @@ smoke2: trace: 5286 requests over 970 s, low=2.03rps, mid=4.05rps, high=8.78rps,
 smoke2: warmed P0/D0
 smoke2: warmed P1/D1
 smoke2: warmed P2/D2
+smoke2: low: ok=379/379 rejected=0 violated=0 p95=528.3406521193683 J/req=171.431330419173
+smoke2: mid: ok=493/493 rejected=0 violated=0 p95=573.1368237175047 J/req=112.12096763979154
+smoke2: high: ok=1289/1291 rejected=2 violated=2 p95=670.3791697509587 J/req=72.32904121754056
+smoke2: overload: ok=1116/1354 rejected=238 violated=225 p95=1197.89376296103 J/req=54.739210621707336
+smoke2: cool: ok=364/364 rejected=0 violated=0 p95=502.5320239365101 J/req=205.82149862098694
+smoke2: canary: ok=96/96 rejected=0 violated=0 p95=518.7729191966355 J/req=159.90016774551074
+smoke2: pressure: ok=1183/1185 rejected=2 violated=3 p95=680.8217680081725 J/req=77.66133714020343
+smoke2: tail: ok=124/124 rejected=0 violated=0 p95=471.508146263659 J/req=210.30157401743244
+smoke2: all: ok=5044/5286 rejected=242 violated=230 p95=985.8711259439588 J/req=95.71558348040236
+smoke2: checks: {"parked": true, "woken": true, "planned": true, "boosted": true, "unboosted": true, "canary_claimed": true, "canary_aborted": false, "plans": 15, "verifications": 0, "clock_failures": 0, "clock_errors": 0}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [87490]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 270775.9 ON ganymede CANCELLED AT 2026-10-01T21:59:54 ***
+slurmstepd-neptune: error: *** STEP 270775.8 ON neptune CANCELLED AT 2026-10-01T21:59:54 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9575 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9575 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9575 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9575 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9575 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9575 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 270775.7 ON ganymede CANCELLED AT 2026-10-01T21:59:56 ***
+slurmstepd-neptune: error: *** STEP 270775.6 ON neptune CANCELLED AT 2026-10-01T21:59:56 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+smoke2: {"mode": "cantune", "ready_s": 285.7, "published_s": 2977.5, "reached_h": true, "run": {"started_wall": 1790883820.4093015, "played_s": 970.0009961132891, "finished_s": 973.5129946344532, "unfinished": 0, "requests": 5286}, "status": "done", "controller_exit": 143}
+RESULT_cantune=ok
+=== static (static) start=2026-10-01T21:59:57+02:00 deadline_s=0 proxy_port=18775
