@@ -227,3 +227,42 @@ smoke2: trace: 5286 requests over 970 s, low=2.03rps, mid=4.05rps, high=8.78rps,
 smoke2: warmed P0/D0
 smoke2: warmed P1/D1
 smoke2: warmed P2/D2
+smoke2: low: ok=379/379 rejected=0 violated=0 p95=388.4493447840214 J/req=234.19694537868855
+smoke2: mid: ok=493/493 rejected=0 violated=0 p95=390.5607732012868 J/req=130.43210340048768
+smoke2: high: ok=1291/1291 rejected=0 violated=11 p95=484.09941932186484 J/req=73.36674822122232
+smoke2: overload: ok=1354/1354 rejected=0 violated=190 p95=1329.5255270786583 J/req=50.6224519203896
+smoke2: cool: ok=364/364 rejected=0 violated=0 p95=383.89395410194993 J/req=244.8228839999817
+smoke2: canary: ok=96/96 rejected=0 violated=0 p95=376.7297430895269 J/req=206.75197655391693
+smoke2: pressure: ok=1185/1185 rejected=0 violated=10 p95=492.03515658155084 J/req=78.5267990063824
+smoke2: tail: ok=124/124 rejected=0 violated=0 p95=378.73877212405205 J/req=239.5598547080255
+smoke2: all: ok=5286/5286 rejected=0 violated=211 p95=899.4358102791011 J/req=103.67883833906481
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [112666]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 270775.18 ON ganymede CANCELLED AT 2026-10-01T22:40:41 ***
+slurmstepd-neptune: error: *** STEP 270775.19 ON neptune CANCELLED AT 2026-10-01T22:40:41 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9575 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9575 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9575 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9575 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9575 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9575 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 270775.17 ON ganymede CANCELLED AT 2026-10-01T22:40:43 ***
+slurmstepd-neptune: error: *** STEP 270775.16 ON neptune CANCELLED AT 2026-10-01T22:40:43 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+smoke2: {"mode": "baseline", "ready_s": 215.3, "clocks_at_start": [{"agent": "http://10.1.0.3:9575", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9575", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9575", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9575", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9575", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9575", "index": 2, "sm_mhz": 2520}], "run": {"started_wall": 1790886267.183843, "played_s": 970.0010272860527, "finished_s": 973.2640190678649, "unfinished": 0, "requests": 5286}, "status": "done", "controller_exit": 143}
+RESULT_baseline=ok
+RESULT=cantune:ok static:0 baseline:0
+--- teardown 2026-10-01T22:40:43+02:00
