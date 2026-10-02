@@ -136,3 +136,25 @@ smoke2: trace: 4734 requests over 970 s, low=1.80rps, mid=3.60rps, high=7.80rps,
 smoke2: warmed P0/D0
 smoke2: warmed P1/D1
 smoke2: warmed P2/D2
+smoke2: low: ok=335/335 rejected=0 violated=0 p95=504.1490732692182 J/req=193.0276113462078
+smoke2: mid: ok=422/422 rejected=0 violated=0 p95=545.8831158466637 J/req=120.77691696235695
+smoke2: high: ok=1162/1162 rejected=0 violated=24 p95=856.2057572416961 J/req=68.02542610706847
+smoke2: overload: ok=1198/1198 rejected=0 violated=133 p95=1232.866727747023 J/req=53.88694999089186
+smoke2: cool: ok=341/341 rejected=0 violated=0 p95=543.2682200334966 J/req=195.7027616650981
+smoke2: canary: ok=95/95 rejected=0 violated=0 p95=569.7182947769761 J/req=162.06511927393862
+smoke2: pressure: ok=1092/1092 rejected=0 violated=22 p95=834.6258983947337 J/req=71.07411959191906
+smoke2: tail: ok=89/89 rejected=0 violated=0 p95=583.7908568792045 J/req=230.58214437017548
+smoke2: all: ok=4734/4734 rejected=0 violated=179 p95=928.3602549694479 J/req=92.83899397692018
+smoke2: checks: {"parked": false, "woken": false, "planned": false, "boosted": false, "unboosted": false, "canary_claimed": false, "canary_aborted": false, "plans": 0, "verifications": 0, "clock_failures": 0, "clock_errors": 0}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [176411]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 271007.13 ON ganymede CANCELLED AT 2026-10-02T04:54:12 ***
+slurmstepd-neptune: error: *** STEP 271007.12 ON neptune CANCELLED AT 2026-10-02T04:54:12 ***
+srun: error: neptune: task 0: Killed
+srun: error: ganymede: task 0: Killed
