@@ -74,3 +74,38 @@ bench: r4_8rps: 1440 prompts at 8 req/s
 bench: r4_8rps: exit 0, 201 s of load
 bench: r5_10rps: 1800 prompts at 10 req/s
 bench: r5_10rps: exit 0, 201 s of load
+bench: r0_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=382.2747920639813 energy_j=57855.5137395401 J/tok=1.7253306814045897 modes={'energy': 183}
+bench: r1_2rps: exit=0 ok=359/360 goodput=0.9972222222222222 ttft_p95=442.06761103123426 energy_j=60419.668252143856 J/tok=0.884375770314903 modes={'energy': 185}
+bench: r2_4rps: exit=0 ok=720/720 goodput=1.0 ttft_p95=494.8811177164316 energy_j=67405.10438946533 J/tok=0.4860933343150521 modes={'energy': 187}
+bench: r3_6rps: exit=0 ok=1080/1080 goodput=0.9981481481481481 ttft_p95=543.9759641885757 energy_j=74867.53723535156 J/tok=0.35914754093299667 modes={'energy': 186}
+bench: r4_8rps: exit=0 ok=1440/1440 goodput=0.9958333333333333 ttft_p95=602.204387076199 energy_j=82446.59358161927 J/tok=0.29883756114414484 modes={'energy': 89, 'confirming': 96}
+bench: r5_10rps: exit=0 ok=1800/1800 goodput=0.9761111111111112 ttft_p95=655.519665684551 energy_j=101471.01234300995 J/tok=0.2936753839651134 modes={'energy': 22, 'confirming': 3, 'full_effort': 159}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [654527]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 271419.9 ON ganymede CANCELLED AT 2026-10-04T00:44:27 ***
+slurmstepd-neptune: error: *** STEP 271419.8 ON neptune CANCELLED AT 2026-10-04T00:44:27 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9719 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9719 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9719 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9719 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9719 GPU 4: ok
+CanaTune controller: reset http://10.1.0.3:9719 GPU 5: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 271419.7 ON ganymede CANCELLED AT 2026-10-04T00:44:29 ***
+slurmstepd-neptune: error: *** STEP 271419.6 ON neptune CANCELLED AT 2026-10-04T00:44:29 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 290.5, "published_s": 3513.7, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_cantune=ok
+--- clocks before the baseline (reset)
