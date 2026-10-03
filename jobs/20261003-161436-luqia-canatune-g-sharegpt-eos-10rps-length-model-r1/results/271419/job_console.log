@@ -172,3 +172,39 @@ bench: r4_8rps: 1440 prompts at 8 req/s
 bench: r4_8rps: exit 0, 198 s of load
 bench: r5_10rps: 1800 prompts at 10 req/s
 bench: r5_10rps: exit 0, 199 s of load
+bench: r0_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=304.2101007886231 energy_j=87843.9421502533 J/tok=2.639700166784461 modes={}
+bench: r1_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=309.0009926818311 energy_j=90362.90489152528 J/tok=1.3226420505199836 modes={}
+bench: r2_4rps: exit=0 ok=720/720 goodput=1.0 ttft_p95=335.70024091750383 energy_j=94202.36410377502 J/tok=0.6777246011005555 modes={}
+bench: r3_6rps: exit=0 ok=1079/1080 goodput=0.9953703703703703 ttft_p95=363.57921874150634 energy_j=97904.68015953827 J/tok=0.4698845749861454 modes={}
+bench: r4_8rps: exit=0 ok=1440/1440 goodput=0.9972222222222222 ttft_p95=415.9309952519834 energy_j=101351.24886569213 J/tok=0.3672891922480363 modes={}
+bench: r5_10rps: exit=0 ok=1800/1800 goodput=0.9933333333333333 ttft_p95=442.23403884097934 energy_j=105195.53978430938 J/tok=0.30503396918884024 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [677964]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 271419.15 ON ganymede CANCELLED AT 2026-10-04T01:12:53 ***
+slurmstepd-neptune: error: *** STEP 271419.14 ON neptune CANCELLED AT 2026-10-04T01:12:53 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9719 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9719 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9719 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9719 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9719 GPU 4: ok
+CanaTune controller: reset http://10.1.0.3:9719 GPU 5: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 271419.13 ON ganymede CANCELLED AT 2026-10-04T01:12:55 ***
+slurmstepd-neptune: error: *** STEP 271419.12 ON neptune CANCELLED AT 2026-10-04T01:12:55 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 210.3, "clocks_at_start": [{"agent": "http://10.1.0.3:9719", "index": 3, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9719", "index": 4, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9719", "index": 5, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9719", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9719", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9719", "index": 2, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline=ok
+RESULT=cantune:ok baseline:0
+--- teardown 2026-10-04T01:12:55+02:00
