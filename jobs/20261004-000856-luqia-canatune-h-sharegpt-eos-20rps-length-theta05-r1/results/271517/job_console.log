@@ -2755,3 +2755,20 @@ srun: error: neptune: task 0: Killed
 bench: r5_16rps: exit 0, 180 s of load
 bench: r6_20rps: 3600 prompts at 20 req/s
 bench: r6_20rps: exit 0, 180 s of load
+bench: r0_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=328.42149678617716 energy_j=87924.5053699875 J/tok=2.6423592898568744 modes={}
+bench: r1_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=323.1847742572427 energy_j=90460.98830697632 J/tok=1.324077697701644 modes={}
+bench: r2_4rps: exit=0 ok=720/720 goodput=1.0 ttft_p95=353.3071456477046 energy_j=94242.2133999176 J/tok=0.6780112908093469 modes={}
+bench: r3_8rps: exit=0 ok=1440/1440 goodput=0.9944444444444445 ttft_p95=410.75341310352087 energy_j=101270.69173654939 J/tok=0.36705445698474953 modes={}
+bench: r4_12rps: exit=0 ok=2160/2160 goodput=0.9597222222222223 ttft_p95=880.8997068554163 energy_j=108682.21336986544 J/tok=0.2641225743160498 modes={}
+bench: r5_16rps: exit=0 ok=989/2880 goodput=0.27152777777777776 ttft_p95=2864.981767255813 energy_j=None J/tok=None modes={}
+bench: r6_20rps: exit=0 ok=0/3600 goodput=0.0 ttft_p95=None energy_j=None J/tok=None modes={}
+smoke2: /metrics of P0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P2 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D2 failed: ConnectError('[Errno 111] Connection refused')
+bench: {"mode": "baseline", "ready_s": 255.4, "clocks_at_start": [{"agent": "http://10.1.0.3:9317", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9317", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9317", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9317", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9317", "index": 2, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9317", "index": 3, "sm_mhz": 2520}], "status": "done", "controller_exit": 1}
+RESULT_baseline=ok
+RESULT=cantune:ok baseline:0
+--- teardown 2026-10-04T06:31:17+02:00
