@@ -223,3 +223,24 @@ srun: error: neptune: task 0: Killed
 bench: r9_16rps: exit 0, 180 s of load
 bench: r10_20rps: 3600 prompts at 20 req/s
 bench: r10_20rps: exit 0, 180 s of load
+bench: r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=303.2778752967715 energy_j=85151.14299712372 J/tok=5.026631818012026 modes={}
+bench: r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=307.9996439628303 energy_j=87798.42902269744 J/tok=2.6385703688263695 modes={}
+bench: r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=316.8294751085341 energy_j=90309.34098596955 J/tok=1.321858035508922 modes={}
+bench: r3_4rps: exit=0 ok=720/720 goodput=1.0 ttft_p95=336.4792331121862 energy_j=94165.21033389283 J/tok=0.6774573039460483 modes={}
+bench: r4_6rps: exit=0 ok=1080/1080 goodput=1.0 ttft_p95=369.07862685620785 energy_j=97846.8348032608 J/tok=0.4690306775795643 modes={}
+bench: r5_8rps: exit=0 ok=1440/1440 goodput=0.9972222222222222 ttft_p95=408.37928280234337 energy_j=101361.22381495667 J/tok=0.36732534070302914 modes={}
+bench: r6_10rps: exit=0 ok=1800/1800 goodput=0.9983333333333333 ttft_p95=430.93103310093284 energy_j=105083.08141558073 J/tok=0.3044095254548215 modes={}
+bench: r7_12rps: exit=0 ok=2160/2160 goodput=0.9861111111111112 ttft_p95=554.0957478806376 energy_j=108691.659119133 J/tok=0.2645647347799903 modes={}
+bench: r8_14rps: exit=0 ok=2520/2520 goodput=0.9523809523809523 ttft_p95=948.9223780110478 energy_j=111708.4517137146 J/tok=0.23332432073445566 modes={}
+bench: r9_16rps: exit=0 ok=777/2880 goodput=0.24409722222222222 ttft_p95=1489.966596942395 energy_j=None J/tok=None modes={}
+bench: r10_20rps: exit=0 ok=0/3600 goodput=0.0 ttft_p95=None energy_j=None J/tok=None modes={}
+smoke2: /metrics of P0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P2 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D2 failed: ConnectError('[Errno 111] Connection refused')
+bench: {"mode": "baseline", "ready_s": 235.3, "clocks_at_start": [{"agent": "http://10.1.0.3:9439", "index": 4, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9439", "index": 5, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9439", "index": 6, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9439", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9439", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9439", "index": 3, "sm_mhz": 2520}], "status": "done", "controller_exit": 1}
+RESULT_baseline=ok
+RESULT=cantune:ok baseline:0
+--- teardown 2026-10-04T20:59:17+02:00
