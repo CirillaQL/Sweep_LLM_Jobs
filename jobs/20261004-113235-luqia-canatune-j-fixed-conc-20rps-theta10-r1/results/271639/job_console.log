@@ -107,3 +107,23 @@ bench: r9_16rps: 2880 prompts at 16 req/s
 bench: r9_16rps: exit 0, 180 s of load
 bench: r10_20rps: 3600 prompts at 20 req/s
 bench: r10_20rps: exit 0, 180 s of load
+bench: r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=398.2117138803005 energy_j=56866.31886779785 J/tok=3.356925552998692 modes={'energy': 183}
+bench: r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=380.30183408409357 energy_j=58692.55390167236 J/tok=1.7502923657791538 modes={'energy': 183}
+bench: r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=446.5654231607914 energy_j=61384.37053372193 J/tok=0.8984831752593959 modes={'energy': 186}
+bench: r3_4rps: exit=0 ok=720/720 goodput=1.0 ttft_p95=502.30881199240685 energy_j=70927.55510366822 J/tok=0.5093833405414186 modes={'energy': 185}
+bench: r4_6rps: exit=0 ok=1080/1080 goodput=1.0 ttft_p95=516.5193066932261 energy_j=79430.02820050048 J/tok=0.38010072306923204 modes={'energy': 184}
+bench: r5_8rps: exit=0 ok=838/1440 goodput=0.18541666666666667 ttft_p95=34966.55389806256 energy_j=80141.26353691865 J/tok=0.5900375746327501 modes={'energy': 12, None: 62, 'full_effort': 54}
+bench: r6_10rps: exit=0 ok=0/1800 goodput=0.0 ttft_p95=None energy_j=None J/tok=None modes={None: 178}
+bench: r7_12rps: exit=0 ok=0/2160 goodput=0.0 ttft_p95=None energy_j=None J/tok=None modes={None: 178}
+bench: r8_14rps: exit=0 ok=0/2520 goodput=0.0 ttft_p95=None energy_j=None J/tok=None modes={None: 178}
+bench: r9_16rps: exit=0 ok=0/2880 goodput=0.0 ttft_p95=None energy_j=None J/tok=None modes={None: 178}
+bench: r10_20rps: exit=0 ok=0/3600 goodput=0.0 ttft_p95=None energy_j=None J/tok=None modes={None: 177}
+smoke2: /metrics of P0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P2 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D2 failed: ConnectError('[Errno 111] Connection refused')
+bench: {"mode": "cantune", "ready_s": 270.4, "published_s": 3228.4, "reached_h": true, "status": "done", "controller_exit": 1}
+RESULT_cantune=ok
+--- clocks before the baseline (reset)
