@@ -99,3 +99,19 @@ srun: error: neptune: task 0: Killed
 bench: r5_16rps: exit 0, 180 s of load
 bench: r6_20rps: 3600 prompts at 20 req/s
 bench: r6_20rps: exit 0, 180 s of load
+bench: r0_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=406.2557867728174 energy_j=60539.706216140745 J/tok=1.805376978383704 modes={'energy': 142, 'confirming': 1, 'full_effort': 38}
+bench: r1_2rps: exit=0 ok=360/360 goodput=0.9972222222222222 ttft_p95=477.1520830690861 energy_j=60665.30967372131 J/tok=0.8879582797675836 modes={'energy': 155, 'warning': 28}
+bench: r2_4rps: exit=0 ok=720/720 goodput=0.9819444444444444 ttft_p95=550.1342099159956 energy_j=70211.3516897583 J/tok=0.5052848546264109 modes={'energy': 100, 'warning': 83}
+bench: r3_8rps: exit=0 ok=1440/1440 goodput=0.9201388888888888 ttft_p95=1625.6506931968033 energy_j=99168.95305039216 J/tok=0.3596087778190883 modes={'energy': 9, 'confirming': 1, 'full_effort': 166}
+bench: r4_12rps: exit=0 ok=2160/2160 goodput=0.6018518518518519 ttft_p95=3495.3670212998986 energy_j=107015.98189388275 J/tok=0.26001069503328067 modes={'energy': 2, 'warning': 3, 'confirming': 1, 'full_effort': 167}
+bench: r5_16rps: exit=0 ok=1077/2880 goodput=0.25243055555555555 ttft_p95=5981.12798621878 energy_j=None J/tok=None modes={'warning': 8, 'confirming': 28, 'full_effort': 42, None: 85}
+bench: r6_20rps: exit=0 ok=0/3600 goodput=0.0 ttft_p95=None energy_j=None J/tok=None modes={None: 178}
+smoke2: /metrics of P0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P2 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D2 failed: ConnectError('[Errno 111] Connection refused')
+bench: {"mode": "cantune", "ready_s": 270.4, "published_s": 3588.6, "reached_h": true, "status": "done", "controller_exit": 1}
+RESULT_cantune=ok
+--- clocks before the baseline (reset)
