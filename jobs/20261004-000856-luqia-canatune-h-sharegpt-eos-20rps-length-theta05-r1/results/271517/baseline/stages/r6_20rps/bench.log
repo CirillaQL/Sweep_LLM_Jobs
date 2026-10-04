@@ -1,0 +1,432 @@
+/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/serve.py:886: UserWarning: All requests failed. This is likely due to a misconfiguration on the benchmark arguments.
+  metrics, actual_output_lens = calculate_metrics(
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x7e1ba6cf8820>, seed=20261002, num_prompts=3600, dataset_name='sharegpt', no_stream=False, dataset_path='/data/users/chjing/datasets/ShareGPT_V3_unfiltered_cleaned_split.json', no_oversample=False, skip_chat_template=False, disable_shuffle=False, custom_output_len=256, spec_bench_output_len=256, spec_bench_category=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=256, blazedit_min_distance=0.0, blazedit_max_distance=1.0, random_input_len=1024, random_output_len=128, random_range_ratio=0.0, random_prefix_len=0, random_batch_size=1, no_reranker=False, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, random_mm_limit_mm_per_prompt={'image': 255, 'video': 1}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_output_len=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, label=None, backend='openai', base_url='http://127.0.0.1:18517', host='127.0.0.1', port=8000, endpoint='/v1/completions', header=None, max_concurrency=None, model='/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da', input_len=None, output_len=None, tokenizer='/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da', tokenizer_mode='auto', use_beam_search=False, logprobs=None, request_rate=20.0, burstiness=1.0, trust_remote_code=False, disable_tqdm=True, num_warmups=0, profile=False, save_result=True, save_detailed=True, append_result=False, metadata=None, result_dir='/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20261004-000856-luqia-canatune-h-sharegpt-eos-20rps-length-theta05-r1/results/271517/baseline/stages/r6_20rps', result_filename='bench.json', ignore_eos=False, percentile_metrics='ttft,tpot,itl,e2el', metric_percentiles='50,90,95,99', goodput=['ttft:1000', 'tpot:200'], request_id_prefix='bench-c6a27e60-', top_p=None, top_k=None, min_p=None, temperature=0.0, frequency_penalty=None, presence_penalty=None, repetition_penalty=None, served_model_name=None, lora_modules=None, ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=0, extra_body=None)
+Starting initial single prompt test run...
+Skipping endpoint ready check.
+Starting main benchmark run...
+Traffic request rate: 20.0
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: None
+Failed requests during benchmark run detected (capping to 10):
+Error 0: Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 122, in start_connection
+    raise first_exception
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 501, in sock_connect
+    return await fut
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 541, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 18517)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/lib/endpoint_request_func.py", line 186, in async_request_openai_completions
+    async with session.post(url=api_url, json=payload, headers=headers) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 1510, in __aenter__
+    self._resp: _RetType = await self._coro
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:18517 ssl:default [Connect call failed ('127.0.0.1', 18517)]
+
+Error 1: Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 122, in start_connection
+    raise first_exception
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 501, in sock_connect
+    return await fut
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 541, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 18517)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/lib/endpoint_request_func.py", line 186, in async_request_openai_completions
+    async with session.post(url=api_url, json=payload, headers=headers) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 1510, in __aenter__
+    self._resp: _RetType = await self._coro
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:18517 ssl:default [Connect call failed ('127.0.0.1', 18517)]
+
+Error 2: Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 122, in start_connection
+    raise first_exception
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 501, in sock_connect
+    return await fut
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 541, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 18517)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/lib/endpoint_request_func.py", line 186, in async_request_openai_completions
+    async with session.post(url=api_url, json=payload, headers=headers) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 1510, in __aenter__
+    self._resp: _RetType = await self._coro
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:18517 ssl:default [Connect call failed ('127.0.0.1', 18517)]
+
+Error 3: Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 122, in start_connection
+    raise first_exception
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 501, in sock_connect
+    return await fut
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 541, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 18517)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/lib/endpoint_request_func.py", line 186, in async_request_openai_completions
+    async with session.post(url=api_url, json=payload, headers=headers) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 1510, in __aenter__
+    self._resp: _RetType = await self._coro
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:18517 ssl:default [Connect call failed ('127.0.0.1', 18517)]
+
+Error 4: Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 122, in start_connection
+    raise first_exception
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 501, in sock_connect
+    return await fut
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 541, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 18517)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/lib/endpoint_request_func.py", line 186, in async_request_openai_completions
+    async with session.post(url=api_url, json=payload, headers=headers) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 1510, in __aenter__
+    self._resp: _RetType = await self._coro
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:18517 ssl:default [Connect call failed ('127.0.0.1', 18517)]
+
+Error 5: Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 122, in start_connection
+    raise first_exception
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 501, in sock_connect
+    return await fut
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 541, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 18517)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/lib/endpoint_request_func.py", line 186, in async_request_openai_completions
+    async with session.post(url=api_url, json=payload, headers=headers) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 1510, in __aenter__
+    self._resp: _RetType = await self._coro
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:18517 ssl:default [Connect call failed ('127.0.0.1', 18517)]
+
+Error 6: Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 122, in start_connection
+    raise first_exception
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 501, in sock_connect
+    return await fut
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 541, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 18517)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/lib/endpoint_request_func.py", line 186, in async_request_openai_completions
+    async with session.post(url=api_url, json=payload, headers=headers) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 1510, in __aenter__
+    self._resp: _RetType = await self._coro
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:18517 ssl:default [Connect call failed ('127.0.0.1', 18517)]
+
+Error 7: Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 122, in start_connection
+    raise first_exception
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 501, in sock_connect
+    return await fut
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 541, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 18517)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/lib/endpoint_request_func.py", line 186, in async_request_openai_completions
+    async with session.post(url=api_url, json=payload, headers=headers) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 1510, in __aenter__
+    self._resp: _RetType = await self._coro
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:18517 ssl:default [Connect call failed ('127.0.0.1', 18517)]
+
+Error 8: Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 122, in start_connection
+    raise first_exception
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 501, in sock_connect
+    return await fut
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 541, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 18517)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/lib/endpoint_request_func.py", line 186, in async_request_openai_completions
+    async with session.post(url=api_url, json=payload, headers=headers) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 1510, in __aenter__
+    self._resp: _RetType = await self._coro
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:18517 ssl:default [Connect call failed ('127.0.0.1', 18517)]
+
+Error 9: Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1298, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 122, in start_connection
+    raise first_exception
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 501, in sock_connect
+    return await fut
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/selector_events.py", line 541, in _sock_connect_cb
+    raise OSError(err, f'Connect call failed {address}')
+ConnectionRefusedError: [Errno 111] Connect call failed ('127.0.0.1', 18517)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/vllm/benchmarks/lib/endpoint_request_func.py", line 186, in async_request_openai_completions
+    async with session.post(url=api_url, json=payload, headers=headers) as response:
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 1510, in __aenter__
+    self._resp: _RetType = await self._coro
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 779, in _request
+    resp = await handler(req)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/client.py", line 734, in _connect_and_send_request
+    conn = await self._connector.connect(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 672, in connect
+    proto = await self._create_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1239, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1611, in _create_direct_connection
+    raise last_exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1580, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/aiohttp/connector.py", line 1321, in _wrap_create_connection
+    raise client_error(req.connection_key, exc) from exc
+aiohttp.client_exceptions.ClientConnectorError: Cannot connect to host 127.0.0.1:18517 ssl:default [Connect call failed ('127.0.0.1', 18517)]
+
+============ Serving Benchmark Result ============
+Successful requests:                     0         
+Failed requests:                         3600      
+Request rate configured (RPS):           20.00     
+Benchmark duration (s):                  180.03    
+Total input tokens:                      0         
+Total generated tokens:                  0         
+Request throughput (req/s):              0.00      
+Request goodput (req/s):                 0.00      
+Output token throughput (tok/s):         0.00      
+Peak output token throughput (tok/s):    0.00      
+Peak concurrent requests:                0.00      
+Total token throughput (tok/s):          0.00      
+---------------Time to First Token----------------
+Mean TTFT (ms):                          0.00      
+Median TTFT (ms):                        0.00      
+P50 TTFT (ms):                           0.00      
+P90 TTFT (ms):                           0.00      
+P95 TTFT (ms):                           0.00      
+P99 TTFT (ms):                           0.00      
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          0.00      
+Median TPOT (ms):                        0.00      
+P50 TPOT (ms):                           0.00      
+P90 TPOT (ms):                           0.00      
+P95 TPOT (ms):                           0.00      
+P99 TPOT (ms):                           0.00      
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           0.00      
+Median ITL (ms):                         0.00      
+P50 ITL (ms):                            0.00      
+P90 ITL (ms):                            0.00      
+P95 ITL (ms):                            0.00      
+P99 ITL (ms):                            0.00      
+----------------End-to-end Latency----------------
+Mean E2EL (ms):                          0.00      
+Median E2EL (ms):                        0.00      
+P50 E2EL (ms):                           0.00      
+P90 E2EL (ms):                           0.00      
+P95 E2EL (ms):                           0.00      
+P99 E2EL (ms):                           0.00      
+==================================================
