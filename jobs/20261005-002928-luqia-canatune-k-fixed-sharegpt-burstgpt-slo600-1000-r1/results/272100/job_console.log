@@ -94,3 +94,31 @@ bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.6472222222222223 ttft_p95=4
 bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.19583333333333333 ttft_p95=468.13283301889896 energy_j=129768.51736322785 J/tok=1.4163930774536706 modes={}
 bench: burstgpt_r4_6rps: exit=0 ok=1079/1080 goodput=0.09166666666666666 ttft_p95=5961.989951785654 energy_j=157535.94638693237 J/tok=1.2125331649279372 modes={}
 INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1068999]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 272100.8 ON ganymede CANCELLED AT 2026-10-05T06:15:03 ***
+slurmstepd-neptune: error: *** STEP 272100.9 ON neptune CANCELLED AT 2026-10-05T06:15:03 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9400 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9400 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9400 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9400 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9400 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9400 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 272100.6 ON neptune CANCELLED AT 2026-10-05T06:15:12 ***
+slurmstepd-ganymede: error: *** STEP 272100.7 ON ganymede CANCELLED AT 2026-10-05T06:15:12 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 265.4, "clocks_at_start": [{"agent": "http://10.1.0.3:9400", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9400", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9400", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9400", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9400", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9400", "index": 2, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline=ok
+--- clocks before cantune_s600 (reset)
