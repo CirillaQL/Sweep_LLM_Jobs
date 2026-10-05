@@ -356,3 +356,23 @@ slurmstepd-ganymede: error: *** STEP 272100.19 ON ganymede CANCELLED AT 2026-10-
 slurmstepd-neptune: error: *** STEP 272100.18 ON neptune CANCELLED AT 2026-10-05T09:35:13 ***
 srun: error: neptune: task 0: Killed
 srun: error: ganymede: task 0: Killed
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=391.63214806467295 energy_j=56856.27771276092 J/tok=3.3563328047674688 modes={'energy': 183}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=420.49793619662523 energy_j=58572.89673763275 J/tok=1.746724025217927 modes={'energy': 182}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=480.1338776014745 energy_j=61088.847916442865 J/tok=0.8948911273356801 modes={'energy': 27, 'confirming': 158}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=1.0 ttft_p95=466.11780393868685 energy_j=90077.71221771241 J/tok=0.6480504195579246 modes={'energy': 18, 'confirming': 14, 'full_effort': 148}
+bench: sharegpt_r4_6rps: exit=0 ok=1079/1080 goodput=0.9990740740740741 ttft_p95=465.1690158061683 energy_j=96475.31690096283 J/tok=0.46302447650911566 modes={'energy': 4, 'confirming': 7, 'full_effort': 169}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=462.9513882100582 energy_j=76563.61325482177 J/tok=7.619028087851704 modes={'energy': 161, 'warning': 84}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=474.1420946083963 energy_j=96935.99010437012 J/tok=3.475404779304823 modes={'energy': 148, 'confirming': 62, 'warning': 73}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=547.141048591584 energy_j=113371.46367675782 J/tok=2.2711539660394613 modes={'energy': 104, 'warning': 22, 'confirming': 189}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9986111111111111 ttft_p95=588.932532351464 energy_j=120763.86602108764 J/tok=1.318109409850442 modes={'energy': 65, 'warning': 4, 'confirming': 49, 'full_effort': 138}
+bench: burstgpt_r4_6rps: exit=0 ok=944/1080 goodput=0.8240740740740741 ttft_p95=1295.2051381580532 energy_j=110455.2968132324 J/tok=1.1498094688252873 modes={'energy': 2, 'warning': 4, 'confirming': 30, 'full_effort': 128, None: 58}
+smoke2: /metrics of P0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P2 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D2 failed: ConnectError('[Errno 111] Connection refused')
+bench: {"mode": "cantune", "ready_s": 200.3, "published_s": 3252.8, "reached_h": true, "status": "done", "controller_exit": 1}
+RESULT_cantune_s1000=ok
+RESULT=baseline:0 cantune_s600:0 cantune_s1000:0
+--- teardown 2026-10-05T09:35:42+02:00
