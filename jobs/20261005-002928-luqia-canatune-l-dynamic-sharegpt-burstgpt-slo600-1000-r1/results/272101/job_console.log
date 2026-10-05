@@ -326,3 +326,43 @@ bench: burstgpt_r3_4rps: 720 prompts at 4 req/s
 bench: burstgpt_r3_4rps: exit 0, 1080 s of load
 bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 1080 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=383.56708688661456 energy_j=56522.15115065766 J/tok=3.3366086865795546 modes={'energy': 183}
+bench: sharegpt_r1_1rps: exit=0 ok=126/180 goodput=0.7 ttft_p95=374.76372392848134 energy_j=344700.1631304092 J/tok=13.97244276977743 modes={'energy': 58, 'confirming': 30, 'full_effort': 939}
+bench: sharegpt_r2_2rps: exit=0 ok=128/360 goodput=0.35555555555555557 ttft_p95=318.38800804689527 energy_j=347589.86035518645 J/tok=14.501642135891629 modes={'energy': 4, 'confirming': 2, 'full_effort': 1021}
+bench: sharegpt_r3_4rps: exit=0 ok=11/720 goodput=0.015277777777777777 ttft_p95=381.44670613110065 energy_j=339248.9855340271 J/tok=144.05477092740006 modes={'energy': 3, 'confirming': 2, 'full_effort': 1026}
+bench: sharegpt_r4_6rps: exit=0 ok=0/1080 goodput=0.0 ttft_p95=None energy_j=337117.51208483125 J/tok=None modes={'energy': 2, 'confirming': 2, 'full_effort': 1025}
+bench: burstgpt_r0_0.5rps: exit=0 ok=0/90 goodput=0.0 ttft_p95=None energy_j=337700.1712009583 J/tok=None modes={'energy': 4, 'confirming': 2, 'full_effort': 1024}
+bench: burstgpt_r1_1rps: exit=0 ok=0/180 goodput=0.0 ttft_p95=None energy_j=337996.9869397201 J/tok=None modes={'energy': 2, 'confirming': 2, 'full_effort': 1026}
+bench: burstgpt_r2_2rps: exit=0 ok=0/360 goodput=0.0 ttft_p95=None energy_j=337574.45808454894 J/tok=None modes={'energy': 2, 'confirming': 2, 'full_effort': 1027}
+bench: burstgpt_r3_4rps: exit=0 ok=0/720 goodput=0.0 ttft_p95=None energy_j=338799.8743878174 J/tok=None modes={'energy': 2, 'confirming': 2, 'full_effort': 1026}
+bench: burstgpt_r4_6rps: exit=0 ok=0/1080 goodput=0.0 ttft_p95=None energy_j=337149.0963107452 J/tok=None modes={'energy': 1, 'confirming': 2, 'full_effort': 1027}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1192084]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 272101.20 ON ganymede CANCELLED AT 2026-10-05T15:57:08 ***
+slurmstepd-neptune: error: *** STEP 272101.21 ON neptune CANCELLED AT 2026-10-05T15:57:08 ***
+srun: error: neptune: task 0: Killed
+srun: error: ganymede: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9401 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9401 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9401 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9401 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9401 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9401 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 272101.19 ON ganymede CANCELLED AT 2026-10-05T15:57:10 ***
+slurmstepd-neptune: error: *** STEP 272101.18 ON neptune CANCELLED AT 2026-10-05T15:57:10 ***
+srun: error: neptune: task 0: Killed
+srun: error: ganymede: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 225.3, "published_s": 3218.1, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_cantune_s1000=ok
+RESULT=baseline:0 cantune_s600:0 cantune_s1000:0
+--- teardown 2026-10-05T15:57:11+02:00
