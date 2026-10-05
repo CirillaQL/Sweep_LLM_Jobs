@@ -82,3 +82,42 @@ bench: burstgpt_r3_4rps: 720 prompts at 4 req/s
 bench: burstgpt_r3_4rps: exit 0, 264 s of load
 bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 296 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=317.2973142936826 energy_j=84825.70672904969 J/tok=5.007420704194197 modes={}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=302.4451667442918 energy_j=87851.75708944703 J/tok=2.6401730154604666 modes={}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9972222222222222 ttft_p95=306.01594876497984 energy_j=90400.95485971832 J/tok=1.323198987993535 modes={}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.5055555555555555 ttft_p95=329.9369290471077 energy_j=94221.48070869446 J/tok=0.6778621326112207 modes={}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.16666666666666666 ttft_p95=373.60814306885004 energy_j=97766.29828144837 J/tok=0.4686446242190081 modes={}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=342.9657081142068 energy_j=101241.16055238343 J/tok=10.074749781309924 modes={}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=0.9944444444444445 ttft_p95=379.7216205857694 energy_j=125441.84093386077 J/tok=4.497412911725971 modes={}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.6611111111111111 ttft_p95=417.61910542845726 energy_j=142939.33499290465 J/tok=2.863482811669231 modes={}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.2013888888888889 ttft_p95=459.3664361163974 energy_j=128660.29298980712 J/tok=1.404297067090965 modes={}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.09351851851851851 ttft_p95=5669.540039729327 energy_j=147117.43779009246 J/tok=1.130655008877337 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1142732]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 272101.8 ON neptune CANCELLED AT 2026-10-05T10:28:54 ***
+slurmstepd-ganymede: error: *** STEP 272101.9 ON ganymede CANCELLED AT 2026-10-05T10:28:54 ***
+srun: error: neptune: task 0: Killed
+srun: error: ganymede: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9401 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9401 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9401 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9401 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9401 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9401 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 272101.6 ON neptune CANCELLED AT 2026-10-05T10:28:56 ***
+slurmstepd-ganymede: error: *** STEP 272101.7 ON ganymede CANCELLED AT 2026-10-05T10:28:56 ***
+srun: error: neptune: task 0: Killed
+srun: error: ganymede: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 255.3, "clocks_at_start": [{"agent": "http://10.1.0.3:9401", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9401", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9401", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9401", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9401", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9401", "index": 2, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline=ok
+--- clocks before cantune_s600 (reset)
