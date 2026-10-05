@@ -230,3 +230,22 @@ slurmstepd-ganymede: error: *** STEP 272100.12 ON ganymede CANCELLED AT 2026-10-
 slurmstepd-neptune: error: *** STEP 272100.13 ON neptune CANCELLED AT 2026-10-05T07:51:48 ***
 srun: error: ganymede: task 0: Killed
 srun: error: neptune: task 0: Killed
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=340.5619072727859 energy_j=84462.12648937225 J/tok=4.9859578801282325 modes={'energy': 2, 'warning': 9, 'confirming': 2, 'full_effort': 167}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=0.9944444444444445 ttft_p95=336.05907391756773 energy_j=87443.07058431243 J/tok=2.627890926651012 modes={'energy': 5, 'confirming': 3, 'full_effort': 170}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9888888888888889 ttft_p95=353.6012223921716 energy_j=90233.39130645752 J/tok=1.3207463598720364 modes={'energy': 2, 'confirming': 2, 'full_effort': 174}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.5027777777777778 ttft_p95=377.78194481506944 energy_j=94151.03724972534 J/tok=0.6773553378446118 modes={'warning': 1, 'confirming': 1, 'full_effort': 178}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.16296296296296298 ttft_p95=430.571467615664 energy_j=97806.47005828859 J/tok=0.468837188401067 modes={'warning': 1, 'confirming': 1, 'full_effort': 180}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=326.0150430724025 energy_j=98926.56454229736 J/tok=9.84441880209945 modes={'energy': 30, 'warning': 10, 'confirming': 2, 'full_effort': 199}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=0.9833333333333333 ttft_p95=386.4391250535846 energy_j=125477.79425296784 J/tok=4.498701930767526 modes={'energy': 1, 'warning': 5, 'confirming': 1, 'full_effort': 259}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.6638888888888889 ttft_p95=431.30427692085505 energy_j=140306.52237062075 J/tok=2.81074006111264 modes={'warning': 2, 'confirming': 2, 'full_effort': 278, 'energy': 9}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.2986111111111111 ttft_p95=543.1157620623708 energy_j=129110.52679244995 J/tok=1.4092112639567116 modes={'warning': 1, 'confirming': 2, 'full_effort': 246}
+bench: burstgpt_r4_6rps: exit=0 ok=921/1080 goodput=0.09351851851851851 ttft_p95=728.066842071712 energy_j=101352.39091239167 J/tok=1.0960095909379033 modes={'warning': 1, 'confirming': 1, 'full_effort': 156, None: 30}
+smoke2: /metrics of P0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of P2 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D0 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D1 failed: ConnectError('[Errno 111] Connection refused')
+smoke2: /metrics of D2 failed: ConnectError('[Errno 111] Connection refused')
+bench: {"mode": "cantune", "ready_s": 225.3, "published_s": 3042.4, "reached_h": true, "status": "done", "controller_exit": 1}
+RESULT_cantune_s600=ok
+--- clocks before cantune_s1000 (reset)
