@@ -204,3 +204,24 @@ bench: burstgpt_r3_4rps: 720 prompts at 4 req/s
 bench: burstgpt_r3_4rps: exit 0, 274 s of load
 bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 305 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=364.46854285895824 energy_j=56823.32278701019 J/tok=3.354387413636965 modes={'energy': 183}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=396.38458704575896 energy_j=57863.76091506958 J/tok=1.7255766234774574 modes={'energy': 183}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=422.9821371845901 energy_j=60874.40741999054 J/tok=0.8910188439694166 modes={'energy': 41, 'confirming': 144}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9986111111111111 ttft_p95=389.40029917284846 energy_j=87207.043496315 J/tok=0.6273978294386611 modes={'energy': 30, 'confirming': 26, 'full_effort': 125}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9888888888888889 ttft_p95=390.4835288412869 energy_j=95907.07827182006 J/tok=0.45973241747630833 modes={'energy': 7, 'confirming': 4, 'full_effort': 171}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=415.9894152544439 energy_j=77363.90323983002 J/tok=7.698666856386707 modes={'energy': 152, 'warning': 94}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=0.9888888888888889 ttft_p95=471.4516820386052 energy_j=95201.99626021576 J/tok=3.4132366363192226 modes={'energy': 117, 'warning': 98, 'confirming': 71}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.975 ttft_p95=532.8611149452627 energy_j=114549.57490574647 J/tok=2.2947548961446067 modes={'energy': 132, 'warning': 34, 'confirming': 149}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9847222222222223 ttft_p95=517.4231389537454 energy_j=119683.92108142091 J/tok=1.3063220629063939 modes={'energy': 35, 'warning': 4, 'confirming': 84, 'full_effort': 131}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.8083333333333333 ttft_p95=3443.778332788497 energy_j=141359.52179595944 J/tok=1.086403174035364 modes={'energy': 66, 'warning': 4, 'confirming': 15, 'full_effort': 196}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1362370]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 272554.14 ON neptune CANCELLED AT 2026-10-06T07:01:57 ***
+slurmstepd-ganymede: error: *** STEP 272554.15 ON ganymede CANCELLED AT 2026-10-06T07:01:57 ***
+srun: error: neptune: task 0: Killed
