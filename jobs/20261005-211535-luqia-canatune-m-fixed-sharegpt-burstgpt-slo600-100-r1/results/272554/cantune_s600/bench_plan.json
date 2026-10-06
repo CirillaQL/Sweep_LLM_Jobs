@@ -1,0 +1,187 @@
+{
+  "mode": "cantune",
+  "slo": [
+    600.0,
+    100.0
+  ],
+  "stages": [
+    {
+      "name": "sharegpt_r0_0.5rps",
+      "rate_rps": 0.5,
+      "num_prompts": 90,
+      "workload": "sharegpt"
+    },
+    {
+      "name": "sharegpt_r1_1rps",
+      "rate_rps": 1.0,
+      "num_prompts": 180,
+      "workload": "sharegpt"
+    },
+    {
+      "name": "sharegpt_r2_2rps",
+      "rate_rps": 2.0,
+      "num_prompts": 360,
+      "workload": "sharegpt"
+    },
+    {
+      "name": "sharegpt_r3_4rps",
+      "rate_rps": 4.0,
+      "num_prompts": 720,
+      "workload": "sharegpt"
+    },
+    {
+      "name": "sharegpt_r4_6rps",
+      "rate_rps": 6.0,
+      "num_prompts": 1080,
+      "workload": "sharegpt"
+    },
+    {
+      "name": "burstgpt_r0_0.5rps",
+      "rate_rps": 0.5,
+      "num_prompts": 90,
+      "workload": "burstgpt"
+    },
+    {
+      "name": "burstgpt_r1_1rps",
+      "rate_rps": 1.0,
+      "num_prompts": 180,
+      "workload": "burstgpt"
+    },
+    {
+      "name": "burstgpt_r2_2rps",
+      "rate_rps": 2.0,
+      "num_prompts": 360,
+      "workload": "burstgpt"
+    },
+    {
+      "name": "burstgpt_r3_4rps",
+      "rate_rps": 4.0,
+      "num_prompts": 720,
+      "workload": "burstgpt"
+    },
+    {
+      "name": "burstgpt_r4_6rps",
+      "rate_rps": 6.0,
+      "num_prompts": 1080,
+      "workload": "burstgpt"
+    }
+  ],
+  "dataset": "",
+  "stage_s": 180.0,
+  "gap_s": 30.0,
+  "output_len": null,
+  "ignore_eos": true,
+  "seed": 20261002,
+  "burstiness": 1.0,
+  "endpoint": "/v1/completions",
+  "tokenizer": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+  "command": [
+    "/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm",
+    "bench",
+    "serve"
+  ],
+  "extra_args": [],
+  "stage_timeout_s": null,
+  "dataset_name": "sharegpt",
+  "name": "",
+  "workloads": [
+    {
+      "dataset": "/data/users/chjing/datasets/ShareGPT_V3_unfiltered_cleaned_split.json",
+      "rates": [
+        0.5,
+        1.0,
+        2.0,
+        4.0,
+        6.0
+      ],
+      "stage_s": 180.0,
+      "gap_s": 30.0,
+      "output_len": 256,
+      "ignore_eos": false,
+      "seed": 20261002,
+      "burstiness": 1.0,
+      "endpoint": "/v1/completions",
+      "tokenizer": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+      "command": [
+        "/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm",
+        "bench",
+        "serve"
+      ],
+      "extra_args": [],
+      "stage_timeout_s": null,
+      "dataset_name": "sharegpt",
+      "name": "sharegpt",
+      "workloads": [],
+      "score_slos": [
+        [
+          600.0,
+          100.0
+        ],
+        [
+          600.0,
+          65.0
+        ],
+        [
+          1000.0,
+          100.0
+        ]
+      ]
+    },
+    {
+      "dataset": "/data/users/chjing/vllm_job_work/272554/burstgpt.jsonl",
+      "rates": [
+        0.5,
+        1.0,
+        2.0,
+        4.0,
+        6.0
+      ],
+      "stage_s": 180.0,
+      "gap_s": 30.0,
+      "output_len": null,
+      "ignore_eos": true,
+      "seed": 20261002,
+      "burstiness": 1.0,
+      "endpoint": "/v1/completions",
+      "tokenizer": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+      "command": [
+        "/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm",
+        "bench",
+        "serve"
+      ],
+      "extra_args": [],
+      "stage_timeout_s": null,
+      "dataset_name": "custom",
+      "name": "burstgpt",
+      "workloads": [],
+      "score_slos": [
+        [
+          600.0,
+          100.0
+        ],
+        [
+          600.0,
+          65.0
+        ],
+        [
+          1000.0,
+          100.0
+        ]
+      ]
+    }
+  ],
+  "score_slos": [
+    [
+      600.0,
+      100.0
+    ],
+    [
+      600.0,
+      65.0
+    ],
+    [
+      1000.0,
+      100.0
+    ]
+  ]
+}
