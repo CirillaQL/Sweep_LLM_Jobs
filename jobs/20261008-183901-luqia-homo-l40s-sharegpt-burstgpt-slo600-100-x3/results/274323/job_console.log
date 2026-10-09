@@ -846,3 +846,99 @@ CanaTune controller: clock reset failed: ConnectError('[Errno 111] Connection re
 smoke2: service stopped early (1)
 bench: {"mode": "cantune", "status": "stopped_early", "controller_exit": 1}
 RESULT_cantune_s600_r3=failed stage=service_stopped_early
+[neptune] [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[neptune] [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[neptune] skip 0: uuid FailedtoinitializeNVML:Driver/libraryversionmismatch
+[neptune] NVMLlibraryversion:595.91 != GPU-35fd1bf9-5849-1263-ccc4-a5ccc837400f
+[neptune] Failed to initialize NVML: Driver/library version mismatch
+[neptune] NVML library version: 595.91
+[neptune] skip 1: uuid FailedtoinitializeNVML:Driver/libraryversionmismatch
+[neptune] NVMLlibraryversion:595.91 != GPU-a59fb458-a10d-49e3-c7e2-39daba72a66d
+[neptune] Failed to initialize NVML: Driver/library version mismatch
+[neptune] NVML library version: 595.91
+[neptune] skip 2: uuid FailedtoinitializeNVML:Driver/libraryversionmismatch
+[neptune] NVMLlibraryversion:595.91 != GPU-ebc2e033-0d59-2451-884a-dfd75a4915e5
+[neptune] Failed to initialize NVML: Driver/library version mismatch
+[neptune] NVML library version: 595.91
+[neptune] skip 3: uuid FailedtoinitializeNVML:Driver/libraryversionmismatch
+[neptune] NVMLlibraryversion:595.91 != GPU-5dbe54b5-dc6b-9e84-5431-1900a995efdc
+[neptune] Failed to initialize NVML: Driver/library version mismatch
+[neptune] NVML library version: 595.91
+[neptune] srun: error: neptune: task 0: Exited with exit code 18
+=== cantune_s600_r3_retry (cantune) start=2026-10-09T06:32:35+02:00 deadline_s=4800 proxy_port=18323
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 339, in <module>
+    main()
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 321, in main
+    service = service_from_env()
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 313, in service_from_env
+    backend = backend_type(gpus, memory_mhz=int(memory) if memory else None, expected_uuids=uuids)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 46, in __init__
+    pynvml.nvmlInit()
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 339, in <module>
+    main()
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 321, in main
+    service = service_from_env()
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 313, in service_from_env
+    backend = backend_type(gpus, memory_mhz=int(memory) if memory else None, expected_uuids=uuids)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 46, in __init__
+    pynvml.nvmlInit()
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/pynvml.py", line 2882, in nvmlInit
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/pynvml.py", line 2882, in nvmlInit
+    nvmlInitWithFlags(0)
+    nvmlInitWithFlags(0)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/pynvml.py", line 2872, in nvmlInitWithFlags
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/pynvml.py", line 2872, in nvmlInitWithFlags
+    _nvmlCheckReturn(ret)
+    _nvmlCheckReturn(ret)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/pynvml.py", line 1076, in _nvmlCheckReturn
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/pynvml.py", line 1076, in _nvmlCheckReturn
+    raise NVMLError(ret)
+    raise NVMLError(ret)
+pynvml.NVMLError_LibRmVersionMismatch: RM has detected an NVML/RM version mismatch.
+pynvml.NVMLError_LibRmVersionMismatch: RM has detected an NVML/RM version mismatch.
+srun: error: neptune: task 0: Exited with exit code 1
+srun: error: neptune: task 0: Exited with exit code 1
+CanaTune controller: prefill_agent exited with status 1
+CanaTune controller: clock reset failed: ConnectError('[Errno 111] Connection refused')
+smoke2: service stopped early (1)
+bench: {"mode": "cantune", "status": "stopped_early", "controller_exit": 1}
+RESULT_cantune_s600_r3_retry=failed stage=service_stopped_early
+RESULT= baseline_r1:0 cantune_s600_r1:0 cantune_s600_r2:3 baseline_r2:3 baseline_r3:3 cantune_s600_r3:3
+--- teardown 2026-10-09T06:32:40+02:00
+[neptune] [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[neptune] [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[neptune] skip 0: uuid FailedtoinitializeNVML:Driver/libraryversionmismatch
+[neptune] NVMLlibraryversion:595.91 != GPU-35fd1bf9-5849-1263-ccc4-a5ccc837400f
+[neptune] Failed to initialize NVML: Driver/library version mismatch
+[neptune] NVML library version: 595.91
+[neptune] skip 1: uuid FailedtoinitializeNVML:Driver/libraryversionmismatch
+[neptune] NVMLlibraryversion:595.91 != GPU-a59fb458-a10d-49e3-c7e2-39daba72a66d
+[neptune] Failed to initialize NVML: Driver/library version mismatch
+[neptune] NVML library version: 595.91
+[neptune] skip 2: uuid FailedtoinitializeNVML:Driver/libraryversionmismatch
+[neptune] NVMLlibraryversion:595.91 != GPU-ebc2e033-0d59-2451-884a-dfd75a4915e5
+[neptune] Failed to initialize NVML: Driver/library version mismatch
+[neptune] NVML library version: 595.91
+[neptune] skip 3: uuid FailedtoinitializeNVML:Driver/libraryversionmismatch
+[neptune] NVMLlibraryversion:595.91 != GPU-5dbe54b5-dc6b-9e84-5431-1900a995efdc
+[neptune] Failed to initialize NVML: Driver/library version mismatch
+[neptune] NVML library version: 595.91
+[neptune] srun: error: neptune: task 0: Exited with exit code 18
+[neptune leftover] [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[neptune leftover] [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[neptune leftover] none
+end=2026-10-09T06:32:54+02:00 elapsed_s=9631
