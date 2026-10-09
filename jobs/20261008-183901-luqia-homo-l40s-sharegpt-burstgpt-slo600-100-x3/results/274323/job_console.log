@@ -226,3 +226,265 @@ bench: burstgpt_r4_6rps: exit 0, 220 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 204 s of load
 bench: burstgpt_r6_10rps: 1800 prompts at 10 req/s
+bench: burstgpt_r6_10rps: exit 0, 210 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=234.4608847051859 energy_j=71190.13435357666 J/tok=4.202487269986816 modes={'energy': 176}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=229.32720510289073 energy_j=75307.92090957641 J/tok=2.2457853729035997 modes={'energy': 175}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=248.62174969166517 energy_j=83271.14339074708 J/tok=1.2188399208247522 modes={'energy': 176}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=1.0 ttft_p95=269.1532322205603 energy_j=99050.94192907715 J/tok=0.7110058927800185 modes={'energy': 146, 'warning': 29}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9944444444444445 ttft_p95=307.02329706400633 energy_j=109624.94924429321 J/tok=0.5248251343806376 modes={'energy': 51, 'warning': 94, 'confirming': 29}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9881944444444445 ttft_p95=363.7442607432604 energy_j=116546.92956192016 J/tok=0.421486541592542 modes={'energy': 15, 'warning': 71, 'confirming': 88}
+bench: sharegpt_r6_10rps: exit=0 ok=1800/1800 goodput=0.9844444444444445 ttft_p95=374.18149784207344 energy_j=154542.85712554932 J/tok=0.44734347935423635 modes={'energy': 1, 'full_effort': 173}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=297.17402812093496 energy_j=68326.02474136352 J/tok=6.799285972869293 modes={'energy': 96, 'warning': 84}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=339.98977299779654 energy_j=79860.2212199707 J/tok=2.8631945081016315 modes={'energy': 39, 'warning': 138}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=376.0676309466362 energy_j=102754.58990664672 J/tok=2.0584676851365584 modes={'energy': 24, 'warning': 179}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9944444444444445 ttft_p95=425.14155106619 energy_j=118071.26349829102 J/tok=1.2887202818006203 modes={'energy': 8, 'warning': 185}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9814814814814815 ttft_p95=486.7595750838518 energy_j=134263.5507489624 J/tok=1.0318678631459564 modes={'energy': 28, 'warning': 13, 'confirming': 133, 'full_effort': 33}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9472222222222222 ttft_p95=610.5015729553998 energy_j=136421.11299108888 J/tok=0.8057142105700484 modes={'energy': 3, 'warning': 2, 'confirming': 83, 'full_effort': 104}
+bench: burstgpt_r6_10rps: exit=0 ok=1800/1800 goodput=0.8777777777777778 ttft_p95=775.5837859585881 energy_j=149201.4064892273 J/tok=0.6940730188134221 modes={'energy': 1, 'warning': 2, 'confirming': 19, 'full_effort': 175}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1054648]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 274323.12 ON neptune CANCELLED AT 2026-10-09T06:29:44 ***
+slurmstepd-neptune: error: *** STEP 274323.11 ON neptune CANCELLED AT 2026-10-09T06:29:44 ***
+srun: error: neptune: task 0: Killed
+srun: error: neptune: task 0: Killed
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py", line 416, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 295, in reset
+    await asyncio.to_thread(service.reset, gpu)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 218, in reset
+    self.backend.reset(gpu)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 100, in reset
+    self._smi(index, "-rgc")
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 91, in _smi
+    raise RuntimeError(f"{' '.join(cmd)} failed: rc={res.returncode} {text[-300:]}")
+RuntimeError: sudo -n nvidia-smi -i 0 -rgc failed: rc=18 Failed to initialize NVML: Driver/library version mismatch
+NVML library version: 595.91
+
+CanaTune controller: reset http://10.1.0.6:9623 GPU 0: failed: HTTPStatusError("Server error '500 Internal Server Error' for url 'http://10.1.0.6:9623/gpus/0/reset'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500")
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py", line 416, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 295, in reset
+    await asyncio.to_thread(service.reset, gpu)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 218, in reset
+    self.backend.reset(gpu)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 100, in reset
+    self._smi(index, "-rgc")
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 91, in _smi
+    raise RuntimeError(f"{' '.join(cmd)} failed: rc={res.returncode} {text[-300:]}")
+RuntimeError: sudo -n nvidia-smi -i 1 -rgc failed: rc=18 Failed to initialize NVML: Driver/library version mismatch
+NVML library version: 595.91
+
+CanaTune controller: reset http://10.1.0.6:9623 GPU 1: failed: HTTPStatusError("Server error '500 Internal Server Error' for url 'http://10.1.0.6:9623/gpus/1/reset'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500")
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py", line 416, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 295, in reset
+    await asyncio.to_thread(service.reset, gpu)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 218, in reset
+    self.backend.reset(gpu)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 100, in reset
+    self._smi(index, "-rgc")
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 91, in _smi
+    raise RuntimeError(f"{' '.join(cmd)} failed: rc={res.returncode} {text[-300:]}")
+RuntimeError: sudo -n nvidia-smi -i 2 -rgc failed: rc=18 Failed to initialize NVML: Driver/library version mismatch
+NVML library version: 595.91
+
+CanaTune controller: reset http://10.1.0.6:9624 GPU 2: failed: HTTPStatusError("Server error '500 Internal Server Error' for url 'http://10.1.0.6:9624/gpus/2/reset'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500")
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/protocols/http/httptools_impl.py", line 416, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/applications.py", line 1138, in __call__
+    await super().__call__(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 115, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 101, in app
+    response = await f(request)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 355, in app
+    raw_response = await run_endpoint_function(
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/site-packages/fastapi/routing.py", line 243, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 295, in reset
+    await asyncio.to_thread(service.reset, gpu)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+  File "/data/users/chjing/miniforge3/envs/cuda-env/lib/python3.10/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 218, in reset
+    self.backend.reset(gpu)
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 100, in reset
+    self._smi(index, "-rgc")
+  File "/data/users/chjing/vllm_job_work/274323/CanaTune/src/canatune/infrastructure/gpu_agent.py", line 91, in _smi
+    raise RuntimeError(f"{' '.join(cmd)} failed: rc={res.returncode} {text[-300:]}")
+RuntimeError: sudo -n nvidia-smi -i 3 -rgc failed: rc=18 Failed to initialize NVML: Driver/library version mismatch
+NVML library version: 595.91
+
+CanaTune controller: reset http://10.1.0.6:9624 GPU 3: failed: HTTPStatusError("Server error '500 Internal Server Error' for url 'http://10.1.0.6:9624/gpus/3/reset'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500")
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 274323.10 ON neptune CANCELLED AT 2026-10-09T06:29:45 ***
+slurmstepd-neptune: error: *** STEP 274323.9 ON neptune CANCELLED AT 2026-10-09T06:29:45 ***
+srun: error: neptune: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 160.2, "published_s": 2366.8, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_cantune_s600_r1=ok
+--- clocks before cantune_s600_r2 (reset)
