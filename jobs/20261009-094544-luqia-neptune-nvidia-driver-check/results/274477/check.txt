@@ -1,0 +1,87 @@
+
+==== host / time / uptime
+neptune
+2026-10-09T12:27:07+02:00
+ 12:27:07 up 36 days,  2:20,  0 user,  load average: 89.94, 118.93, 124.60
+6.8.0-138-generic
+         system boot  2026-09-03 10:06
+PRETTY_NAME="Ubuntu 24.04.4 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+
+==== kernel module loaded (/proc/driver/nvidia/version)
+NVRM version: NVIDIA UNIX x86_64 Kernel Module  595.71.05  Fri Apr 24 06:36:12 UTC 2026
+GCC version:  gcc version 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 
+
+==== kernel module on disk (modinfo)
+filename:       /lib/modules/6.8.0-138-generic/updates/dkms/nvidia.ko.zst
+version:        595.91.07
+vermagic:       6.8.0-138-generic SMP preempt mod_unload modversions 
+
+==== loaded module params / refcount
+595.71.05
+nvidia_uvm           1990656  0
+nvidia_drm            139264  0
+nvidia_modeset       1531904  1 nvidia_drm
+nvidia              98902016  2 nvidia_uvm,nvidia_modeset
+
+==== user-space NVML library
+	libnvidia-ml.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libnvidia-ml.so.1
+	libnvidia-ml.so (libc6,x86-64) => /lib/x86_64-linux-gnu/libnvidia-ml.so
+	libcuda.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libcuda.so.1
+	libcuda.so (libc6,x86-64) => /lib/x86_64-linux-gnu/libcuda.so
+lrwxrwxrwx 1 root root      17 Aug 10 01:55 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so -> libnvidia-ml.so.1
+lrwxrwxrwx 1 root root      25 Aug 10 01:55 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1 -> libnvidia-ml.so.595.91.07
+-rw-r--r-- 1 root root 2621336 Jul 29 04:44 /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.595.91.07
+
+==== nvidia-smi
+Failed to initialize NVML: Driver/library version mismatch
+NVML library version: 595.91
+
+==== per-GPU clocks (idle unlocked GPUs drop to a low SM clock; a GPU held at 1545 / 1965 with no work is still locked)
+Failed to initialize NVML: Driver/library version mismatch
+NVML library version: 595.91
+
+==== clock details
+
+==== processes on the GPUs
+Failed to initialize NVML: Driver/library version mismatch
+NVML library version: 595.91
+
+==== recent NVIDIA package changes
+2026-10-09 06:09:20 upgrade nvidia-driver-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:20 upgrade nvidia-dkms-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:27 upgrade nvidia-kernel-source-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:28 install nvidia-firmware-595-server-595.91.07:amd64 <none> 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:28 upgrade libnvidia-decode-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:29 upgrade libnvidia-compute-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:32 upgrade nvidia-utils-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:32 upgrade libnvidia-fbc1-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:32 upgrade libnvidia-extra-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:32 upgrade libnvidia-encode-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:32 upgrade libnvidia-common-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:32 upgrade xserver-xorg-video-nvidia-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:32 upgrade libnvidia-cfg1-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:32 upgrade libnvidia-gl-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:36 upgrade nvidia-kernel-common-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:09:36 upgrade nvidia-compute-utils-595-server:amd64 595.71.05-0ubuntu0.24.04.1 595.91.07-0ubuntu0.24.04.1
+2026-10-09 06:14:43 remove nvidia-firmware-595-server-595.71.05:amd64 595.71.05-0ubuntu0.24.04.1 <none>
+Commandline: /usr/bin/unattended-upgrade
+Install: nvidia-firmware-595-server-595.91.07:amd64 (595.91.07-0ubuntu0.24.04.1, automatic)
+Upgrade: nvidia-kernel-common-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), libnvidia-compute-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), xserver-xorg-video-nvidia-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), nvidia-utils-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), libnvidia-encode-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), nvidia-driver-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), libnvidia-gl-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), nvidia-dkms-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), libnvidia-common-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), nvidia-kernel-source-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), libnvidia-cfg1-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), libnvidia-decode-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), nvidia-compute-utils-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), libnvidia-fbc1-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1), libnvidia-extra-595-server:amd64 (595.71.05-0ubuntu0.24.04.1, 595.91.07-0ubuntu0.24.04.1)
+End-Date: 2026-10-09  06:12:51
+
+Start-Date: 2026-10-09  06:12:55
+Commandline: /usr/bin/unattended-upgrade
+--
+Commandline: /usr/bin/unattended-upgrade
+Remove: nvidia-firmware-595-server-595.71.05:amd64 (595.71.05-0ubuntu0.24.04.1)
+End-Date: 2026-10-09  06:14:43
+
+Start-Date: 2026-10-09  06:14:45
+Commandline: /usr/bin/unattended-upgrade
+
+==== kernel messages (if readable)
+
+==== done
+2026-10-09T12:27:07+02:00
