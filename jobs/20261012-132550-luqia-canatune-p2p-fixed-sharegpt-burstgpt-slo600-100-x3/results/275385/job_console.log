@@ -110,3 +110,26 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 306 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 331 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=359.4267000007676 energy_j=84517.50318081395 J/tok=4.9892268701779185 modes={}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=355.84286599987536 energy_j=87538.6187722789 J/tok=2.630525235058564 modes={}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=360.6133860012051 energy_j=90089.0653092309 J/tok=1.3186338599126302 modes={}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9916666666666667 ttft_p95=385.2567129979434 energy_j=93848.24972340613 J/tok=0.6751769789738423 modes={}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9916666666666667 ttft_p95=417.3807039987878 energy_j=97378.61189338587 J/tok=0.4667862420889479 modes={}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9423611111111111 ttft_p95=653.9132919970143 energy_j=100748.18510215504 J/tok=0.3651037351859618 modes={}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=367.46208099793876 energy_j=101181.788271218 J/tok=10.068841503753408 modes={}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=420.28127900266554 energy_j=125067.98722141355 J/tok=4.484009293754967 modes={}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9972222222222222 ttft_p95=455.05612499982817 energy_j=142489.59086894646 J/tok=2.854473153350424 modes={}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9861111111111112 ttft_p95=495.01100000270526 energy_j=128367.3346689952 J/tok=1.4010994953993736 modes={}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.5953703703703703 ttft_p95=41413.9907730023 energy_j=149753.4330167061 J/tok=1.1509136624476903 modes={}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.2875 ttft_p95=72435.16346899924 energy_j=167270.7964757305 J/tok=0.9879149552362166 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [39244]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 275385.12 ON neptune CANCELLED AT 2026-10-12T17:42:32 ***
+slurmstepd-ganymede: error: *** STEP 275385.13 ON ganymede CANCELLED AT 2026-10-12T17:42:32 ***
+srun: error: ganymede: task 0: Killed
