@@ -513,3 +513,44 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 307 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 332 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=354.59652000281494 energy_j=84549.93699180092 J/tok=4.991141498925674 modes={}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=352.4980870060972 energy_j=87619.3742749108 J/tok=2.632951928448549 modes={}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=359.78705000161426 energy_j=90066.72414118134 J/tok=1.3183068521835677 modes={}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9916666666666667 ttft_p95=387.3477630040725 energy_j=93820.35911909354 J/tok=0.674976324257137 modes={}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9861111111111112 ttft_p95=422.6008499972522 energy_j=97409.93660373485 J/tok=0.4669363976882528 modes={}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9534722222222223 ttft_p95=577.9572979954537 energy_j=100751.46943976128 J/tok=0.3651156373748343 modes={}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=354.39375799614936 energy_j=101149.20751417946 J/tok=10.065599314775547 modes={}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=408.19487500266405 energy_j=125050.59962534677 J/tok=4.483385903676566 modes={}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9888888888888889 ttft_p95=443.0378010001732 energy_j=142492.22456610383 J/tok=2.854525913820743 modes={}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9916666666666667 ttft_p95=488.36590800056 energy_j=128260.50206967688 J/tok=1.399933442513855 modes={}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.6 ttft_p95=41387.01114900323 energy_j=150245.2644319005 J/tok=1.1546935791011204 modes={}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.2951388888888889 ttft_p95=73458.4251740016 energy_j=167506.28500179457 J/tok=0.9893057696616085 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [133826]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275385.37 ON ganymede CANCELLED AT 2026-10-12T22:49:17 ***
+slurmstepd-neptune: error: *** STEP 275385.36 ON neptune CANCELLED AT 2026-10-12T22:49:17 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9685 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9685 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9685 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9685 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9685 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9685 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275385.34 ON ganymede CANCELLED AT 2026-10-12T22:49:19 ***
+slurmstepd-neptune: error: *** STEP 275385.35 ON neptune CANCELLED AT 2026-10-12T22:49:19 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 270.4, "clocks_at_start": [{"agent": "http://10.1.0.3:9685", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9685", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9685", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9685", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9685", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9685", "index": 2, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline_r2=ok
+--- preflight and clock reset before baseline_r3
