@@ -298,3 +298,61 @@ gpus europa=0,1 neptune=0,1 iface eno12399np0/enp160s0f0np0 ip 10.1.0.2/10.1.0.6
       1 [1791803129.963505] [neptune:24566:0] | 8177..inf | multi-frag zero-copy | tcp/enp160s0f0np0 |
       1 [1791803129.963504] [neptune:24566:0] | 1..8176 | zero-copy | tcp/enp160s0f0np0 |
 === intra_vram_allvis mem=VRAM target=neptune:1,0 initiator=neptune:0,1 env= start=13:05:38
+  READ  pieces=  1   16 MB     0.62 GB/s  ok
+  READ  pieces=  1   64 MB     0.62 GB/s  ok
+  READ  pieces=  1  256 MB     0.63 GB/s  ok
+  READ  pieces= 64    2 MB     0.51 GB/s  ok
+  READ  pieces= 64   16 MB     0.61 GB/s  ok
+  READ  pieces= 64   64 MB     0.62 GB/s  ok
+  READ  pieces= 64  256 MB     0.62 GB/s  ok
+  WRITE pieces=  1    2 MB     9.40 GB/s  ok
+  WRITE pieces=  1   16 MB    10.31 GB/s  ok
+  WRITE pieces=  1   64 MB    10.41 GB/s  ok
+  WRITE pieces=  1  256 MB    10.72 GB/s  ok
+  WRITE pieces= 64    2 MB     4.85 GB/s  ok
+  WRITE pieces= 64   16 MB    14.31 GB/s  ok
+  WRITE pieces= 64   64 MB    15.76 GB/s  ok
+  WRITE pieces= 64  256 MB    12.00 GB/s  ok
+  rc=0; UCX protocol lines (initiator):
+      1 ulti-frag zero-copy | tcp/enp160s0f0np0 |
+      1 [1791803149.322535] [neptune:24630:0] | 0..inf | zero-copy | cuda_ipc/cuda |
+      1 [1791803149.322534] [neptune:24630:0] | ucp_context_0 intra-node cfg#2 | remote memory write by ucp_put*(multi) from cuda/GPU0 to cuda/dev[0] |
+      1 [1791803141.289282] [neptune:24630:0] | 0..inf | software emulation | tcp/enp160s0f0np0 |
+      1 [1791803141.289281] [neptune:24630:0] | ucp_context_0 intra-node cfg#2 | remote memory read by ucp_get*(multi) into cuda/GPU0 from cuda/dev[0] |
+      1 [1791803141.285373] [neptune:24630:0] | 8177..inf | multi-frag copy-in | tcp/enp160s0f0np0 |
+      1 [1791803141.285372] [neptune:24630:0] | 0..8176 | short | tcp/enp160s0f0np0 |
+      1 [1791803141.284200] [neptune:24630:0] | 8177..65388 | multi-frag copy-in | tcp/enp160s0f0np0 |
+      1 [1791803141.284200] [neptune:24630:0] | 65389..inf | multi-frag zero-copy | tcp/enp160s0f0np0 |
+      1 [1791803141.284199] [neptune:24630:0] | 0..8176 | short | tcp/enp160s0f0np0 |
+      1 [1791803141.282858] [neptune:24630:0] | 8177..inf | multi-frag zero-copy | tcp/enp160s0f0np0 |
+      1 [1791803141.282857] [neptune:24630:0] | 1..8176 | zero-copy | tcp/enp160s0f0np0 |
+=== intra_dram mem=DRAM target=neptune:1 initiator=neptune:0 env= start=13:05:50
+  READ  pieces=  1   16 MB     9.11 GB/s  ok
+  READ  pieces=  1   64 MB     6.98 GB/s  ok
+  READ  pieces=  1  256 MB     6.53 GB/s  ok
+  READ  pieces= 64    2 MB     9.57 GB/s  ok
+  READ  pieces= 64   16 MB    10.81 GB/s  ok
+  READ  pieces= 64   64 MB     6.95 GB/s  ok
+  READ  pieces= 64  256 MB     6.53 GB/s  ok
+  WRITE pieces=  1    2 MB    12.69 GB/s  ok
+  WRITE pieces=  1   16 MB     7.98 GB/s  ok
+  WRITE pieces=  1   64 MB     6.91 GB/s  ok
+  WRITE pieces=  1  256 MB     6.52 GB/s  ok
+  WRITE pieces= 64    2 MB     9.55 GB/s  ok
+  WRITE pieces= 64   16 MB    10.38 GB/s  ok
+  WRITE pieces= 64   64 MB     7.00 GB/s  ok
+  WRITE pieces= 64  256 MB     6.52 GB/s  ok
+  rc=0; UCX protocol lines (initiator):
+      1 ulti-frag zero-copy | tcp/enp160s0f0np0 |
+      1 [1791803153.354928] [neptune:24692:0] | 0..inf | zero-copy | cma/memory |
+      1 [1791803153.354927] [neptune:24692:0] | ucp_context_0 intra-node cfg#2 | remote memory write by ucp_put*(multi) from host memory to host |
+      1 [1791803152.611538] [neptune:24692:0] | 0..inf | zero-copy | cma/memory |
+      1 [1791803152.611537] [neptune:24692:0] | ucp_context_0 intra-node cfg#2 | remote memory read by ucp_get*(multi) into host memory from host |
+      1 [1791803152.610333] [neptune:24692:0] | 8177..inf | multi-frag copy-in | tcp/enp160s0f0np0 |
+      1 [1791803152.610333] [neptune:24692:0] | 0..8176 | short | tcp/enp160s0f0np0 |
+      1 [1791803152.609646] [neptune:24692:0] | 8177..65388 | multi-frag copy-in | tcp/enp160s0f0np0 |
+      1 [1791803152.609646] [neptune:24692:0] | 65389..inf | multi-frag zero-copy | tcp/enp160s0f0np0 |
+      1 [1791803152.609645] [neptune:24692:0] | 0..8176 | short | tcp/enp160s0f0np0 |
+      1 [1791803152.608974] [neptune:24692:0] | 8177..inf | multi-frag zero-copy | tcp/enp160s0f0np0 |
+      1 [1791803152.608974] [neptune:24692:0] | 1..8176 | zero-copy | tcp/enp160s0f0np0 |
+=== tcp neptune -> europa(10.1.0.2), 4 streams x 1 GiB, port 20371
