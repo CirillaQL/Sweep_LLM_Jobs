@@ -124,3 +124,32 @@ Traceback (most recent call last):
 AttributeError: /data/users/chjing/miniforge3/envs/cuda-env/bin/python: undefined symbol: ucp_get_version_string
 gpus europa=0,1 neptune=0,1 iface eno12399np0/enp160s0f0np0 ip 10.1.0.2/10.1.0.6
 === cross_vram mem=VRAM target=neptune:0 initiator=europa:0 env= start=13:00:13
+  READ  pieces=  1   16 MB     0.79 GB/s  ok
+  READ  pieces=  1   64 MB     0.78 GB/s  ok
+  READ  pieces=  1  256 MB     0.78 GB/s  ok
+  READ  pieces= 64    2 MB     0.65 GB/s  ok
+  READ  pieces= 64   16 MB     0.78 GB/s  ok
+  READ  pieces= 64   64 MB     0.79 GB/s  ok
+  READ  pieces= 64  256 MB     0.79 GB/s  ok
+  WRITE pieces=  1    2 MB     0.60 GB/s  ok
+  WRITE pieces=  1   16 MB     0.60 GB/s  ok
+  WRITE pieces=  1   64 MB     0.61 GB/s  ok
+  WRITE pieces=  1  256 MB     0.61 GB/s  ok
+  WRITE pieces= 64    2 MB     0.49 GB/s  ok
+  WRITE pieces= 64   16 MB     0.61 GB/s  ok
+  WRITE pieces= 64   64 MB     0.61 GB/s  ok
+  WRITE pieces= 64  256 MB     0.63 GB/s  ok
+  rc=0; UCX protocol lines (initiator):
+      1 [1791802879.102916] [europa:17552:0] | ucp_context_0 inter-node cfg#2 | remote memory write by ucp_put*(multi) from cuda/GPU0 to cuda |
+      1 [1791802879.102916] [europa:17552:0] | 0..inf | software emulation | tcp/eno12399np0 |
+      1 [1791802872.782343] [europa:17552:0] | 0..inf | software emulation | tcp/eno12399np0 |
+      1 [1791802872.782342] [europa:17552:0] | ucp_context_0 inter-node cfg#2 | remote memory read by ucp_get*(multi) into cuda/GPU0 from cuda |
+      1 [1791802872.780748] [europa:17552:0] | ucp_context_0 inter-node cfg#2 | remote memory write by ucp_put* from host memory to cuda |
+      1 [1791802872.780748] [europa:17552:0] | 0..inf | software emulation | tcp/eno12399np0 |
+      1 [1791802872.780341] [europa:17552:0] | 8177..inf | multi-frag copy-in | tcp/eno12399np0 |
+      1 [1791802872.780341] [europa:17552:0] | 0..8176 | short | tcp/eno12399np0 |
+      1 [1791802872.779694] [europa:17552:0] | 8177..65388 | multi-frag copy-in | tcp/eno12399np0 |
+      1 [1791802872.779694] [europa:17552:0] | 65389..inf | multi-frag zero-copy | tcp/eno12399np0 |
+      1 [1791802872.779693] [europa:17552:0] | 0..8176 | short | tcp/eno12399np0 |
+      1 [1791802872.779054] [europa:17552:0] | 8177..18446744073709551590 | multi-frag zero-copy | tcp/eno12399np0 |
+=== cross_dram mem=DRAM target=neptune:0 initiator=europa:0 env= start=13:02:13
