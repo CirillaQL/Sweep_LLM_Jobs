@@ -240,3 +240,32 @@ gpus europa=0,1 neptune=0,1 iface eno12399np0/enp160s0f0np0 ip 10.1.0.2/10.1.0.6
       1 [1791803033.479941] [europa:18113:0] | 0..8176 | short | tcp/eno12399np0 |
       1 [1791803033.479289] [europa:18113:0] | 8177..18446744073709551590 | multi-frag zero-copy | tcp/eno12399np0 |
 === cross_dram_netdev mem=DRAM target=neptune:0 initiator=europa:0 env= start=13:04:54
+  READ  pieces=  1   16 MB     2.71 GB/s  ok
+  READ  pieces=  1   64 MB     2.49 GB/s  ok
+  READ  pieces=  1  256 MB     2.46 GB/s  ok
+  READ  pieces= 64    2 MB     2.45 GB/s  ok
+  READ  pieces= 64   16 MB     2.40 GB/s  ok
+  READ  pieces= 64   64 MB     2.44 GB/s  ok
+  READ  pieces= 64  256 MB     2.43 GB/s  ok
+  WRITE pieces=  1    2 MB     4.05 GB/s  ok
+  WRITE pieces=  1   16 MB     5.00 GB/s  ok
+  WRITE pieces=  1   64 MB     4.67 GB/s  ok
+  WRITE pieces=  1  256 MB     4.76 GB/s  ok
+  WRITE pieces= 64    2 MB     2.46 GB/s  ok
+  WRITE pieces= 64   16 MB     4.40 GB/s  ok
+  WRITE pieces= 64   64 MB     4.59 GB/s  ok
+  WRITE pieces= 64  256 MB     4.73 GB/s  ok
+  rc=0; UCX protocol lines (initiator):
+      1 [1791803099.485755] [europa:18383:0] | 0..inf | zero-copy | tcp/eno12399np0 |
+      1 [1791803099.485754] [europa:18383:0] | ucp_context_0 inter-node cfg#2 | remote memory write by ucp_put*(multi) from host memory to host |
+      1 [1791803097.460749] [europa:18383:0] | ucp_context_0 inter-node cfg#2 | remote memory read by ucp_get*(multi) into host memory from host |
+      1 [1791803097.460749] [europa:18383:0] | 0..inf | software emulation | tcp/eno12399np0 |
+      1 [1791803097.459276] [europa:18383:0] | 8177..inf | multi-frag copy-in | tcp/eno12399np0 |
+      1 [1791803097.459276] [europa:18383:0] | 0..8176 | short | tcp/eno12399np0 |
+      1 [1791803097.458507] [europa:18383:0] | 8177..65388 | multi-frag copy-in | tcp/eno12399np0 |
+      1 [1791803097.458507] [europa:18383:0] | 65389..inf | multi-frag zero-copy | tcp/eno12399np0 |
+      1 [1791803097.458506] [europa:18383:0] | 0..8176 | short | tcp/eno12399np0 |
+      1 [1791803097.457757] [europa:18383:0] | 18446744073709551591..inf | multi-frag copy-in | tcp/eno12399np0 |
+      1 [1791803097.457756] [europa:18383:0] | 8177..18446744073709551590 | multi-frag zero-copy | tcp/eno12399np0 |
+      1 [1791803097.457756] [europa:18383:0] | 1..8176 | zero-copy | tcp/eno12399np0 |
+=== intra_vram mem=VRAM target=neptune:1 initiator=neptune:0 env= start=13:05:27
