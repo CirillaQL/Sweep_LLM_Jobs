@@ -637,3 +637,44 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 306 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 336 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=364.4227939948905 energy_j=84497.0175720935 J/tok=4.988017566239285 modes={}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=347.2084850000101 energy_j=87535.88393344116 J/tok=2.6304430534719985 modes={}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=359.0182810003171 energy_j=90182.47194596936 J/tok=1.320001053073322 modes={}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9958333333333333 ttft_p95=380.5899269937072 energy_j=93825.4198189714 J/tok=0.6750127326937898 modes={}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.975925925925926 ttft_p95=449.06203400023514 energy_j=97303.04012133885 J/tok=0.46642398735152724 modes={}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9597222222222223 ttft_p95=542.6710930041736 energy_j=100707.66337101246 J/tok=0.364982018197019 modes={}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=369.9182250056765 energy_j=101163.12157461548 J/tok=10.066983936174294 modes={}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=416.55325700412504 energy_j=125114.21288743138 J/tok=4.485666602876502 modes={}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9916666666666667 ttft_p95=439.1619339949102 energy_j=142582.44012389495 J/tok=2.8563331889077075 modes={}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9930555555555556 ttft_p95=492.8031710005598 energy_j=128269.0879686649 J/tok=1.400027155597255 modes={}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.6037037037037037 ttft_p95=41637.24271100364 energy_j=149679.26398705554 J/tok=1.1503436444665611 modes={}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.29305555555555557 ttft_p95=72067.4661469966 energy_j=169041.14523585295 J/tok=0.99837077928296 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [155174]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275385.45 ON ganymede CANCELLED AT 2026-10-12T23:53:11 ***
+slurmstepd-neptune: error: *** STEP 275385.44 ON neptune CANCELLED AT 2026-10-12T23:53:11 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9685 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9685 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9685 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9685 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9685 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9685 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275385.43 ON ganymede CANCELLED AT 2026-10-12T23:53:14 ***
+slurmstepd-neptune: error: *** STEP 275385.42 ON neptune CANCELLED AT 2026-10-12T23:53:14 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 260.4, "clocks_at_start": [{"agent": "http://10.1.0.3:9685", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9685", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9685", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9685", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9685", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9685", "index": 2, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline_r3=ok
+--- preflight and clock reset before cantune_s600_r3
