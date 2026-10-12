@@ -774,3 +774,46 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 301 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 333 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=385.0010940004722 energy_j=56547.14451517844 J/tok=3.338084091805103 modes={'energy': 184}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=0.9888888888888889 ttft_p95=408.0694299991592 energy_j=58675.28790011644 J/tok=1.749777469958442 modes={'energy': 153, 'confirming': 29}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9888888888888889 ttft_p95=433.4373859965126 energy_j=71577.07406516695 J/tok=1.0485332542067114 modes={'energy': 122, 'confirming': 1, 'full_effort': 58}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9916666666666667 ttft_p95=462.0867379999254 energy_j=72169.20864210009 J/tok=0.5192104105246125 modes={'energy': 155, 'confirming': 29}
+bench: sharegpt_r4_6rps: exit=0 ok=1079/1080 goodput=0.9814814814814815 ttft_p95=439.0214040031424 energy_j=96017.8619151609 J/tok=0.46082896306452276 modes={'energy': 11, 'confirming': 1, 'full_effort': 168}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9402777777777778 ttft_p95=673.8614549976774 energy_j=100556.08684562921 J/tok=0.3644075857624344 modes={'confirming': 1, 'full_effort': 177}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=430.2291060012067 energy_j=77394.85501334071 J/tok=7.701746941321596 modes={'energy': 126, 'warning': 119}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=0.9888888888888889 ttft_p95=450.0423330027843 energy_j=102542.37317808032 J/tok=3.676408044531777 modes={'energy': 109, 'warning': 86, 'confirming': 2, 'full_effort': 71}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9861111111111112 ttft_p95=486.68102100054966 energy_j=123922.32043505859 J/tok=2.482517737791149 modes={'energy': 128, 'warning': 63, 'confirming': 31, 'full_effort': 84}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9694444444444444 ttft_p95=563.5850920007215 energy_j=118111.05259791159 J/tok=1.2891545705357141 modes={'energy': 64, 'warning': 12, 'confirming': 39, 'full_effort': 127}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.5981481481481481 ttft_p95=23962.825738999527 energy_j=143731.2980517845 J/tok=1.1046312015477187 modes={'energy': 44, 'confirming': 7, 'full_effort': 226}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.27847222222222223 ttft_p95=85592.33488800237 energy_j=165151.39381868197 J/tok=0.9753975904290885 modes={'energy': 27, 'full_effort': 279}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [176585]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275385.53 ON ganymede CANCELLED AT 2026-10-13T01:53:09 ***
+slurmstepd-neptune: error: *** STEP 275385.52 ON neptune CANCELLED AT 2026-10-13T01:53:09 ***
+srun: error: neptune: task 0: Killed
+srun: error: ganymede: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9685 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9685 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9685 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9685 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9685 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9685 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275385.51 ON ganymede CANCELLED AT 2026-10-13T01:53:12 ***
+slurmstepd-neptune: error: *** STEP 275385.50 ON neptune CANCELLED AT 2026-10-13T01:53:12 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 255.4, "published_s": 3580.5, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_cantune_s600_r3=ok
+cantune_s600_r3 clock_errors=0
+RESULT= baseline_r1:0 cantune_s600_r1:0 cantune_s600_r2:0 baseline_r2:0 baseline_r3:0 cantune_s600_r3:0
+--- teardown 2026-10-13T01:53:12+02:00
