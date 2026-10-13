@@ -225,3 +225,49 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 220 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 203 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=250.31167099950835 energy_j=72052.2980525608 J/tok=4.253382411603353 modes={'energy': 138, 'warning': 38}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=249.76216899813153 energy_j=79889.26644043923 J/tok=2.3826205320739406 modes={'energy': 174}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=264.3590799998492 energy_j=91162.80359568883 J/tok=1.3343501697261246 modes={'energy': 118, 'warning': 56}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9916666666666667 ttft_p95=308.11563998577185 energy_j=103417.38780142594 J/tok=0.7430958159489114 modes={'energy': 45, 'warning': 68, 'confirming': 60}
+bench: sharegpt_r4_6rps: exit=0 ok=1079/1080 goodput=0.9935185185185185 ttft_p95=358.3852080046199 energy_j=108091.95177618599 J/tok=0.516494417890797 modes={'energy': 11, 'warning': 103, 'confirming': 59}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9722222222222222 ttft_p95=408.24318100931123 energy_j=144683.91226993751 J/tok=0.5214623916770738 modes={'energy': 9, 'warning': 20, 'confirming': 3, 'full_effort': 141}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=353.6566669936292 energy_j=67706.24279390526 J/tok=6.737609990437383 modes={'energy': 42, 'warning': 139}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=0.9888888888888889 ttft_p95=416.7739360127598 energy_j=81361.05158086968 J/tok=2.91700313999963 modes={'energy': 24, 'warning': 127, 'confirming': 1, 'expanding': 28}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9916666666666667 ttft_p95=453.7912349915132 energy_j=106632.34269980527 J/tok=2.1361501402260763 modes={'energy': 17, 'warning': 7, 'confirming': 178}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9763888888888889 ttft_p95=529.718628997216 energy_j=124935.67115863132 J/tok=1.3636436891761679 modes={'energy': 23, 'warning': 4, 'confirming': 113, 'full_effort': 53}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9888888888888889 ttft_p95=437.15719602187164 energy_j=162727.4505736332 J/tok=1.250624058144848 modes={'energy': 33, 'warning': 15, 'confirming': 5, 'full_effort': 153}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9777777777777777 ttft_p95=505.0700480060186 energy_j=173200.62629755115 J/tok=1.022937013398248 modes={'energy': 2, 'warning': 2, 'full_effort': 185}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [972211]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-uranus: error: *** STEP 275726.18 ON uranus CANCELLED AT 2026-10-13T23:43:26 ***
+slurmstepd-uranus: error: *** STEP 275726.17 ON uranus CANCELLED AT 2026-10-13T23:43:26 ***
+srun: error: uranus: task 0: Killed
+srun: error: uranus: task 0: Killed
+CanaTune controller: reset http://10.1.0.5:9526 GPU 0: ok
+CanaTune controller: reset http://10.1.0.5:9526 GPU 1: ok
+CanaTune controller: reset http://10.1.0.5:9527 GPU 2: ok
+CanaTune controller: reset http://10.1.0.5:9527 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-uranus: error: *** STEP 275726.15 ON uranus CANCELLED AT 2026-10-13T23:43:28 ***
+slurmstepd-uranus: error: *** STEP 275726.16 ON uranus CANCELLED AT 2026-10-13T23:43:28 ***
+srun: error: uranus: task 0: Killed
+srun: error: uranus: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 190.4, "published_s": 2513.5, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_fill_r1=ok
+fill_r1 clock_errors=0
+fill_r1 redirect=6
+fill_r1 p_slot_update=1
+fill_r1 kv_gate_update=0
+fill_r1 admission_calibration=1
+fill_r1 kv_overflow_or_drop=176799
+RESULT= baseline_r1:0 fill_r1:0
+--- teardown 2026-10-13T23:43:29+02:00
