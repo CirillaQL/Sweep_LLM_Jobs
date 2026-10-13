@@ -202,3 +202,43 @@ bench: burstgpt_r0_2rps: 360 prompts at 2 req/s
 bench: burstgpt_r0_2rps: exit 0, 326 s of load
 bench: burstgpt_r1_4rps: 720 prompts at 4 req/s
 bench: burstgpt_r1_4rps: exit 0, 269 s of load
+bench: sharegpt_r0_4rps: exit=0 ok=720/720 goodput=0.9861111111111112 ttft_p95=460.49737599969376 energy_j=81753.34994895745 J/tok=0.5881620595185358 modes={'energy': 49, 'confirming': 63, 'full_effort': 71}
+bench: sharegpt_r1_6rps: exit=0 ok=1080/1080 goodput=0.9824074074074074 ttft_p95=486.5414849919034 energy_j=93849.33613324833 J/tok=0.44996133773108726 modes={'energy': 37, 'confirming': 1, 'full_effort': 142}
+bench: burstgpt_r0_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=478.95398299442604 energy_j=127890.69395095397 J/tok=2.5620155845777868 modes={'energy': 139, 'warning': 54, 'confirming': 8, 'full_effort': 100}
+bench: burstgpt_r1_4rps: exit=0 ok=720/720 goodput=0.9680555555555556 ttft_p95=540.4459809942637 energy_j=120636.90996672392 J/tok=1.3167237141501644 modes={'energy': 70, 'warning': 24, 'confirming': 11, 'full_effort': 142}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [451518]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 275717.20 ON neptune CANCELLED AT 2026-10-13T20:50:14 ***
+slurmstepd-ganymede: error: *** STEP 275717.21 ON ganymede CANCELLED AT 2026-10-13T20:50:14 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9517 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9517 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9517 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9517 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9517 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9517 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275717.19 ON ganymede CANCELLED AT 2026-10-13T20:50:16 ***
+slurmstepd-neptune: error: *** STEP 275717.18 ON neptune CANCELLED AT 2026-10-13T20:50:16 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "static", "ready_s": 305.5, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_noredir_r1=ok
+noredir_r1 clock_errors=0
+noredir_r1 redirect=0
+noredir_r1 p_slot_update=0
+noredir_r1 kv_gate_update=1
+noredir_r1 admission_calibration=1
+noredir_r1 kv_overflow_or_drop=0
+RESULT= redir_r1:0 noredir_r1:0
+--- teardown 2026-10-13T20:50:17+02:00
