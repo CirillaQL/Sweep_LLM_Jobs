@@ -45,3 +45,14 @@ rdma modules: ib_core
 to neptune: ip=10.1.0.6 rtt_avg_ms=0.342
 to ganymede: ip=10.1.0.3 rtt_avg_ms=0.378
 to uranus: ip=10.1.0.5 rtt_avg_ms=0.454
+to callisto: ip=10.1.0.4 rtt_avg_ms=0.390
+== 3. CanaTune GPU agent
+13b605249c0929c8fb9444489074c905f1360c5d controller.redirect: cool hot groups before full effort; knee of a merged block
+{"status":"ok","gpus":[0]}
+agent /net interfaces: ['eno12399np0', 'eno12409np1', 'eno8303', 'eno8403', 'idrac']
+allowed SM clocks (0): 210 225 240 255 270 285 300 315 330 345 360 375 390 405 420 435 450 465 480 495 510 525 540 555 570 585 600 615 630 645 660 675 690 705 720 735 750 765 780 795 810 825 840 855 870 885 900 915 930 945 960 975 990 1005 1020 1035 1050 1065 1080 1095 1110 1125 1140 1155 1170 1185 1200 1215 1230 1245 1260 1275 1290 1305 1320 1335 1350 1365 1380 1395 1410 1425 1440 1455 1470 1485 1500 1515 1530 1545 1560 1575 1590 1605 1620 1635 1650 1665 1680 1695 1710 1725 1740 1755 1770 1785 1800 1815 1830 1845 1860 1875 1890 1905 1920 1935 1950 1965 1980 1995 2010 2025 2040
+awk: cmd. line:1: {c[NR]=$1} END {print c[int(n*0.75)+0>n?n:int(n*0.75)], c[int(n*0.35)>0?int(n*0.35):1]}
+awk: cmd. line:1:                                      ^ syntax error
+-- reset
+{"ok":true,"gpu":0}
+default clocks under load: [{"index":0,"sm_mhz":210,"power_w":15.85,"energy_mj":2227993329.0,"throttle_reasons":1}]
