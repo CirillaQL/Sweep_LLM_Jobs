@@ -267,3 +267,54 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 296 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 286 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=411.12633400189225 energy_j=72735.96404155517 J/tok=4.293740498320848 modes={'energy': 182}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=414.94935599621385 energy_j=74635.93378775049 J/tok=2.225745796312602 modes={'energy': 181}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=445.9848119877279 energy_j=78761.64131356143 J/tok=1.1528343283600913 modes={'energy': 154, 'confirming': 1, 'expanding': 28}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9805555555555555 ttft_p95=484.4652109895833 energy_j=90882.37375630761 J/tok=0.6538394347854474 modes={'energy': 125, 'confirming': 29, 'expanding': 27}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9833333333333333 ttft_p95=513.0640419956762 energy_j=99335.57913358403 J/tok=0.4762948572518282 modes={'energy': 53, 'confirming': 36, 'expanding': 91}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9701388888888889 ttft_p95=535.6999340001494 energy_j=114905.84860017087 J/tok=0.41659723225353806 modes={'energy': 16, 'confirming': 95, 'expanding': 5, 'full_effort': 60}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=0.9888888888888889 ttft_p95=430.0668299983954 energy_j=101130.70795283413 J/tok=10.06375837922521 modes={'energy': 85, 'warning': 128, 'expanding': 28}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=0.9833333333333333 ttft_p95=476.99953999836 energy_j=123481.2872026398 J/tok=4.427122013575211 modes={'energy': 116, 'warning': 94, 'confirming': 1, 'expanding': 70}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9722222222222222 ttft_p95=555.3607429901604 energy_j=146697.83976195575 J/tok=2.9387763885162816 modes={'energy': 128, 'warning': 53, 'confirming': 62, 'expanding': 68}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9527777777777777 ttft_p95=597.2775510017527 energy_j=144124.11923522688 J/tok=1.5730811211127265 modes={'energy': 63, 'warning': 11, 'confirming': 11, 'expanding': 117, 'full_effort': 44}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9481481481481482 ttft_p95=601.4407629991183 energy_j=175088.4268694985 J/tok=1.3456229921493619 modes={'energy': 66, 'confirming': 10, 'expanding': 15, 'full_effort': 177}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.5826388888888889 ttft_p95=36371.649193999474 energy_j=185656.16043852022 J/tok=1.0965004130626 modes={'energy': 26, 'confirming': 1, 'expanding': 5, 'full_effort': 226}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [486187]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275725.21 ON ganymede CANCELLED AT 2026-10-14T00:14:10 ***
+slurmstepd-neptune: error: *** STEP 275725.20 ON neptune CANCELLED AT 2026-10-14T00:14:10 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9525 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9525 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9525 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9525 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9525 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9525 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9525 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9525 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275725.19 ON ganymede CANCELLED AT 2026-10-14T00:14:12 ***
+slurmstepd-neptune: error: *** STEP 275725.18 ON neptune CANCELLED AT 2026-10-14T00:14:12 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 340.6, "published_s": 3741.2, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_fill_r1=ok
+fill_r1 clock_errors=0
+fill_r1 redirect=25
+fill_r1 p_slot_update=3
+fill_r1 kv_gate_update=0
+fill_r1 admission_calibration=1
+fill_r1 kv_overflow_or_drop=788
+--- preflight and clock reset before fill_r2
+[neptune] loaded=595.91.07 disk=595.91.07 nvml=ok
+[ganymede] loaded=595.91.07 disk=595.91.07 nvml=ok
