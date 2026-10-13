@@ -110,3 +110,44 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 302 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 331 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=364.1462230007164 energy_j=84825.94902749872 J/tok=5.007435007526489 modes={}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=352.8037990035955 energy_j=87679.3718575821 J/tok=2.634992392414188 modes={}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=368.7508720031474 energy_j=90113.9381298809 J/tok=1.3189979234467346 modes={}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9888888888888889 ttft_p95=388.06014199508354 energy_j=93895.94394505788 J/tok=0.675520107807723 modes={}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9833333333333333 ttft_p95=429.78223199315835 energy_j=97533.0849147768 J/tok=0.46752671147701175 modes={}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9763888888888889 ttft_p95=482.52367100212723 energy_j=100905.47426867246 J/tok=0.36567373912341805 modes={}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=368.0703209975036 energy_j=101207.52918466806 J/tok=10.071403043553394 modes={}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=415.7575220015133 energy_j=125169.27198558378 J/tok=4.487640613279212 modes={}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9916666666666667 ttft_p95=463.2302370009711 energy_j=142708.34982401849 J/tok=2.858855519532403 modes={}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9902777777777778 ttft_p95=492.01930199342314 energy_j=128425.6668057375 J/tok=1.4017361770564785 modes={}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.6055555555555555 ttft_p95=41019.33571099653 energy_j=148276.56258582068 J/tok=1.1395633359654824 modes={}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.2881944444444444 ttft_p95=73503.39034599892 energy_j=167141.53529980278 J/tok=0.9871515281974212 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [374181]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275524.13 ON ganymede CANCELLED AT 2026-10-13T16:42:19 ***
+slurmstepd-neptune: error: *** STEP 275524.12 ON neptune CANCELLED AT 2026-10-13T16:42:19 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9324 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9324 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9324 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9324 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9324 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9324 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275524.11 ON ganymede CANCELLED AT 2026-10-13T16:42:21 ***
+slurmstepd-neptune: error: *** STEP 275524.10 ON neptune CANCELLED AT 2026-10-13T16:42:21 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 300.5, "clocks_at_start": [{"agent": "http://10.1.0.3:9324", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9324", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9324", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9324", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9324", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9324", "index": 2, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline_r1=ok
+--- preflight and clock reset before fill_r1
