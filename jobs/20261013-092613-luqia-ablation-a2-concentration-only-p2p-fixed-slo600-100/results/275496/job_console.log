@@ -123,3 +123,46 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 322 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 340 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=374.73546899855137 energy_j=70984.20918502998 J/tok=4.190331120721958 modes={'energy': 183}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=420.99807399790734 energy_j=71630.25057979107 J/tok=2.1361122052840806 modes={'energy': 184}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=456.29908100818284 energy_j=77512.75132107688 J/tok=1.1347702478673765 modes={'energy': 184}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9875 ttft_p95=475.57965699525084 energy_j=86430.77921503449 J/tok=0.6218712754256538 modes={'energy': 126, 'confirming': 57}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9851851851851852 ttft_p95=496.1748070054455 energy_j=96399.12309226894 J/tok=0.4620733240930719 modes={'energy': 113, 'confirming': 30, 'full_effort': 40}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9423611111111111 ttft_p95=617.242520005675 energy_j=100739.74150422573 J/tok=0.365090336005109 modes={'energy': 4, 'confirming': 13, 'full_effort': 162}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=374.1441360034514 energy_j=95638.47249339342 J/tok=9.517212906099454 modes={'energy': 124, 'warning': 119}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=425.47266199835576 energy_j=115819.87828864573 J/tok=4.15244078189609 modes={'energy': 121, 'warning': 159}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9972222222222222 ttft_p95=473.10517700680066 energy_j=132537.27582638408 J/tok=2.655099880331425 modes={'energy': 107, 'warning': 182}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9847222222222223 ttft_p95=509.59499200689606 energy_j=128520.88808652878 J/tok=1.4027754951104987 modes={'energy': 72, 'warning': 46, 'confirming': 127}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.6064814814814815 ttft_p95=26926.817254992784 energy_j=155208.35066390657 J/tok=1.1928368365694457 modes={'energy': 66, 'confirming': 32, 'full_effort': 199}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.2569444444444444 ttft_p95=74315.73015201138 energy_j=169856.21110319425 J/tok=1.0031846247169172 modes={'confirming': 1, 'full_effort': 273, 'energy': 38}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [289535]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275496.12 ON ganymede CANCELLED AT 2026-10-13T11:40:00 ***
+slurmstepd-neptune: error: *** STEP 275496.13 ON neptune CANCELLED AT 2026-10-13T11:40:00 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9796 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9796 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9796 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9796 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9796 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9796 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275496.11 ON ganymede CANCELLED AT 2026-10-13T11:40:02 ***
+slurmstepd-neptune: error: *** STEP 275496.10 ON neptune CANCELLED AT 2026-10-13T11:40:02 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 300.5, "published_s": 4177.5, "reached_h": false, "status": "done", "controller_exit": 143}
+RESULT_cantune_a2_r1=ok
+cantune_a2_r1 clock_errors=0
+RESULT=cantune_a2_r1:0
+--- teardown 2026-10-13T11:40:03+02:00
