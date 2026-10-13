@@ -138,3 +138,18 @@ CanaTune controller: reset http://10.1.0.6:9322 GPU 0: ok
 CanaTune controller: reset http://10.1.0.6:9322 GPU 1: ok
 CanaTune controller: reset http://10.1.0.6:9322 GPU 2: ok
 CanaTune controller: reset http://10.1.0.3:9322 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9322 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9322 GPU 2: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275522.11 ON ganymede CANCELLED AT 2026-10-13T15:03:28 ***
+slurmstepd-neptune: error: *** STEP 275522.10 ON neptune CANCELLED AT 2026-10-13T15:03:28 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 255.4, "clocks_at_start": [{"agent": "http://10.1.0.3:9322", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9322", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9322", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9322", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9322", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9322", "index": 2, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline_r1=ok
+--- preflight and clock reset before cantune_s1000_r1
+[neptune] loaded=595.91.07 disk=595.91.07 nvml=ok
+[ganymede] loaded=595.91.07 disk=595.91.07 nvml=ok
