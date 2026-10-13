@@ -105,3 +105,46 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 294 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 285 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=351.5839750180021 energy_j=110466.5263789234 J/tok=6.566398762344612 modes={}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=352.6788630115334 energy_j=117295.33342839027 J/tok=3.497907536706834 modes={}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=359.5859659835696 energy_j=120376.16234142064 J/tok=1.7619461701027612 modes={}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9944444444444445 ttft_p95=374.73928899271414 energy_j=124439.18667518019 J/tok=0.8952588287254506 modes={}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9851851851851852 ttft_p95=412.8841799974907 energy_j=127828.9762293806 J/tok=0.6127506470262474 modes={}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9784722222222222 ttft_p95=437.0394960278645 energy_j=131503.26771178006 J/tok=0.4765578077862902 modes={}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=339.8878689913545 energy_j=133435.56780921292 J/tok=13.278492169291763 modes={}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=401.3086810009554 energy_j=162328.36890068077 J/tok=5.819889893183736 modes={}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9916666666666667 ttft_p95=445.98640498588793 energy_j=189044.66580351116 J/tok=3.7871041669039456 modes={}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9875 ttft_p95=493.09774301946163 energy_j=167963.19213093948 J/tok=1.833279037436989 modes={}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.925 ttft_p95=1367.9379420063924 energy_j=187132.38306425427 J/tok=1.4381855027725376 modes={}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.5736111111111111 ttft_p95=18949.92457999615 energy_j=189569.6082693496 J/tok=1.1196135548666089 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [348791]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-uranus: error: *** STEP 275770.12 ON uranus CANCELLED AT 2026-10-14T01:27:10 ***
+slurmstepd-europa: error: *** STEP 275770.13 ON europa CANCELLED AT 2026-10-14T01:27:10 ***
+srun: error: europa: task 0: Killed
+srun: error: uranus: task 0: Killed
+CanaTune controller: reset http://10.1.0.5:9570 GPU 0: ok
+CanaTune controller: reset http://10.1.0.5:9570 GPU 1: ok
+CanaTune controller: reset http://10.1.0.5:9570 GPU 2: ok
+CanaTune controller: reset http://10.1.0.5:9570 GPU 3: ok
+CanaTune controller: reset http://10.1.0.2:9570 GPU 0: ok
+CanaTune controller: reset http://10.1.0.2:9570 GPU 1: ok
+CanaTune controller: reset http://10.1.0.2:9570 GPU 2: ok
+CanaTune controller: reset http://10.1.0.2:9570 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-europa: error: *** STEP 275770.11 ON europa CANCELLED AT 2026-10-14T01:27:12 ***
+slurmstepd-uranus: error: *** STEP 275770.10 ON uranus CANCELLED AT 2026-10-14T01:27:12 ***
+srun: error: europa: task 0: Killed
+srun: error: uranus: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 440.6, "clocks_at_start": [{"agent": "http://10.1.0.2:9570", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.2:9570", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.2:9570", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.2:9570", "index": 3, "sm_mhz": 2040}, {"agent": "http://10.1.0.5:9570", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.5:9570", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.5:9570", "index": 2, "sm_mhz": 2520}, {"agent": "http://10.1.0.5:9570", "index": 3, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline_r1=ok
+--- preflight and clock reset before full_r1
