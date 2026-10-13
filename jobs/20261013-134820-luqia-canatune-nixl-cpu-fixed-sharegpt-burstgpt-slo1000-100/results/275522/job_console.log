@@ -109,3 +109,32 @@ bench: burstgpt_r3_4rps: exit 0, 342 s of load
 bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 411 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
+bench: burstgpt_r5_8rps: exit 0, 476 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=0.9 ttft_p95=1105.855108005926 energy_j=84365.65046432399 J/tok=4.980262719263518 modes={}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=0.7777777777777778 ttft_p95=1269.9997430026997 energy_j=86309.42952150917 J/tok=2.5935882421272063 modes={}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.49166666666666664 ttft_p95=2709.8492270015413 energy_j=86009.57722255468 J/tok=1.258922383234114 modes={}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.0 ttft_p95=8690.766925996286 energy_j=82067.23087191151 J/tok=0.5880679226099682 modes={}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.0 ttft_p95=79618.94029199902 energy_j=111246.03238103676 J/tok=0.5326421062307548 modes={}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.001388888888888889 ttft_p95=162996.42943200888 energy_j=142254.41486860084 J/tok=0.5130889153460252 modes={}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=0.9111111111111111 ttft_p95=1161.0579999978654 energy_j=101570.37143002986 J/tok=10.107510342325591 modes={}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=0.7111111111111111 ttft_p95=1373.2927220116835 energy_j=125816.94498577117 J/tok=4.510861357585371 modes={}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.36944444444444446 ttft_p95=2487.7957299904665 energy_j=142594.59865606404 J/tok=2.856576759006051 modes={}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.006944444444444444 ttft_p95=8886.279498008662 energy_j=145591.31637167692 J/tok=1.5890952353952446 modes={}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.001851851851851852 ttft_p95=73151.24210799695 energy_j=173146.53831546308 J/tok=1.3306988196428067 modes={}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.0006944444444444445 ttft_p95=160473.95336699265 energy_j=203034.892936553 J/tok=1.199140623425604 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [344502]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275522.13 ON ganymede CANCELLED AT 2026-10-13T15:03:21 ***
+slurmstepd-neptune: error: *** STEP 275522.12 ON neptune CANCELLED AT 2026-10-13T15:03:21 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9322 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9322 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9322 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9322 GPU 0: ok
