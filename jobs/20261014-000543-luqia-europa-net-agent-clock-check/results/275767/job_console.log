@@ -1,0 +1,45 @@
+start=2026-10-14T00:06:22+02:00 host=europa job=275767 commit=13b605249c0929c8fb9444489074c905f1360c5d
+== 1. driver / NVML / GPU
+loaded=595.91.07 disk=595.91.07
+GPU 0: NVIDIA L4 (UUID: GPU-8a19ff4e-0a36-da53-e044-0d0a9faa084c)
+GPU 1: NVIDIA L4 (UUID: GPU-90e440a3-b971-6684-181a-6eceafd2ef8b)
+GPU 2: NVIDIA L4 (UUID: GPU-73f9ba48-ea35-6a89-25e9-cc69dff09e23)
+GPU 3: NVIDIA L4 (UUID: GPU-4d8b5d35-0448-00b6-05fd-81cfc632838a)
+GPU 4: NVIDIA L4 (UUID: GPU-0418730a-7fdb-c7fe-68ab-792e56e6efff)
+GPU 5: NVIDIA L4 (UUID: GPU-c861e89c-7469-dcbb-8129-fad65b759e0e)
+GPU 6: NVIDIA L4 (UUID: GPU-c5b8926c-def1-f27a-a339-369f9a2220fa)
+GPU 7: NVIDIA L4 (UUID: GPU-a1e2e860-85a5-86ff-1f44-91b414bc667c)
+allocated GPU index=0
+index, uuid, name, clocks.current.sm [MHz], clocks.max.sm [MHz], power.draw [W], power.limit [W], enforced.power.limit [W]
+0, GPU-8a19ff4e-0a36-da53-e044-0d0a9faa084c, NVIDIA L4, 210 MHz, 2040 MHz, 15.85 W, 72.00 W, 72.00 W
+        Memory                                         : 6251 MHz
+            Graphics                                   : 2040 MHz
+            Graphics                                   : 2025 MHz
+            Graphics                                   : 2010 MHz
+sudo rules:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty, !use_pty
+
+User chjing may run the following commands on europa:
+    (ALL) ALL
+    (ALL) NOPASSWD: ALL
+== 2. network
+hostname -I: 10.1.0.2 
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+eno12399np0      UP             10.1.0.2/16 fe80::632:1ff:fe4c:f430/64 
+eno8303          DOWN           
+eno12409np1      DOWN           
+eno8403          DOWN           
+idrac            DOWN           
+default via 10.1.0.8 dev eno12399np0 proto static 
+10.1.0.0/16 dev eno12399np0 proto kernel scope link src 10.1.0.2 
+10.32.0.0/12 via 10.1.0.8 dev eno12399np0 proto static 
+10.48.0.0/12 via 10.1.0.9 dev eno12399np0 proto static 
+10.64.0.0/12 via 10.1.0.10 dev eno12399np0 proto static 
+nic eno12399np0: state=up speed=100000Mb/s mtu=1500 driver=bnxt_en
+nic eno12409np1: state=down speed=Mb/s mtu=1500 driver=bnxt_en
+nic eno8303: state=down speed=Mb/s mtu=1500 driver=tg3
+nic eno8403: state=down speed=Mb/s mtu=1500 driver=tg3
+nic idrac: state=down speed=Mb/s mtu=1500 driver=cdc_ether
+rdma devices: 
+rdma modules: ib_core 
+to neptune: ip=10.1.0.6 rtt_avg_ms=0.342
