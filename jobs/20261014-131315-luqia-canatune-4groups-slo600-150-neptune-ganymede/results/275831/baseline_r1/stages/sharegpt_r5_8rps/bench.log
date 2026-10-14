@@ -1,0 +1,50 @@
+Namespace(subparser='bench', bench_type='serve', dispatch_function=<function BenchmarkServingSubcommand.cmd at 0x753ab2bf0820>, seed=20261002, num_prompts=1440, dataset_name='sharegpt', no_stream=False, dataset_path='/data/users/chjing/datasets/ShareGPT_V3_unfiltered_cleaned_split.json', no_oversample=False, skip_chat_template=False, disable_shuffle=False, custom_output_len=256, spec_bench_output_len=256, spec_bench_category=None, sonnet_input_len=550, sonnet_output_len=150, sonnet_prefix_len=200, sharegpt_output_len=256, blazedit_min_distance=0.0, blazedit_max_distance=1.0, random_input_len=1024, random_output_len=128, random_range_ratio=0.0, random_prefix_len=0, random_batch_size=1, no_reranker=False, random_mm_base_items_per_request=1, random_mm_num_mm_items_range_ratio=0.0, random_mm_limit_mm_per_prompt={'image': 255, 'video': 1}, random_mm_bucket_config={(256, 256, 1): 0.5, (720, 1280, 1): 0.5, (720, 1280, 16): 0.0}, hf_subset=None, hf_split=None, hf_name=None, hf_output_len=None, prefix_repetition_prefix_len=256, prefix_repetition_suffix_len=256, prefix_repetition_num_prefixes=10, prefix_repetition_output_len=128, label=None, backend='openai', base_url='http://127.0.0.1:18831', host='127.0.0.1', port=8000, endpoint='/v1/completions', header=None, max_concurrency=None, model='/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da', input_len=None, output_len=None, tokenizer='/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da', tokenizer_mode='auto', use_beam_search=False, logprobs=None, request_rate=8.0, burstiness=1.0, trust_remote_code=False, disable_tqdm=True, num_warmups=0, profile=False, save_result=True, save_detailed=True, append_result=False, metadata=None, result_dir='/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20261014-131315-luqia-canatune-4groups-slo600-150-neptune-ganymede/results/275831/baseline_r1/stages/sharegpt_r5_8rps', result_filename='bench.json', ignore_eos=False, percentile_metrics='ttft,tpot,itl,e2el', metric_percentiles='50,90,95,99', goodput=['ttft:600', 'tpot:150'], request_id_prefix='bench-971b550e-', top_p=None, top_k=None, min_p=None, temperature=0.0, frequency_penalty=None, presence_penalty=None, repetition_penalty=None, served_model_name=None, lora_modules=None, ramp_up_strategy=None, ramp_up_start_rps=None, ramp_up_end_rps=None, ready_check_timeout_sec=0, extra_body=None)
+Starting initial single prompt test run...
+Skipping endpoint ready check.
+Starting main benchmark run...
+Traffic request rate: 8.0
+Burstiness factor: 1.0 (Poisson process)
+Maximum request concurrency: None
+tip: install termplotlib and gnuplot to plot the metrics
+============ Serving Benchmark Result ============
+Successful requests:                     1440      
+Failed requests:                         0         
+Request rate configured (RPS):           8.00      
+Benchmark duration (s):                  196.82    
+Total input tokens:                      374315    
+Total generated tokens:                  275944    
+Request throughput (req/s):              7.32      
+Request goodput (req/s):                 7.15      
+Output token throughput (tok/s):         1402.04   
+Peak output token throughput (tok/s):    2211.00   
+Peak concurrent requests:                136.00    
+Total token throughput (tok/s):          3303.89   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          372.61    
+Median TTFT (ms):                        359.30    
+P50 TTFT (ms):                           359.30    
+P90 TTFT (ms):                           425.11    
+P95 TTFT (ms):                           454.83    
+P99 TTFT (ms):                           860.94    
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          71.50     
+Median TPOT (ms):                        71.74     
+P50 TPOT (ms):                           71.74     
+P90 TPOT (ms):                           73.66     
+P95 TPOT (ms):                           74.49     
+P99 TPOT (ms):                           75.51     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           71.50     
+Median ITL (ms):                         71.46     
+P50 ITL (ms):                            71.46     
+P90 ITL (ms):                            82.54     
+P95 ITL (ms):                            87.35     
+P99 ITL (ms):                            96.98     
+----------------End-to-end Latency----------------
+Mean E2EL (ms):                          14003.26  
+Median E2EL (ms):                        18448.68  
+P50 E2EL (ms):                           18448.68  
+P90 E2EL (ms):                           19036.95  
+P95 E2EL (ms):                           19264.65  
+P99 E2EL (ms):                           19568.86  
+==================================================
