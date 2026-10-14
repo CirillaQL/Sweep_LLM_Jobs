@@ -577,3 +577,27 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 399 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 456 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=384.29724698653445 energy_j=73514.41412427044 J/tok=4.339693868020687 modes={'energy': 154, 'warning': 28}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=399.77506900322624 energy_j=75012.1998032651 J/tok=2.2369665643773327 modes={'energy': 181}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=446.015046996763 energy_j=80465.69597567273 J/tok=1.1777765804401745 modes={'energy': 182}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9861111111111112 ttft_p95=508.3260349929333 energy_j=89418.31030421637 J/tok=0.6433064526411629 modes={'energy': 103, 'confirming': 78}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9638888888888889 ttft_p95=543.8016659754794 energy_j=101270.6096978116 J/tok=0.4851565584503617 modes={'energy': 27, 'confirming': 50, 'expanding': 103}
+bench: sharegpt_r5_8rps: exit=0 ok=1439/1440 goodput=0.9715277777777778 ttft_p95=516.4669399964623 energy_j=121043.47315111302 J/tok=0.4389036178454056 modes={'energy': 7, 'confirming': 59, 'expanding': 3, 'full_effort': 108}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=419.87561498535797 energy_j=100013.7233257928 J/tok=9.952604570185372 modes={'energy': 150, 'warning': 93}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=448.293535009725 energy_j=120862.89379507209 J/tok=4.333245869606772 modes={'energy': 141, 'warning': 141}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9916666666666667 ttft_p95=511.40384198515676 energy_j=143920.55914332296 J/tok=2.8831395316984447 modes={'energy': 135, 'warning': 60, 'confirming': 88, 'expanding': 27}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9611111111111111 ttft_p95=580.0081579945982 energy_j=138906.9680363636 J/tok=1.5161371335243083 modes={'energy': 79, 'confirming': 2, 'expanding': 169}
+bench: burstgpt_r4_6rps: exit=0 ok=1032/1080 goodput=0.3527777777777778 ttft_p95=87583.3093560068 energy_j=236657.5576997099 J/tok=1.9115192938929446 modes={'energy': 2, 'confirming': 1, 'expanding': 14, 'full_effort': 189, None: 5}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.5826388888888889 ttft_p95=173763.13905700226 energy_j=267846.7619747872 J/tok=1.5819248036215336 modes={'warning': 2, 'confirming': 3, 'expanding': 14, 'full_effort': 377, 'energy': 19}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [560283]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275725.37 ON ganymede CANCELLED AT 2026-10-14T04:18:57 ***
+slurmstepd-neptune: error: *** STEP 275725.36 ON neptune CANCELLED AT 2026-10-14T04:18:57 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
