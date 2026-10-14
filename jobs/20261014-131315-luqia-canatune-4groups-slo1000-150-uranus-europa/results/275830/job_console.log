@@ -239,3 +239,53 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 295 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 273 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=384.0561399993021 energy_j=72837.5128812437 J/tok=4.299735116956535 modes={'energy': 182}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=413.65547498571686 energy_j=74380.23782100058 J/tok=2.2181205922822467 modes={'energy': 182}
+bench: sharegpt_r2_2rps: exit=0 ok=358/360 goodput=0.9944444444444445 ttft_p95=424.3968540104106 energy_j=79334.57580683994 J/tok=1.1656050395492403 modes={'energy': 181}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=1.0 ttft_p95=458.40531200519763 energy_j=89309.95242337798 J/tok=0.6425268883248535 modes={'energy': 181}
+bench: sharegpt_r4_6rps: exit=0 ok=1079/1080 goodput=0.9990740740740741 ttft_p95=501.8275979964528 energy_j=101454.28707324123 J/tok=0.48692526324165364 modes={'energy': 152, 'warning': 27}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=1.0 ttft_p95=495.67044401192106 energy_j=109108.80960464953 J/tok=0.39560270918713847 modes={'energy': 17, 'warning': 158}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=453.85485800215974 energy_j=99672.26108168649 J/tok=9.918624846421185 modes={'energy': 116, 'warning': 126}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=594.9698779731989 energy_j=119852.15767429686 J/tok=4.297008377825071 modes={'energy': 126, 'warning': 158}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9972222222222222 ttft_p95=612.6674710249063 energy_j=143947.30583627988 J/tok=2.8836753442902334 modes={'energy': 129, 'warning': 178}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9972222222222222 ttft_p95=675.8736400224734 energy_j=137193.97148289107 J/tok=1.4974401759775926 modes={'energy': 90, 'warning': 82, 'confirming': 78}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9675925925925926 ttft_p95=876.1450939928181 energy_j=160185.5770879049 J/tok=1.2310887669397919 modes={'energy': 103, 'confirming': 14, 'expanding': 34, 'warning': 61, 'full_effort': 56}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.6583333333333333 ttft_p95=36617.27062301361 energy_j=174260.62251885986 J/tok=1.0291974374626285 modes={'energy': 32, 'confirming': 17, 'expanding': 27, 'warning': 1, 'full_effort': 170}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [543532]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-europa: error: *** STEP 275830.21 ON europa CANCELLED AT 2026-10-14T17:20:41 ***
+slurmstepd-uranus: error: *** STEP 275830.20 ON uranus CANCELLED AT 2026-10-14T17:20:41 ***
+srun: error: europa: task 0: Killed
+srun: error: uranus: task 0: Killed
+CanaTune controller: reset http://10.1.0.5:9630 GPU 0: ok
+CanaTune controller: reset http://10.1.0.5:9630 GPU 1: ok
+CanaTune controller: reset http://10.1.0.5:9630 GPU 2: ok
+CanaTune controller: reset http://10.1.0.5:9630 GPU 3: ok
+CanaTune controller: reset http://10.1.0.2:9630 GPU 0: ok
+CanaTune controller: reset http://10.1.0.2:9630 GPU 1: ok
+CanaTune controller: reset http://10.1.0.2:9630 GPU 2: ok
+CanaTune controller: reset http://10.1.0.2:9630 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-europa: error: *** STEP 275830.19 ON europa CANCELLED AT 2026-10-14T17:20:43 ***
+slurmstepd-uranus: error: *** STEP 275830.18 ON uranus CANCELLED AT 2026-10-14T17:20:43 ***
+srun: error: europa: task 0: Killed
+srun: error: uranus: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 325.5, "published_s": 3826.5, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_fill_r1=ok
+fill_r1 clock_errors=0
+fill_r1 redirect=3
+fill_r1 p_slot_update=0
+fill_r1 kv_gate_update=3
+fill_r1 admission_calibration=1
+fill_r1 kv_overflow_or_drop=831
+RESULT= baseline_r1:0 fill_r1:0
+--- teardown 2026-10-14T17:20:45+02:00
