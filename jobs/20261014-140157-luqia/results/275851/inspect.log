@@ -339,3 +339,137 @@ warning: unable to access '/root/.config/git/ignore': Permission denied
   remotes/origin/backport-9351-to-branch/3.3.x
   remotes/origin/branch/2.2.x
 == 5. broker / job markers
+*.sbatch: 38 (e.g. research_spikes/cudastf_region_planner/scripts/minerva_phase2d.sbatch research_spikes/cudastf_region_planner/scripts/minerva_nearby_tests.sbatch research_spikes/cudastf_region_planner/scripts/minerva_phase2b.sbatch )
+-- mentions of broker / READY / gsync / git push in scripts (file:line, first 30)
+-- one status.json / run.sbatch header, if any
+(/data/users/chjing/cccl-cudastf-region-spike-d10a88a/research_spikes/cudastf_region_planner/scripts/minerva_phase2d.sbatch)
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+#SBATCH --job-name=cudastf-phase2d
+#SBATCH --partition=short
+#SBATCH --time=00:20:00
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=24G
+#SBATCH --gres=gpu:L40s:2
+#SBATCH --output=minerva-phase2d-%j.stdout.log
+#SBATCH --error=minerva-phase2d-%j.stderr.log
+
+set -euo pipefail
+
+: "${HIGH_CLOCK_MHZ:?submit with --export=ALL,HIGH_CLOCK_MHZ=<MHz>,LOW_CLOCK_MHZ=<MHz>}"
+: "${LOW_CLOCK_MHZ:?submit with --export=ALL,HIGH_CLOCK_MHZ=<MHz>,LOW_CLOCK_MHZ=<MHz>}"
+
+if [[ -x "${SLURM_SUBMIT_DIR}/scripts/build.sh" ]]; then
+  readonly spike_dir="${SLURM_SUBMIT_DIR}"
+else
+  readonly spike_dir="${SLURM_SUBMIT_DIR}/research_spikes/cudastf_region_planner"
+fi
+readonly cccl_dir="$(cd "${spike_dir}/../.." && pwd)"
+readonly build_dir="${spike_dir}/build-minerva"
+readonly results_dir="${spike_dir}/results/minerva_phase2d_${SLURM_JOB_ID}"
+readonly conda_init="${MINERVA_CONDA_INIT:-/data/users/chjing/miniforge3/etc/profile.d/conda.sh}"
+readonly conda_env="${MINERVA_CONDA_ENV:-cuda-env}"
+readonly cmake_bin_dir="${cccl_dir}/.minerva-tools/cmake/data/bin"
+
+source "${conda_init}"
+conda activate "${conda_env}"
+export PATH="${cmake_bin_dir}:${PATH}"
+export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib:${LD_LIBRARY_PATH:-}"
+
+echo "SLURM_JOB_ID=${SLURM_JOB_ID}"
+echo "SLURM_JOB_NODELIST=${SLURM_JOB_NODELIST}"
+echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-<unset>}"
+echo "HIGH_CLOCK_MHZ=${HIGH_CLOCK_MHZ}"
+== 6. README
+(README.md)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/NVIDIA/cccl?quickstart=1&devcontainer_path=.devcontainer%2Fdevcontainer.json)
+
+|[Contributor Guide](https://github.com/NVIDIA/cccl/blob/main/CONTRIBUTING.md)|[Dev Containers](https://github.com/NVIDIA/cccl/blob/main/.devcontainer/README.md)|[Discord](https://discord.gg/nvidiadeveloper)|[Godbolt](https://godbolt.org/z/x4G73af9a)|[GitHub Project](https://github.com/orgs/NVIDIA/projects/6)|[Documentation](https://nvidia.github.io/cccl)|
+|-|-|-|-|-|-|
+
+# CUDA Core Compute Libraries (CCCL)
+
+Welcome to the CUDA Core Compute Libraries (CCCL) where our mission is to make CUDA more delightful.
+
+This repository unifies three essential CUDA C++ libraries into a single, convenient repository:
+
+- [Thrust](thrust) ([former repo](https://github.com/nvidia/thrust))
+- [CUB](cub) ([former repo](https://github.com/nvidia/cub))
+- [libcudacxx](libcudacxx) ([former repo](https://github.com/nvidia/libcudacxx))
+
+The goal of CCCL is to provide CUDA C++ developers with building blocks that make it easier to write safe and efficient code.
+Bringing these libraries together streamlines your development process and broadens your ability to leverage the power of CUDA C++.
+For more information about the decision to unify these projects, see the [announcement here](https://github.com/NVIDIA/cccl/discussions/520).
+
+## Overview
+
+The concept for the CUDA Core Compute Libraries (CCCL) grew organically out of the Thrust, CUB, and libcudacxx projects that were developed independently over the years with a similar goal: to provide high-quality, high-performance, and easy-to-use C++ abstractions for CUDA developers.
+Naturally, there was a lot of overlap among the three projects, and it became clear the community would be better served by unifying them into a single repository.
+
+- **Thrust** is the C++ parallel algorithms library which inspired the introduction of parallel algorithms to the C++ Standard Library. Thrust's high-level interface greatly enhances programmer productivity while enabling performance portability between GPUs and multicore CPUs via configurable backends that allow using multiple parallel programming frameworks (such as CUDA, TBB, and OpenMP).
+
+- **CUB** is a lower-level, CUDA-specific library designed for speed-of-light parallel algorithms across all GPU architectures. In addition to device-wide algorithms, it provides *cooperative algorithms* like block-wide reduction and warp-wide scan, providing CUDA kernel developers with building blocks to create speed-of-light, custom kernels.
+
+- **libcudacxx** is the CUDA C++ Standard Library. It provides an implementation of the C++ Standard Library that works in both host and device code. Additionally, it provides abstractions for CUDA-specific hardware features like synchronization primitives, cache control, atomics, and more.
+
+The main goal of CCCL is to fill a similar role that the Standard C++ Library fills for Standard C++: provide general-purpose, speed-of-light tools to CUDA C++ developers, allowing them to focus on solving the problems that matter.
+Unifying these projects is the first step towards realizing that goal.
+
+## Example
+
+This is a simple example demonstrating the use of CCCL functionality from Thrust, CUB, and libcudacxx.
+
+It shows how to use Thrust/CUB/libcudacxx to implement a simple parallel reduction kernel.
+Each thread block computes the sum of a subset of the array using `cub::BlockReduce`.
+The sum of each block is then reduced to a single value using an atomic add via `cuda::atomic_ref` from libcudacxx.
+
+It then shows how the same reduction can be done using Thrust's `reduce` algorithm and compares the results.
+
+[Try it live on Godbolt!](https://godbolt.org/z/hraxq8rdn)
+
+```cpp
+#include <thrust/execution_policy.h>
+#include <thrust/device_vector.h>
+#include <cub/block/block_reduce.cuh>
+#include <cuda/atomic>
+#include <cuda/cmath>
+#include <cuda/std/span>
+#include <cstdio>
+#include <iostream>
+
+template <int block_size>
+__global__ void reduce(cuda::std::span<int const> data, cuda::std::span<int> result) {
+  using BlockReduce = cub::BlockReduce<int, block_size>;
+  __shared__ typename BlockReduce::TempStorage temp_storage;
+
+  int const index = threadIdx.x + blockIdx.x * blockDim.x;
+  int sum = 0;
+  if (index < data.size()) {
+    sum += data[index];
+  }
+  sum = BlockReduce(temp_storage).Sum(sum);
+
+  if (threadIdx.x == 0) {
+    cuda::atomic_ref<int, cuda::thread_scope_device> atomic_result(result.front());
+    atomic_result.fetch_add(sum, cuda::memory_order_relaxed);
+  }
+}
+
+int main() {
+
+  // Allocate and initialize input data
+  int const N = 1000;
+  thrust::device_vector<int> data(N);
+  thrust::fill(data.begin(), data.end(), 1);
+
+== 7. Slurm queue of this user, and recent jobs
+     JOBID    PARTITION                           NAME    STATE       TIME     NODELIST(REASON)
+    275837         long           gcn-plans-mixed-l40s  PENDING       0:00           (Priority)
+    275832         long            cholesky-plans-l40s  PENDING       0:00          (Resources)
+    275831         long 20261014-131315-luqia-canatune  PENDING       0:00          (Resources)
+    275830         long 20261014-131315-luqia-canatune  PENDING       0:00          (Resources)
+    275851        short          20261014-140157-luqia  RUNNING       1:25              neptune
+RESULT=ok end=2026-10-14T14:04:46+02:00
