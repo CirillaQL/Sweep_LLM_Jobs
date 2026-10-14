@@ -423,3 +423,52 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 298 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 283 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=409.84542400110513 energy_j=73875.44386637307 J/tok=4.361006131426982 modes={'energy': 181}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=392.79314898885787 energy_j=77562.42054347682 J/tok=2.3130176406368896 modes={'energy': 181}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=398.2424109999556 energy_j=85244.12208959508 J/tok=1.2477184146603495 modes={'energy': 179}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9916666666666667 ttft_p95=407.0459009963088 energy_j=97292.60154041028 J/tok=0.6999568449935271 modes={'energy': 96, 'warning': 81}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9685185185185186 ttft_p95=467.25755801890045 energy_j=105155.41743899346 J/tok=0.5040645084916878 modes={'energy': 8, 'warning': 2, 'confirming': 166}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9604166666666667 ttft_p95=554.8157290031668 energy_j=111781.85179726624 J/tok=0.4050580754706801 modes={'warning': 9, 'confirming': 112, 'expanding': 28, 'full_effort': 27}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=404.4106619840022 energy_j=101446.59247003721 J/tok=10.095192802272585 modes={'energy': 82, 'warning': 159}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=0.9888888888888889 ttft_p95=468.9996110100765 energy_j=123956.52655378485 J/tok=4.444160567681946 modes={'energy': 131, 'warning': 93, 'confirming': 1, 'expanding': 56}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.975 ttft_p95=549.2989509948529 energy_j=142620.7871998296 J/tok=2.8571013902766453 modes={'energy': 99, 'warning': 60, 'confirming': 5, 'expanding': 120}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9472222222222222 ttft_p95=603.733158990508 energy_j=138388.20517511558 J/tok=1.5104749579794101 modes={'energy': 48, 'warning': 21, 'confirming': 6, 'expanding': 166}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9518518518518518 ttft_p95=580.0534579902887 energy_j=178968.5974810226 J/tok=1.3754436198269449 modes={'energy': 73, 'warning': 1, 'confirming': 1, 'expanding': 3, 'full_effort': 191}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.6048611111111111 ttft_p95=26493.89551600325 energy_j=182823.98528307723 J/tok=1.0797733557946174 modes={'energy': 31, 'warning': 2, 'confirming': 2, 'full_effort': 219}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [523513]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275725.29 ON ganymede CANCELLED AT 2026-10-14T02:13:59 ***
+slurmstepd-neptune: error: *** STEP 275725.28 ON neptune CANCELLED AT 2026-10-14T02:13:59 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9525 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9525 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9525 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9525 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9525 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9525 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9525 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9525 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 275725.27 ON ganymede CANCELLED AT 2026-10-14T02:14:01 ***
+slurmstepd-neptune: error: *** STEP 275725.26 ON neptune CANCELLED AT 2026-10-14T02:14:01 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 345.5, "published_s": 3618.2, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_fill_r2=ok
+fill_r2 clock_errors=0
+fill_r2 redirect=20
+fill_r2 p_slot_update=0
+fill_r2 kv_gate_update=0
+fill_r2 admission_calibration=1
+fill_r2 kv_overflow_or_drop=1047
+--- preflight and clock reset before fill_r3
