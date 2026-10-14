@@ -11,11 +11,11 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=2G
-#SBATCH --output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20261014-140157-luqia-inspect-cccl-cudastf-dir/slurm-%j.out
-#SBATCH --error=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20261014-140157-luqia-inspect-cccl-cudastf-dir/slurm-%j.err
+#SBATCH --output=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20261014-140157-luqia/slurm-%j.out
+#SBATCH --error=/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20261014-140157-luqia/slurm-%j.err
 
 set -uo pipefail
-JOB_NAME="20261014-140157-luqia-inspect-cccl-cudastf-dir"
+JOB_NAME="20261014-140157-luqia"
 OUT="/data/users/chjing/Sweep_LLM_Jobs_broker/jobs/${JOB_NAME}/results/${SLURM_JOB_ID:-manual}"
 D="/data/users/chjing/cccl-cudastf-region-spike-d10a88a"
 mkdir -p "${OUT}"
