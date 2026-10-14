@@ -103,3 +103,31 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 294 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 285 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=360.28655801783316 energy_j=110301.7738467822 J/tok=6.556605471484408 modes={}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=351.9931079936214 energy_j=117038.65309365891 J/tok=3.490252977474694 modes={}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=363.00947901327163 energy_j=120265.91410876466 J/tok=1.760332466463183 modes={}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=1.0 ttft_p95=377.3939390084706 energy_j=124273.41245575428 J/tok=0.8940661912815601 modes={}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=1.0 ttft_p95=411.31985699757934 energy_j=127772.58264069082 J/tok=0.6124803232782438 modes={}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9986111111111111 ttft_p95=432.768466998823 energy_j=131361.36616414355 J/tok=0.4760435674055009 modes={}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=339.8476089932956 energy_j=132994.23104719687 J/tok=13.234573693620945 modes={}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=411.3862490048632 energy_j=161970.96146381044 J/tok=5.807075916528411 modes={}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=446.93796199862845 energy_j=187213.0208912406 J/tok=3.750411092015718 modes={}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=1.0 ttft_p95=490.6138190126512 energy_j=167915.33520503424 J/tok=1.8327566902611274 modes={}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9435185185185185 ttft_p95=1421.5858049865346 energy_j=186911.66245121718 J/tok=1.4364891785947815 modes={}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.6166666666666667 ttft_p95=18087.362507008947 energy_j=189348.17749777462 J/tok=1.1183057666848257 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [522420]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-europa: error: *** STEP 275830.13 ON europa CANCELLED AT 2026-10-14T15:16:58 ***
+slurmstepd-uranus: error: *** STEP 275830.12 ON uranus CANCELLED AT 2026-10-14T15:16:58 ***
+srun: error: europa: task 0: Killed
+srun: error: uranus: task 0: Killed
+CanaTune controller: reset http://10.1.0.5:9630 GPU 0: ok
+CanaTune controller: reset http://10.1.0.5:9630 GPU 1: ok
+CanaTune controller: reset http://10.1.0.5:9630 GPU 2: ok
+CanaTune controller: reset http://10.1.0.5:9630 GPU 3: ok
