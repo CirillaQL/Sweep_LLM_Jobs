@@ -382,3 +382,42 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 286 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 260 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=347.7130350074731 energy_j=72828.85711540509 J/tok=3.3143195192229493 modes={'energy': 181}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=0.9944444444444445 ttft_p95=389.73807700676844 energy_j=73978.35777155208 J/tok=1.7094151112958864 modes={'energy': 182}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=427.3900910047814 energy_j=78420.37606152725 J/tok=0.9091479655161581 modes={'energy': 156, 'confirming': 4, 'expanding': 22}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9916666666666667 ttft_p95=457.89702399633825 energy_j=86598.37120456982 J/tok=0.49168140719236586 modes={'energy': 180}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.975 ttft_p95=522.4642690154724 energy_j=97350.91571916961 J/tok=0.3685608118452082 modes={'energy': 78, 'confirming': 65, 'expanding': 35}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9729166666666667 ttft_p95=548.2814960123505 energy_j=106945.59187213038 J/tok=0.302967166218492 modes={'confirming': 1, 'expanding': 175}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=391.4856810006313 energy_j=100223.8846953497 J/tok=9.973518230206956 modes={'energy': 77, 'warning': 160}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=438.7714890181087 energy_j=115025.4948238325 J/tok=4.123960089768841 modes={'energy': 118, 'warning': 88, 'confirming': 1, 'expanding': 56}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9944444444444445 ttft_p95=503.0412790074479 energy_j=135964.15160078523 J/tok=2.723749981986162 modes={'energy': 110, 'warning': 111, 'confirming': 39, 'expanding': 27}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9652777777777778 ttft_p95=570.2948840043973 energy_j=130742.53179025839 J/tok=1.4270242175777774 modes={'energy': 55, 'warning': 26, 'confirming': 29, 'expanding': 124}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9564814814814815 ttft_p95=576.9743169948924 energy_j=159222.55705541326 J/tok=1.2236875816028132 modes={'energy': 80, 'warning': 14, 'confirming': 31, 'expanding': 55, 'full_effort': 78}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9388888888888889 ttft_p95=631.1402950086631 energy_j=168941.33863010505 J/tok=0.9977813133359619 modes={'energy': 48, 'warning': 1, 'expanding': 6, 'full_effort': 177}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [776444]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-europa: error: *** STEP 275914.29 ON europa CANCELLED AT 2026-10-15T06:04:18 ***
+slurmstepd-uranus: error: *** STEP 275914.28 ON uranus CANCELLED AT 2026-10-15T06:04:18 ***
+srun: error: europa: task 0: Killed
+srun: error: uranus: task 0: Killed
+CanaTune controller: reset http://10.1.0.5:9714 GPU 0: ok
+CanaTune controller: reset http://10.1.0.5:9714 GPU 1: ok
+CanaTune controller: reset http://10.1.0.5:9714 GPU 2: ok
+CanaTune controller: reset http://10.1.0.5:9714 GPU 3: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 0: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 1: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 2: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-uranus: error: *** STEP 275914.26 ON uranus CANCELLED AT 2026-10-15T06:04:20 ***
+slurmstepd-europa: error: *** STEP 275914.27 ON europa CANCELLED AT 2026-10-15T06:04:20 ***
+srun: error: europa: task 0: Killed
