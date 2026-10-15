@@ -240,3 +240,52 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 288 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 260 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=341.3861159933731 energy_j=75855.95068274593 J/tok=3.4520774862449226 modes={'energy': 181}
+bench: sharegpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=334.4011250010226 energy_j=84572.80004624462 J/tok=1.9417917997484644 modes={'energy': 151, 'warning': 28}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9972222222222222 ttft_p95=343.0354579759296 energy_j=95487.15147097968 J/tok=1.0948352535197634 modes={'energy': 61, 'warning': 116}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9986111111111111 ttft_p95=401.8604480079375 energy_j=92781.81150806809 J/tok=0.5277721233230456 modes={'energy': 153, 'warning': 27}
+bench: sharegpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9861111111111112 ttft_p95=431.2229430070147 energy_j=101566.64408967685 J/tok=0.38427090949898546 modes={'energy': 77, 'confirming': 99}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9631944444444445 ttft_p95=523.3620190119836 energy_j=111091.9317924795 J/tok=0.31442922222640973 modes={'energy': 12, 'confirming': 98, 'expanding': 40, 'full_effort': 24}
+bench: burstgpt_r0_0.5rps: exit=0 ok=89/90 goodput=0.9888888888888889 ttft_p95=360.2531570068095 energy_j=99395.54763320541 J/tok=10.205929523894179 modes={'energy': 119, 'warning': 119}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=397.74924897938035 energy_j=118059.65983582877 J/tok=4.232742716041473 modes={'energy': 105, 'warning': 157}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=1.0 ttft_p95=461.71482201316394 energy_j=140856.79290186023 J/tok=2.8217635502596305 modes={'energy': 117, 'warning': 139, 'confirming': 2, 'expanding': 27}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9930555555555556 ttft_p95=502.0830840221606 energy_j=129792.54622804068 J/tok=1.4166553469044705 modes={'energy': 56, 'warning': 142, 'confirming': 38}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9666666666666667 ttft_p95=557.6799879781902 energy_j=154073.64672333718 J/tok=1.1841161932978563 modes={'energy': 92, 'confirming': 32, 'expanding': 100, 'warning': 7, 'full_effort': 29}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.9076388888888889 ttft_p95=704.0545110066887 energy_j=168605.9141321106 J/tok=0.9958002689163558 modes={'energy': 48, 'warning': 1, 'confirming': 1, 'expanding': 5, 'full_effort': 177}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [744314]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-europa: error: *** STEP 275914.20 ON europa CANCELLED AT 2026-10-15T04:09:39 ***
+slurmstepd-uranus: error: *** STEP 275914.21 ON uranus CANCELLED AT 2026-10-15T04:09:39 ***
+srun: error: europa: task 0: Killed
+srun: error: uranus: task 0: Killed
+CanaTune controller: reset http://10.1.0.5:9714 GPU 0: ok
+CanaTune controller: reset http://10.1.0.5:9714 GPU 1: ok
+CanaTune controller: reset http://10.1.0.5:9714 GPU 2: ok
+CanaTune controller: reset http://10.1.0.5:9714 GPU 3: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 0: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 1: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 2: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-europa: error: *** STEP 275914.19 ON europa CANCELLED AT 2026-10-15T04:09:41 ***
+slurmstepd-uranus: error: *** STEP 275914.18 ON uranus CANCELLED AT 2026-10-15T04:09:41 ***
+srun: error: europa: task 0: Killed
+srun: error: uranus: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 330.5, "published_s": 2989.1, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_fill_r1=ok
+fill_r1 clock_errors=0
+fill_r1 redirect=10
+fill_r1 p_slot_update=0
+fill_r1 kv_gate_update=0
+fill_r1 admission_calibration=1
+fill_r1 kv_overflow_or_drop=0
+--- preflight and clock reset before fill_r2
