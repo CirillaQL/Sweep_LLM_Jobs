@@ -347,3 +347,42 @@ slurmstepd-uranus: error: *** STEP 276039.46 ON uranus CANCELLED AT 2026-10-15T1
 slurmstepd-neptune: error: *** STEP 276039.47 ON neptune CANCELLED AT 2026-10-15T10:33:53 ***
 srun: error: neptune: task 0: Killed
 srun: error: uranus: task 0: Killed
+CanaTune controller: reset http://10.1.0.5:9339 GPU 0: ok
+CanaTune controller: reset http://10.1.0.5:9339 GPU 1: ok
+CanaTune controller: reset http://10.1.0.5:9339 GPU 2: ok
+CanaTune controller: reset http://10.1.0.5:9339 GPU 3: ok
+CanaTune controller: reset http://10.1.0.6:9339 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9339 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9339 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9339 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9339 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9339 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9339 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9339 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9339 GPU 4: ok
+CanaTune controller: reset http://10.1.0.3:9339 GPU 5: ok
+CanaTune controller: reset http://10.1.0.3:9339 GPU 6: ok
+CanaTune controller: reset http://10.1.0.3:9339 GPU 7: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-uranus: error: *** STEP 276039.43 ON uranus CANCELLED AT 2026-10-15T10:33:57 ***
+slurmstepd-neptune: error: *** STEP 276039.44 ON neptune CANCELLED AT 2026-10-15T10:33:57 ***
+slurmstepd-ganymede: error: *** STEP 276039.42 ON ganymede CANCELLED AT 2026-10-15T10:33:57 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+srun: error: uranus: task 0: Killed
+smoke2: service stopped early (1)
+bench: {"mode": "cantune", "status": "stopped_early", "controller_exit": 1}
+RESULT_fill_r1b=failed stage=service_stopped_early
+fill_r1b clock_errors=0
+fill_r1b redirect=0
+fill_r1b p_slot_update=0
+fill_r1b kv_gate_update=0
+fill_r1b admission_calibration=0
+fill_r1b kv_overflow_or_drop=0
+RESULT= baseline_r1:3 fill_r1:3
+--- teardown 2026-10-15T10:34:04+02:00
