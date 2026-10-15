@@ -1,0 +1,229 @@
+{
+  "mode": "cantune",
+  "slo": [
+    600.0,
+    100.0
+  ],
+  "stages": [
+    {
+      "name": "replay_w00",
+      "rate_rps": 5.216666666666667,
+      "num_prompts": 3130,
+      "workload": "replay",
+      "segment": [
+        0.0,
+        600.0
+      ]
+    },
+    {
+      "name": "replay_w01",
+      "rate_rps": 5.331666666666667,
+      "num_prompts": 3199,
+      "workload": "replay",
+      "segment": [
+        600.0,
+        1200.0
+      ]
+    },
+    {
+      "name": "replay_w02",
+      "rate_rps": 3.9583333333333335,
+      "num_prompts": 2375,
+      "workload": "replay",
+      "segment": [
+        1200.0,
+        1800.0
+      ]
+    },
+    {
+      "name": "replay_w03",
+      "rate_rps": 3.7183333333333333,
+      "num_prompts": 2231,
+      "workload": "replay",
+      "segment": [
+        1800.0,
+        2400.0
+      ]
+    },
+    {
+      "name": "replay_w04",
+      "rate_rps": 3.506666666666667,
+      "num_prompts": 2104,
+      "workload": "replay",
+      "segment": [
+        2400.0,
+        3000.0
+      ]
+    },
+    {
+      "name": "replay_w05",
+      "rate_rps": 3.2733333333333334,
+      "num_prompts": 1964,
+      "workload": "replay",
+      "segment": [
+        3000.0,
+        3600.0
+      ]
+    },
+    {
+      "name": "replay_w06",
+      "rate_rps": 3.243333333333333,
+      "num_prompts": 1946,
+      "workload": "replay",
+      "segment": [
+        3600.0,
+        4200.0
+      ]
+    },
+    {
+      "name": "replay_w07",
+      "rate_rps": 3.205,
+      "num_prompts": 1923,
+      "workload": "replay",
+      "segment": [
+        4200.0,
+        4800.0
+      ]
+    },
+    {
+      "name": "replay_w08",
+      "rate_rps": 3.4716666666666667,
+      "num_prompts": 2083,
+      "workload": "replay",
+      "segment": [
+        4800.0,
+        5400.0
+      ]
+    },
+    {
+      "name": "replay_w09",
+      "rate_rps": 3.49,
+      "num_prompts": 2094,
+      "workload": "replay",
+      "segment": [
+        5400.0,
+        6000.0
+      ]
+    },
+    {
+      "name": "replay_w10",
+      "rate_rps": 3.29,
+      "num_prompts": 1974,
+      "workload": "replay",
+      "segment": [
+        6000.0,
+        6600.0
+      ]
+    },
+    {
+      "name": "replay_w11",
+      "rate_rps": 0.8,
+      "num_prompts": 480,
+      "workload": "replay",
+      "segment": [
+        6600.0,
+        7200.0
+      ]
+    },
+    {
+      "name": "replay_w12",
+      "rate_rps": 0.6266666666666667,
+      "num_prompts": 376,
+      "workload": "replay",
+      "segment": [
+        7200.0,
+        7800.0
+      ]
+    },
+    {
+      "name": "replay_w13",
+      "rate_rps": 0.6761744955097739,
+      "num_prompts": 403,
+      "workload": "replay",
+      "segment": [
+        7800.0,
+        8396.000001
+      ]
+    },
+    {
+      "name": "replay_total",
+      "rate_rps": 3.13030014255237,
+      "num_prompts": 26282,
+      "workload": "replay",
+      "segment": [
+        0.0,
+        Infinity
+      ]
+    }
+  ],
+  "dataset": "",
+  "stage_s": 180.0,
+  "gap_s": 30.0,
+  "output_len": null,
+  "ignore_eos": true,
+  "seed": 20261002,
+  "burstiness": 1.0,
+  "endpoint": "/v1/completions",
+  "tokenizer": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+  "command": [
+    "/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm",
+    "bench",
+    "serve"
+  ],
+  "extra_args": [],
+  "stage_timeout_s": null,
+  "dataset_name": "sharegpt",
+  "name": "",
+  "workloads": [
+    {
+      "dataset": "/data/users/chjing/vllm_job_work/275892/burstgpt_replay.jsonl",
+      "rates": [
+        1.0,
+        2.0,
+        4.0
+      ],
+      "stage_s": 180.0,
+      "gap_s": 30.0,
+      "output_len": null,
+      "ignore_eos": true,
+      "seed": 20261002,
+      "burstiness": 1.0,
+      "endpoint": "/v1/completions",
+      "tokenizer": "/data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da",
+      "command": [
+        "/data/users/chjing/miniforge3/envs/cuda-env/bin/vllm",
+        "bench",
+        "serve"
+      ],
+      "extra_args": [],
+      "stage_timeout_s": null,
+      "dataset_name": "sharegpt",
+      "name": "replay",
+      "workloads": [],
+      "score_slos": [
+        [
+          600.0,
+          100.0
+        ],
+        [
+          1000.0,
+          100.0
+        ]
+      ],
+      "replay": true,
+      "segment_s": 600.0
+    }
+  ],
+  "score_slos": [
+    [
+      600.0,
+      100.0
+    ],
+    [
+      1000.0,
+      100.0
+    ]
+  ],
+  "replay": false,
+  "segment_s": 600.0
+}
