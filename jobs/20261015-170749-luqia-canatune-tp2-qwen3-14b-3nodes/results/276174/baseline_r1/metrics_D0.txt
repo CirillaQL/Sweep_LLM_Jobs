@@ -1,0 +1,537 @@
+# HELP python_gc_objects_collected_total Objects collected during gc
+# TYPE python_gc_objects_collected_total counter
+python_gc_objects_collected_total{generation="0"} 11834.0
+python_gc_objects_collected_total{generation="1"} 2096.0
+python_gc_objects_collected_total{generation="2"} 443.0
+# HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
+# TYPE python_gc_objects_uncollectable_total counter
+python_gc_objects_uncollectable_total{generation="0"} 0.0
+python_gc_objects_uncollectable_total{generation="1"} 0.0
+python_gc_objects_uncollectable_total{generation="2"} 0.0
+# HELP python_gc_collections_total Number of times this generation was collected
+# TYPE python_gc_collections_total counter
+python_gc_collections_total{generation="0"} 2057.0
+python_gc_collections_total{generation="1"} 187.0
+python_gc_collections_total{generation="2"} 11.0
+# HELP python_info Python platform information
+# TYPE python_info gauge
+python_info{implementation="CPython",major="3",minor="10",patchlevel="17",version="3.10.17"} 1.0
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 2.4399241216e+010
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 1.216466944e+09
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.7920779223e+09
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 91.85000000000001
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 77.0
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 131072.0
+# HELP vllm:num_requests_running Number of requests in model execution batches.
+# TYPE vllm:num_requests_running gauge
+vllm:num_requests_running{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+# HELP vllm:num_requests_waiting Number of requests waiting to be processed.
+# TYPE vllm:num_requests_waiting gauge
+vllm:num_requests_waiting{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+# HELP vllm:engine_sleep_state Engine sleep state; awake = 0 means engine is sleeping; awake = 1 means engine is awake; weights_offloaded = 1 means sleep level 1; discard_all = 1 means sleep level 2.
+# TYPE vllm:engine_sleep_state gauge
+vllm:engine_sleep_state{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18",sleep_state="awake"} 1.0
+vllm:engine_sleep_state{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18",sleep_state="weights_offloaded"} 0.0
+vllm:engine_sleep_state{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18",sleep_state="discard_all"} 0.0
+# HELP vllm:kv_cache_usage_perc KV-cache usage. 1 means 100 percent usage.
+# TYPE vllm:kv_cache_usage_perc gauge
+vllm:kv_cache_usage_perc{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+# HELP vllm:prefix_cache_queries_total Prefix cache queries, in terms of number of queried tokens.
+# TYPE vllm:prefix_cache_queries_total counter
+vllm:prefix_cache_queries_total{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+# HELP vllm:prefix_cache_queries_created Prefix cache queries, in terms of number of queried tokens.
+# TYPE vllm:prefix_cache_queries_created gauge
+vllm:prefix_cache_queries_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948528357e+09
+# HELP vllm:prefix_cache_hits_total Prefix cache hits, in terms of number of cached tokens.
+# TYPE vllm:prefix_cache_hits_total counter
+vllm:prefix_cache_hits_total{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+# HELP vllm:prefix_cache_hits_created Prefix cache hits, in terms of number of cached tokens.
+# TYPE vllm:prefix_cache_hits_created gauge
+vllm:prefix_cache_hits_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948528554e+09
+# HELP vllm:external_prefix_cache_queries_total External prefix cache queries from KV connector cross-instance cache sharing, in terms of number of queried tokens.
+# TYPE vllm:external_prefix_cache_queries_total counter
+vllm:external_prefix_cache_queries_total{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 810372.0
+# HELP vllm:external_prefix_cache_queries_created External prefix cache queries from KV connector cross-instance cache sharing, in terms of number of queried tokens.
+# TYPE vllm:external_prefix_cache_queries_created gauge
+vllm:external_prefix_cache_queries_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948528738e+09
+# HELP vllm:external_prefix_cache_hits_total External prefix cache hits from KV connector cross-instance cache sharing, in terms of number of cached tokens.
+# TYPE vllm:external_prefix_cache_hits_total counter
+vllm:external_prefix_cache_hits_total{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 808434.0
+# HELP vllm:external_prefix_cache_hits_created External prefix cache hits from KV connector cross-instance cache sharing, in terms of number of cached tokens.
+# TYPE vllm:external_prefix_cache_hits_created gauge
+vllm:external_prefix_cache_hits_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948528876e+09
+# HELP vllm:mm_cache_queries_total Multi-modal cache queries, in terms of number of queried items.
+# TYPE vllm:mm_cache_queries_total counter
+vllm:mm_cache_queries_total{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+# HELP vllm:mm_cache_queries_created Multi-modal cache queries, in terms of number of queried items.
+# TYPE vllm:mm_cache_queries_created gauge
+vllm:mm_cache_queries_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948529985e+09
+# HELP vllm:mm_cache_hits_total Multi-modal cache hits, in terms of number of cached items.
+# TYPE vllm:mm_cache_hits_total counter
+vllm:mm_cache_hits_total{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+# HELP vllm:mm_cache_hits_created Multi-modal cache hits, in terms of number of cached items.
+# TYPE vllm:mm_cache_hits_created gauge
+vllm:mm_cache_hits_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.792078194853028e+09
+# HELP vllm:num_preemptions_total Cumulative number of preemption from the engine.
+# TYPE vllm:num_preemptions_total counter
+vllm:num_preemptions_total{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 18.0
+# HELP vllm:num_preemptions_created Cumulative number of preemption from the engine.
+# TYPE vllm:num_preemptions_created gauge
+vllm:num_preemptions_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948530462e+09
+# HELP vllm:prompt_tokens_total Number of prefill tokens processed.
+# TYPE vllm:prompt_tokens_total counter
+vllm:prompt_tokens_total{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 810372.0
+# HELP vllm:prompt_tokens_created Number of prefill tokens processed.
+# TYPE vllm:prompt_tokens_created gauge
+vllm:prompt_tokens_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948530598e+09
+# HELP vllm:generation_tokens_total Number of generation tokens processed.
+# TYPE vllm:generation_tokens_total counter
+vllm:generation_tokens_total{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 371198.0
+# HELP vllm:generation_tokens_created Number of generation tokens processed.
+# TYPE vllm:generation_tokens_created gauge
+vllm:generation_tokens_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948530726e+09
+# HELP vllm:request_success_total Count of successfully processed requests.
+# TYPE vllm:request_success_total counter
+vllm:request_success_total{engine="0",finished_reason="stop",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 8.0
+vllm:request_success_total{engine="0",finished_reason="length",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1930.0
+vllm:request_success_total{engine="0",finished_reason="abort",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+vllm:request_success_total{engine="0",finished_reason="error",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+# HELP vllm:request_success_created Count of successfully processed requests.
+# TYPE vllm:request_success_created gauge
+vllm:request_success_created{engine="0",finished_reason="stop",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948531e+09
+vllm:request_success_created{engine="0",finished_reason="length",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948531122e+09
+vllm:request_success_created{engine="0",finished_reason="abort",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948531218e+09
+vllm:request_success_created{engine="0",finished_reason="error",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948531296e+09
+# HELP vllm:request_prompt_tokens Number of prefill tokens processed.
+# TYPE vllm:request_prompt_tokens histogram
+vllm:request_prompt_tokens_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+vllm:request_prompt_tokens_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+vllm:request_prompt_tokens_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 16.0
+vllm:request_prompt_tokens_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 119.0
+vllm:request_prompt_tokens_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 254.0
+vllm:request_prompt_tokens_bucket{engine="0",le="50.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 371.0
+vllm:request_prompt_tokens_bucket{engine="0",le="100.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 561.0
+vllm:request_prompt_tokens_bucket{engine="0",le="200.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 830.0
+vllm:request_prompt_tokens_bucket{engine="0",le="500.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1421.0
+vllm:request_prompt_tokens_bucket{engine="0",le="1000.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1779.0
+vllm:request_prompt_tokens_bucket{engine="0",le="2000.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1859.0
+vllm:request_prompt_tokens_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prompt_tokens_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prompt_tokens_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 810372.0
+# HELP vllm:request_prompt_tokens_created Number of prefill tokens processed.
+# TYPE vllm:request_prompt_tokens_created gauge
+vllm:request_prompt_tokens_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948531754e+09
+# HELP vllm:request_generation_tokens Number of generation tokens processed.
+# TYPE vllm:request_generation_tokens histogram
+vllm:request_generation_tokens_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 21.0
+vllm:request_generation_tokens_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 91.0
+vllm:request_generation_tokens_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 168.0
+vllm:request_generation_tokens_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 323.0
+vllm:request_generation_tokens_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 391.0
+vllm:request_generation_tokens_bucket{engine="0",le="50.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 534.0
+vllm:request_generation_tokens_bucket{engine="0",le="100.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 649.0
+vllm:request_generation_tokens_bucket{engine="0",le="200.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 810.0
+vllm:request_generation_tokens_bucket{engine="0",le="500.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1898.0
+vllm:request_generation_tokens_bucket{engine="0",le="1000.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1910.0
+vllm:request_generation_tokens_bucket{engine="0",le="2000.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_generation_tokens_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_generation_tokens_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_generation_tokens_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 371198.0
+# HELP vllm:request_generation_tokens_created Number of generation tokens processed.
+# TYPE vllm:request_generation_tokens_created gauge
+vllm:request_generation_tokens_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.792078194853235e+09
+# HELP vllm:iteration_tokens_total Histogram of number of tokens per engine_step.
+# TYPE vllm:iteration_tokens_total histogram
+vllm:iteration_tokens_total_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 8077.0
+vllm:iteration_tokens_total_bucket{engine="0",le="8.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 25303.0
+vllm:iteration_tokens_total_bucket{engine="0",le="16.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 31655.0
+vllm:iteration_tokens_total_bucket{engine="0",le="32.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 36708.0
+vllm:iteration_tokens_total_bucket{engine="0",le="64.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 38777.0
+vllm:iteration_tokens_total_bucket{engine="0",le="128.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 38998.0
+vllm:iteration_tokens_total_bucket{engine="0",le="256.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 39342.0
+vllm:iteration_tokens_total_bucket{engine="0",le="512.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 39777.0
+vllm:iteration_tokens_total_bucket{engine="0",le="1024.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 40122.0
+vllm:iteration_tokens_total_bucket{engine="0",le="2048.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 40205.0
+vllm:iteration_tokens_total_bucket{engine="0",le="4096.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 40280.0
+vllm:iteration_tokens_total_bucket{engine="0",le="8192.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 40284.0
+vllm:iteration_tokens_total_bucket{engine="0",le="16384.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 40284.0
+vllm:iteration_tokens_total_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 40284.0
+vllm:iteration_tokens_total_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 40284.0
+vllm:iteration_tokens_total_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.18157e+06
+# HELP vllm:iteration_tokens_total_created Histogram of number of tokens per engine_step.
+# TYPE vllm:iteration_tokens_total_created gauge
+vllm:iteration_tokens_total_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948532705e+09
+# HELP vllm:request_max_num_generation_tokens Histogram of maximum number of requested generation tokens.
+# TYPE vllm:request_max_num_generation_tokens histogram
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 21.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 91.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 168.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 323.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 391.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="50.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 534.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="100.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 649.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="200.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 810.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="500.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1898.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="1000.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1910.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="2000.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_max_num_generation_tokens_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_max_num_generation_tokens_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_max_num_generation_tokens_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 371198.0
+# HELP vllm:request_max_num_generation_tokens_created Histogram of maximum number of requested generation tokens.
+# TYPE vllm:request_max_num_generation_tokens_created gauge
+vllm:request_max_num_generation_tokens_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948533158e+09
+# HELP vllm:request_params_n Histogram of the n request parameter.
+# TYPE vllm:request_params_n histogram
+vllm:request_params_n_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_params_n_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_params_n_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_params_n_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_params_n_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_params_n_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_params_n_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_params_n_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+# HELP vllm:request_params_n_created Histogram of the n request parameter.
+# TYPE vllm:request_params_n_created gauge
+vllm:request_params_n_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948533554e+09
+# HELP vllm:request_params_max_tokens Histogram of the max_tokens request parameter.
+# TYPE vllm:request_params_max_tokens histogram
+vllm:request_params_max_tokens_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 21.0
+vllm:request_params_max_tokens_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 91.0
+vllm:request_params_max_tokens_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 168.0
+vllm:request_params_max_tokens_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 323.0
+vllm:request_params_max_tokens_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 391.0
+vllm:request_params_max_tokens_bucket{engine="0",le="50.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 533.0
+vllm:request_params_max_tokens_bucket{engine="0",le="100.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 645.0
+vllm:request_params_max_tokens_bucket{engine="0",le="200.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 804.0
+vllm:request_params_max_tokens_bucket{engine="0",le="500.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1898.0
+vllm:request_params_max_tokens_bucket{engine="0",le="1000.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1910.0
+vllm:request_params_max_tokens_bucket{engine="0",le="2000.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_params_max_tokens_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_params_max_tokens_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_params_max_tokens_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 372266.0
+# HELP vllm:request_params_max_tokens_created Histogram of the max_tokens request parameter.
+# TYPE vllm:request_params_max_tokens_created gauge
+vllm:request_params_max_tokens_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948533936e+09
+# HELP vllm:time_to_first_token_seconds Histogram of time to first token in seconds.
+# TYPE vllm:time_to_first_token_seconds histogram
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.001",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.005",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.01",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.02",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.04",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.06",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 0.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.08",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 39.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.1",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 39.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.25",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1815.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1820.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="0.75",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1825.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1828.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="2.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1868.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1916.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="7.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="40.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="80.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="160.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="640.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="2560.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:time_to_first_token_seconds_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:time_to_first_token_seconds_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:time_to_first_token_seconds_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 691.7848279476166
+# HELP vllm:time_to_first_token_seconds_created Histogram of time to first token in seconds.
+# TYPE vllm:time_to_first_token_seconds_created gauge
+vllm:time_to_first_token_seconds_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.792078194853436e+09
+# HELP vllm:inter_token_latency_seconds Histogram of inter-token latency in seconds.
+# TYPE vllm:inter_token_latency_seconds histogram
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.01",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 76.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.025",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 462.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.05",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 5008.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.075",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 320975.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.1",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 367876.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.15",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369219.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.2",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369243.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.3",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369244.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.4",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369247.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369247.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="0.75",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369255.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369255.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="2.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369260.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369260.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="7.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369260.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369260.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369260.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="40.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369260.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="80.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369260.0
+vllm:inter_token_latency_seconds_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369260.0
+vllm:inter_token_latency_seconds_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 369260.0
+vllm:inter_token_latency_seconds_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 25164.598284416483
+# HELP vllm:inter_token_latency_seconds_created Histogram of inter-token latency in seconds.
+# TYPE vllm:inter_token_latency_seconds_created gauge
+vllm:inter_token_latency_seconds_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948534946e+09
+# HELP vllm:request_time_per_output_token_seconds Histogram of time_per_output_token_seconds per request.
+# TYPE vllm:request_time_per_output_token_seconds histogram
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.01",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 21.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.025",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 21.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.05",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 21.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.075",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1784.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.1",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1935.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.15",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1935.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.2",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1936.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.3",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1936.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.4",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1937.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="0.75",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="2.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="7.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="40.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="80.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_time_per_output_token_seconds_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 130.82748913394448
+# HELP vllm:request_time_per_output_token_seconds_created Histogram of time_per_output_token_seconds per request.
+# TYPE vllm:request_time_per_output_token_seconds_created gauge
+vllm:request_time_per_output_token_seconds_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948535395e+09
+# HELP vllm:e2e_request_latency_seconds Histogram of e2e request latency in seconds.
+# TYPE vllm:e2e_request_latency_seconds histogram
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="0.3",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 101.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="0.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 158.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="0.8",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 288.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 308.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="1.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 360.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 403.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="2.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 448.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 556.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 736.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="15.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 836.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1857.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="30.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1895.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="40.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1902.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="50.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1908.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="60.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1910.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="120.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1935.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="240.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="480.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="960.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="1920.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="7680.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:e2e_request_latency_seconds_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:e2e_request_latency_seconds_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:e2e_request_latency_seconds_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 25856.391760110855
+# HELP vllm:e2e_request_latency_seconds_created Histogram of e2e request latency in seconds.
+# TYPE vllm:e2e_request_latency_seconds_created gauge
+vllm:e2e_request_latency_seconds_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948535895e+09
+# HELP vllm:request_queue_time_seconds Histogram of time spent in WAITING phase for request.
+# TYPE vllm:request_queue_time_seconds histogram
+vllm:request_queue_time_seconds_bucket{engine="0",le="0.3",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1818.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="0.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1824.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="0.8",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1828.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1832.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="1.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1846.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1860.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="2.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1871.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1920.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="15.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="30.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="40.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="50.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="60.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="120.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="240.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="480.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="960.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="1920.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="7680.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_queue_time_seconds_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 363.56316596025135
+# HELP vllm:request_queue_time_seconds_created Histogram of time spent in WAITING phase for request.
+# TYPE vllm:request_queue_time_seconds_created gauge
+vllm:request_queue_time_seconds_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948536737e+09
+# HELP vllm:request_inference_time_seconds Histogram of time spent in RUNNING phase for request.
+# TYPE vllm:request_inference_time_seconds histogram
+vllm:request_inference_time_seconds_bucket{engine="0",le="0.3",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 142.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="0.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 201.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="0.8",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 320.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 340.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="1.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 395.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 438.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="2.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 487.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 577.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 753.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="15.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 852.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1860.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="30.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1895.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="40.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1902.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="50.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1908.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="60.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1910.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="120.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1935.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="240.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="480.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="960.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="1920.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="7680.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_inference_time_seconds_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_inference_time_seconds_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_inference_time_seconds_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 25426.145536399155
+# HELP vllm:request_inference_time_seconds_created Histogram of time spent in RUNNING phase for request.
+# TYPE vllm:request_inference_time_seconds_created gauge
+vllm:request_inference_time_seconds_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948537197e+09
+# HELP vllm:request_prefill_time_seconds Histogram of time spent in PREFILL phase for request.
+# TYPE vllm:request_prefill_time_seconds histogram
+vllm:request_prefill_time_seconds_bucket{engine="0",le="0.3",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="0.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="0.8",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="1.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="2.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="15.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="30.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="40.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="50.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="60.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="120.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="240.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="480.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="960.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="1920.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="7680.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_time_seconds_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 261.5472519826726
+# HELP vllm:request_prefill_time_seconds_created Histogram of time spent in PREFILL phase for request.
+# TYPE vllm:request_prefill_time_seconds_created gauge
+vllm:request_prefill_time_seconds_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948537714e+09
+# HELP vllm:request_decode_time_seconds Histogram of time spent in DECODE phase for request.
+# TYPE vllm:request_decode_time_seconds histogram
+vllm:request_decode_time_seconds_bucket{engine="0",le="0.3",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 168.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="0.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 309.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="0.8",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 333.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 355.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="1.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 409.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 453.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="2.5",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 492.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 579.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 755.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="15.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 865.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1861.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="30.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1895.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="40.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1902.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="50.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1908.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="60.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1910.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="120.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1935.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="240.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="480.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="960.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="1920.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="7680.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_decode_time_seconds_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_decode_time_seconds_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_decode_time_seconds_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 25164.598284416483
+# HELP vllm:request_decode_time_seconds_created Histogram of time spent in DECODE phase for request.
+# TYPE vllm:request_decode_time_seconds_created gauge
+vllm:request_decode_time_seconds_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948538184e+09
+# HELP vllm:request_prefill_kv_computed_tokens Histogram of new KV tokens computed during prefill (excluding cached tokens).
+# TYPE vllm:request_prefill_kv_computed_tokens histogram
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="1.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="2.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="5.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="10.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="20.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="50.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="100.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="200.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="500.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="1000.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="2000.0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_bucket{engine="0",le="+Inf",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_count{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+vllm:request_prefill_kv_computed_tokens_sum{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1938.0
+# HELP vllm:request_prefill_kv_computed_tokens_created Histogram of new KV tokens computed during prefill (excluding cached tokens).
+# TYPE vllm:request_prefill_kv_computed_tokens_created gauge
+vllm:request_prefill_kv_computed_tokens_created{engine="0",model_name="/data/users/chjing/vllm_job_work/models/huggingface/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18"} 1.7920781948538737e+09
+# HELP vllm:cache_config_info Information of the LLMEngine CacheConfig
+# TYPE vllm:cache_config_info gauge
+vllm:cache_config_info{block_size="16",cache_dtype="auto",calculate_kv_scales="False",cpu_kvcache_space_bytes="None",cpu_offload_gb="0.0",enable_prefix_caching="False",engine="0",gpu_memory_utilization="0.7826",is_attention_free="False",kv_cache_memory_bytes="None",kv_offloading_backend="native",kv_offloading_size="None",kv_sharing_fast_prefill="False",mamba_block_size="None",mamba_cache_dtype="auto",mamba_cache_mode="none",mamba_page_size_padded="None",mamba_ssm_cache_dtype="auto",num_cpu_blocks="None",num_gpu_blocks="1654",num_gpu_blocks_override="None",prefix_caching_hash_algo="sha256",sliding_window="None",swap_space="4.0"} 1.0
+# HELP http_requests_total Total number of requests by method, status and handler.
+# TYPE http_requests_total counter
+http_requests_total{handler="/v1/completions",method="POST",status="2xx"} 1938.0
+# HELP http_requests_created Total number of requests by method, status and handler.
+# TYPE http_requests_created gauge
+http_requests_created{handler="/v1/completions",method="POST",status="2xx"} 1.7920784672003636e+09
+# HELP http_request_size_bytes Content length of incoming requests by handler. Only value of header is respected. Otherwise ignored. No percentile calculated. 
+# TYPE http_request_size_bytes summary
+http_request_size_bytes_count{handler="/v1/completions"} 1938.0
+http_request_size_bytes_sum{handler="/v1/completions"} 4.254944e+06
+# HELP http_request_size_bytes_created Content length of incoming requests by handler. Only value of header is respected. Otherwise ignored. No percentile calculated. 
+# TYPE http_request_size_bytes_created gauge
+http_request_size_bytes_created{handler="/v1/completions"} 1.7920784672004447e+09
+# HELP http_response_size_bytes Content length of outgoing responses by handler. Only value of header is respected. Otherwise ignored. No percentile calculated. 
+# TYPE http_response_size_bytes summary
+http_response_size_bytes_count{handler="/v1/completions"} 1938.0
+http_response_size_bytes_sum{handler="/v1/completions"} 1837.0
+# HELP http_response_size_bytes_created Content length of outgoing responses by handler. Only value of header is respected. Otherwise ignored. No percentile calculated. 
+# TYPE http_response_size_bytes_created gauge
+http_response_size_bytes_created{handler="/v1/completions"} 1.7920784672005272e+09
+# HELP http_request_duration_highr_seconds Latency with many buckets but no API specific labels. Made for more accurate percentile calculations. 
+# TYPE http_request_duration_highr_seconds histogram
+http_request_duration_highr_seconds_bucket{le="0.01"} 0.0
+http_request_duration_highr_seconds_bucket{le="0.025"} 0.0
+http_request_duration_highr_seconds_bucket{le="0.05"} 0.0
+http_request_duration_highr_seconds_bucket{le="0.075"} 0.0
+http_request_duration_highr_seconds_bucket{le="0.1"} 0.0
+http_request_duration_highr_seconds_bucket{le="0.25"} 55.0
+http_request_duration_highr_seconds_bucket{le="0.5"} 156.0
+http_request_duration_highr_seconds_bucket{le="0.75"} 285.0
+http_request_duration_highr_seconds_bucket{le="1.0"} 307.0
+http_request_duration_highr_seconds_bucket{le="1.5"} 358.0
+http_request_duration_highr_seconds_bucket{le="2.0"} 403.0
+http_request_duration_highr_seconds_bucket{le="2.5"} 448.0
+http_request_duration_highr_seconds_bucket{le="3.0"} 479.0
+http_request_duration_highr_seconds_bucket{le="3.5"} 500.0
+http_request_duration_highr_seconds_bucket{le="4.0"} 516.0
+http_request_duration_highr_seconds_bucket{le="4.5"} 532.0
+http_request_duration_highr_seconds_bucket{le="5.0"} 555.0
+http_request_duration_highr_seconds_bucket{le="7.5"} 660.0
+http_request_duration_highr_seconds_bucket{le="10.0"} 735.0
+http_request_duration_highr_seconds_bucket{le="30.0"} 1895.0
+http_request_duration_highr_seconds_bucket{le="60.0"} 1910.0
+http_request_duration_highr_seconds_bucket{le="+Inf"} 1938.0
+http_request_duration_highr_seconds_count 1938.0
+http_request_duration_highr_seconds_sum 25873.032392618537
+# HELP http_request_duration_highr_seconds_created Latency with many buckets but no API specific labels. Made for more accurate percentile calculations. 
+# TYPE http_request_duration_highr_seconds_created gauge
+http_request_duration_highr_seconds_created 1.7920781950287492e+09
+# HELP http_request_duration_seconds Latency with only few buckets by handler. Made to be only used if aggregation by handler is important. 
+# TYPE http_request_duration_seconds histogram
+http_request_duration_seconds_bucket{handler="/v1/completions",le="0.1",method="POST"} 0.0
+http_request_duration_seconds_bucket{handler="/v1/completions",le="0.5",method="POST"} 156.0
+http_request_duration_seconds_bucket{handler="/v1/completions",le="1.0",method="POST"} 307.0
+http_request_duration_seconds_bucket{handler="/v1/completions",le="+Inf",method="POST"} 1938.0
+http_request_duration_seconds_count{handler="/v1/completions",method="POST"} 1938.0
+http_request_duration_seconds_sum{handler="/v1/completions",method="POST"} 25873.032392618537
+# HELP http_request_duration_seconds_created Latency with only few buckets by handler. Made to be only used if aggregation by handler is important. 
+# TYPE http_request_duration_seconds_created gauge
+http_request_duration_seconds_created{handler="/v1/completions",method="POST"} 1.7920784672006166e+09
