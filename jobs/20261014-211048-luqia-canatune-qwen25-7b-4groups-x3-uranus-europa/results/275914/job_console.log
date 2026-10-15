@@ -486,3 +486,42 @@ smoke2: t=0s phase=park
 smoke2: t=40s phase=alpha
 smoke2: t=50s phase=ramp
 smoke2: t=306s phase=coarse_target
+smoke2: calibration failed 3 times: no feasible prefill clock at load 3124
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [810071]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-europa: error: *** STEP 275914.37 ON europa CANCELLED AT 2026-10-15T06:18:36 ***
+slurmstepd-uranus: error: *** STEP 275914.36 ON uranus CANCELLED AT 2026-10-15T06:18:36 ***
+srun: error: europa: task 0: Killed
+srun: error: uranus: task 0: Killed
+CanaTune controller: reset http://10.1.0.5:9714 GPU 0: ok
+CanaTune controller: reset http://10.1.0.5:9714 GPU 1: ok
+CanaTune controller: reset http://10.1.0.5:9714 GPU 2: ok
+CanaTune controller: reset http://10.1.0.5:9714 GPU 3: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 0: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 1: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 2: ok
+CanaTune controller: reset http://10.1.0.2:9714 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-uranus: error: *** STEP 275914.34 ON uranus CANCELLED AT 2026-10-15T06:18:38 ***
+slurmstepd-europa: error: *** STEP 275914.35 ON europa CANCELLED AT 2026-10-15T06:18:38 ***
+srun: error: europa: task 0: Killed
+srun: error: uranus: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 325.5, "status": "calibration_failed", "controller_exit": 143}
+RESULT_fill_r3=failed stage=calibration_failed (3 attempts)
+fill_r3 clock_errors=0
+fill_r3 redirect=0
+fill_r3 p_slot_update=0
+fill_r3 kv_gate_update=0
+fill_r3 admission_calibration=0
+fill_r3 kv_overflow_or_drop=0
+RESULT= baseline_r1:0 fill_r1:0 fill_r2:0 fill_r3:5
+--- teardown 2026-10-15T06:18:39+02:00
