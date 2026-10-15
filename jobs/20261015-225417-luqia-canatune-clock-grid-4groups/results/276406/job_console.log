@@ -103,3 +103,38 @@ bench: burstgpt_r0_1rps: 180 prompts at 1 req/s
 bench: burstgpt_r0_1rps: exit 0, 284 s of load
 bench: burstgpt_r1_4rps: 720 prompts at 4 req/s
 bench: burstgpt_r1_4rps: exit 0, 266 s of load
+bench: sharegpt_r0_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=354.92363199591637 energy_j=116162.88451339625 J/tok=3.464136358613791 modes={}
+bench: sharegpt_r1_4rps: exit=0 ok=720/720 goodput=0.9930555555555556 ttft_p95=382.3346570134163 energy_j=123309.67850143719 J/tok=0.8871327537190261 modes={}
+bench: burstgpt_r0_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=428.90073894523084 energy_j=160805.0085059309 J/tok=5.765273501575035 modes={}
+bench: burstgpt_r1_4rps: exit=0 ok=720/720 goodput=0.9930555555555556 ttft_p95=494.70451998058707 energy_j=166670.5041882391 J/tok=1.8191696502716588 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1217888]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 276406.13 ON ganymede CANCELLED AT 2026-10-16T01:45:03 ***
+slurmstepd-neptune: error: *** STEP 276406.12 ON neptune CANCELLED AT 2026-10-16T01:45:03 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9706 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9706 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9706 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9706 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9706 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9706 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9706 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9706 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 276406.10 ON neptune CANCELLED AT 2026-10-16T01:45:05 ***
+slurmstepd-ganymede: error: *** STEP 276406.11 ON ganymede CANCELLED AT 2026-10-16T01:45:05 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 350.5, "clocks_at_start": [{"agent": "http://10.1.0.3:9706", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9706", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9706", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9706", "index": 3, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9706", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9706", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9706", "index": 2, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9706", "index": 3, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline_r1=ok
+--- preflight and clock reset before grid_r1
