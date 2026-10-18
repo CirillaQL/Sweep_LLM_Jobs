@@ -1,0 +1,49 @@
+{
+ "warmup_s": 90.0,
+ "warmup_rate": 1.0,
+ "power_s": 15.0,
+ "settle_s": 2.0,
+ "decode_window_s": 60.0,
+ "load_window_s": 90.0,
+ "seed": 20261017,
+ "tag": "dclk",
+ "stages": [
+  "warmup",
+  "power",
+  "decode"
+ ],
+ "prefill_clocks": [
+  2520
+ ],
+ "decode_clocks": [
+  210,
+  360,
+  510,
+  660,
+  810,
+  960,
+  1110,
+  1260,
+  1410,
+  1560,
+  1710,
+  1860,
+  2040
+ ],
+ "base_prefill_clock": 2520,
+ "base_decode_clock": 2040,
+ "mix_clock": 2520,
+ "mixes": {
+  "default": [
+   [
+    128,
+    256
+   ]
+  ]
+ },
+ "decode_concurrency": [
+  8,
+  32
+ ],
+ "decode_output": 256
+}

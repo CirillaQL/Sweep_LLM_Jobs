@@ -1,0 +1,40 @@
+{
+ "warmup_s": 90.0,
+ "warmup_rate": 1.0,
+ "power_s": 15.0,
+ "settle_s": 2.0,
+ "decode_window_s": 60.0,
+ "load_window_s": 90.0,
+ "seed": 20261017,
+ "tag": "pb5",
+ "stages": [
+  "warmup",
+  "decode"
+ ],
+ "prefill_clocks": [
+  2520
+ ],
+ "decode_clocks": [
+  2040
+ ],
+ "base_prefill_clock": 2520,
+ "base_decode_clock": 2040,
+ "mix_clock": 2520,
+ "mixes": {
+  "default": [
+   [
+    512,
+    1
+   ]
+  ]
+ },
+ "decode_concurrency": [
+  1,
+  2,
+  4,
+  8,
+  16,
+  32
+ ],
+ "decode_output": 1
+}
