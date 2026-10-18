@@ -1,0 +1,83 @@
+{
+  "tag": "dclk",
+  "prefill_clocks": [
+    2520
+  ],
+  "decode_clocks": [
+    300,
+    360,
+    510,
+    660,
+    810,
+    960,
+    1110,
+    1260,
+    1410,
+    1560,
+    1710,
+    1860,
+    2040
+  ],
+  "lut_clocks": null,
+  "base_prefill_clock": 2520,
+  "base_decode_clock": 2040,
+  "stages": [
+    "warmup",
+    "power",
+    "decode"
+  ],
+  "warmup_s": 90.0,
+  "warmup_rate": 1.0,
+  "lut_lengths": [
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048,
+    3072
+  ],
+  "lut_repeats": 7,
+  "warmup_requests": 3,
+  "power_s": 15.0,
+  "settle_s": 2.0,
+  "decode_concurrency": [
+    8,
+    32
+  ],
+  "decode_output": 256,
+  "decode_window_s": 60.0,
+  "decode_stagger_s": 15.0,
+  "load_rates": [
+    0.5,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "load_window_s": 90.0,
+  "load_output": 64,
+  "mixes": {
+    "default": [
+      [
+        128,
+        256
+      ]
+    ]
+  },
+  "mix_clock": 2520,
+  "mix_names": [
+    "short",
+    "long"
+  ],
+  "scans": [],
+  "saturation_ttft_ms": 3000.0,
+  "stall_ms": 10000.0,
+  "drain_timeout_s": 120.0,
+  "seed": 20261017
+}
