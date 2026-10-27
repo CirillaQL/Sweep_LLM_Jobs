@@ -108,3 +108,19 @@ ok   nixl ?
 ok   sglang.srt.disaggregation.fake ?
 ok   sglang.srt.disaggregation.nixl ?
 cuda 12.6 available True NVIDIA L4
+/var/spool/slurmd/job279404/slurm_script: line 165: 293388 Segmentation fault      timeout 120 "${PY}" - <<'PYEOF' > "${OUT}/nixl_check.txt" 2>&1
+import nixl
+from nixl._api import nixl_agent, nixl_agent_config
+agent = nixl_agent("voltana-setup-check", nixl_agent_config(backends=["UCX"]))
+print("nixl", nixl.__file__, "plugins", agent.get_plugin_list())
+print("NIXL_UCX_AGENT_OK")
+PYEOF
+
+/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/torch/cuda/__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+2026-10-27 08:56:41 NIXL INFO    _api.py:363 Backend UCX was instantiated
+2026-10-27 08:56:41 NIXL INFO    _api.py:253 Initialized NIXL agent: voltana-setup-check
+nixl /data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/nixl/__init__.py plugins ['GDS', 'GDS_MT', 'GUSLI', 'OBJ', 'POSIX', 'UCX']
+NIXL_UCX_AGENT_OK
+timeout: the monitored command dumped core
+nixl_check_rc=139
