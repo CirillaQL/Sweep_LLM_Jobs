@@ -92,3 +92,33 @@ index, uuid, name, driver_version, clocks.max.sm [MHz], clocks.max.memory [MHz],
 0, GPU-07e36d4f-3eca-a88d-1c31-445fc0d863e8, NVIDIA L4, 595.91.07, 2040 MHz, 6251 MHz, 72.00 W
 /data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/torch/cuda/__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
   import pynvml  # type: ignore[import]
+ok   torch 2.7.1+cu126
+ok   sglang 0.4.7.post1
+ok   sgl_kernel 0.1.9
+ok   flashinfer 0.2.6.post1
+ok   transformers 4.52.3
+ok   sklearn 1.9.1
+ok   pandas 3.1.0
+ok   orjson 3.13.0
+ok   pynvml ?
+ok   datasets 5.0.1
+ok   nixl ?
+ok   sglang.srt.disaggregation.fake ?
+ok   sglang.srt.disaggregation.nixl ?
+cuda 12.6 available True NVIDIA L4
+/var/spool/slurmd/job279465/slurm_script: line 172: 403560 Segmentation fault      timeout 120 "${PY}" - <<'PYEOF' > "${OUT}/nixl_check.txt" 2>&1
+import nixl
+from nixl._api import nixl_agent, nixl_agent_config
+agent = nixl_agent("voltana-setup-check", nixl_agent_config(backends=["UCX"]))
+print("nixl", nixl.__file__, "plugins", agent.get_plugin_list())
+print("NIXL_UCX_AGENT_OK")
+PYEOF
+
+/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/torch/cuda/__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+2026-10-27 23:53:29 NIXL INFO    _api.py:363 Backend UCX was instantiated
+2026-10-27 23:53:29 NIXL INFO    _api.py:253 Initialized NIXL agent: voltana-setup-check
+nixl /data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/nixl/__init__.py plugins ['GDS', 'GDS_MT', 'GUSLI', 'OBJ', 'POSIX', 'UCX']
+NIXL_UCX_AGENT_OK
+timeout: the monitored command dumped core
+nixl_check_rc=139
