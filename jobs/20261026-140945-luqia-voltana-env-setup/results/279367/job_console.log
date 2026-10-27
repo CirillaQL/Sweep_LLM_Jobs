@@ -56,3 +56,34 @@ commit=f7789acfa63ad0b1ec772724fbfbf7adac6a2142
  M voltana-llm-scripts/predictions/prefill/run_profile.py
 ?? voltana-llm-scripts/predictions/fit_latency.py
 ?? voltana-llm-scripts/predictions/slurm/
+  Downloading nvidia_cusolver_cu12-11.7.1.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cusparse-cu12==12.5.4.2 (from torch==2.7.1->sglang==0.4.9)
+  Downloading nvidia_cusparse_cu12-12.5.4.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cusparselt-cu12==0.6.3 (from torch==2.7.1->sglang==0.4.9)
+  Downloading nvidia_cusparselt_cu12-0.6.3-py3-none-manylinux2014_x86_64.whl.metadata (6.8 kB)
+Collecting nvidia-nccl-cu12==2.26.2 (from torch==2.7.1->sglang==0.4.9)
+  Downloading nvidia_nccl_cu12-2.26.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.0 kB)
+Collecting nvidia-nvtx-cu12==12.6.77 (from torch==2.7.1->sglang==0.4.9)
+  Downloading nvidia_nvtx_cu12-12.6.77-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-nvjitlink-cu12==12.6.85 (from torch==2.7.1->sglang==0.4.9)
+  Downloading nvidia_nvjitlink_cu12-12.6.85-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cufile-cu12==1.11.1.6 (from torch==2.7.1->sglang==0.4.9)
+  Downloading nvidia_cufile_cu12-1.11.1.6-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.5 kB)
+Collecting triton==3.3.1 (from torch==2.7.1->sglang==0.4.9)
+  Downloading triton-3.3.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (1.5 kB)
+ERROR: Cannot install sglang and sglang[srt]==0.4.9 because these package versions have conflicting dependencies.
+
+The conflict is caused by:
+    sglang[srt] 0.4.9 depends on torch==2.7.1; extra == "srt"
+    flashinfer-python 0.2.7.post1 depends on torch
+    flashinfer-python 0.2.7.post1 depends on torch==2.14.*
+
+Additionally, some packages in these conflicts have no matching distributions available for your environment:
+    torch
+
+To fix this you could try to:
+1. loosen the range of package versions you've specified
+2. remove package versions to allow pip to attempt to solve the dependency conflict
+
+ERROR: ResolutionImpossible: for help visit https://pip.pypa.io/en/latest/topics/dependency-resolution/#dealing-with-dependency-conflicts
+RESULT=failed stage=pip_sglang
