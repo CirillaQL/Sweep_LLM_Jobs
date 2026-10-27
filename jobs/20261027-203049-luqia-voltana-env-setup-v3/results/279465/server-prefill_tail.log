@@ -1,0 +1,44 @@
+/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/utils.py:26: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml
+/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/torch/cuda/__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/launch_server.py", line 6, in <module>
+    from sglang.srt.entrypoints.http_server import launch_server
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/entrypoints/http_server.py", line 53, in <module>
+    from sglang.srt.entrypoints.engine import _launch_subprocesses
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/entrypoints/engine.py", line 42, in <module>
+    from sglang.srt.code_completion_parser import load_completion_template_for_openai_api
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/code_completion_parser.py", line 23, in <module>
+    from sglang.srt.openai_api.protocol import ChatCompletionRequest
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/openai_api/protocol.py", line 22, in <module>
+    from sglang.srt.managers.schedule_batch import ExtraBatchInfo
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/managers/schedule_batch.py", line 49, in <module>
+    from sglang.srt.configs.model_config import ModelConfig
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/configs/model_config.py", line 30, in <module>
+    from sglang.srt.layers.quantization import QUANTIZATION_METHODS
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/layers/quantization/__init__.py", line 56, in <module>
+    from sglang.srt.layers.quantization.compressed_tensors.compressed_tensors import (
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/layers/quantization/compressed_tensors/compressed_tensors.py", line 9, in <module>
+    from compressed_tensors.config import (
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/compressed_tensors/__init__.py", line 9, in <module>
+    from .compressors import *
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/compressed_tensors/compressors/__init__.py", line 6, in <module>
+    from .base import *
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/compressed_tensors/compressors/base.py", line 8, in <module>
+    from compressed_tensors.compressors.format import infer_module_format
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/compressed_tensors/compressors/format.py", line 8, in <module>
+    from compressed_tensors.quantization import QuantizationScheme
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/compressed_tensors/quantization/__init__.py", line 11, in <module>
+    from .lifecycle import *
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/compressed_tensors/quantization/lifecycle/__init__.py", line 8, in <module>
+    from .initialize import *
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/compressed_tensors/quantization/lifecycle/initialize.py", line 8, in <module>
+    from compressed_tensors.modeling import (
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/compressed_tensors/modeling/__init__.py", line 7, in <module>
+    from .attention import *
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/compressed_tensors/modeling/attention.py", line 15, in <module>
+    from transformers.masking_utils import ALL_MASK_ATTENTION_FUNCTIONS
+ModuleNotFoundError: No module named 'transformers.masking_utils'
