@@ -1,0 +1,20 @@
+/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/utils.py:26: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml
+/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/torch/cuda/__init__.py:61: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/launch_server.py", line 6, in <module>
+    from sglang.srt.entrypoints.http_server import launch_server
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/entrypoints/http_server.py", line 53, in <module>
+    from sglang.srt.entrypoints.engine import _launch_subprocesses
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/entrypoints/engine.py", line 42, in <module>
+    from sglang.srt.code_completion_parser import load_completion_template_for_openai_api
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/code_completion_parser.py", line 21, in <module>
+    from sglang.srt.entrypoints.openai.protocol import CompletionRequest
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/entrypoints/openai/protocol.py", line 22, in <module>
+    from sglang.srt.managers.schedule_batch import ExtraBatchInfo
+  File "/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/managers/schedule_batch.py", line 59, in <module>
+    from sglang.srt.mem_cache.memory_pool import ReqToTokenPool, TokenToKVPoolAllocator
+ImportError: cannot import name 'TokenToKVPoolAllocator' from 'sglang.srt.mem_cache.memory_pool' (/data/users/chjing/voltana_work/VoltanaLLM/python/sglang/srt/mem_cache/memory_pool.py)
