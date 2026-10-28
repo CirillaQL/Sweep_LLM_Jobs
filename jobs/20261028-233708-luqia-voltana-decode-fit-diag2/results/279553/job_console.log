@@ -1,0 +1,73 @@
+job_start=2026-10-28T23:48:38+01:00 host=ganymede job=279553
+/data/users/chjing/voltana_work/runs/279535:
+total 70
+drwxr-xr-x 17 chjing nogroup    23 Oct 28 22:07 .
+drwxr-xr-x  7 chjing nogroup     7 Oct 28 21:51 ..
+drwxr-xr-x  2 chjing nogroup     2 Oct 28 21:51 conda-pkgs
+drwxr-xr-x  2 chjing nogroup     2 Oct 28 21:51 cuda-cache
+-rw-r--r--  1 chjing nogroup  1253 Oct 28 22:07 fit-decode.log
+-rw-r--r--  1 chjing nogroup   338 Oct 28 21:54 fit-prefill.log
+drwxr-xr-x  2 chjing nogroup     2 Oct 28 21:51 home
+drwxr-xr-x  2 chjing nogroup     2 Oct 28 21:51 huggingface
+drwxr-xr-x  2 chjing nogroup     3 Oct 28 21:54 matplotlib
+drwxr-xr-x  4 chjing nogroup     4 Oct 28 21:51 pip-cache
+-rw-r--r--  1 chjing nogroup 10686 Oct 28 22:07 profile-decode.log
+-rw-r--r--  1 chjing nogroup 16510 Oct 28 21:54 profile-prefill.log
+drwxr-xr-x  3 chjing nogroup     3 Oct 28 21:51 python-pycache
+-rw-r--r--  1 chjing nogroup 63780 Oct 28 22:07 server-decode.log
+-rw-r--r--  1 chjing nogroup 66013 Oct 28 21:54 server-prefill.log
+drwxr-xr-x  4 chjing nogroup     4 Oct 28 22:07 smoke-decode
+drwxr-xr-x  4 chjing nogroup     4 Oct 28 21:54 smoke-prefill
+drwxr-xr-x 15 chjing nogroup    29 Oct 28 21:55 tmp
+drwxr-xr-x  2 chjing nogroup     2 Oct 28 21:51 torch-cache
+drwxr-xr-x  2 chjing nogroup     2 Oct 28 21:51 torch-extensions
+drwxr-xr-x  8 chjing nogroup    11 Oct 28 21:51 uv-cache
+drwxr-xr-x  2 chjing nogroup     2 Oct 28 21:51 xdg-cache
+drwxr-xr-x  2 chjing nogroup     2 Oct 28 21:51 xdg-config
+
+/data/users/chjing/voltana_work/runs/279535/smoke-decode:
+total 18
+drwxr-xr-x  4 chjing nogroup  4 Oct 28 22:07 .
+drwxr-xr-x 17 chjing nogroup 23 Oct 28 22:07 ..
+drwxr-xr-x  2 chjing nogroup  8 Oct 28 22:07 2040
+drwxr-xr-x  2 chjing nogroup  2 Oct 28 22:07 fit
+
+/data/users/chjing/voltana_work/runs/279535/smoke-decode/2040:
+total 13195
+drwxr-xr-x 2 chjing nogroup        8 Oct 28 22:07 .
+drwxr-xr-x 4 chjing nogroup        4 Oct 28 22:07 ..
+-rw-r--r-- 1 chjing nogroup 26056210 Oct 28 22:07 Mistral-7B-v0.1-L4-24G-smoke-triton-bs-8-outlen-5535-extra.json
+-rw-r--r-- 1 chjing nogroup     1190 Oct 28 22:07 Mistral-7B-v0.1-L4-24G-smoke-triton-bs-8-outlen-5535.json
+-rw-r--r-- 1 chjing nogroup   927685 Oct 28 22:07 Mistral-7B-v0.1-L4-24G-smoke-triton-bs-8-outlen-5535.json-detail
+-rw-r--r-- 1 chjing nogroup 26258680 Oct 28 22:01 Mistral-7B-v0.1-L4-24G-smoke-triton-bs-9-outlen-4920-extra.json
+-rw-r--r-- 1 chjing nogroup     1189 Oct 28 22:01 Mistral-7B-v0.1-L4-24G-smoke-triton-bs-9-outlen-4920.json
+-rw-r--r-- 1 chjing nogroup   927448 Oct 28 22:01 Mistral-7B-v0.1-L4-24G-smoke-triton-bs-9-outlen-4920.json-detail
+
+/data/users/chjing/voltana_work/runs/279535/smoke-decode/fit:
+total 1
+drwxr-xr-x 2 chjing nogroup 2 Oct 28 22:07 .
+drwxr-xr-x 4 chjing nogroup 4 Oct 28 22:07 ..
+== /data/users/chjing/voltana_work/runs/279535/smoke-decode/2040/Mistral-7B-v0.1-L4-24G-smoke-triton-bs-8-outlen-5535-extra.json 26056210 bytes
+requests 8 infos/request min/max 5534 5534
+forward_mode {'2': 44272}
+batch_size {8: 44263, 7: 7, 1: 2}
+itl types {'float': 44272}
+itl ms n=44272 min=52.841 p5=59.245 p50=69.801 p95=80.178 max=109.888 in(3,300)=44272
+keys x44272 ('batch_size', 'energy_forward', 'forward_mode', 'iteration_counter', 'itl', 'num_forward_repeat', 'num_total_computed_tokens_list', 'num_total_computing_tokens_list', 'timestamp_after_forward', 'timestamp_after_schedule', 'timestamp_after_worker_iteration', 'timestamp_before_forward', 'timestamp_before_output', 'timestamp_before_worker_iteration', 'timestamp_begin', 'timestamps_arrival')
+{"iteration_counter": 868107, "timestamp_begin": 1421805.577723642, "timestamps_arrival": null, "timestamp_after_schedule": 1421805.577891946, "timestamp_before_forward": 1421805.579816844, "timestamp_after_forward": 1421805.581394626, "timestamp_before_worker_iteration": 1421805.578710859, "timestamp_after_worker_iteration": 1421805.581584071, "timestamp_before_output": 1421805.636694449, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 1, "num_total_computed_tokens_list": [2], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.05284144193865359}
+{"iteration_counter": 868108, "timestamp_begin": 1421805.578439486, "timestamps_arrival": null, "timestamp_after_schedule": 1421805.578761428, "timestamp_before_forward": 1421805.582045594, "timestamp_after_forward": 1421805.582993478, "timestamp_before_worker_iteration": 1421805.581694253, "timestamp_after_worker_iteration": 1421805.583149994, "timestamp_before_output": 1421805.692394171, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 1, "num_total_computed_tokens_list": [2], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.05569972191005945}
+{"iteration_counter": 868110, "timestamp_begin": 1421805.692439062, "timestamps_arrival": null, "timestamp_after_schedule": 1421805.692682039, "timestamp_before_forward": 1421805.693663366, "timestamp_after_forward": 1421805.694985877, "timestamp_before_worker_iteration": 1421805.693019132, "timestamp_after_worker_iteration": 1421805.695179474, "timestamp_before_output": 1421805.752875166, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 8, "num_total_computed_tokens_list": [4, 2, 2, 2, 2, 2, 2, 2], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.06048099510371685}
+{"iteration_counter": 873640, "timestamp_begin": 1422191.554203788, "timestamps_arrival": null, "timestamp_after_schedule": 1422191.554324868, "timestamp_before_forward": 1422191.555211904, "timestamp_after_forward": 1422191.556467086, "timestamp_before_worker_iteration": 1422191.554640642, "timestamp_after_worker_iteration": 1422191.55664552, "timestamp_before_output": 1422191.716400921, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 8, "num_total_computed_tokens_list": [5533, 5531, 5531, 5531, 5531, 5531, 5531, 5531], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.08121982822194695}
+{"iteration_counter": 873641, "timestamp_begin": 1422191.635441748, "timestamps_arrival": null, "timestamp_after_schedule": 1422191.635572824, "timestamp_before_forward": 1422191.636451283, "timestamp_after_forward": 1422191.637701798, "timestamp_before_worker_iteration": 1422191.635884264, "timestamp_after_worker_iteration": 1422191.637880619, "timestamp_before_output": 1422191.797645141, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 8, "num_total_computed_tokens_list": [5534, 5532, 5532, 5532, 5532, 5532, 5532, 5532], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.08124421979300678}
+== /data/users/chjing/voltana_work/runs/279535/smoke-decode/2040/Mistral-7B-v0.1-L4-24G-smoke-triton-bs-9-outlen-4920-extra.json 26258680 bytes
+requests 9 infos/request min/max 4919 4919
+forward_mode {'2': 44271}
+batch_size {9: 44270, 1: 1}
+itl types {'float': 44271}
+itl ms n=44271 min=56.039 p5=59.638 p50=70.005 p95=80.271 max=713.047 in(3,300)=44262
+keys x44271 ('batch_size', 'energy_forward', 'forward_mode', 'iteration_counter', 'itl', 'num_forward_repeat', 'num_total_computed_tokens_list', 'num_total_computing_tokens_list', 'timestamp_after_forward', 'timestamp_after_schedule', 'timestamp_after_worker_iteration', 'timestamp_before_forward', 'timestamp_before_output', 'timestamp_before_worker_iteration', 'timestamp_begin', 'timestamps_arrival')
+{"iteration_counter": 644415, "timestamp_begin": 1421457.777754479, "timestamps_arrival": null, "timestamp_after_schedule": 1421457.77794775, "timestamp_before_forward": 1421457.779170319, "timestamp_after_forward": 1421457.78097974, "timestamp_before_worker_iteration": 1421457.778509741, "timestamp_after_worker_iteration": 1421457.781256705, "timestamp_before_output": 1421457.836345943, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 1, "num_total_computed_tokens_list": [2], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.05603930586948991}
+{"iteration_counter": 644418, "timestamp_begin": 1421457.838468346, "timestamps_arrival": null, "timestamp_after_schedule": 1421457.838643932, "timestamp_before_forward": 1421458.184069985, "timestamp_after_forward": 1421458.45357735, "timestamp_before_worker_iteration": 1421457.838873616, "timestamp_after_worker_iteration": 1421458.453688358, "timestamp_before_output": 1421458.494813033, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 9, "num_total_computed_tokens_list": [3, 2, 2, 2, 2, 2, 2, 2, 2], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.6584670899901539}
+{"iteration_counter": 644419, "timestamp_begin": 1421457.838764173, "timestamps_arrival": null, "timestamp_after_schedule": 1421457.842731941, "timestamp_before_forward": 1421458.453894757, "timestamp_after_forward": 1421458.464042428, "timestamp_before_worker_iteration": 1421458.453718023, "timestamp_after_worker_iteration": 1421458.464127636, "timestamp_before_output": 1421458.553132783, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 9, "num_total_computed_tokens_list": [3, 2, 2, 2, 2, 2, 2, 2, 2], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.05831975000910461}
+{"iteration_counter": 649334, "timestamp_begin": 1421802.43549457, "timestamps_arrival": null, "timestamp_after_schedule": 1421802.435628809, "timestamp_before_forward": 1421802.436505727, "timestamp_after_forward": 1421802.457865599, "timestamp_before_worker_iteration": 1421802.435940732, "timestamp_after_worker_iteration": 1421802.457940952, "timestamp_before_output": 1421802.598071631, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 9, "num_total_computed_tokens_list": [4918, 4917, 4917, 4917, 4917, 4917, 4917, 4917, 4917], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.08141951612196863}
+{"iteration_counter": 649335, "timestamp_begin": 1421802.516924751, "timestamps_arrival": null, "timestamp_after_schedule": 1421802.517062836, "timestamp_before_forward": 1421802.517880487, "timestamp_after_forward": 1421802.538203668, "timestamp_before_worker_iteration": 1421802.517326619, "timestamp_after_worker_iteration": 1421802.538280313, "timestamp_before_output": 1421802.679528694, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 9, "num_total_computed_tokens_list": [4919, 4918, 4918, 4918, 4918, 4918, 4918, 4918, 4918], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.08145706285722554}
