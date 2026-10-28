@@ -71,3 +71,22 @@ keys x44271 ('batch_size', 'energy_forward', 'forward_mode', 'iteration_counter'
 {"iteration_counter": 644419, "timestamp_begin": 1421457.838764173, "timestamps_arrival": null, "timestamp_after_schedule": 1421457.842731941, "timestamp_before_forward": 1421458.453894757, "timestamp_after_forward": 1421458.464042428, "timestamp_before_worker_iteration": 1421458.453718023, "timestamp_after_worker_iteration": 1421458.464127636, "timestamp_before_output": 1421458.553132783, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 9, "num_total_computed_tokens_list": [3, 2, 2, 2, 2, 2, 2, 2, 2], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.05831975000910461}
 {"iteration_counter": 649334, "timestamp_begin": 1421802.43549457, "timestamps_arrival": null, "timestamp_after_schedule": 1421802.435628809, "timestamp_before_forward": 1421802.436505727, "timestamp_after_forward": 1421802.457865599, "timestamp_before_worker_iteration": 1421802.435940732, "timestamp_after_worker_iteration": 1421802.457940952, "timestamp_before_output": 1421802.598071631, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 9, "num_total_computed_tokens_list": [4918, 4917, 4917, 4917, 4917, 4917, 4917, 4917, 4917], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.08141951612196863}
 {"iteration_counter": 649335, "timestamp_begin": 1421802.516924751, "timestamps_arrival": null, "timestamp_after_schedule": 1421802.517062836, "timestamp_before_forward": 1421802.517880487, "timestamp_after_forward": 1421802.538203668, "timestamp_before_worker_iteration": 1421802.517326619, "timestamp_after_worker_iteration": 1421802.538280313, "timestamp_before_output": 1421802.679528694, "num_forward_repeat": 1, "energy_forward": null, "batch_size": 9, "num_total_computed_tokens_list": [4919, 4918, 4918, 4918, 4918, 4918, 4918, 4918, 4918], "num_total_computing_tokens_list": [], "forward_mode": 2, "itl": 0.08145706285722554}
+refit_rc=1
+loading ./2040/Mistral-7B-v0.1-L4-24G-smoke-triton-bs-8-outlen-5535-extra.json
+loading ./2040/Mistral-7B-v0.1-L4-24G-smoke-triton-bs-9-outlen-4920-extra.json
+Traceback (most recent call last):
+  File "/data/users/chjing/voltana_work/VoltanaLLM/voltana-llm-scripts/predictions/fit_latency.py", line 197, in <module>
+    main()
+  File "/data/users/chjing/voltana_work/VoltanaLLM/voltana-llm-scripts/predictions/fit_latency.py", line 189, in main
+    table = fit_decode(df, png)
+            ^^^^^^^^^^^^^^^^^^^
+  File "/data/users/chjing/voltana_work/VoltanaLLM/voltana-llm-scripts/predictions/fit_latency.py", line 144, in fit_decode
+    model.fit(xy, zs)
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/sklearn/base.py", line 1363, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages/sklearn/linear_model/_ransac.py", line 571, in fit
+    raise ValueError(
+ValueError: RANSAC could not find a valid consensus set. All `max_trials` iterations were skipped because each randomly chosen sub-sample failed the passing criteria. See estimator attributes for diagnostics (n_skips*).
+refit_rc=1
+RESULT=ok
