@@ -1,0 +1,908 @@
+diff --git a/.gitignore b/.gitignore
+index f22aad92..ff937467 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -239,3 +239,6 @@ lmms-eval
+ .vscode/
+ .idea/
+ .history/
++
++# VoltanaLLM profiling outputs
++voltana-llm-scripts/predictions/*/results/
+diff --git a/python/sglang/srt/disaggregation/nixl/__init__.py b/python/sglang/srt/disaggregation/nixl/__init__.py
+index c67ed4e6..4df7baba 100644
+--- a/python/sglang/srt/disaggregation/nixl/__init__.py
++++ b/python/sglang/srt/disaggregation/nixl/__init__.py
+@@ -3,7 +3,4 @@ from sglang.srt.disaggregation.nixl.conn import (
+     NixlKVManager,
+     NixlKVReceiver,
+     NixlKVSender,
+-    FakeNixlKVReceiver,
+-    FakeNixlKVSender,
+-    FakeNixlKVManager,
+ )
+diff --git a/python/sglang/srt/disaggregation/nixl/conn.py b/python/sglang/srt/disaggregation/nixl/conn.py
+index 3239e935..43475736 100644
+--- a/python/sglang/srt/disaggregation/nixl/conn.py
++++ b/python/sglang/srt/disaggregation/nixl/conn.py
+@@ -142,7 +142,7 @@ class NixlKVManager(CommonKVManager):
+             self.kv_args.kv_data_ptrs, self.kv_args.kv_data_lens
+         ):
+             kv_addrs.append((kv_data_ptr, kv_data_len, self.kv_args.gpu_id, ""))
+-        self.kv_descs = self.agent.register_memory(kv_addrs, "VRAM", is_sorted=True)
++        self.kv_descs = self.agent.register_memory(kv_addrs, "VRAM")
+         logger.debug(f"Register kv tensors, len(kv_addr)= {len(kv_addrs)}")
+         if not self.kv_descs:
+             raise Exception("NIXL memory registration failed for kv tensors")
+@@ -151,7 +151,7 @@ class NixlKVManager(CommonKVManager):
+             self.kv_args.aux_data_ptrs, self.kv_args.aux_data_lens
+         ):
+             aux_addrs.append((aux_data_ptr, aux_data_len, 0, ""))
+-        self.aux_descs = self.agent.register_memory(aux_addrs, "DRAM", is_sorted=True)
++        self.aux_descs = self.agent.register_memory(aux_addrs, "DRAM")
+         logger.debug(f"Register aux tensors, len(aux_addrs)= {len(aux_addrs)}")
+         if not self.aux_descs:
+             raise Exception("NIXL memory registration failed for aux tensors")
+@@ -202,11 +202,11 @@ class NixlKVManager(CommonKVManager):
+ 
+         timer_src_descs = TimeMeasurementContext("send_kvcache() get src_descs", enabled=MEASURE_FUNC_TIME, print_on_exit=True)
+         with timer_src_descs:
+-            src_descs = self.agent.get_xfer_descs(src_addrs, "VRAM", is_sorted=True)
++            src_descs = self.agent.get_xfer_descs(src_addrs, "VRAM")
+ 
+         timer_dst_descs = TimeMeasurementContext("send_kvcache() get dst_descs", enabled=MEASURE_FUNC_TIME, print_on_exit=True)
+         with timer_dst_descs:
+-            dst_descs = self.agent.get_xfer_descs(dst_addrs, "VRAM", is_sorted=True)
++            dst_descs = self.agent.get_xfer_descs(dst_addrs, "VRAM")
+ 
+         timer_init_xfer = TimeMeasurementContext("send_kvcache() init_xfer", enabled=MEASURE_FUNC_TIME, print_on_exit=True)
+         with timer_init_xfer:
+@@ -243,8 +243,8 @@ class NixlKVManager(CommonKVManager):
+         decode_aux_addr = dst_aux_ptrs[0] + dst_aux_index * aux_item_len
+         src_addrs = [(prefill_aux_addr, aux_item_len, 0)]
+         dst_addrs = [(decode_aux_addr, aux_item_len, 0)]
+-        src_descs = self.agent.get_xfer_descs(src_addrs, "DRAM", is_sorted=True)
+-        dst_descs = self.agent.get_xfer_descs(dst_addrs, "DRAM", is_sorted=True)
++        src_descs = self.agent.get_xfer_descs(src_addrs, "DRAM")
++        dst_descs = self.agent.get_xfer_descs(dst_addrs, "DRAM")
+         # Transfer data
+         xfer_handle = self.agent.initialize_xfer(
+             "WRITE",
+diff --git a/python/sglang/srt/disaggregation/utils.py b/python/sglang/srt/disaggregation/utils.py
+index af182f95..b688fa4d 100644
+--- a/python/sglang/srt/disaggregation/utils.py
++++ b/python/sglang/srt/disaggregation/utils.py
+@@ -265,23 +265,8 @@ def get_kv_class(transfer_backend: TransferBackend, class_type: KVClassType):
+         }
+         return class_mapping.get(class_type)
+     elif transfer_backend == TransferBackend.FAKENIXL:
+-        from sglang.srt.disaggregation.base import KVArgs
+-        from sglang.srt.disaggregation.nixl import (
+-            NixlKVBootstrapServer,
+-            NixlKVManager,
+-            FakeNixlKVReceiver,
+-            FakeNixlKVSender,
+-            FakeNixlKVManager,
+-        )
+-
+-        class_mapping = {
+-            KVClassType.KVARGS: KVArgs,
+-            KVClassType.MANAGER: FakeNixlKVManager,
+-            KVClassType.SENDER: FakeNixlKVSender,
+-            KVClassType.RECEIVER: (FakeNixlKVReceiver),
+-            KVClassType.BOOTSTRAP_SERVER: NixlKVBootstrapServer,
+-        }
+-        return class_mapping.get(class_type)
++        # The FakeNixl* classes were never part of the VoltanaLLM v0.1 release.
++        raise ValueError("fakenixl transfer backend is not available; use fake or nixl")
+     raise ValueError(f"Unsupported transfer backend: {transfer_backend}")
+ 
+ 
+diff --git a/voltana-llm-scripts/predictions/README.md b/voltana-llm-scripts/predictions/README.md
+index 68921597..c465f6bd 100644
+--- a/voltana-llm-scripts/predictions/README.md
++++ b/voltana-llm-scripts/predictions/README.md
+@@ -21,3 +21,46 @@ Scripts are for A100 80G GPU. You may need to adjust `--mem-fraction-static` (in
+ You can select the model to profile by modifying `p_server.sh`/`d_server.sh`/`run_profile.py`.
+ 
+ After profiling, open and run `draw.ipynb` for result visualization and prediction model regression.
++
++## Run on a Slurm Cluster (L40S / L4)
++
++`slurm/profile.sbatch` starts the server and runs the profile inside one job on one GPU. It
++locks clocks with `sudo -n nvidia-smi -lgc` (passwordless sudo required, checked up front),
++maps the job's CUDA device to its NVML index for frequency locking/energy readings, resets
++clocks on exit, and logs actual SM clock / power / throttle reasons to `clocks-<jobid>.csv`.
++
++```shell
++conda activate voltanallm
++cd voltana-llm-scripts/predictions
++
++# prefill, all frequencies in one job (~1 h)
++sbatch --partition=<part> --gres=gpu:<l40s-type>:1 slurm/profile.sbatch prefill L40S
++
++# decode, one frequency per array task (default picks 5 supported clocks in [0.7 * max, max])
++sbatch --partition=<part> --gres=gpu:<l4-type>:1 --array=0-4 --time=08:00:00 slurm/profile.sbatch decode L4
++
++# or pin the frequencies explicitly (same list for every array task)
++FREQ_LIST=2040,1890,1740,1575,1425 sbatch ... slurm/profile.sbatch decode L4
++```
++
++Results go to `<prefill|decode>/results/<GPU_TAG>/<model>/<freq>/`; set `DATA_DIR` in the
++first loading cell of `draw.ipynb` to that directory. Fit L40S and L4 separately — the
++coefficients are hardware-specific. Before fitting, check `clocks-*.csv`: if the SM clock
++sits below the locked value (power cap, common on the 72 W L4), that frequency's data is
++not what its label says.
++
++Env overrides: `MODEL_PATH`, `FREQ_LIST`, `N_FREQ`, `FREQ_MIN_RATIO`, `MEM_FRACTION`,
++`CONTEXT_LEN`, `MAX_RUNNING`, `CUDA_GRAPH_MAX_BS`, `MAX_TOKENS`, `OUT_DIR`, `PORT`.
++Compute nodes usually have no internet: pre-download the model into a shared `HF_HOME`.
++
++The default model is `mistralai/Mistral-7B-v0.1` (override with `MODEL_PATH`, a local path works too).
++It is gated on Hugging Face, so accept its terms and log in before downloading:
++
++```shell
++huggingface-cli download mistralai/Mistral-7B-v0.1
++```
++
++Notes for Mistral-7B-v0.1: it is a base model, so the benchmark warns about the missing chat
++template; this is harmless because requests use `ignore_eos` and fixed output lengths. SGLang
++serves it through the Llama implementation with full attention (its 4096-token sliding window is
++not applied), which is also how it will run when served, so the profiled latency stays consistent.
+diff --git a/voltana-llm-scripts/predictions/decode/d_server.sh b/voltana-llm-scripts/predictions/decode/d_server.sh
+index 60ad8408..be6c53ac 100755
+--- a/voltana-llm-scripts/predictions/decode/d_server.sh
++++ b/voltana-llm-scripts/predictions/decode/d_server.sh
+@@ -6,6 +6,19 @@ export SGLANG_ENABLE_TORCH_INFERENCE_MODE=1
+ 
+ idx=${1:-0}
+ 
++# overridable by env (e.g. from slurm/profile.sbatch); memory/batch defaults are the A100-80G settings
++MODEL_PATH=${MODEL_PATH:-mistralai/Mistral-7B-v0.1}
++PORT=${PORT:-$((8200 + ${idx}))}
++MEM_FRACTION=${MEM_FRACTION:-0.9}
++MAX_RUNNING=${MAX_RUNNING:-1024}
++CONTEXT_LEN=${CONTEXT_LEN:-16384}
++CUDA_GRAPH_MAX_BS=${CUDA_GRAPH_MAX_BS:-2048}
++
++cuda_graph_bs=()
++for bs in 1 2 4 8 16 24 32 40 48 56 64 72 80 88 96 104 112 120 128 160 192 224 256 320 384 448 512 576 640 704 768 832 896 960 1024 1088 1152 1216 1280 1344 1408 1472 1536 1600 1664 1728 1792 1856 1920 1984 2048; do
++    (( bs <= CUDA_GRAPH_MAX_BS )) && cuda_graph_bs+=(${bs})
++done
++
+ args=(
+     --watchdog-timeout 86400
+     --random-seed 0
+@@ -13,19 +26,20 @@ args=(
+ 
+     ## select models
+     # --model-path ministral/Ministral-3b-instruct
+-    --model-path meta-llama/Llama-3.1-8B-Instruct
++    # --model-path meta-llama/Llama-3.1-8B-Instruct
++    --model-path ${MODEL_PATH}  # default: mistralai/Mistral-7B-v0.1
+     # --model-path Qwen/Qwen3-32B
+ 
+     --trust-remote-code
+     --host 0.0.0.0
+-    --port $((8200 + ${idx}))
++    --port ${PORT}
+     --device cuda
+     --base-gpu-id ${idx}
+-    --mem-fraction-static 0.9
+-    --max-running-requests 1024
+-    --max-prefill-tokens 16384
+-    --context-length 16384
+-    --chunked-prefill-size 16384
++    --mem-fraction-static ${MEM_FRACTION}
++    --max-running-requests ${MAX_RUNNING}
++    --max-prefill-tokens ${CONTEXT_LEN}
++    --context-length ${CONTEXT_LEN}
++    --chunked-prefill-size ${CONTEXT_LEN}
+     --schedule-policy fcfs
+     # --schedule-conservativeness 0.1
+ 
+@@ -33,7 +47,7 @@ args=(
+     --attention-backend triton
+     --sampling-backend flashinfer
+     --grammar-backend xgrammar
+-    --cuda-graph-bs 1 2 4 8 16 24 32 40 48 56 64 72 80 88 96 104 112 120 128 160 192 224 256 320 384 448 512 576 640 704 768 832 896 960 1024 1088 1152 1216 1280 1344 1408 1472 1536 1600 1664 1728 1792 1856 1920 1984 2048
++    --cuda-graph-bs ${cuda_graph_bs[@]}
+     --disable-radix-cache
+ 
+     --disaggregation-mode decode
+@@ -46,4 +60,4 @@ args=(
+     --monitor-iteration-metrics
+ )
+ 
+-python -m sglang.launch_server "${args[@]}"
++exec python -m sglang.launch_server "${args[@]}"
+diff --git a/voltana-llm-scripts/predictions/decode/draw.ipynb b/voltana-llm-scripts/predictions/decode/draw.ipynb
+index c357979f..65365ce0 100644
+--- a/voltana-llm-scripts/predictions/decode/draw.ipynb
++++ b/voltana-llm-scripts/predictions/decode/draw.ipynb
+@@ -142,10 +142,14 @@
+     "\n",
+     "mod = 10\n",
+     "\n",
+-    "for freq in [1005, 1095, 1200, 1305, 1410]:\n",
++    "# directory holding the <freq>/ result dirs, e.g. \"results/L4-24G/Mistral-7B-v0.1\"\n",
++    "DATA_DIR = \".\"\n",
++    "freqs = sorted(int(d) for d in os.listdir(DATA_DIR) if d.isdigit() and os.path.isdir(os.path.join(DATA_DIR, d)))\n",
++    "\n",
++    "for freq in freqs:\n",
+     "    for mod_rem in range(mod):\n",
+-    "        args.append((str(freq), freq, \"save\", mod, mod_rem))\n",
+-    "        # args.append((str(freq), freq, \"load\", mod, mod_rem))\n",
++    "        args.append((os.path.join(DATA_DIR, str(freq)), freq, \"save\", mod, mod_rem))\n",
++    "        # args.append((os.path.join(DATA_DIR, str(freq)), freq, \"load\", mod, mod_rem))\n",
+     "\n",
+     "results = pool.starmap(load_data, args)\n",
+     "\n",
+@@ -256,7 +260,7 @@
+     "        xs_freq = xs_total[sel]\n",
+     "        ys_freq = ys_total[sel]\n",
+     "        zs_freq = zs_total[sel]\n",
+-    "        color = freq_color_map.get(freq, \"gray\")\n",
++    "        color = freq_color_map.get(freq, f\"C{freq_list.index(freq)}\")  # matplotlib cycle for non-A100 freqs\n",
+     "\n",
+     "        label_added = False\n",
+     "\n",
+@@ -305,21 +309,20 @@
+     "            X, Y = np.meshgrid(x_range, y_range)\n",
+     "            Z = regressor.predict(np.vstack((X.ravel(), Y.ravel())).T).reshape(X.shape)\n",
+     "\n",
+-    "            if freq in [1005, 1410, 1305, 1200, 1095]:\n",
+-    "\n",
+-    "                N = 100\n",
+-    "                if len(xs_sel) > N:\n",
+-    "                    sel_draw = np.random.choice(len(xs_sel), N, replace=False)\n",
+-    "                    xs_draw = xs_sel[sel_draw]\n",
+-    "                    ys_draw = ys_sel[sel_draw]\n",
+-    "                    zs_draw = zs_sel[sel_draw]\n",
+-    "                    ax.scatter(xs_draw, ys_draw, zs_draw, c=color, s=50, alpha=0.5)\n",
+-    "\n",
+-    "                if not label_added:\n",
+-    "                    ax.plot_surface(X, Y, Z, color=color, alpha=0.5, rstride=100, cstride=100, label=f\"f = {freq} MHz\")\n",
+-    "                    label_added = True\n",
+-    "                else:\n",
+-    "                    ax.plot_surface(X, Y, Z, color=color, alpha=0.5, rstride=100, cstride=100)\n",
++    "\n",
++    "            N = 100\n",
++    "            if len(xs_sel) > N:\n",
++    "                sel_draw = np.random.choice(len(xs_sel), N, replace=False)\n",
++    "                xs_draw = xs_sel[sel_draw]\n",
++    "                ys_draw = ys_sel[sel_draw]\n",
++    "                zs_draw = zs_sel[sel_draw]\n",
++    "                ax.scatter(xs_draw, ys_draw, zs_draw, c=color, s=50, alpha=0.5)\n",
++    "\n",
++    "            if not label_added:\n",
++    "                ax.plot_surface(X, Y, Z, color=color, alpha=0.5, rstride=100, cstride=100, label=f\"f = {freq} MHz\")\n",
++    "                label_added = True\n",
++    "            else:\n",
++    "                ax.plot_surface(X, Y, Z, color=color, alpha=0.5, rstride=100, cstride=100)\n",
+     "\n",
+     "    ax.set_xlim(0)\n",
+     "    ax.set_ylim(0)\n",
+diff --git a/voltana-llm-scripts/predictions/decode/run_profile.py b/voltana-llm-scripts/predictions/decode/run_profile.py
+index f23f376d..f2bd564c 100644
+--- a/voltana-llm-scripts/predictions/decode/run_profile.py
++++ b/voltana-llm-scripts/predictions/decode/run_profile.py
+@@ -11,18 +11,39 @@ os.environ["SKIP_NUM_NEW_TOKENS_CHECK"] = "1"
+ 
+ from sglang.bench_serving_voltanallm import get_parser, run_benchmark
+ 
+-GPU_IDX = 0
++# NVML (physical) GPU index, used for frequency locking and energy readings.
++# Under Slurm this may differ from the CUDA index; slurm/profile.sbatch resolves it.
++GPU_IDX = int(os.environ.get("NVML_GPU_IDX", 0))
++HOST = os.environ.get("HOST", "localhost")
++PORT = int(os.environ.get("PORT", 8200 + GPU_IDX))
++GPU_TAG = os.environ.get("GPU_TAG", "A100-80G-400W")  # goes into output file names
++FREQ_LIST = [int(f) for f in os.environ.get("FREQ_LIST", "1410,1305,1200,1095,1005").split(",")]
++DATASET_PATH = os.environ.get("DATASET_PATH", "")  # ShareGPT json; empty downloads it
+ 
+ # MODEL = "ministral/Ministral-3b-instruct"
+ # MAX_TOKENS = 1210369
+ # MAX_LENGTH = 8192
+ # TP = 1
+ 
+-MODEL = "meta-llama/Llama-3.1-8B-Instruct"
+-MAX_TOKENS = 457600
++# MODEL = "meta-llama/Llama-3.1-8B-Instruct"
++# MAX_TOKENS = 457600
++
++MODEL = os.environ.get("MODEL_PATH", "mistralai/Mistral-7B-v0.1")
++MAX_TOKENS = 457600  # A100-80G value; decode re-reads it from the server
+ MAX_LENGTH = 8192
+ TP = 1
+ 
++
++def fit_to_server():
++    """Fit MAX_TOKENS / MAX_LENGTH to the running server unless set via env."""
++    global MAX_TOKENS, MAX_LENGTH, MAX_RUNNING
++    info = requests.get(f"http://{HOST}:{PORT}/get_server_info").json()
++    MAX_TOKENS = int(os.environ.get("MAX_TOKENS", info["max_total_num_tokens"]))
++    if info.get("context_length"):
++        MAX_LENGTH = min(MAX_LENGTH, info["context_length"] - 16)
++    MAX_RUNNING = info.get("max_running_requests") or 1024
++    print(f"MAX_TOKENS={MAX_TOKENS}, MAX_LENGTH={MAX_LENGTH}, MAX_RUNNING={MAX_RUNNING}")
++
+ # MODEL = "Qwen/Qwen3-32B"
+ # MAX_TOKENS = 325037
+ # MAX_LENGTH = 8192
+@@ -33,7 +54,7 @@ def bench_single(freq: int, bs: int, gpu_idx: int, warmup: int = 0):
+     outlen = min(MAX_LENGTH, round(MAX_TOKENS * 0.95 / bs))
+ 
+     model_name = MODEL.split("/")[-1]
+-    prefix = f"{model_name}-A100-80G-400W-triton-"
++    prefix = f"{model_name}-{GPU_TAG}-triton-"
+     file_id = f"bs-{bs}-outlen-{outlen}"
+     print(file_id)
+     output_file_id = f"{prefix}{file_id}.json"
+@@ -54,9 +75,10 @@ def bench_single(freq: int, bs: int, gpu_idx: int, warmup: int = 0):
+     args.seed = 0
+     args.backend = "sglang"
+     args.model = MODEL
+-    args.host = "localhost"
+-    args.port = 8200 + gpu_idx
++    args.host = HOST
++    args.port = PORT
+     args.dataset_name = "random"
++    args.dataset_path = DATASET_PATH  # random prompts are still drawn from ShareGPT
+     args.random_input_len = inlen
+     args.random_output_len = outlen
+     args.random_range_ratio_input = 1
+@@ -87,12 +109,16 @@ def bench_single(freq: int, bs: int, gpu_idx: int, warmup: int = 0):
+ 
+ def bench_latency():
+ 
++    fit_to_server()
++
+     bs_list = [8 * k for k in range(1, 16)] + [8 * k + 1 for k in range(0, 16)] \
+             + [128 * k for k in range(1, 9)] + [128 * k + 1 for k in range(1, 8)] # [8k, 8k + 1] + [128k, 128k + 1]
+-    bs_list = sorted(bs_list)
++    if os.environ.get("BS_LIST"):  # e.g. a short smoke test
++        bs_list = [int(b) for b in os.environ["BS_LIST"].split(",")]
++    bs_list = sorted(bs for bs in bs_list if bs <= MAX_RUNNING)
+     bs_list = [bs_list[-1]] + bs_list[:-1]
+ 
+-    freq_list = [1410, 1305, 1200, 1095, 1005]
++    freq_list = FREQ_LIST
+ 
+     print("Starting profiling...")
+ 
+diff --git a/voltana-llm-scripts/predictions/prefill/draw.ipynb b/voltana-llm-scripts/predictions/prefill/draw.ipynb
+index 40cbee17..3649b905 100644
+--- a/voltana-llm-scripts/predictions/prefill/draw.ipynb
++++ b/voltana-llm-scripts/predictions/prefill/draw.ipynb
+@@ -30,14 +30,17 @@
+    "source": [
+     "%matplotlib widget\n",
+     "\n",
++    "# directory holding the <freq>/ result dirs, e.g. \"results/L40S-48G/Mistral-7B-v0.1\"\n",
++    "DATA_DIR = \".\"\n",
++    "\n",
+     "data_list = []\n",
+     "\n",
+-    "for dir in os.listdir(\".\"):\n",
+-    "    if not os.path.isdir(dir):\n",
++    "for dir in os.listdir(DATA_DIR):\n",
++    "    if not (dir.isdigit() and os.path.isdir(os.path.join(DATA_DIR, dir))):\n",
+     "        continue\n",
+     "    print(f\"Processing dir: {dir}\")\n",
+     "    freq = int(dir)\n",
+-    "    for file in glob.glob(f\"{dir}/*-extra.json\"):\n",
++    "    for file in glob.glob(os.path.join(DATA_DIR, dir, \"*-extra.json\")):\n",
+     "        print(f\"Processing file: {file}\")\n",
+     "        matches = re.match(r\"rps-(\\d+)\", file)\n",
+     "        rps = int(matches.group(1)) if matches else None\n",
+@@ -113,9 +116,8 @@
+     "    y_pred = model.predict(xs.reshape(-1, 1))\n",
+     "    r2 = r2_score(ys, y_pred)\n",
+     "\n",
+-    "    if freq >= 1005:\n",
+-    "        ax.scatter(xs, ys, alpha=0.5)\n",
+-    "        ax.plot(xs, y_pred, label=f\"f = {freq} MHz (r² = {r2:.5f})\", linewidth=2)\n",
++    "    ax.scatter(xs, ys, alpha=0.5)\n",
++    "    ax.plot(xs, y_pred, label=f\"f = {freq} MHz (r² = {r2:.5f})\", linewidth=2)\n",
+     "\n",
+     "    table_list.append({\n",
+     "        \"freq\": freq,\n",
+diff --git a/voltana-llm-scripts/predictions/prefill/p_server.sh b/voltana-llm-scripts/predictions/prefill/p_server.sh
+index 266ef7b6..37775a15 100755
+--- a/voltana-llm-scripts/predictions/prefill/p_server.sh
++++ b/voltana-llm-scripts/predictions/prefill/p_server.sh
+@@ -6,6 +6,19 @@ export SGLANG_ENABLE_TORCH_INFERENCE_MODE=1
+ 
+ idx=${1:-0}
+ 
++# overridable by env (e.g. from slurm/profile.sbatch); memory/batch defaults are the A100-80G settings
++MODEL_PATH=${MODEL_PATH:-mistralai/Mistral-7B-v0.1}
++PORT=${PORT:-$((8100 + ${idx}))}
++MEM_FRACTION=${MEM_FRACTION:-0.85}
++MAX_RUNNING=${MAX_RUNNING:-1024}
++CONTEXT_LEN=${CONTEXT_LEN:-16384}
++CUDA_GRAPH_MAX_BS=${CUDA_GRAPH_MAX_BS:-2048}
++
++cuda_graph_bs=()
++for bs in 1 2 4 8 16 24 32 40 48 56 64 72 80 88 96 104 112 120 128 160 192 224 256 320 384 448 512 576 640 704 768 832 896 960 1024 1088 1152 1216 1280 1344 1408 1472 1536 1600 1664 1728 1792 1856 1920 1984 2048; do
++    (( bs <= CUDA_GRAPH_MAX_BS )) && cuda_graph_bs+=(${bs})
++done
++
+ args=(
+     --watchdog-timeout 86400
+     --random-seed 0
+@@ -13,19 +26,20 @@ args=(
+ 
+     ## select models
+     # --model-path ministral/Ministral-3b-instruct
+-    --model-path meta-llama/Llama-3.1-8B-Instruct
++    # --model-path meta-llama/Llama-3.1-8B-Instruct
++    --model-path ${MODEL_PATH}  # default: mistralai/Mistral-7B-v0.1
+     # --model-path Qwen/Qwen3-32B
+ 
+     --trust-remote-code
+     --host 0.0.0.0
+-    --port $((8100 + ${idx}))
++    --port ${PORT}
+     --device cuda
+     --base-gpu-id ${idx}
+-    --mem-fraction-static 0.85
+-    --max-running-requests 1024
+-    --max-prefill-tokens 16384
+-    --context-length 16384
+-    --chunked-prefill-size 16384
++    --mem-fraction-static ${MEM_FRACTION}
++    --max-running-requests ${MAX_RUNNING}
++    --max-prefill-tokens ${CONTEXT_LEN}
++    --context-length ${CONTEXT_LEN}
++    --chunked-prefill-size ${CONTEXT_LEN}
+     --schedule-policy fcfs
+     # --schedule-conservativeness 0.1
+ 
+@@ -33,7 +47,7 @@ args=(
+     --attention-backend flashinfer
+     --sampling-backend flashinfer
+     --grammar-backend xgrammar
+-    --cuda-graph-bs 1 2 4 8 16 24 32 40 48 56 64 72 80 88 96 104 112 120 128 160 192 224 256 320 384 448 512 576 640 704 768 832 896 960 1024 1088 1152 1216 1280 1344 1408 1472 1536 1600 1664 1728 1792 1856 1920 1984 2048
++    --cuda-graph-bs ${cuda_graph_bs[@]}
+     --disable-radix-cache
+ 
+     # only for prefill
+@@ -44,4 +58,4 @@ args=(
+     --monitor-iteration-metrics
+ )
+ 
+-python -m sglang.launch_server "${args[@]}"
++exec python -m sglang.launch_server "${args[@]}"
+diff --git a/voltana-llm-scripts/predictions/prefill/run_profile.py b/voltana-llm-scripts/predictions/prefill/run_profile.py
+index abba6afb..00707827 100644
+--- a/voltana-llm-scripts/predictions/prefill/run_profile.py
++++ b/voltana-llm-scripts/predictions/prefill/run_profile.py
+@@ -11,15 +11,26 @@ os.environ["SKIP_NUM_NEW_TOKENS_CHECK"] = "1"
+ 
+ from sglang.bench_serving_voltanallm import get_parser, run_benchmark
+ 
+-GPU_IDX = 0
++# NVML (physical) GPU index, used for frequency locking and energy readings.
++# Under Slurm this may differ from the CUDA index; slurm/profile.sbatch resolves it.
++GPU_IDX = int(os.environ.get("NVML_GPU_IDX", 0))
++HOST = os.environ.get("HOST", "localhost")
++PORT = int(os.environ.get("PORT", 8100 + GPU_IDX))
++GPU_TAG = os.environ.get("GPU_TAG", "A100-80G-400W")  # goes into output file names
++FREQ_LIST = [int(f) for f in os.environ.get("FREQ_LIST", "1410,1305,1200,1095,1005").split(",")]
++RPS_LIST = [int(r) for r in os.environ.get("RPS_LIST", "10,20,30,40,50,60,70,80").split(",")]
++DATASET_PATH = os.environ.get("DATASET_PATH", "")  # ShareGPT json; empty downloads it
+ 
+ # MODEL = "ministral/Ministral-3b-instruct"
+ # MAX_TOKENS = 1210369
+ # MAX_LENGTH = 8192
+ # TP = 1
+ 
+-MODEL = "meta-llama/Llama-3.1-8B-Instruct"
+-MAX_TOKENS = 457600
++# MODEL = "meta-llama/Llama-3.1-8B-Instruct"
++# MAX_TOKENS = 457600
++
++MODEL = os.environ.get("MODEL_PATH", "mistralai/Mistral-7B-v0.1")
++MAX_TOKENS = 457600  # A100-80G value; decode re-reads it from the server
+ MAX_LENGTH = 8192
+ TP = 1
+ 
+@@ -30,8 +41,8 @@ TP = 1
+ 
+ def bench_latency():
+ 
+-    freq_list = [1410, 1305, 1200, 1095, 1005]
+-    rps_list = [10, 20, 30, 40, 50, 60, 70, 80]
++    freq_list = FREQ_LIST
++    rps_list = RPS_LIST
+ 
+     warmuped = False
+ 
+@@ -43,7 +54,7 @@ def bench_latency():
+         for rps in rps_list:
+ 
+             model_name = MODEL.split("/")[-1]
+-            prefix = f"{model_name}-A100-80G-400W-flashinfer-"
++            prefix = f"{model_name}-{GPU_TAG}-flashinfer-"
+             file_id = f"rps-{rps}-freq-{freq}"
+             print(file_id)
+             output_file_id = f"{prefix}{file_id}.json"
+@@ -64,10 +75,10 @@ def bench_latency():
+             args.seed = 0
+             args.backend = "sglang"
+             args.model = MODEL
+-            # args.host = "localhost"
+-            args.host = "gpub060"
+-            args.port = 8100 + GPU_IDX
++            args.host = HOST
++            args.port = PORT
+             args.dataset_name = "sharegpt"
++            args.dataset_path = DATASET_PATH
+             args.sharegpt_output_len = 1
+             args.num_prompts = 60 * rps
+             args.request_rate = rps
+diff --git a/voltana-llm-scripts/predictions/fit_latency.py b/voltana-llm-scripts/predictions/fit_latency.py
+new file mode 100644
+index 00000000..7ca0e557
+--- /dev/null
++++ b/voltana-llm-scripts/predictions/fit_latency.py
+@@ -0,0 +1,197 @@
++"""Fit the EcoPred latency tables without Jupyter (same regression as prefill/ and decode/ draw.ipynb).
++
++Usage:
++    python fit_latency.py --phase prefill --data-dir <dir with <freq>/ subdirs> --out-dir <dir>
++    python fit_latency.py --phase decode  --data-dir <dir with <freq>/ subdirs> --out-dir <dir>
++
++Writes latency-<phase>.csv (the lookup table format read by sglang.srt.managers.lookup_table),
++points-<phase>.csv.gz (the samples the fit used) and latency-<phase>.png.
++"""
++
++import argparse
++import glob
++import os
++
++import matplotlib
++
++matplotlib.use("Agg")
++
++import matplotlib.pyplot as plt
++import numpy as np
++import orjson
++import pandas as pd
++from sklearn.linear_model import LinearRegression, RANSACRegressor
++from sklearn.metrics import r2_score
++
++# decode batch-size segments (CUDA graph buckets), as in decode/draw.ipynb
++STEPS_END = [4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128,
++             256, 384, 512, 640, 768, 896, 1024, 1152, 1280, 1408, 1536, 1664, 1792, 1920, 2048]
++STEPS_BEG = [1] + [v + 1 for v in STEPS_END[:-1]]
++
++
++def freq_dirs(data_dir: str):
++    for name in sorted(os.listdir(data_dir)):
++        path = os.path.join(data_dir, name)
++        if name.isdigit() and os.path.isdir(path):
++            yield int(name), path
++
++
++def load_prefill(data_dir: str) -> pd.DataFrame:
++    rows = []
++    for freq, path in freq_dirs(data_dir):
++        for file in sorted(glob.glob(os.path.join(path, "*-extra.json"))):
++            print(f"loading {file}")
++            with open(file, "rb") as f:
++                reqs = orjson.loads(f.read())
++            for items in reqs.values():
++                for item in items or []:
++                    if item["forward_mode"] != 1:
++                        continue
++                    rows.append((
++                        freq,
++                        item["iteration_counter"],
++                        sum(item["num_total_computing_tokens_list"]),
++                        (item["timestamp_before_output"] - item["timestamp_begin"]) * 1000,
++                    ))
++    df = pd.DataFrame(rows, columns=["freq", "iteration_counter", "tokens", "ttft_exec"])
++    # every request of a batch reports the same iteration; keep one row per iteration
++    df = df.drop_duplicates(subset=["freq", "iteration_counter"], keep="last")
++    return df.sort_values(by=["freq", "tokens", "ttft_exec"], ignore_index=True)
++
++
++def fit_prefill(df: pd.DataFrame, tokens_min: float, tokens_max: float, png: str) -> pd.DataFrame:
++    fig, ax = plt.subplots(figsize=(12, 5))
++    table = []
++    for freq in sorted(df["freq"].unique()):
++        df_freq = df[df["freq"] == freq]
++        xs = df_freq["tokens"].to_numpy()
++        ys = df_freq["ttft_exec"].to_numpy()
++        sel = (xs > tokens_min) & (xs < tokens_max)
++        if sel.sum() < 2:
++            print(f"freq {freq}: only {sel.sum()} points in ({tokens_min}, {tokens_max}) tokens, skipped")
++            continue
++        model = RANSACRegressor(LinearRegression(positive=True), max_trials=100000, random_state=1)
++        model.fit(xs[sel].reshape(-1, 1), ys[sel])
++        y_pred = model.predict(xs.reshape(-1, 1))
++        r2 = r2_score(ys, y_pred)
++        ax.scatter(xs, ys, alpha=0.5)
++        ax.plot(xs, y_pred, label=f"f = {freq} MHz (r² = {r2:.5f})", linewidth=2)
++        table.append({
++            "freq": freq,
++            "coef_tokens": model.estimator_.coef_[0],
++            "coef_intercept": model.estimator_.intercept_,
++            "r_2": r2,
++            "n_points": int(sel.sum()),
++        })
++        print(table[-1])
++    ax.grid(True)
++    ax.legend(fontsize=11, loc="upper left")
++    ax.set_xlim(0)
++    ax.set_ylim(0)
++    ax.set_xlabel("#Batched Tokens")
++    ax.set_ylabel("TTFT (ms)")
++    fig.tight_layout()
++    fig.savefig(png, dpi=150)
++    return pd.DataFrame(table, columns=["freq", "coef_tokens", "coef_intercept", "r_2", "n_points"]).sort_values(by="freq", ignore_index=True)
++
++
++def load_decode(data_dir: str, itl_min: float, itl_max: float) -> pd.DataFrame:
++    frames = []
++    for freq, path in freq_dirs(data_dir):
++        for file in sorted(glob.glob(os.path.join(path, "*-extra.json"))):
++            print(f"loading {file}")
++            with open(file, "rb") as f:
++                reqs = orjson.loads(f.read())
++            rows = []
++            for infos in reqs.values():
++                for info in infos or []:
++                    if info["forward_mode"] != 2:
++                        continue
++                    rows.append((
++                        info["batch_size"],
++                        sum(info["num_total_computed_tokens_list"]),
++                        (info.get("itl", 0) or 0) * 1000,
++                    ))
++            del reqs
++            arr = np.asarray(rows, dtype=np.float64).reshape(-1, 3)
++            arr = arr[(arr[:, 2] > itl_min) & (arr[:, 2] < itl_max)]
++            frame = pd.DataFrame(arr, columns=["batch_size", "tokens", "itl"])
++            frame.insert(0, "freq", freq)
++            frames.append(frame)
++    df = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame(columns=["freq", "batch_size", "tokens", "itl"])
++    return df.sort_values(by=["freq", "batch_size", "tokens", "itl"], ignore_index=True)
++
++
++def fit_decode(df: pd.DataFrame, png: str) -> pd.DataFrame:
++    fig = plt.figure(figsize=(6, 6))
++    ax = fig.add_subplot(111, projection="3d")
++    rng = np.random.default_rng(0)
++    table = []
++    for i, freq in enumerate(sorted(df["freq"].unique())):
++        df_freq = df[df["freq"] == freq]
++        xs_freq = df_freq["batch_size"].to_numpy()
++        ys_freq = df_freq["tokens"].to_numpy()
++        zs_freq = df_freq["itl"].to_numpy()
++        label = f"f = {freq} MHz"
++        for beg, end in zip(STEPS_BEG, STEPS_END):
++            sel = (xs_freq >= beg) & (xs_freq <= end)
++            if sel.sum() < 2:
++                continue
++            xy = np.vstack((xs_freq[sel], ys_freq[sel])).T
++            zs = zs_freq[sel]
++            model = RANSACRegressor(LinearRegression(positive=True), max_trials=10000,
++                                    loss="squared_error", random_state=1)
++            model.fit(xy, zs)
++            r2 = r2_score(zs, model.predict(xy))
++            table.append({
++                "freq": freq,
++                "bs_start": beg,
++                "bs_end": end,
++                "coef_bs": model.estimator_.coef_[0],
++                "coef_tokens": model.estimator_.coef_[1],
++                "coef_intercept": model.estimator_.intercept_,
++                "r_2": r2,
++                "n_points": int(sel.sum()),
++            })
++            print(table[-1])
++            draw = rng.choice(len(zs), min(100, len(zs)), replace=False)
++            ax.scatter(xy[draw, 0], xy[draw, 1], zs[draw], c=f"C{i}", s=10, alpha=0.5, label=label)
++            label = None
++    ax.set_xlabel("#Reqs")
++    ax.set_ylabel("#Computed Tokens", labelpad=10)
++    ax.set_zlabel("ITL (ms)")
++    ax.view_init(elev=35, azim=-135)
++    fig.legend(fontsize=9, loc="upper left")
++    fig.tight_layout()
++    fig.savefig(png, dpi=150)
++    columns = ["freq", "bs_start", "bs_end", "coef_bs", "coef_tokens", "coef_intercept", "r_2", "n_points"]
++    return pd.DataFrame(table, columns=columns).sort_values(by=["freq", "bs_start", "bs_end"], ignore_index=True)
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
++    parser.add_argument("--phase", choices=["prefill", "decode"], required=True)
++    parser.add_argument("--data-dir", required=True)
++    parser.add_argument("--out-dir", required=True)
++    parser.add_argument("--tokens-min", type=float, default=2000, help="prefill fit range (batched tokens)")
++    parser.add_argument("--tokens-max", type=float, default=20000)
++    parser.add_argument("--itl-min", type=float, default=3, help="decode ITL filter (ms)")
++    parser.add_argument("--itl-max", type=float, default=300)
++    args = parser.parse_args()
++
++    os.makedirs(args.out_dir, exist_ok=True)
++    png = os.path.join(args.out_dir, f"latency-{args.phase}.png")
++    if args.phase == "prefill":
++        df = load_prefill(args.data_dir)
++        table = fit_prefill(df, args.tokens_min, args.tokens_max, png)
++    else:
++        df = load_decode(args.data_dir, args.itl_min, args.itl_max)
++        table = fit_decode(df, png)
++    df.to_csv(os.path.join(args.out_dir, f"points-{args.phase}.csv.gz"), index=False)
++    # n_points is informational; lookup_table.py ignores unknown columns
++    table.to_csv(os.path.join(args.out_dir, f"latency-{args.phase}.csv"), index=False)
++    print(f"{len(df)} points, {len(table)} table rows -> {args.out_dir}")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/voltana-llm-scripts/predictions/slurm/profile.sbatch b/voltana-llm-scripts/predictions/slurm/profile.sbatch
+new file mode 100644
+index 00000000..2b220efc
+--- /dev/null
++++ b/voltana-llm-scripts/predictions/slurm/profile.sbatch
+@@ -0,0 +1,154 @@
++#!/bin/bash
++#SBATCH --job-name=voltana-profile
++#SBATCH --nodes=1
++#SBATCH --ntasks=1
++#SBATCH --gres=gpu:1
++#SBATCH --cpus-per-task=8
++#SBATCH --mem=64G
++#SBATCH --time=04:00:00
++#SBATCH --output=voltana-profile-%x-%j.out
++
++# Profile prefill/decode latency at locked GPU frequencies on one GPU (see ../README.md).
++#
++# Usage (submit from voltana-llm-scripts/predictions with the voltanallm env activated):
++#   sbatch [--partition=...] [--gres=gpu:<type>:1] slurm/profile.sbatch <prefill|decode> <L40S|L4>
++#   # one frequency per array task (recommended for decode):
++#   sbatch --array=0-4 ... slurm/profile.sbatch decode L4
++#
++# Env overrides: MODEL_PATH, FREQ_LIST (e.g. 2520,2310,2100), N_FREQ, FREQ_MIN_RATIO,
++#   MEM_FRACTION, CONTEXT_LEN, MAX_RUNNING, CUDA_GRAPH_MAX_BS, MAX_TOKENS, OUT_DIR, PORT
++
++set -euo pipefail
++
++PHASE=${1:?usage: profile.sbatch <prefill|decode> <L40S|L4>}
++GPU=${2:?usage: profile.sbatch <prefill|decode> <L40S|L4>}
++
++PRED_DIR=${PRED_DIR:-${SLURM_SUBMIT_DIR:-$(pwd)}}
++if [[ ! -f "${PRED_DIR}/${PHASE}/run_profile.py" ]]; then
++    echo "cannot find ${PRED_DIR}/${PHASE}/run_profile.py; submit from voltana-llm-scripts/predictions or set PRED_DIR" >&2
++    exit 1
++fi
++
++## per-GPU presets (Mistral-7B-v0.1, bf16, TP=1)
++case "${GPU}" in
++    L40S)
++        GPU_TAG=${GPU_TAG:-L40S-48G}
++        : "${CONTEXT_LEN:=16384}" "${MAX_RUNNING:=1024}" "${CUDA_GRAPH_MAX_BS:=1024}"
++        ;;
++    L4)
++        # 24 GB: ~14.5 GB weights leaves only ~5-6 GB KV cache, keep batches and graphs small
++        GPU_TAG=${GPU_TAG:-L4-24G}
++        : "${CONTEXT_LEN:=8192}" "${MAX_RUNNING:=512}" "${CUDA_GRAPH_MAX_BS:=512}"
++        ;;
++    *)
++        echo "unknown GPU type: ${GPU} (expected L40S or L4)" >&2
++        exit 1
++        ;;
++esac
++# prefill needs more activation headroom than decode
++if [[ "${PHASE}" == prefill ]]; then : "${MEM_FRACTION:=0.85}"; else : "${MEM_FRACTION:=0.88}"; fi
++export MEM_FRACTION CONTEXT_LEN MAX_RUNNING CUDA_GRAPH_MAX_BS GPU_TAG
++export MODEL_PATH=${MODEL_PATH:-mistralai/Mistral-7B-v0.1}
++export HOST=localhost
++export PORT=${PORT:-$((20000 + ${SLURM_JOB_ID:-0} % 10000))}
++
++python -c "import sglang" || { echo "sglang not importable; activate the voltanallm env before sbatch" >&2; exit 1; }
++
++## resolve the NVML index of the GPU Slurm gave us (CUDA index 0 inside the job)
++cuda_uuid=$(python -c "import torch; print(str(torch.cuda.get_device_properties(0).uuid))")
++cuda_uuid=${cuda_uuid#GPU-}
++NVML_GPU_IDX=$(nvidia-smi --query-gpu=index,uuid --format=csv,noheader \
++    | awk -F', ' -v u="GPU-${cuda_uuid}" '$2 == u { print $1 }')
++if [[ -z "${NVML_GPU_IDX}" ]]; then
++    echo "cannot map CUDA device 0 (uuid ${cuda_uuid}) to an NVML index" >&2
++    nvidia-smi -L >&2
++    exit 1
++fi
++export NVML_GPU_IDX
++gpu_name=$(nvidia-smi -i "${NVML_GPU_IDX}" --query-gpu=name --format=csv,noheader)
++echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-} -> NVML index ${NVML_GPU_IDX} (${gpu_name})"
++if [[ "${gpu_name}" != *"${GPU}"* ]]; then
++    echo "allocated GPU '${gpu_name}' does not match requested type ${GPU}; pass --gres=gpu:<type>:1 or --partition" >&2
++    exit 1
++fi
++
++## frequency list: explicit FREQ_LIST, else N_FREQ supported clocks spaced in [FREQ_MIN_RATIO * max, max]
++if [[ -z "${FREQ_LIST:-}" ]]; then
++    supported=$(nvidia-smi -i "${NVML_GPU_IDX}" --query-supported-clocks=graphics --format=csv,noheader,nounits | sort -un)
++    FREQ_LIST=$(python - "${N_FREQ:-5}" "${FREQ_MIN_RATIO:-0.7}" ${supported} <<'EOF'
++import sys
++n, ratio, clocks = int(sys.argv[1]), float(sys.argv[2]), sorted({int(c) for c in sys.argv[3:]})
++f_max = clocks[-1]
++f_min = ratio * f_max
++targets = [f_max - i * (f_max - f_min) / (n - 1) for i in range(n)] if n > 1 else [f_max]
++picked = []
++for t in targets:
++    f = min(clocks, key=lambda c: abs(c - t))
++    if f not in picked:
++        picked.append(f)
++print(",".join(map(str, picked)))
++EOF
++)
++fi
++if [[ -n "${SLURM_ARRAY_TASK_ID:-}" ]]; then
++    IFS=, read -ra freqs <<< "${FREQ_LIST}"
++    if (( SLURM_ARRAY_TASK_ID >= ${#freqs[@]} )); then
++        echo "array task ${SLURM_ARRAY_TASK_ID} has no frequency (FREQ_LIST=${FREQ_LIST})" >&2
++        exit 1
++    fi
++    FREQ_LIST=${freqs[${SLURM_ARRAY_TASK_ID}]}
++fi
++export FREQ_LIST
++echo "frequencies to profile: ${FREQ_LIST}"
++
++## passwordless sudo is required to lock clocks; fail fast instead of recording mislabeled data
++if ! sudo -n nvidia-smi -i "${NVML_GPU_IDX}" -rgc > /dev/null; then
++    echo "sudo -n nvidia-smi -rgc failed; frequency locking needs passwordless sudo on this node" >&2
++    exit 1
++fi
++
++model_name=${MODEL_PATH%/}
++model_name=${model_name##*/}
++OUT_DIR=${OUT_DIR:-${PRED_DIR}/${PHASE}/results/${GPU_TAG}/${model_name}}
++mkdir -p "${OUT_DIR}"
++cd "${OUT_DIR}"
++echo "writing results to ${OUT_DIR}"
++
++server_pid=""
++monitor_pid=""
++cleanup() {
++    [[ -n "${monitor_pid}" ]] && kill "${monitor_pid}" 2> /dev/null || true
++    [[ -n "${server_pid}" ]] && kill "${server_pid}" 2> /dev/null || true
++    # never leave the clock locked for the next job on this GPU
++    sudo -n nvidia-smi -i "${NVML_GPU_IDX}" -rgc > /dev/null || true
++}
++trap cleanup EXIT
++
++## start the server on CUDA index 0 of this job
++if [[ "${PHASE}" == prefill ]]; then
++    bash "${PRED_DIR}/prefill/p_server.sh" 0 > "server-${SLURM_JOB_ID:-local}.log" 2>&1 &
++else
++    bash "${PRED_DIR}/decode/d_server.sh" 0 > "server-${SLURM_JOB_ID:-local}.log" 2>&1 &
++fi
++server_pid=$!
++
++echo "waiting for server on port ${PORT} ..."
++for _ in $(seq 1 360); do
++    if curl -sf "http://localhost:${PORT}/health" > /dev/null; then
++        break
++    fi
++    if ! kill -0 "${server_pid}" 2> /dev/null; then
++        echo "server exited during startup, see ${OUT_DIR}/server-${SLURM_JOB_ID:-local}.log" >&2
++        exit 1
++    fi
++    sleep 5
++done
++curl -sf "http://localhost:${PORT}/health" > /dev/null || { echo "server not ready after 30 min" >&2; exit 1; }
++
++## record actual clocks/power so power-capped runs (esp. L4, 72 W) can be spotted afterwards
++nvidia-smi -i "${NVML_GPU_IDX}" \
++    --query-gpu=timestamp,clocks.sm,clocks.mem,power.draw,temperature.gpu,clocks_throttle_reasons.active \
++    --format=csv -lms 500 > "clocks-${SLURM_JOB_ID:-local}.csv" &
++monitor_pid=$!
++
++python "${PRED_DIR}/${PHASE}/run_profile.py"
