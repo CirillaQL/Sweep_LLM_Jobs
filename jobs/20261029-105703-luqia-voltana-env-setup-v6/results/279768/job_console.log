@@ -1,0 +1,38 @@
+job_start=2026-10-31T01:18:33+01:00 host=ganymede job=279768
+env exists, reusing /data/users/chjing/miniforge3/envs/voltanallm
+Python 3.12.16
+Cuda compilation tools, release 12.8, V12.8.93
+Build cuda_12.8.r12.8/compiler.35583870_0
+commit=274173238ba0021ab40d98e5abfec3f47d24bed5
+ M .gitignore
+ M python/sglang/srt/disaggregation/nixl/__init__.py
+ M python/sglang/srt/disaggregation/nixl/conn.py
+ M python/sglang/srt/disaggregation/utils.py
+ M python/sglang/srt/managers/scheduler_output_processor_mixin.py
+ M voltana-llm-scripts/predictions/README.md
+ M voltana-llm-scripts/predictions/decode/d_server.sh
+ M voltana-llm-scripts/predictions/decode/draw.ipynb
+ M voltana-llm-scripts/predictions/decode/run_profile.py
+ M voltana-llm-scripts/predictions/prefill/draw.ipynb
+ M voltana-llm-scripts/predictions/prefill/p_server.sh
+ M voltana-llm-scripts/predictions/prefill/run_profile.py
+?? voltana-llm-scripts/predictions/fit_latency.py
+?? voltana-llm-scripts/predictions/slurm/
+Requirement already satisfied: uv in /data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages (0.13.6)
+Using Python 3.12.16 environment at: /data/users/chjing/miniforge3/envs/voltanallm
+Checked 142 packages in 150ms
+      Built sglang @ file:///data/users/chjing/voltana_work/VoltanaLLM/python
+Prepared 1 package in 2.92s
+Uninstalled 1 package in 6ms
+Installed 1 package in 18ms
+ ~ sglang==0.4.7.post1 (from file:///data/users/chjing/voltana_work/VoltanaLLM/python)
+Requires: ninja, numpy, requests, torch
+Requirement already satisfied: nixl==0.9.0 in /data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages (0.9.0)
+Requirement already satisfied: nixl-cu12==0.9.0 in /data/users/chjing/miniforge3/envs/voltanallm/lib/python3.12/site-packages (0.9.0)
+torch before=2.7.1+cu126 after=2.7.1+cu126
+pip check rc=0
+model=/data/users/chjing/voltana_work/models/Mistral-7B-v0.1 -> /data/users/chjing/vllm_job_work/255143/huggingface/hub/models--mistralai--Mistral-7B-v0.1/snapshots/27d67f1b5f57dc0953326b2601d68371d40ea8da
+dataset=/data/users/chjing/datasets/ShareGPT_V3_unfiltered_cleaned_split.json
+gpu_index=0
+index, uuid, name, driver_version, clocks.max.sm [MHz], clocks.max.memory [MHz], power.limit [W]
+0, GPU-07e36d4f-3eca-a88d-1c31-445fc0d863e8, NVIDIA L4, 595.91.07, 2040 MHz, 6251 MHz, 72.00 W
