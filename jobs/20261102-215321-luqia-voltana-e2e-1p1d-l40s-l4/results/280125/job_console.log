@@ -17,3 +17,17 @@ slurm_step_gpus=0 slurm_job_gpus=0 cuda_visible_devices=0
 clocks.current.sm [MHz], clocks.max.sm [MHz], power.draw [W], power.limit [W]
 210 MHz, 2040 MHz, 16.05 W, 72.00 W
 compute_apps_before_start=none
+router exited:
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/data/users/chjing/voltana_work/runs/280125/overlay/python/sglang/srt/disaggregation/launch_lb.py", line 231, in <module>
+    main()
+  File "/data/users/chjing/voltana_work/runs/280125/overlay/python/sglang/srt/disaggregation/launch_lb.py", line 222, in main
+    from sglang.srt.disaggregation.mini_lb import PrefillConfig, run
+  File "/data/users/chjing/voltana_work/runs/280125/overlay/python/sglang/srt/disaggregation/mini_lb.py", line 24, in <module>
+    import aiofiles
+ModuleNotFoundError: No module named 'aiofiles'
+RESULT=failed stage=router_not_ready
+--- teardown 2026-11-02T22:21:19+01:00
+/var/spool/slurmd/job280125/slurm_script: line 129: posthttp://10.1.0.6:30125/unset_freq: No such file or directory
