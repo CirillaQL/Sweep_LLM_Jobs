@@ -31,3 +31,20 @@ ModuleNotFoundError: No module named 'aiofiles'
 RESULT=failed stage=router_not_ready
 --- teardown 2026-11-02T22:21:19+01:00
 /var/spool/slurmd/job280125/slurm_script: line 129: posthttp://10.1.0.6:30125/unset_freq: No such file or directory
+[neptune] [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[neptune] [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[neptune] All done.
+[neptune] 2, GPU-ebc2e033-0d59-2451-884a-dfd75a4915e5, 210 MHz
+[ganymede] [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[ganymede] [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[ganymede] All done.
+[ganymede] 0, GPU-07e36d4f-3eca-a88d-1c31-445fc0d863e8, 210 MHz
+[neptune leftover] [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[neptune leftover] [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[neptune leftover] 2494370    04:03:57 python -m sglang.launch_server --watchdog-timeout 86400 --random-seed 0 --model-path /data/users/chjing/voltana_work/models/Mistral-7B-v0.1 --trust-remote-code --host 0.0.0.0 --port 30102 --device cuda --base-gpu-id 0 --mem-fraction-static 0.88 --max-running-requests 1024 --max-prefill-tokens 16384 --context-length 16384 --chunked-prefill-size 16384 --schedule-policy fcfs --page-size 1 --attention-backend triton --sampling-backend flashinfer --grammar-backend xgrammar --cuda-graph-bs 1 2 4 8 16 24 32 40 48 56 64 72 80 88 96 104 112 120 128 160 192 224 256 320 384 448 512 576 640 704 768 832 896 960 1024 --disable-radix-cache --disaggregation-mode decode --disaggregation-transfer-backend fake --num-reserved-decode-tokens 8 --collect-extra-batch-info --monitor-iteration-metrics
+[neptune leftover] 2495119    04:00:19 sglang::scheduler
+[neptune leftover] 2495121    04:00:19 sglang::detokenizer
+[ganymede leftover] [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[ganymede leftover] [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[ganymede leftover] none
+end=2026-11-02T22:21:45+01:00 elapsed_s=211
