@@ -1,0 +1,55 @@
+[prefill] 9214 points, clocks [720, 1080, 1440, 1800, 2520], train/val/test 7372/921/921
+[prefill] fit 4s best_iteration 9376
+[prefill] leave out 1080 MHz: fit 2s
+[prefill] leave out 1440 MHz: fit 21s
+[prefill] leave out 1800 MHz: fit 6s
+[prefill_gbtree] 9214 points, clocks [720, 1080, 1440, 1800, 2520], train/val/test 7372/921/921
+[prefill_gbtree] fit 1s best_iteration 576
+[prefill_gbtree] leave out 1080 MHz: fit 1s
+[prefill_gbtree] leave out 1440 MHz: fit 0s
+[prefill_gbtree] leave out 1800 MHz: fit 0s
+[decode] 8207704 points, clocks [735, 1020, 1170, 1455, 2040], train/val/test 6566164/820770/820770
+[decode] fit 1296s best_iteration 999
+[decode] leave out 1020 MHz: fit 909s
+[decode] leave out 1170 MHz: fit 928s
+[decode] leave out 1455 MHz: fit 936s
+== prefill (gblinear): 9214 points, best_iteration 9376, fit 4 s
+  all                xgb MAE   84.18 ms  MAPE  24.89%  p90  126.25 | linear MAE   16.03 ms  MAPE  19.69%  p90   25.19  cov 1.000  (n 921)
+  tokens_2000_20000  xgb MAE  262.60 ms  MAPE  15.71%  p90 1134.57 | linear MAE   21.34 ms  MAPE   1.88%  p90   41.83  cov 1.000  (n 257)
+  720 MHz            xgb MAE  568.76 ms  MAPE  41.74%  p90 1173.65 | linear MAE   18.80 ms  MAPE   8.68%  p90   37.08  cov 1.000  (n 78)
+  1080 MHz           xgb MAE  130.30 ms  MAPE  18.56%  p90  388.89 | linear MAE   13.81 ms  MAPE  11.95%  p90   24.24  cov 1.000  (n 142)
+  1440 MHz           xgb MAE    8.85 ms  MAPE   8.35%  p90   16.50 | linear MAE    9.66 ms  MAPE  17.28%  p90   13.67  cov 1.000  (n 228)
+  1800 MHz           xgb MAE   24.25 ms  MAPE  20.68%  p90   65.66 | linear MAE   19.48 ms  MAPE  25.54%  p90   28.34  cov 1.000  (n 222)
+  2520 MHz           xgb MAE   28.93 ms  MAPE  41.98%  p90   49.38 | linear MAE   19.17 ms  MAPE  24.51%  p90   22.72  cov 1.000  (n 251)
+  LOCO 1080 MHz      xgb MAE  138.77 ms  MAPE  18.95%  p90  414.37 | linear MAE   66.33 ms  MAPE  10.70%  p90  197.07  cov 1.000  (n 142)
+  LOCO 1440 MHz      xgb MAE   79.48 ms  MAPE  21.37%  p90  314.21 | linear MAE   34.81 ms  MAPE   8.50%  p90  147.13  cov 1.000  (n 228)
+  LOCO 1800 MHz      xgb MAE   73.37 ms  MAPE  41.00%  p90  374.55 | linear MAE   18.92 ms  MAPE  19.91%  p90   48.74  cov 1.000  (n 222)
+  predict latency (1 thread): 1_row p50 211 us p99 363 us, 5_rows p50 569 us p99 1710 us
+  gblinear weights: {'bias': -2.5829200744628906, 'coef': {'freq': -0.0225185, 'tokens': 0.0822097}}
+== prefill_gbtree (gbtree): 9214 points, best_iteration 576, fit 1 s
+  all                xgb MAE    9.31 ms  MAPE   1.55%  p90   15.49 | linear MAE   16.03 ms  MAPE  19.69%  p90   25.19  cov 1.000  (n 921)
+  tokens_2000_20000  xgb MAE   22.37 ms  MAPE   1.90%  p90   46.12 | linear MAE   21.34 ms  MAPE   1.88%  p90   41.83  cov 1.000  (n 257)
+  720 MHz            xgb MAE   15.84 ms  MAPE   1.45%  p90   28.13 | linear MAE   18.80 ms  MAPE   8.68%  p90   37.08  cov 1.000  (n 78)
+  1080 MHz           xgb MAE   10.28 ms  MAPE   1.71%  p90   24.46 | linear MAE   13.81 ms  MAPE  11.95%  p90   24.24  cov 1.000  (n 142)
+  1440 MHz           xgb MAE    4.77 ms  MAPE   0.78%  p90   10.65 | linear MAE    9.66 ms  MAPE  17.28%  p90   13.67  cov 1.000  (n 228)
+  1800 MHz           xgb MAE    8.97 ms  MAPE   1.45%  p90    5.39 | linear MAE   19.48 ms  MAPE  25.54%  p90   28.34  cov 1.000  (n 222)
+  2520 MHz           xgb MAE   11.16 ms  MAPE   2.29%  p90    5.10 | linear MAE   19.17 ms  MAPE  24.51%  p90   22.72  cov 1.000  (n 251)
+  LOCO 1080 MHz      xgb MAE  270.10 ms  MAPE  37.29%  p90  790.01 | linear MAE   66.33 ms  MAPE  10.70%  p90  197.07  cov 1.000  (n 142)
+  LOCO 1440 MHz      xgb MAE   97.36 ms  MAPE  21.31%  p90  389.46 | linear MAE   34.81 ms  MAPE   8.50%  p90  147.13  cov 1.000  (n 228)
+  LOCO 1800 MHz      xgb MAE   21.89 ms  MAPE  10.71%  p90   69.82 | linear MAE   18.92 ms  MAPE  19.91%  p90   48.74  cov 1.000  (n 222)
+  predict latency (1 thread): 1_row p50 112 us p99 220 us, 5_rows p50 167 us p99 283 us
+== decode (gbtree): 8207704 points, best_iteration 999, fit 1296 s
+  all                xgb MAE    0.28 ms  MAPE   0.28%  p90    0.52 | linear MAE    0.37 ms  MAPE   0.35%  p90    0.55  cov 1.000  (n 820770)
+  bs_1_32            xgb MAE    0.15 ms  MAPE   0.19%  p90    0.21 | linear MAE    0.18 ms  MAPE   0.23%  p90    0.30  cov 1.000  (n 159037)
+  bs_33_128          xgb MAE    0.09 ms  MAPE   0.11%  p90    0.14 | linear MAE    0.10 ms  MAPE   0.12%  p90    0.16  cov 1.000  (n 530518)
+  bs_129_512         xgb MAE    1.18 ms  MAPE   1.05%  p90    2.53 | linear MAE    1.71 ms  MAPE   1.41%  p90    4.05  cov 1.000  (n 131215)
+  735 MHz            xgb MAE    0.33 ms  MAPE   0.41%  p90    0.82 | linear MAE    0.20 ms  MAPE   0.34%  p90    0.40  cov 1.000  (n 164279)
+  1020 MHz           xgb MAE    0.24 ms  MAPE   0.21%  p90    0.40 | linear MAE    0.33 ms  MAPE   0.29%  p90    0.57  cov 1.000  (n 164144)
+  1170 MHz           xgb MAE    0.29 ms  MAPE   0.24%  p90    0.46 | linear MAE    0.38 ms  MAPE   0.32%  p90    0.75  cov 1.000  (n 163964)
+  1455 MHz           xgb MAE    0.28 ms  MAPE   0.27%  p90    0.46 | linear MAE    0.35 ms  MAPE   0.32%  p90    0.63  cov 1.000  (n 164144)
+  2040 MHz           xgb MAE    0.25 ms  MAPE   0.24%  p90    0.46 | linear MAE    0.62 ms  MAPE   0.47%  p90    0.64  cov 1.000  (n 164239)
+  LOCO 1020 MHz      xgb MAE    6.30 ms  MAPE   5.57%  p90   14.86 | linear MAE    1.90 ms  MAPE   1.52%  p90    6.27  cov 1.000  (n 164144)
+  LOCO 1170 MHz      xgb MAE    1.01 ms  MAPE   1.11%  p90    1.15 | linear MAE    0.61 ms  MAPE   0.59%  p90    1.10  cov 1.000  (n 163964)
+  LOCO 1455 MHz      xgb MAE    0.91 ms  MAPE   1.01%  p90    1.29 | linear MAE    0.86 ms  MAPE   0.82%  p90    1.54  cov 1.000  (n 164144)
+  predict latency (1 thread): 1_row p50 174 us p99 327 us, 5_rows p50 282 us p99 446 us
+
