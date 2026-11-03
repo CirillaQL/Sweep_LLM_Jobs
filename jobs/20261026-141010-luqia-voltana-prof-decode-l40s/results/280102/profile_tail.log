@@ -1,0 +1,200 @@
+Successful requests:                     768       
+Benchmark duration (s):                  43.45     
+Total input tokens:                      768       
+Total generated tokens:                  195840    
+Total generated tokens (retokenized):    1519      
+Request throughput (req/s):              17.68     
+Input token throughput (tok/s):          17.68     
+Output token throughput (tok/s):         4507.55   
+Total token throughput (tok/s):          4525.22   
+Concurrency:                             703.76    
+----------------End-to-End Latency----------------
+Mean E2E Latency (ms):                   39812.84  
+Median E2E Latency (ms):                 39869.34  
+---------------Time to First Token----------------
+Mean TTFT (ms):                          440.31    
+Median TTFT (ms):                        417.98    
+P99 TTFT (ms):                           661.07    
+---------------Inter-Token Latency----------------
+Mean ITL (ms):                           154.48    
+Median ITL (ms):                         154.76    
+P95 ITL (ms):                            171.22    
+P99 ITL (ms):                            179.69    
+Max ITL (ms):                            180.02    
+----------------Energy Consumption----------------
+==================================================
+Benchmark completed in 45.81 seconds.
+bs-769-outlen-254
+benchmark_args=Namespace(backend='sglang', base_url=None, host='127.0.0.1', port=30102, dataset_name='random', dataset_path='/data/users/chjing/datasets/ShareGPT_V3_unfiltered_cleaned_split.json', model='/data/users/chjing/voltana_work/models/Mistral-7B-v0.1', tokenizer=None, num_prompts=769, random_sort=False, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=1, random_output_len=254, random_range_ratio=0.0, lmsys_output_len=None, lmsys_context_len=None, profiling_input_lens=None, profiling_output_lens=None, request_rate=inf, burstiness=1.0, max_concurrency=None, output_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-769-outlen-254.json', output_extra_batch_info_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-769-outlen-254-extra.json', output_details=True, disable_tqdm=False, disable_stream=False, return_logprob=False, seed=0, disable_ignore_eos=False, extra_request_body='{"stream_options":{"include_extra_batch_info":true},"bootstrap_host":"localhost","bootstrap_port":8100,"bootstrap_room":10}', apply_chat_template=False, profile=False, lora_name=None, prompt_suffix='', pd_separated=True, flush_cache=False, warmup_requests=0, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, freq_settings='1:720', log_file='/dev/null', random_range_ratio_input=1, random_range_ratio_output=1)
+
+WARNING It is recommended to use the `Chat` or `Instruct` model for benchmarking.
+Because when the tokenizer counts the output tokens, if there is gibberish, it might count incorrectly.
+
+Namespace(backend='sglang', base_url=None, host='127.0.0.1', port=30102, dataset_name='random', dataset_path='/data/users/chjing/datasets/ShareGPT_V3_unfiltered_cleaned_split.json', model='/data/users/chjing/voltana_work/models/Mistral-7B-v0.1', tokenizer=None, num_prompts=769, random_sort=False, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=1, random_output_len=254, random_range_ratio=0.0, lmsys_output_len=None, lmsys_context_len=None, profiling_input_lens=None, profiling_output_lens=None, request_rate=inf, burstiness=1.0, max_concurrency=None, output_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-769-outlen-254.json', output_extra_batch_info_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-769-outlen-254-extra.json', output_details=True, disable_tqdm=False, disable_stream=False, return_logprob=False, seed=0, disable_ignore_eos=False, extra_request_body='{"stream_options":{"include_extra_batch_info":true},"bootstrap_host":"localhost","bootstrap_port":8100,"bootstrap_room":10}', apply_chat_template=False, profile=False, lora_name=None, prompt_suffix='', pd_separated=True, flush_cache=False, warmup_requests=0, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, freq_settings='1:720', log_file='/dev/null', random_range_ratio_input=1, random_range_ratio_output=1)
+
+#Input tokens: 769
+#Output tokens: 195326
+
+
+  0%|          | 0/769 [00:00<?, ?it/s][AGPU clocks set to "(gpuClkMin 720, gpuClkMax 720)" for GPU 00000000:61:00.0
+
+Warning: persistence mode is disabled on device 00000000:61:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+
+
+  0%|          | 1/769 [00:45<9:45:03, 45.71s/it][A
+
+  1%|          | 4/769 [00:46<1:52:53,  8.85s/it][A
+
+ 17%|█▋        | 134/769 [00:47<01:53,  5.58it/s][AAll done.
+
+100%|██████████| 769/769 [00:49<00:00, 15.56it/s]
+
+============ Serving Benchmark Result ============
+Backend:                                 sglang    
+Traffic request rate:                    inf       
+Max request concurrency:                 not set   
+Successful requests:                     769       
+Benchmark duration (s):                  49.43     
+Total input tokens:                      769       
+Total generated tokens:                  195326    
+Total generated tokens (retokenized):    1074      
+Request throughput (req/s):              15.56     
+Input token throughput (tok/s):          15.56     
+Output token throughput (tok/s):         3951.52   
+Total token throughput (tok/s):          3967.08   
+Concurrency:                             712.37    
+----------------End-to-End Latency----------------
+Mean E2E Latency (ms):                   45790.65  
+Median E2E Latency (ms):                 45904.99  
+---------------Time to First Token----------------
+Mean TTFT (ms):                          425.81    
+Median TTFT (ms):                        410.57    
+P99 TTFT (ms):                           627.67    
+---------------Inter-Token Latency----------------
+Mean ITL (ms):                           177.82    
+Median ITL (ms):                         178.08    
+P95 ITL (ms):                            198.42    
+P99 ITL (ms):                            199.65    
+Max ITL (ms):                            200.00    
+----------------Energy Consumption----------------
+==================================================
+Benchmark completed in 51.68 seconds.
+bs-896-outlen-218
+benchmark_args=Namespace(backend='sglang', base_url=None, host='127.0.0.1', port=30102, dataset_name='random', dataset_path='/data/users/chjing/datasets/ShareGPT_V3_unfiltered_cleaned_split.json', model='/data/users/chjing/voltana_work/models/Mistral-7B-v0.1', tokenizer=None, num_prompts=896, random_sort=False, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=1, random_output_len=218, random_range_ratio=0.0, lmsys_output_len=None, lmsys_context_len=None, profiling_input_lens=None, profiling_output_lens=None, request_rate=inf, burstiness=1.0, max_concurrency=None, output_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-896-outlen-218.json', output_extra_batch_info_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-896-outlen-218-extra.json', output_details=True, disable_tqdm=False, disable_stream=False, return_logprob=False, seed=0, disable_ignore_eos=False, extra_request_body='{"stream_options":{"include_extra_batch_info":true},"bootstrap_host":"localhost","bootstrap_port":8100,"bootstrap_room":10}', apply_chat_template=False, profile=False, lora_name=None, prompt_suffix='', pd_separated=True, flush_cache=False, warmup_requests=0, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, freq_settings='1:720', log_file='/dev/null', random_range_ratio_input=1, random_range_ratio_output=1)
+
+WARNING It is recommended to use the `Chat` or `Instruct` model for benchmarking.
+Because when the tokenizer counts the output tokens, if there is gibberish, it might count incorrectly.
+
+Namespace(backend='sglang', base_url=None, host='127.0.0.1', port=30102, dataset_name='random', dataset_path='/data/users/chjing/datasets/ShareGPT_V3_unfiltered_cleaned_split.json', model='/data/users/chjing/voltana_work/models/Mistral-7B-v0.1', tokenizer=None, num_prompts=896, random_sort=False, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=1, random_output_len=218, random_range_ratio=0.0, lmsys_output_len=None, lmsys_context_len=None, profiling_input_lens=None, profiling_output_lens=None, request_rate=inf, burstiness=1.0, max_concurrency=None, output_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-896-outlen-218.json', output_extra_batch_info_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-896-outlen-218-extra.json', output_details=True, disable_tqdm=False, disable_stream=False, return_logprob=False, seed=0, disable_ignore_eos=False, extra_request_body='{"stream_options":{"include_extra_batch_info":true},"bootstrap_host":"localhost","bootstrap_port":8100,"bootstrap_room":10}', apply_chat_template=False, profile=False, lora_name=None, prompt_suffix='', pd_separated=True, flush_cache=False, warmup_requests=0, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, freq_settings='1:720', log_file='/dev/null', random_range_ratio_input=1, random_range_ratio_output=1)
+
+#Input tokens: 896
+#Output tokens: 195328
+
+
+  0%|          | 0/896 [00:00<?, ?it/s][AGPU clocks set to "(gpuClkMin 720, gpuClkMax 720)" for GPU 00000000:61:00.0
+
+Warning: persistence mode is disabled on device 00000000:61:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+
+
+  0%|          | 1/896 [00:38<9:36:51, 38.67s/it][A
+
+  0%|          | 4/896 [00:39<1:52:03,  7.54s/it][A
+
+ 14%|█▍        | 129/896 [00:40<02:02,  6.27it/s][AAll done.
+
+100%|██████████| 896/896 [00:42<00:00, 20.99it/s]
+
+============ Serving Benchmark Result ============
+Backend:                                 sglang    
+Traffic request rate:                    inf       
+Max request concurrency:                 not set   
+Successful requests:                     896       
+Benchmark duration (s):                  42.70     
+Total input tokens:                      896       
+Total generated tokens:                  195328    
+Total generated tokens (retokenized):    1755      
+Request throughput (req/s):              20.99     
+Input token throughput (tok/s):          20.99     
+Output token throughput (tok/s):         4574.95   
+Total token throughput (tok/s):          4595.94   
+Concurrency:                             814.47    
+----------------End-to-End Latency----------------
+Mean E2E Latency (ms):                   38810.16  
+Median E2E Latency (ms):                 38883.98  
+---------------Time to First Token----------------
+Mean TTFT (ms):                          502.14    
+Median TTFT (ms):                        475.85    
+P99 TTFT (ms):                           704.40    
+---------------Inter-Token Latency----------------
+Mean ITL (ms):                           175.80    
+Median ITL (ms):                         176.37    
+P95 ITL (ms):                            192.50    
+P99 ITL (ms):                            201.32    
+Max ITL (ms):                            267.74    
+----------------Energy Consumption----------------
+==================================================
+Benchmark completed in 45.06 seconds.
+bs-897-outlen-218
+benchmark_args=Namespace(backend='sglang', base_url=None, host='127.0.0.1', port=30102, dataset_name='random', dataset_path='/data/users/chjing/datasets/ShareGPT_V3_unfiltered_cleaned_split.json', model='/data/users/chjing/voltana_work/models/Mistral-7B-v0.1', tokenizer=None, num_prompts=897, random_sort=False, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=1, random_output_len=218, random_range_ratio=0.0, lmsys_output_len=None, lmsys_context_len=None, profiling_input_lens=None, profiling_output_lens=None, request_rate=inf, burstiness=1.0, max_concurrency=None, output_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-897-outlen-218.json', output_extra_batch_info_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-897-outlen-218-extra.json', output_details=True, disable_tqdm=False, disable_stream=False, return_logprob=False, seed=0, disable_ignore_eos=False, extra_request_body='{"stream_options":{"include_extra_batch_info":true},"bootstrap_host":"localhost","bootstrap_port":8100,"bootstrap_room":10}', apply_chat_template=False, profile=False, lora_name=None, prompt_suffix='', pd_separated=True, flush_cache=False, warmup_requests=0, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, freq_settings='1:720', log_file='/dev/null', random_range_ratio_input=1, random_range_ratio_output=1)
+
+WARNING It is recommended to use the `Chat` or `Instruct` model for benchmarking.
+Because when the tokenizer counts the output tokens, if there is gibberish, it might count incorrectly.
+
+Namespace(backend='sglang', base_url=None, host='127.0.0.1', port=30102, dataset_name='random', dataset_path='/data/users/chjing/datasets/ShareGPT_V3_unfiltered_cleaned_split.json', model='/data/users/chjing/voltana_work/models/Mistral-7B-v0.1', tokenizer=None, num_prompts=897, random_sort=False, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=1, random_output_len=218, random_range_ratio=0.0, lmsys_output_len=None, lmsys_context_len=None, profiling_input_lens=None, profiling_output_lens=None, request_rate=inf, burstiness=1.0, max_concurrency=None, output_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-897-outlen-218.json', output_extra_batch_info_file='720/Mistral-7B-v0.1-L40S-48G-triton-bs-897-outlen-218-extra.json', output_details=True, disable_tqdm=False, disable_stream=False, return_logprob=False, seed=0, disable_ignore_eos=False, extra_request_body='{"stream_options":{"include_extra_batch_info":true},"bootstrap_host":"localhost","bootstrap_port":8100,"bootstrap_room":10}', apply_chat_template=False, profile=False, lora_name=None, prompt_suffix='', pd_separated=True, flush_cache=False, warmup_requests=0, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, freq_settings='1:720', log_file='/dev/null', random_range_ratio_input=1, random_range_ratio_output=1)
+
+#Input tokens: 897
+#Output tokens: 195546
+
+
+  0%|          | 0/897 [00:00<?, ?it/s][AGPU clocks set to "(gpuClkMin 720, gpuClkMax 720)" for GPU 00000000:61:00.0
+
+Warning: persistence mode is disabled on device 00000000:61:00.0. See the Known Issues section of the nvidia-smi(1) man page for more information. Run with [--help | -h] switch to get more information on how to enable persistence mode.
+All done.
+
+
+  0%|          | 1/897 [00:44<11:10:35, 44.91s/it][A
+
+ 46%|████▌     | 413/897 [00:45<00:37, 13.07it/s] [A
+
+ 77%|███████▋  | 688/897 [00:45<00:08, 25.24it/s][A
+
+ 97%|█████████▋| 872/897 [00:45<00:00, 36.71it/s][AAll done.
+
+100%|██████████| 897/897 [00:47<00:00, 18.78it/s]
+
+100%|██████████| 5/5 [8:10:36<00:00, 6036.68s/it]  
+100%|██████████| 5/5 [8:10:36<00:00, 5887.38s/it]
+
+============ Serving Benchmark Result ============
+Backend:                                 sglang    
+Traffic request rate:                    inf       
+Max request concurrency:                 not set   
+Successful requests:                     897       
+Benchmark duration (s):                  47.77     
+Total input tokens:                      897       
+Total generated tokens:                  195546    
+Total generated tokens (retokenized):    1777      
+Request throughput (req/s):              18.78     
+Input token throughput (tok/s):          18.78     
+Output token throughput (tok/s):         4093.24   
+Total token throughput (tok/s):          4112.01   
+Concurrency:                             823.96    
+----------------End-to-End Latency----------------
+Mean E2E Latency (ms):                   43882.90  
+Median E2E Latency (ms):                 43840.22  
+---------------Time to First Token----------------
+Mean TTFT (ms):                          669.53    
+Median TTFT (ms):                        536.78    
+P99 TTFT (ms):                           1240.85   
+---------------Inter-Token Latency----------------
+Mean ITL (ms):                           198.77    
+Median ITL (ms):                         199.80    
+P95 ITL (ms):                            220.42    
+P99 ITL (ms):                            221.94    
+Max ITL (ms):                            301.38    
+----------------Energy Consumption----------------
+==================================================
+Benchmark completed in 50.12 seconds.
+Profiling completed.
