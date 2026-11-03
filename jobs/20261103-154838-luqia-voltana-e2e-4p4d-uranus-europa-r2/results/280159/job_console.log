@@ -1,2 +1,13 @@
 job_start=2026-11-03T16:52:40+01:00 host=europa job=280159
 freq_manager=/data/users/chjing/voltana_work/runs/280159/overlay/python/sglang/srt/managers/freq_manager.py
+client vllm 0.15.1
+model_file config.json canatune=f33edb225a21ae0ab5f74828a4d29bcd voltana=f33edb225a21ae0ab5f74828a4d29bcd
+model_file tokenizer.json canatune=622037c9c522b307424a22e55d1b0750 voltana=622037c9c522b307424a22e55d1b0750
+model_file tokenizer_config.json canatune=3644b0827ecf030adb621e215ddd9b5a voltana=3644b0827ecf030adb621e215ddd9b5a
+model_file tokenizer.model canatune=37974873eb68a7ab30c4912fc36264ae voltana=37974873eb68a7ab30c4912fc36264ae
+burstgpt=copied from /data/users/chjing/vllm_job_work/275725/burstgpt.jsonl
+burstgpt_sha256=f98794866c6691af1a2f916a4034a94784e2cd10b8530d0018d0cc7e2208ae8e lines=4000
+burstgpt_275830_sha256=f98794866c6691af1a2f916a4034a94784e2cd10b8530d0018d0cc7e2208ae8e
+ips uranus=10.1.0.5 europa=10.1.0.2 lb=30189
+prefill http://10.1.0.5:30159 http://10.1.0.5:30160 http://10.1.0.5:30161 http://10.1.0.5:30162 bootstrap 30179 30180 30181 30182
+decode http://10.1.0.2:30169 http://10.1.0.2:30170 http://10.1.0.2:30171 http://10.1.0.2:30172
