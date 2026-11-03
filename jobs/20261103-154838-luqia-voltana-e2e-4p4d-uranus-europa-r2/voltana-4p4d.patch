@@ -1,0 +1,245 @@
+diff --color -ruN base/python/sglang/srt/disaggregation/echo_lb_new.py new/python/sglang/srt/disaggregation/echo_lb_new.py
+--- base/python/sglang/srt/disaggregation/echo_lb_new.py	2026-11-03 15:48:09
++++ new/python/sglang/srt/disaggregation/echo_lb_new.py	2026-11-03 15:48:09
+@@ -62,7 +62,7 @@
+ 
+         # misc
+         self.decode_index = -1
+-        self.tokenizer = get_tokenizer("meta-llama/Llama-3.1-8B-Instruct")
++        self.tokenizer = get_tokenizer(os.environ.get("VOLTANA_ROUTER_TOKENIZER", "meta-llama/Llama-3.1-8B-Instruct"))
+ 
+     async def refresh_server_info_loop(self):
+         logger.info(f"Refreshing server info every {self.refresh_server_info_interval}s")
+@@ -75,8 +75,11 @@
+             if self.lb.on_benchmark:
+                 if self.log_file is None:
+                     self.log_file = await aiofiles.open(self.lb.log_server_info_path, mode="wb")
+-                await self._refresh_server_info_once(self.log_file)
+-                await self.log_file.flush()
++                try:
++                    await self._refresh_server_info_once(self.log_file)
++                    await self.log_file.flush()
++                except Exception as e:
++                    logger.warning(f"server info refresh failed: {e!r}")
+             else:
+                 if self.log_file is not None:
+                     await self.log_file.close()
+@@ -103,15 +106,19 @@
+             if not info:
+                 continue
+ 
++            try:
++                lookup_itl = None if info.get("is_prefill") else self.latency_lookup_table.lookup(
++                    bs=info["bs"],
++                    tokens=info["num_running_tokens"],
++                    freq=info["freq"],
++                )
++            except AssertionError:  # clock outside the table's range: no extrapolation
++                lookup_itl = None
+             item_to_append = {
+                 # "time": info["time"],
+                 "time": time.perf_counter(),  # use current time instead of server time
+                 "n_req": self.lb.n_req[server],
+-                "lookup_itl": self.latency_lookup_table.lookup(
+-                    bs=info["bs"],
+-                    tokens=info["num_running_tokens"],
+-                    freq=info["freq"],
+-                ),
++                "lookup_itl": lookup_itl,
+             }
+ 
+             for key in info.keys():
+@@ -437,7 +444,11 @@
+         assert len(self.prefill_configs) > 0, "No prefill servers available"
+         assert len(self.decode_servers) > 0, "No decode servers available"
+ 
+-        prefill_config = random.choice(self.prefill_configs)
++        if os.environ.get("VOLTANA_PREFILL_POLICY") == "rr":
++            self.prefill_index = (getattr(self, "prefill_index", -1) + 1) % len(self.prefill_configs)
++            prefill_config = self.prefill_configs[self.prefill_index]
++        else:
++            prefill_config = random.choice(self.prefill_configs)
+         decode_server = self.decode_router.route(request_data)
+ 
+         return prefill_config.url, prefill_config.bootstrap_port, decode_server
+diff --color -ruN base/python/sglang/srt/disaggregation/mini_lb.py new/python/sglang/srt/disaggregation/mini_lb.py
+--- base/python/sglang/srt/disaggregation/mini_lb.py	2026-11-03 15:48:09
++++ new/python/sglang/srt/disaggregation/mini_lb.py	2026-11-03 15:48:09
+@@ -239,9 +239,8 @@
+ @asynccontextmanager
+ async def lifespan(app: FastAPI):
+ 
+-    from sglang.srt.disaggregation.echo_lb import EchoLoadBalancer
+-
+-    if isinstance(load_balancer, EchoLoadBalancer):
++    # run_echo_lb builds echo_lb_new's EchoLoadBalancer, not echo_lb's: check for the router itself
++    if hasattr(load_balancer, "decode_router"):
+         asyncio.create_task(
+             load_balancer.decode_router.refresh_server_info_loop()
+         )
+diff --color -ruN base/python/sglang/srt/managers/energy_monitor.py new/python/sglang/srt/managers/energy_monitor.py
+--- base/python/sglang/srt/managers/energy_monitor.py	2026-11-03 15:48:09
++++ new/python/sglang/srt/managers/energy_monitor.py	2026-11-03 15:48:09
+@@ -1,4 +1,5 @@
+ import logging
++import os
+ import time
+ import signal
+ from multiprocessing import shared_memory
+@@ -44,6 +45,9 @@
+         self.gpu_energy_buf = self.gpu_energy_shm.buf[:4]
+ 
+         self.device_ids = [server_args.base_gpu_id + i * server_args.gpu_id_step for i in range(server_args.tp_size)]
++        # NVML indexes physical GPUs; under Slurm without device cgroups the CUDA index differs
++        if os.environ.get("VOLTANA_NVML_INDEX"):
++            self.device_ids = [int(x) for x in os.environ["VOLTANA_NVML_INDEX"].split(",")]
+ 
+         pynvml.nvmlInit()
+         self.nvml_handles = {
+diff --color -ruN base/python/sglang/srt/managers/freq_manager.py new/python/sglang/srt/managers/freq_manager.py
+--- base/python/sglang/srt/managers/freq_manager.py	2026-11-03 15:48:09
++++ new/python/sglang/srt/managers/freq_manager.py	2026-11-03 15:48:09
+@@ -3,6 +3,7 @@
+ import os
+ import subprocess
+ import sys
++import tempfile
+ import msgspec
+ import time
+ import signal
+@@ -69,6 +70,9 @@
+ 
+         # devices
+         self.device_ids = [server_args.base_gpu_id + i * server_args.gpu_id_step for i in range(server_args.tp_size)]
++        # NVML indexes physical GPUs; under Slurm without device cgroups the CUDA index differs
++        if os.environ.get("VOLTANA_NVML_INDEX"):
++            self.device_ids = [int(x) for x in os.environ["VOLTANA_NVML_INDEX"].split(",")]
+ 
+         # arg
+         self.enabled = server_args.enable_freq_manager
+@@ -105,17 +109,30 @@
+         self._init_state()
+ 
+     def _init_freq_setter(self, context):
+-        zmq_to_freq_setter = f"ipc:///tmp/srt_freq_setter_input_{self.device_ids[0]}"
+-        zmq_from_freq_setter = f"ipc:///tmp/srt_freq_setter_output_{self.device_ids[0]}"
++        # VOLTANA_FREQ_SETTER=nvidia-smi: unprivileged setter that locks clocks with `sudo -n nvidia-smi -lgc`
++        # (the cluster allows that, not a root python); its sockets live in the job's TMPDIR
++        use_nvsmi = os.environ.get("VOLTANA_FREQ_SETTER") == "nvidia-smi"
++        ipc_dir = tempfile.gettempdir() if use_nvsmi else "/tmp"
++        zmq_to_freq_setter = f"ipc://{ipc_dir}/srt_freq_setter_input_{self.device_ids[0]}"
++        zmq_from_freq_setter = f"ipc://{ipc_dir}/srt_freq_setter_output_{self.device_ids[0]}"
+         self.send_to_freq_setter = get_zmq_socket(
+             context, zmq.PUSH, zmq_to_freq_setter, False
+         )
+         self.recv_from_freq_setter = get_zmq_socket(
+             context, zmq.PULL, zmq_from_freq_setter, True
+         )
++        setter_args = ["--gpu-index"] + [str(x) for x in self.device_ids] + ["--zmq-input", zmq_to_freq_setter, "--zmq-output", zmq_from_freq_setter]
++        if use_nvsmi:
++            setter_path = os.path.join(os.path.dirname(__file__), "freq_setter_nvsmi.py")
++            cmd = [sys.executable, setter_path] + setter_args
++            self.setter_proc = subprocess.Popen(cmd)
++            logger.info(f"Started frequency setter process with command: {' '.join(cmd)}")
++            time.sleep(3)  # wait for the process to start
++            self.send_to_freq_setter.send_pyobj("echo")
++            return
+         setter_path = os.path.join(os.path.dirname(__file__), "freq_setter.py")
+         # run in a separate process with root privileges
+-        cmd = ["sudo", "-E", "python", setter_path, "--gpu-index"] + [str(x) for x in self.device_ids] + ["--zmq-input", zmq_to_freq_setter, "--zmq-output", zmq_from_freq_setter]
++        cmd = ["sudo", "-E", "python", setter_path] + setter_args
+         self.setter_proc = subprocess.Popen(cmd)
+         logger.info(f"Started frequency setter process with command: {' '.join(cmd)}")
+         time.sleep(3)  # wait for the process to start
+diff --color -ruN base/python/sglang/srt/managers/freq_setter_nvsmi.py new/python/sglang/srt/managers/freq_setter_nvsmi.py
+--- base/python/sglang/srt/managers/freq_setter_nvsmi.py	1970-01-01 01:00:00
++++ new/python/sglang/srt/managers/freq_setter_nvsmi.py	2026-11-03 15:48:09
+@@ -0,0 +1,76 @@
++"""Unprivileged variant of freq_setter.py: same ZMQ protocol, clocks set with `sudo -n nvidia-smi`.
++
++freq_setter.py needs a root python (pynvml.nvmlDeviceSetGpuLockedClocks); on clusters that only
++allow `sudo -n nvidia-smi`, FreqManager starts this one instead (VOLTANA_FREQ_SETTER=nvidia-smi).
++An nvidia-smi call takes tens to hundreds of ms, so targets that arrive meanwhile are coalesced
++and only the latest one is applied. Every change is logged with its duration.
++"""
++
++import argparse
++import subprocess
++import sys
++import time
++from typing import List, Optional
++
++import zmq
++
++
++def run_nvsmi(gpu_idx: List[int], args: List[str]) -> bool:
++    ok = True
++    for idx in gpu_idx:
++        proc = subprocess.run(
++            ["sudo", "-n", "nvidia-smi", "-i", str(idx)] + args,
++            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
++        )
++        # judged by the output: nvidia-smi has exited non-zero after a successful lock
++        if "All done" not in proc.stdout:
++            ok = False
++            print(f"[freq_setter_nvsmi] gpu {idx} {' '.join(args)} failed rc={proc.returncode}: {proc.stdout.strip()}", flush=True)
++    return ok
++
++
++def event_loop(gpu_idx: List[int], zmq_input: str, zmq_output: str):
++    context = zmq.Context()
++    socket_input = context.socket(zmq.PULL)
++    socket_input.bind(zmq_input)
++    socket_output = context.socket(zmq.PUSH)
++    socket_output.connect(zmq_output)
++
++    f_last: Optional[int] = None
++    print(f"[freq_setter_nvsmi] gpus {gpu_idx} listening on {zmq_input}", flush=True)
++    while True:
++        objs = [socket_input.recv_pyobj()]
++        while True:  # coalesce whatever queued up during the last nvidia-smi call
++            try:
++                objs.append(socket_input.recv_pyobj(flags=zmq.NOBLOCK))
++            except zmq.Again:
++                break
++        targets = [obj for obj in objs if isinstance(obj, int)]
++        if not targets:
++            continue
++        f_target = targets[-1]
++        if f_target == f_last:
++            continue
++
++        t0 = time.time()
++        if f_target == 0:
++            ok = run_nvsmi(gpu_idx, ["-rgc"])
++            f_last = None
++            socket_output.send_pyobj(ok, flags=zmq.NOBLOCK, copy=True)
++        else:
++            ok = run_nvsmi(gpu_idx, ["-lgc", f"{f_target},{f_target}"])
++            f_last = f_target if ok else None
++        print(f"[freq_setter_nvsmi] t={t0:.3f} set={f_target} ok={ok} took_ms={(time.time() - t0) * 1000:.0f} "
++              f"coalesced={len(targets) - 1}", flush=True)
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description="Frequency setter (sudo -n nvidia-smi)")
++    parser.add_argument("--gpu-index", type=int, nargs="+", required=True)
++    parser.add_argument("--zmq-input", type=str, required=True)
++    parser.add_argument("--zmq-output", type=str, required=True)
++    args = parser.parse_args()
++    try:
++        event_loop(args.gpu_index, args.zmq_input, args.zmq_output)
++    except KeyboardInterrupt:
++        sys.exit(0)
+diff --color -ruN base/python/sglang/srt/openai_api/adapter.py new/python/sglang/srt/openai_api/adapter.py
+--- base/python/sglang/srt/openai_api/adapter.py	2026-11-03 15:48:09
++++ new/python/sglang/srt/openai_api/adapter.py	2026-11-03 15:48:09
+@@ -890,7 +890,7 @@
+                         ),
+                     )
+                     extra_batch_info = None
+-                    if request.stream_options and request.stream_options.include_prompt:
++                    if request.stream_options and request.stream_options.include_extra_batch_info:
+                         extra_batch_info = content["meta_info"]["extra_batch_info"]
+                     cur_token_time = content["meta_info"]["cur_token_time"]
+                     if cur_token_time is None:
