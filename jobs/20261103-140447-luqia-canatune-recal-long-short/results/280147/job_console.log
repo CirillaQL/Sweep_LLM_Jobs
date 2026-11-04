@@ -238,3 +238,52 @@ smoke2: warmed P1/D1
 smoke2: warmed P2/D2
 smoke2: warmed P3/D3
 bench: replay: replaying 16004 requests over 18000 s
+bench: replay: replay done, 129 failed, send lag max 29.99 s
+bench: replay_w00: exit=0 ok=684/685 goodput=0.9722627737226277 ttft_p95=559.44635393098 energy_j=911506.4263147889 J/tok=6.678045220742374 modes={'energy': 240, 'warning': 664, 'confirming': 103, 'expanding': 431, 'full_effort': 188}
+bench: replay_w01: exit=0 ok=673/685 goodput=0.8627737226277372 ttft_p95=4103.787063853815 energy_j=897174.1016832963 J/tok=6.657075771190148 modes={'warning': 1020, 'energy': 149, 'confirming': 29, 'full_effort': 121, None: 5, 'expanding': 146}
+bench: replay_w02: exit=0 ok=732/735 goodput=0.9496598639455782 ttft_p95=589.6400709170848 energy_j=860166.0002791137 J/tok=5.583825612343804 modes={'warning': 113, 'energy': 544, 'confirming': 41, 'expanding': 875, None: 2, 'full_effort': 41}
+bench: replay_w03: exit=0 ok=783/783 goodput=0.9604086845466155 ttft_p95=584.0584859251976 energy_j=865593.7069255677 J/tok=5.510492719842423 modes={'energy': 556, 'confirming': 28, 'expanding': 889, 'full_effort': 144, None: 2}
+bench: replay_w04: exit=0 ok=758/759 goodput=0.9868247694334651 ttft_p95=572.4473420996219 energy_j=844087.1558525849 J/tok=5.60259628204291 modes={'expanding': 937, 'energy': 571, 'confirming': 113, 'full_effort': 31}
+bench: replay_w05: exit=0 ok=716/717 goodput=0.8661087866108786 ttft_p95=10503.651074832305 energy_j=860099.3415476226 J/tok=6.087474991490003 modes={'confirming': 127, 'energy': 571, 'expanding': 568, 'full_effort': 220, None: 2}
+bench: replay_w06: exit=0 ok=717/717 goodput=0.9748953974895398 ttft_p95=573.5783169511706 energy_j=832281.7819753342 J/tok=5.611960365296747 modes={'energy': 737, 'confirming': 204, 'expanding': 604, 'full_effort': 82, None: 1}
+bench: replay_w07: exit=0 ok=3628/3628 goodput=0.9785005512679162 ttft_p95=339.9328561499715 energy_j=893260.0530292589 J/tok=4.358833231815874 modes={'full_effort': 677, 'energy': 934, None: 1}
+bench: replay_w08: exit=0 ok=3621/3635 goodput=0.9708390646492435 ttft_p95=342.43891295045614 energy_j=818391.1210053863 J/tok=4.007536841461544 modes={'energy': 1555, 'confirming': 1, None: 2, 'full_effort': 47}
+bench: replay_w09: exit=0 ok=3563/3660 goodput=0.8387978142076503 ttft_p95=46913.14988490194 energy_j=931934.7396521987 J/tok=4.761911947779827 modes={'energy': 377, 'warning': 1, 'confirming': 1, 'expanding': 10, None: 11, 'full_effort': 1012}
+bench: replay_total: exit=0 ok=15875/16004 goodput=0.9325793551612097 ttft_p95=2395.6994090694934 energy_j=8734815.546996986 J/tok=5.367030649554676 modes={'energy': 6266, 'warning': 1798, 'confirming': 647, 'expanding': 4460, 'full_effort': 2575, None: 26}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1752382]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 280147.20 ON neptune CANCELLED AT 2026-11-04T02:47:53 ***
+slurmstepd-ganymede: error: *** STEP 280147.21 ON ganymede CANCELLED AT 2026-11-04T02:47:53 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9447 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9447 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9447 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9447 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9447 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9447 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9447 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9447 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 280147.18 ON ganymede CANCELLED AT 2026-11-04T02:47:55 ***
+slurmstepd-neptune: error: *** STEP 280147.19 ON neptune CANCELLED AT 2026-11-04T02:47:55 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "static", "ready_s": 355.9, "reached_h": true, "status": "done", "controller_exit": 143}
+RESULT_frozen_r1=ok
+frozen_r1 clock_errors=0
+frozen_r1 redirect=209
+frozen_r1 p_slot_update=0
+frozen_r1 kv_gate_update=0
+frozen_r1 admission_calibration=1
+frozen_r1 kv_overflow_or_drop=4559
+--- preflight and clock reset before baseline_r1
