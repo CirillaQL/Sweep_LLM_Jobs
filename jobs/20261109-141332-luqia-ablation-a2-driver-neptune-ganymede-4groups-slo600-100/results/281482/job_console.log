@@ -273,3 +273,33 @@ bench: burstgpt_r4_6rps: 1080 prompts at 6 req/s
 bench: burstgpt_r4_6rps: exit 0, 296 s of load
 bench: burstgpt_r5_8rps: 1440 prompts at 8 req/s
 bench: burstgpt_r5_8rps: exit 0, 281 s of load
+bench: sharegpt_r0_0.5rps: exit=0 ok=90/90 goodput=1.0 ttft_p95=383.76880902796984 energy_j=91057.59038017274 J/tok=5.375300494697329 modes={'energy': 183}
+bench: sharegpt_r1_1rps: exit=0 ok=179/180 goodput=0.9944444444444445 ttft_p95=427.7804628945887 energy_j=92058.26079800415 J/tok=2.766423078943539 modes={'energy': 165, 'confirming': 1, 'expanding': 15}
+bench: sharegpt_r2_2rps: exit=0 ok=360/360 goodput=0.9972222222222222 ttft_p95=438.8986206613481 energy_j=97392.82581890869 J/tok=1.4255390195976096 modes={'energy': 183}
+bench: sharegpt_r3_4rps: exit=0 ok=720/720 goodput=0.9888888888888889 ttft_p95=484.3636779114604 energy_j=107326.4273865967 J/tok=0.7721436811076181 modes={'energy': 182}
+bench: sharegpt_r4_6rps: exit=0 ok=1079/1080 goodput=0.9731481481481481 ttft_p95=497.716988902539 energy_j=122596.84466193391 J/tok=0.587723852144499 modes={'energy': 46, 'confirming': 2, 'expanding': 58, 'full_effort': 73}
+bench: sharegpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.95625 ttft_p95=572.7876662276685 energy_j=129175.82988617706 J/tok=0.46812335070223327 modes={'energy': 5, 'confirming': 1, 'expanding': 2, 'full_effort': 169}
+bench: burstgpt_r0_0.5rps: exit=0 ok=90/90 goodput=0.9444444444444444 ttft_p95=1099.9061483889818 energy_j=124539.82726894379 J/tok=12.39325577360372 modes={'energy': 117, 'expanding': 6, None: 2, 'full_effort': 37, 'warning': 19, 'confirming': 23}
+bench: burstgpt_r1_1rps: exit=0 ok=180/180 goodput=1.0 ttft_p95=427.8361559845507 energy_j=142421.46596243285 J/tok=5.106176178202813 modes={'energy': 228, 'warning': 51}
+bench: burstgpt_r2_2rps: exit=0 ok=360/360 goodput=0.9916666666666667 ttft_p95=490.01011438667774 energy_j=168018.58866339875 J/tok=3.3658918358788164 modes={'energy': 198, 'confirming': 2, 'expanding': 28, 'warning': 78}
+bench: burstgpt_r3_4rps: exit=0 ok=720/720 goodput=0.9694444444444444 ttft_p95=569.0247598104179 energy_j=165761.35060079192 J/tok=1.8092464510722877 modes={'energy': 85, 'confirming': 83, 'expanding': 80, 'warning': 3}
+bench: burstgpt_r4_6rps: exit=0 ok=1080/1080 goodput=0.9314814814814815 ttft_p95=638.8594550080597 energy_j=183960.78942520905 J/tok=1.413810566069069 modes={'energy': 84, 'confirming': 1, 'expanding': 86, 'full_effort': 98}
+bench: burstgpt_r5_8rps: exit=0 ok=1440/1440 goodput=0.6090277777777777 ttft_p95=20282.214540988207 energy_j=186235.3138572922 J/tok=1.0999209403503027 modes={'energy': 38, 'confirming': 1, 'expanding': 3, 'full_effort': 213}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2950466]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 281482.21 ON ganymede CANCELLED AT 2026-11-09T17:20:35 ***
+slurmstepd-neptune: error: *** STEP 281482.20 ON neptune CANCELLED AT 2026-11-09T17:20:35 ***
+srun: error: neptune: task 0: Killed
+srun: error: ganymede: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9782 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9782 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9782 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9782 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9782 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9782 GPU 1: ok
