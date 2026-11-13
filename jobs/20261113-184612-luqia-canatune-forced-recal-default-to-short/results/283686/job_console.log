@@ -101,3 +101,43 @@ untracked=src/canatune/domain/p_capacity.py tests/test_p_capacity.py
 tar_sha256=07d80b74fa4ba6a80e8983f6cd89046eb45237820ba411c679523d30afc32c27
 packed=2026-11-13T18:47:06+01:00
 local_tests=pytest -x passed (deselected test_stalled_window_is_repeated_and_does_not_stop_the_scan)
+    return loop.run_until_complete(main)
+../../../miniforge3/envs/cuda-env/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def run():
+        probe, risk = make_probe([], FakeAgent())
+        probe.ttft_slo_ms = 40.0
+        slots = asyncio.Semaphore(16)
+    
+        class DecodeStream(httpx.AsyncByteStream):
+            async def __aiter__(self):
+                async with slots:
+                    yield TOKEN
+                    await asyncio.sleep(0.08)
+                    yield TOKEN + b"data: [DONE]\n\n"
+    
+        install_stream(probe, DecodeStream)
+        result = await probe.closed_window(ClockPoint(1815, 1050), 80, 0.04,
+                                           stagger_s=0.02, drain_s=0.08, output_tokens=2)
+        assert result.aborted and result.requests_censored > 0
+        assert result.requests_completed >= 16
+>       assert result.requests == result.requests_sent == 80
+E       AssertionError: assert 46 == 80
+E        +  where 46 = WindowResult(clock=ClockPoint(prefill_mhz=1815, decode_mhz=1050), kind='closed', load=80, duration_s=0.127383017912507...0.56390238925815, requests_sent=46, requests_completed=16, requests_failed=0, requests_censored=30, requests_unknown=0).requests_sent
+
+tests/test_probe_censoring.py:47: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_probe_censoring.py::test_closed_window_keeps_late_queued_requests_and_finds_the_engine_knee
+1 failed, 370 passed, 1 deselected in 42.09s
+RESULT=failed stage=pytest
+--- teardown 2026-11-13T23:43:41+01:00
+[neptune leftover] [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[neptune leftover] [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[neptune leftover] none
+[ganymede leftover] [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[ganymede leftover] [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[ganymede leftover] 4026478       01:01 tee -a /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20261113-184612-luqia-canatune-forced-recal-default-to-short/results/283686/job_console.log
+[ganymede leftover] 4026739       00:00 tee -a /data/users/chjing/Sweep_LLM_Jobs_broker/jobs/20261113-184612-luqia-canatune-forced-recal-default-to-short/results/283686/leftover_processes.txt
+end=2026-11-13T23:43:42+01:00 elapsed_s=62

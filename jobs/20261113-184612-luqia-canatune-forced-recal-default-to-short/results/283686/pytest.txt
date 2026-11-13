@@ -1,4 +1,74 @@
 ........................................................................ [ 19%]
 ........................................................................ [ 38%]
 ............................................F........................... [ 58%]
-.......................
+........................................................................ [ 77%]
+........................................................................ [ 97%]
+...........                                                              [100%]
+=================================== FAILURES ===================================
+___ test_closed_window_keeps_late_queued_requests_and_finds_the_engine_knee ____
+
+    def test_closed_window_keeps_late_queued_requests_and_finds_the_engine_knee():
+        async def run():
+            probe, risk = make_probe([], FakeAgent())
+            probe.ttft_slo_ms = 40.0
+            slots = asyncio.Semaphore(16)
+    
+            class DecodeStream(httpx.AsyncByteStream):
+                async def __aiter__(self):
+                    async with slots:
+                        yield TOKEN
+                        await asyncio.sleep(0.08)
+                        yield TOKEN + b"data: [DONE]\n\n"
+    
+            install_stream(probe, DecodeStream)
+            result = await probe.closed_window(ClockPoint(1815, 1050), 80, 0.04,
+                                               stagger_s=0.02, drain_s=0.08, output_tokens=2)
+            assert result.aborted and result.requests_censored > 0
+            assert result.requests_completed >= 16
+            assert result.requests == result.requests_sent == 80
+            assert result.requests_failed == result.requests_unknown == 0
+            assert result.violations == 80 - result.requests_completed
+            assert len(result.samples) == 80
+            assert d_sequence_cap(result.samples, theta=0.1)[:2] == (16, "measured")
+            # Missing first tokens are represented by known violations with no fake TTFT.
+            assert any(s.violated and s.ttft_ms is None for s in result.samples)
+            assert any(s.violated and s.ttft_ms is not None for s in result.samples)
+            assert sum(c["violated"] for c in risk.to_json()["cells"].values()) > 0
+            assert probe._n_await == probe._decoding == 0
+            assert not probe._active and not probe._at_prefill
+    
+>       asyncio.run(run())
+
+tests/test_probe_censoring.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../miniforge3/envs/cuda-env/lib/python3.10/asyncio/runners.py:44: in run
+    return loop.run_until_complete(main)
+../../../miniforge3/envs/cuda-env/lib/python3.10/asyncio/base_events.py:649: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def run():
+        probe, risk = make_probe([], FakeAgent())
+        probe.ttft_slo_ms = 40.0
+        slots = asyncio.Semaphore(16)
+    
+        class DecodeStream(httpx.AsyncByteStream):
+            async def __aiter__(self):
+                async with slots:
+                    yield TOKEN
+                    await asyncio.sleep(0.08)
+                    yield TOKEN + b"data: [DONE]\n\n"
+    
+        install_stream(probe, DecodeStream)
+        result = await probe.closed_window(ClockPoint(1815, 1050), 80, 0.04,
+                                           stagger_s=0.02, drain_s=0.08, output_tokens=2)
+        assert result.aborted and result.requests_censored > 0
+        assert result.requests_completed >= 16
+>       assert result.requests == result.requests_sent == 80
+E       AssertionError: assert 46 == 80
+E        +  where 46 = WindowResult(clock=ClockPoint(prefill_mhz=1815, decode_mhz=1050), kind='closed', load=80, duration_s=0.127383017912507...0.56390238925815, requests_sent=46, requests_completed=16, requests_failed=0, requests_censored=30, requests_unknown=0).requests_sent
+
+tests/test_probe_censoring.py:47: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_probe_censoring.py::test_closed_window_keeps_late_queued_requests_and_finds_the_engine_knee
+1 failed, 370 passed, 1 deselected in 42.09s
