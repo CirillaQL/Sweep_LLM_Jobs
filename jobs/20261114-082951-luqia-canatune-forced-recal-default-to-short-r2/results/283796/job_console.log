@@ -502,3 +502,60 @@ bench: replay_w15: exit=0 ok=1234/1235 goodput=0.9991902834008097 ttft_p95=251.5
 bench: replay_w16: exit=0 ok=1157/1159 goodput=0.998274374460742 ttft_p95=254.8601282760501 energy_j=334353.8882728119 J/tok=9.073621761046756 modes={}
 bench: replay_w17: exit=0 ok=1145/1148 goodput=0.9878048780487805 ttft_p95=255.56361116468906 energy_j=332095.82878933713 J/tok=9.172144303293207 modes={}
 bench: replay_total: exit=0 ok=20117/20159 goodput=0.9971724787935909 ttft_p95=316.8478971347213 energy_j=6151196.9104292225 J/tok=5.438329767805714 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [46177]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 283796.29 ON ganymede CANCELLED AT 2026-11-14T21:43:07 ***
+slurmstepd-neptune: error: *** STEP 283796.28 ON neptune CANCELLED AT 2026-11-14T21:43:07 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9596 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9596 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9596 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9596 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9596 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9596 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9596 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9596 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 283796.26 ON ganymede CANCELLED AT 2026-11-14T21:43:10 ***
+slurmstepd-neptune: error: *** STEP 283796.27 ON neptune CANCELLED AT 2026-11-14T21:43:10 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 327.5, "clocks_at_start": [{"agent": "http://10.1.0.3:9596", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9596", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9596", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9596", "index": 3, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9596", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9596", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9596", "index": 2, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9596", "index": 3, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline_r1=ok
+shift at 1800 s, full calibration requested at 3602.3 s, published at 6088.9 s (replay time)
+H   1560/1170 -> 900/1170 MHz (P/D)
+park 600/300 -> 600/300
+alpha 825.5749320291224 -> 787.2823986557593 tokens, capacity_h 1534.3780655254823 -> 11906.704581180631
+calibration 2012.3267421661876 s, 54 windows, 3 reused
+adapt_r1     A         n= 3 power=466.7 W J/token=1.496 goodput=0.997
+adapt_r1     S_before  n= 3 power=396.6 W J/token=6.378 goodput=0.998
+adapt_r1     S_during  n= 5 power=444.7 W J/token=6.951 goodput=0.998
+adapt_r1     S_after   n= 7 power=373.0 W J/token=5.899 goodput=0.998
+frozen_r1    A         n= 3 power=466.4 W J/token=1.495 goodput=0.997
+frozen_r1    S_before  n= 3 power=396.9 W J/token=6.383 goodput=0.998
+frozen_r1    S_during  n= 5 power=398.0 W J/token=6.220 goodput=0.998
+frozen_r1    S_after   n= 7 power=397.5 W J/token=6.286 goodput=0.998
+baseline_r1  A         n= 3 power=619.5 W J/token=1.985 goodput=0.997
+baseline_r1  S_before  n= 3 power=557.7 W J/token=8.969 goodput=0.998
+baseline_r1  S_during  n= 5 power=561.0 W J/token=8.770 goodput=0.998
+baseline_r1  S_after   n= 7 power=559.1 W J/token=8.842 goodput=0.996
+energy adapt_r1 vs frozen_r1 in A: +0.1 %
+energy adapt_r1 vs frozen_r1 in S_before: -0.1 %
+energy adapt_r1 vs frozen_r1 in S_during: +11.8 %
+energy adapt_r1 vs frozen_r1 in S_after: -6.1 %
+energy adapt_r1 vs baseline_r1 in A: -24.7 %
+energy adapt_r1 vs baseline_r1 in S_before: -28.9 %
+energy adapt_r1 vs baseline_r1 in S_during: -20.7 %
+energy adapt_r1 vs baseline_r1 in S_after: -33.3 %
+RESULT= adapt_r1:0 forced_recal:0 frozen_r1:0 baseline_r1:0
+--- teardown 2026-11-14T21:43:17+01:00
