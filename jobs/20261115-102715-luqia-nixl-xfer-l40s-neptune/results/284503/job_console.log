@@ -290,3 +290,34 @@ srun: error: neptune: task 0: Killed
 srun: error: neptune: task 0: Killed
 bench: {"mode": "baseline", "ready_s": 185.3, "clocks_at_start": [], "status": "done", "controller_exit": 143}
 RESULT_cpu_b128=0
+RESULT= cpu:0 cuda:0 cpu_b128:0
+--- teardown 2026-11-15T17:45:47+01:00
+[neptune leftover] [NVGPUFREQ][INFO] The spank nvgpufreq plugin has been loaded!
+[neptune leftover] [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
+[neptune leftover] none
+== cpu  request status {'ok': 634}
+  w00 ok=45/45 TTFT p50/p95=836/1151 ms | prefill p50=393.9 decode_first p50/p95=300.4/565.0 ms | kv n=45 xfer=36.0 ms (P90 max 45.9) 224.0 MB -> 6.22 GB/s failed=0.0
+  w01 ok=208/208 TTFT p50/p95=33166/56924 ms | prefill p50=23854.4 decode_first p50/p95=9213.8/17672.3 ms | kv n=90 xfer=88.8 ms (P90 max 447.8) 155.7 MB -> 1.75 GB/s failed=0.0
+  w02 ok=381/381 TTFT p50/p95=163643/189554 ms | prefill p50=112168.9 decode_first p50/p95=43904.0/80489.0 ms | kv n=103 xfer=73.2 ms (P90 max 252.9) 152.9 MB -> 2.09 GB/s failed=0.0
+  w03 ok=None/None TTFT p50/p95=None/None ms | prefill p50=106906.0 decode_first p50/p95=43782.4/43782.4 ms | kv n=43 xfer=24.1 ms (P90 max 88.6) 62.5 MB -> 2.59 GB/s failed=0.0
+  w05 ok=None/None TTFT p50/p95=None/None ms | prefill p50=None decode_first p50/p95=None/None ms | kv n=70 xfer=28.0 ms (P90 max 86.3) 8.2 MB -> 0.29 GB/s failed=0.0
+  w06 ok=None/None TTFT p50/p95=None/None ms | prefill p50=None decode_first p50/p95=None/None ms | kv n=262 xfer=36.4 ms (P90 max 139.6) 8.9 MB -> 0.25 GB/s failed=0.0
+  total kv: n=613 xfer=48.4 ms 74.1 MB -> 1.53 GB/s
+  ucx: [('decode:tcp/enp160s0f0np0', 340), ('prefill:tcp/enp160s0f0np0', 190), ('decode:cuda_copy/cuda', 30), ('prefill:cuda_copy/cuda', 30), ('decode:cma/memory', 24), ('prefill:cma/memory', 14)]
+== cuda  request status {'ok': 634}
+  w00 ok=45/45 TTFT p50/p95=670/712 ms | prefill p50=164.9 decode_first p50/p95=490.7/507.7 ms | kv n=48 xfer=392.4 ms (P90 max 457.2) 226.0 MB -> 0.58 GB/s failed=0.0
+  w01 ok=208/208 TTFT p50/p95=670/1860 ms | prefill p50=92.0 decode_first p50/p95=530.4/1692.6 ms | kv n=194 xfer=601.8 ms (P90 max 2078.8) 152.1 MB -> 0.25 GB/s failed=0.0
+  w02 ok=381/381 TTFT p50/p95=147/181 ms | prefill p50=39.8 decode_first p50/p95=100.2/132.4 ms | kv n=375 xfer=31.6 ms (P90 max 280.3) 14.1 MB -> 0.45 GB/s failed=0.0
+  w03 ok=None/None TTFT p50/p95=None/None ms | prefill p50=None decode_first p50/p95=None/None ms | kv n=23 xfer=15.3 ms (P90 max 23.8) 7.7 MB -> 0.51 GB/s failed=0.0
+  total kv: n=640 xfer=230.9 ms 71.6 MB -> 0.31 GB/s
+  ucx: [('decode:tcp/enp160s0f0np0', 340), ('prefill:tcp/enp160s0f0np0', 208), ('decode:cuda_copy/cuda', 30), ('prefill:cuda_copy/cuda', 30), ('decode:cma/memory', 20), ('prefill:cma/memory', 12)]
+== cpu_b128  request status {'ok': 634}
+  w00 ok=45/45 TTFT p50/p95=780/1151 ms | prefill p50=384.6 decode_first p50/p95=307.5/635.2 ms | kv n=46 xfer=36.9 ms (P90 max 69.6) 224.7 MB -> 6.09 GB/s failed=0.0
+  w01 ok=208/208 TTFT p50/p95=30830/55271 ms | prefill p50=22571.8 decode_first p50/p95=8578.2/17655.7 ms | kv n=95 xfer=59.6 ms (P90 max 134.0) 154.9 MB -> 2.6 GB/s failed=0.0
+  w02 ok=381/381 TTFT p50/p95=161330/187459 ms | prefill p50=107517.8 decode_first p50/p95=45541.4/82446.5 ms | kv n=107 xfer=88.4 ms (P90 max 197.9) 150.1 MB -> 1.7 GB/s failed=0.0
+  w03 ok=None/None TTFT p50/p95=None/None ms | prefill p50=103403.5 decode_first p50/p95=45355.8/45359.4 ms | kv n=34 xfer=29.6 ms (P90 max 80.3) 50.4 MB -> 1.7 GB/s failed=0.0
+  w04 ok=None/None TTFT p50/p95=None/None ms | prefill p50=None decode_first p50/p95=None/None ms | kv n=67 xfer=44.7 ms (P90 max 149.4) 16.0 MB -> 0.36 GB/s failed=0.0
+  w06 ok=None/None TTFT p50/p95=None/None ms | prefill p50=None decode_first p50/p95=None/None ms | kv n=260 xfer=76.9 ms (P90 max 265.3) 16.0 MB -> 0.21 GB/s failed=0.0
+  total kv: n=609 xfer=67.0 ms 78.9 MB -> 1.18 GB/s
+  ucx: [('decode:tcp/enp160s0f0np0', 340), ('prefill:tcp/enp160s0f0np0', 190), ('decode:cuda_copy/cuda', 30), ('prefill:cuda_copy/cuda', 30), ('decode:cma/memory', 24), ('prefill:cma/memory', 14)]
+end=2026-11-15T17:45:48+01:00 elapsed_s=1521
