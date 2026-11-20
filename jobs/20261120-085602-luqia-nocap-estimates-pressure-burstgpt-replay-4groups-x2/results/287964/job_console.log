@@ -101,3 +101,48 @@ smoke2: warmed P2/D2
 smoke2: warmed P3/D3
 bench: replay: replaying 26282 requests over 8396 s
 bench: replay: replay done, 24 failed, send lag max 21.51 s
+bench: replay_w00: exit=0 ok=3129/3130 goodput=0.8063897763578275 ttft_p95=971.3846920058131 energy_j=405064.33242210385 J/tok=1.0474952868184058 modes={}
+bench: replay_w01: exit=0 ok=3194/3199 goodput=0.5845576742732104 ttft_p95=6849.526508711278 energy_j=424513.30176480097 J/tok=0.9204857535491279 modes={}
+bench: replay_w02: exit=0 ok=2371/2375 goodput=0.8741052631578947 ttft_p95=710.78587975353 energy_j=396773.51733277895 J/tok=1.194730301541326 modes={}
+bench: replay_w03: exit=0 ok=2230/2231 goodput=0.9341102644554011 ttft_p95=663.3974593132734 energy_j=374755.1657974244 J/tok=1.3089597128795822 modes={}
+bench: replay_w04: exit=0 ok=2103/2104 goodput=0.9852661596958175 ttft_p95=460.82863537594676 energy_j=374479.75290457153 J/tok=1.393921329097016 modes={}
+bench: replay_w05: exit=0 ok=1964/1964 goodput=0.9903258655804481 ttft_p95=442.80873937532306 energy_j=370692.09296368406 J/tok=1.4232208130372574 modes={}
+bench: replay_w06: exit=0 ok=1937/1946 goodput=0.8324768756423433 ttft_p95=7701.942353043705 energy_j=365918.63014685054 J/tok=1.4894418648492949 modes={}
+bench: replay_w07: exit=0 ok=1922/1923 goodput=0.8777951118044722 ttft_p95=3570.941297337413 energy_j=367468.96163073735 J/tok=1.5477134514218576 modes={}
+bench: replay_w08: exit=0 ok=2082/2083 goodput=0.9798367738838214 ttft_p95=461.0704709775746 energy_j=371490.5945270691 J/tok=1.4657352319079466 modes={}
+bench: replay_w09: exit=0 ok=2094/2094 goodput=0.8973256924546322 ttft_p95=3363.1280921399593 energy_j=365473.8044053497 J/tok=1.4759164236460363 modes={}
+bench: replay_w10: exit=0 ok=1973/1974 goodput=0.9802431610942249 ttft_p95=458.9301189407706 energy_j=369046.8103826599 J/tok=1.5542739655603939 modes={}
+bench: replay_w11: exit=0 ok=480/480 goodput=0.9979166666666667 ttft_p95=428.7210567854345 energy_j=345349.25694577023 J/tok=6.104165316490565 modes={}
+bench: replay_w12: exit=0 ok=376/376 goodput=0.9840425531914894 ttft_p95=418.9005489461124 energy_j=353229.38002441404 J/tok=6.156503355545343 modes={}
+bench: replay_w13: exit=0 ok=403/403 goodput=0.9751861042183623 ttft_p95=389.87652445212007 energy_j=359903.3571571808 J/tok=5.74329142515249 modes={}
+bench: replay_total: exit=0 ok=26258/26282 goodput=0.874248535119093 ttft_p95=1207.9708548262715 energy_j=5249864.103414765 J/tok=1.5469759824773959 modes={}
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1801839]
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 287964.12 ON neptune CANCELLED AT 2026-11-20T11:25:44 ***
+slurmstepd-ganymede: error: *** STEP 287964.13 ON ganymede CANCELLED AT 2026-11-20T11:25:44 ***
+srun: error: neptune: task 0: Killed
+srun: error: ganymede: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9764 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9764 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9764 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9764 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9764 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9764 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9764 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9764 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 287964.10 ON neptune CANCELLED AT 2026-11-20T11:25:47 ***
+slurmstepd-ganymede: error: *** STEP 287964.11 ON ganymede CANCELLED AT 2026-11-20T11:25:47 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 355.5, "clocks_at_start": [{"agent": "http://10.1.0.3:9764", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9764", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9764", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9764", "index": 3, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9764", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9764", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9764", "index": 2, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9764", "index": 3, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline_r1=ok
