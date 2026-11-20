@@ -373,3 +373,30 @@ slurmstepd-neptune: error: *** STEP 287964.32 ON neptune CANCELLED AT 2026-11-20
 srun: error: ganymede: task 0: Killed
 srun: error: neptune: task 0: Killed
 CanaTune controller: reset http://10.1.0.6:9764 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9764 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9764 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9764 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9764 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9764 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9764 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9764 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 287964.31 ON ganymede CANCELLED AT 2026-11-20T15:03:02 ***
+slurmstepd-neptune: error: *** STEP 287964.30 ON neptune CANCELLED AT 2026-11-20T15:03:02 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "cantune", "ready_s": 310.5, "status": "calibration_failed", "controller_exit": 143}
+RESULT_nocap_r2=failed stage=calibration_failed (3 attempts)
+nocap_r2 clock_errors=0
+nocap_r2 redirect=0
+nocap_r2 p_slot_update=0
+nocap_r2 kv_gate_update=0
+nocap_r2 admission_calibration=0
+nocap_r2 capacity_limits_ignored=0
+nocap_r2 control_mode=0
+nocap_r2 kv_overflow_or_drop=0
+RESULT= baseline_r1:0 nocap_r1:0 nocap_r2:5
+--- teardown 2026-11-20T15:03:03+01:00
