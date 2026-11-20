@@ -131,3 +131,19 @@ srun: error: ganymede: task 0: Killed
 CanaTune controller: reset http://10.1.0.6:9557 GPU 0: ok
 CanaTune controller: reset http://10.1.0.6:9557 GPU 1: ok
 CanaTune controller: reset http://10.1.0.6:9557 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9557 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9557 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9557 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9557 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9557 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 287757.11 ON neptune CANCELLED AT 2026-11-20T01:41:40 ***
+slurmstepd-ganymede: error: *** STEP 287757.10 ON ganymede CANCELLED AT 2026-11-20T01:41:40 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+bench: {"mode": "baseline", "ready_s": 839.4, "clocks_at_start": [{"agent": "http://10.1.0.3:9557", "index": 0, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9557", "index": 1, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9557", "index": 2, "sm_mhz": 2040}, {"agent": "http://10.1.0.3:9557", "index": 3, "sm_mhz": 2040}, {"agent": "http://10.1.0.6:9557", "index": 0, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9557", "index": 1, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9557", "index": 2, "sm_mhz": 2520}, {"agent": "http://10.1.0.6:9557", "index": 3, "sm_mhz": 2520}], "status": "done", "controller_exit": 143}
+RESULT_baseline_r1=ok
+--- preflight and clock reset before nocap_r1
