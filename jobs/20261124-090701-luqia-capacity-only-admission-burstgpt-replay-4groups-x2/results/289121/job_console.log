@@ -72,3 +72,15 @@ INFO:     Uvicorn running on http://0.0.0.0:9421 (Press CTRL+C to quit)
 [NVGPUFREQ][ERROR] Failed to retrive the job ID from slurmctld! Exit!
 memory_plan: GPU 24.15 GB, reserve 5.25 GB (1 P), utilization 0.7826
 decode_0: GPU 0 gpu-memory-utilization 0.7826
+P0 failed to start; see /data/users/chjing/vllm_job_work/289121/baseline_r1/pd/prefill/logs/prefill_0.log
+D0 failed to start; see /data/users/chjing/vllm_job_work/289121/baseline_r1/pd/decode/logs/decode_0.log
+srun: error: ganymede: task 0: Exited with exit code 1
+CanaTune controller: decode exited with status 1
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-neptune: error: *** STEP 289121.12 ON neptune CANCELLED AT 2026-11-24T23:30:32 ***
+srun: error: neptune: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9421 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9421 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9421 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9421 GPU 3: ok
