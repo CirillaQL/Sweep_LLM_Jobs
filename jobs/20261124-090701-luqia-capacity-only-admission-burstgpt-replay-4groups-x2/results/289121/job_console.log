@@ -306,3 +306,40 @@ D0 ready: GPU=0 HTTP=8200 KV=14579
 memory_plan: GPU 24.15 GB, reserve 5.25 GB (1 P), utilization 0.7826
 decode_1: GPU 1 gpu-memory-utilization 0.7826
 P0 ready: GPU=0 HTTP=8100 KV=14579
+CanaTune controller: timed out waiting for http://10.1.0.6:8100/health, http://10.1.0.6:8101/health, http://10.1.0.6:8102/health, http://10.1.0.6:8103/health, http://10.1.0.3:8200/health, http://10.1.0.3:8201/health, http://10.1.0.3:8202/health, http://10.1.0.3:8203/health
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 289121.42 ON ganymede CANCELLED AT 2026-11-25T00:28:43 ***
+slurmstepd-neptune: error: *** STEP 289121.43 ON neptune CANCELLED AT 2026-11-25T00:28:43 ***
+srun: error: neptune: task 0: Killed
+srun: error: ganymede: task 0: Killed
+CanaTune controller: reset http://10.1.0.6:9421 GPU 0: ok
+CanaTune controller: reset http://10.1.0.6:9421 GPU 1: ok
+CanaTune controller: reset http://10.1.0.6:9421 GPU 2: ok
+CanaTune controller: reset http://10.1.0.6:9421 GPU 3: ok
+CanaTune controller: reset http://10.1.0.3:9421 GPU 0: ok
+CanaTune controller: reset http://10.1.0.3:9421 GPU 1: ok
+CanaTune controller: reset http://10.1.0.3:9421 GPU 2: ok
+CanaTune controller: reset http://10.1.0.3:9421 GPU 3: ok
+srun: forcing job termination
+srun: forcing job termination
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-ganymede: error: *** STEP 289121.40 ON ganymede CANCELLED AT 2026-11-25T00:28:44 ***
+slurmstepd-neptune: error: *** STEP 289121.41 ON neptune CANCELLED AT 2026-11-25T00:28:44 ***
+srun: error: ganymede: task 0: Killed
+srun: error: neptune: task 0: Killed
+smoke2: service stopped early (1)
+bench: {"mode": "cantune", "status": "stopped_early", "controller_exit": 1}
+RESULT_capacity_r2=failed stage=service_stopped_early
+capacity_r2 clock_errors=0
+capacity_r2 redirect=0
+capacity_r2 p_slot_update=0
+capacity_r2 kv_gate_update=0
+capacity_r2 admission_calibration=0
+capacity_r2 capacity_limits_ignored=0
+capacity_r2 capacity_admission_no_slot_cap=0
+capacity_r2 control_mode=0
+capacity_r2 kv_overflow_or_drop=0
